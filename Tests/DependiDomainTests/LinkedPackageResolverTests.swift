@@ -44,13 +44,14 @@ struct LinkedPackageResolverTests {
         linked: [ProductReference], remote remotes: [ResolvedPackage],
         local locals: [ResolvedPackage] = [],
         manifests: [String: PackageManifest], excludes: Set<String> = [],
-        platforms: Set<String>? = nil,
+        otherLinked: [ProductReference] = [], platforms: Set<String>? = nil,
         buildTools: Bool = false
     ) throws(DomainError) -> (LinkResult, StubManifestReader) {
         let reader = StubManifestReader(manifests: manifests)
         let resolver = LinkedPackageResolver(manifests: reader, normalizer: normalizer)
         let result = try resolver.resolve(
-            linked: linked, remotePackages: remotes, localPackages: locals, excludes: excludes,
+            linked: linked, otherLinked: otherLinked, remotePackages: remotes,
+            localPackages: locals, excludes: excludes,
             platformNames: platforms, includeBuildTools: buildTools)
         return (result, reader)
     }
@@ -143,6 +144,41 @@ struct LinkedPackageResolverTests {
             linked: [ProductReference(productName: "Mixed", packageName: "tools")],
             remote: [remote("tools")], manifests: ["/checkouts/tools": pluginPackageManifest()])
         #expect(names(result.linked) == ["tools"])
+    }
+
+    @Test("packages that other targets link, and their dependencies, are not unreached")
+    func otherTargetPackagesAreNotUnreached() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(product: "Kit"),
+            "/checkouts/tester": simpleManifest(
+                product: "Tester", dependencies: [dependency(.product, "Dep", package: "dep")],
+                declared: ["dep"]),
+            "/checkouts/dep": simpleManifest(product: "Dep"),
+            "/checkouts/orphan": simpleManifest(product: "Orphan"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Kit", packageName: "kit")],
+            remote: [remote("kit"), remote("tester"), remote("dep"), remote("orphan")],
+            manifests: manifests,
+            otherLinked: [ProductReference(productName: "Tester", packageName: "tester")])
+        #expect(names(result.linked) == ["kit"])
+        #expect(names(result.unreached) == ["orphan"])
+    }
+
+    @Test("an other product that does not resolve is ignored and the others still count")
+    func brokenOtherProductIsIgnored() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(product: "Kit"),
+            "/checkouts/tester": simpleManifest(product: "Tester"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Kit", packageName: "kit")],
+            remote: [remote("kit"), remote("tester")], manifests: manifests,
+            otherLinked: [
+                ProductReference(productName: "Ghost", packageName: "ghost"),
+                ProductReference(productName: "Tester", packageName: "tester"),
+            ])
+        #expect(result.unreached.isEmpty)
     }
 
     @Test("a macro target's dependencies are followed only when build tools are included")

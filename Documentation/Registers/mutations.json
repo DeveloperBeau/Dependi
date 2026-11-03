@@ -1390,5 +1390,37 @@
     "replace": "!reached.contains($0.identity)",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix"
+  },
+  {
+    "id": "resolver-other-targets-expected",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "&& !expected.contains($0.identity) && !excludes.contains($0.identity.value)",
+    "replace": "&& !excludes.contains($0.identity.value)",
+    "test": "otherTargetPackagesAreNotUnreached",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-other-targets-walk",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "expected.formUnion(walked.reached)",
+    "replace": "expected.insert(found.0)",
+    "test": "otherTargetPackagesAreNotUnreached",
+    "slice": "review-fix"
+  },
+  {
+    "id": "projectfile-tests-in-other-products",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "includeTests || !Self.isTestTarget(target)",
+    "replace": "!Self.isTestTarget(target)",
+    "test": "testTargetProductsAreOtherProducts",
+    "slice": "review-fix"
+  },
+  {
+    "id": "projectfile-other-products-subtract-app",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": ".subtracting(unique)",
+    "replace": "",
+    "test": "appProductsAreNotOtherProducts",
+    "slice": "review-fix"
   }
 ]

@@ -52,7 +52,8 @@ Names are compared exactly. An empty list means archive only.
 7. A `byName` dependency is a target of the same package first, then a product of a declared dependency. A product dependency whose package name is not a package identity, such as a manifest name, is searched the same way.
 8. Each manifest is read once for a run.
 9. A product of an excluded package is still followed, so its dependencies ship. Only the excluded package itself is left out.
-10. The result lists the linked packages and the resolved packages that nothing reached.
+10. The other products of the project are joined and followed the same way. Their packages are expected. A product of them that does not resolve is ignored.
+11. The result lists the linked packages and the resolved remote packages that neither the app nor any other target of the project reached.
 
 ## Finding license files
 

@@ -5,6 +5,8 @@ import Foundation
 /// Walks a target, its dependencies and its embedded targets, and gathers their package products.
 struct ProductCollector {
     let files: any FileReading
+    /// Whether test targets are followed. The app's own products leave them out.
+    let includeTests: Bool
     private var models: [String: ProjectModel] = [:]
     private var unreachable: Set<String> = []
     private var visited: Set<String> = []
@@ -12,15 +14,16 @@ struct ProductCollector {
     private(set) var found: [ProductReference] = []
     private let normalizer = PackageIdentityNormalizer()
 
-    init(files: any FileReading) {
+    init(files: any FileReading, includeTests: Bool) {
         self.files = files
+        self.includeTests = includeTests
     }
 
-    /// Follows one target. Test targets and unknown ids are skipped.
+    /// Follows one target. Unknown ids are skipped, and so are test targets unless they are included.
     mutating func visit(_ model: ProjectModel, targetID: String) throws(DomainError) {
         guard visited.insert(model.path + "#" + targetID).inserted,
             let target = model.object(targetID, isa: "PBXNativeTarget"),
-            !Self.isTestTarget(target)
+            includeTests || !Self.isTestTarget(target)
         else { return }
         try collectProducts(of: target, in: model)
         try followDependencies(of: target, in: model)

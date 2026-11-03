@@ -118,7 +118,8 @@ public struct GenerateFeature: Sendable {
         }
         let resolver = LinkedPackageResolver(manifests: manifests, normalizer: normalizer)
         let result = try resolver.resolve(
-            linked: linked.products, remotePackages: resolved.filter { $0.kind == .remote },
+            linked: linked.products, otherLinked: linked.otherProducts,
+            remotePackages: resolved.filter { $0.kind == .remote },
             localPackages: locals, excludes: Set(settings.excludes),
             platformNames: PlatformNames.manifestNames(
                 platformName: context.platformName, supportedPlatforms: linked.supportedPlatforms),

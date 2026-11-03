@@ -247,6 +247,46 @@ struct GenerateFeatureTests {
         #expect(try allowed.run() == .wrote(count: 1))
     }
 
+    @Test("a package that only another target links is expected and a package nothing links fails")
+    func otherTargetPackagesAreExpected() throws {
+        let good = try world()
+        try good.addRemote("view-inspector")
+        try good.addRemote("snapshot-testing")
+        good.linkOther("view-inspector", package: "view-inspector")
+        good.linkOther("snapshot-testing", package: "snapshot-testing")
+        #expect(try good.run() == .wrote(count: 1))
+        let call = try #require(good.writer.calls.first)
+        #expect(call.acknowledgements.map(\.displayName) == ["kit"])
+
+        let broken = try world()
+        try broken.addRemote("view-inspector")
+        try broken.addRemote("orphan")
+        broken.linkOther("view-inspector", package: "view-inspector")
+        #expect(throws: DomainError.packagesUnreached(["orphan"])) { try broken.run() }
+    }
+
+    @Test("a product of another target that matches no package does not fail the run")
+    func otherTargetUnmatchedProductIsIgnored() throws {
+        let world = try world()
+        world.linkOther("Ghost", package: "ghost")
+        #expect(try world.run() == .wrote(count: 1))
+    }
+
+    @Test("the dependencies of a package that another target links are expected too")
+    func otherTargetTransitivePackagesAreExpected() throws {
+        let world = try world()
+        try world.addRemote(
+            "tester",
+            dependencies: [
+                ManifestDependency(
+                    kind: .product, name: "helper", packageName: "helper", platforms: [])
+            ],
+            declared: ["helper"])
+        try world.addRemote("helper")
+        world.linkOther("tester", package: "tester")
+        #expect(try world.run() == .wrote(count: 1))
+    }
+
     @Test("an exclude removes a package and an exclude that matches nothing fails")
     func excludes() throws {
         let world = try GenerateWorld(configuration: #"{"excludes":["spare"]}"#)
