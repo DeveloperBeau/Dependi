@@ -8,3 +8,5 @@ One page for each subsystem. Each page describes how the subsystem works today.
 | [Architecture test](ArchitectureTest.md) | Current |
 | [Mutation runner](MutationRunner.md) | Current |
 | [Entities](Entities.md) | Current |
+| [Domain interfaces](DomainInterfaces.md) | Current |
+| [Test doubles](TestDoubles.md) | Current |
