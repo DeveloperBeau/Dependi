@@ -14,6 +14,9 @@ final class RunningWrapper {
     private let outURL: URL
     private let errURL: URL
 
+    /// The process id of the wrapper.
+    var processIdentifier: Int32 { process.processIdentifier }
+
     init(process: Process, outURL: URL, errURL: URL) {
         self.process = process
         self.outURL = outURL
@@ -116,8 +119,13 @@ final class WrapperWorld {
                 echo 'compile error: boom' >&2
                 exit 1
             fi
-            if [ -f '\(control.path)/slow-build' ]; then
-                sleep 1
+            if [ -f '\(control.path)/hold-build' ]; then
+                : > '\(control.path)/building'
+                waited=0
+                while [ ! -f '\(control.path)/proceed' ] && [ "$waited" -lt 1200 ]; do
+                    sleep 0.05
+                    waited=$((waited + 1))
+                done
             fi
             scratch=
             while [ $# -gt 0 ]; do
@@ -164,6 +172,78 @@ final class WrapperWorld {
         try install(stub, at: bin.appendingPathComponent("dependi"))
         try contents.write(
             to: bin.appendingPathComponent("VERSION"), atomically: true, encoding: .utf8)
+    }
+
+    /// The lock file for a pin.
+    func lock(version: String, commit: String) -> URL {
+        cache.appendingPathComponent("\(version)-\(commit).build-lock")
+    }
+
+    /// Replaces the lock for a pin with a symlink that holds `owner` as its target.
+    func plantLock(version: String, commit: String, owner: String) throws {
+        try fm.createDirectory(at: cache, withIntermediateDirectories: true)
+        let url = lock(version: version, commit: commit)
+        try? fm.removeItem(at: url)
+        try fm.createSymbolicLink(atPath: url.path, withDestinationPath: owner)
+    }
+
+    /// The owner recorded in a lock, or nil when there is no lock.
+    func lockOwner(version: String, commit: String) -> String? {
+        try? fm.destinationOfSymbolicLink(atPath: lock(version: version, commit: commit).path)
+    }
+
+    /// Sets the modification time of a symlink, in seconds before now.
+    func ageLock(version: String, commit: String, seconds: Int) throws {
+        let date = Date().addingTimeInterval(-Double(seconds))
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyyMMddHHmm"
+        let touch = Process()
+        touch.executableURL = URL(fileURLWithPath: "/usr/bin/touch")
+        touch.arguments = [
+            "-h", "-t", formatter.string(from: date),
+            lock(version: version, commit: commit).path,
+        ]
+        try touch.run()
+        touch.waitUntilExit()
+    }
+
+    /// The id of a process that has already exited.
+    func deadProcessIdentifier() throws -> Int32 {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/true")
+        try process.run()
+        process.waitUntilExit()
+        return process.processIdentifier
+    }
+
+    /// Waits at most 30 seconds for a control file to appear. Returns whether it did.
+    func waitForControlFile(_ name: String) -> Bool {
+        let path = control.appendingPathComponent(name).path
+        let deadline = Date().addingTimeInterval(30)
+        while Date() < deadline {
+            if fm.fileExists(atPath: path) { return true }
+            Thread.sleep(forTimeInterval: 0.01)
+        }
+        return false
+    }
+
+    /// Waits at most 30 seconds until the wrapper has a running `sleep` child, which means it is
+    /// inside the lock wait loop. Returns whether it got there.
+    func waitUntilWaitingForLock(_ running: RunningWrapper) -> Bool {
+        let deadline = Date().addingTimeInterval(30)
+        while Date() < deadline {
+            let pgrep = Process()
+            pgrep.executableURL = URL(fileURLWithPath: "/usr/bin/pgrep")
+            pgrep.arguments = ["-P", String(running.processIdentifier), "-x", "sleep"]
+            pgrep.standardOutput = FileHandle.nullDevice
+            pgrep.standardError = FileHandle.nullDevice
+            try? pgrep.run()
+            pgrep.waitUntilExit()
+            if pgrep.terminationStatus == 0 { return true }
+            Thread.sleep(forTimeInterval: 0.01)
+        }
+        return false
     }
 
     /// Sets a control flag that changes a stub.

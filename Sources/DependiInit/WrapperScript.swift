@@ -7,11 +7,12 @@
 /// - `DEPENDI_REPO_URL` replaces the repository URL.
 /// - `DEPENDI_XCRUN` replaces the `xcrun` tool.
 /// - `DEPENDI_CACHE_ROOT` replaces the cache folder.
+/// - `DEPENDI_LOCK_WAIT_STEPS` sets how many 0.2 second waits the lock allows.
 ///
 /// Cache layout under `$HOME/Library/Caches/dependi`. The script makes the folder private to the
 /// user and refuses a folder that another user owns or can write:
 /// - `<version>-<commit>/bin/dependi` and `dependi.sha256`: a finished build.
-/// - `<version>-<commit>.lock`: the build lock, a folder made with `mkdir`.
+/// - `<version>-<commit>.build-lock`: the build lock, a symlink whose target is the owner's process id.
 /// - `build.XXXXXX`: a temporary build folder with `src`, `build`, `out` and `build.log`.
 ///   The product is read from `build/release/dependi`. `out` is renamed to `bin`.
 public enum WrapperScript {
@@ -127,7 +128,8 @@ public enum WrapperScript {
         fi
         key="$version-$commit"
         cached="$cache_root/$key/bin"
-        lock="$cache_root/$key.lock"
+        lock="$cache_root/$key.build-lock"
+        token=$$
 
         cache_valid() {
             [ -f "$cached/dependi" ] && [ -x "$cached/dependi" ] && [ -f "$cached/dependi.sha256" ] || return 1
@@ -151,7 +153,10 @@ public enum WrapperScript {
                 tmp=
             fi
             if [ "$have_lock" = 1 ]; then
-                rmdir "$lock" 2>/dev/null || true
+                owner=$(readlink "$lock" 2>/dev/null || true)
+                if [ "$owner" = "$token" ]; then
+                    rm -f "$lock"
+                fi
                 have_lock=0
             fi
         }
@@ -175,15 +180,47 @@ public enum WrapperScript {
 
         (umask 077 && mkdir -p "$cache_root")
 
+        # The lock is a symlink named for the build. Its target is the owner process id,
+        # so taking the lock and recording the owner is one atomic step.
+        max_steps=1500
+        if testing && [ -n "${DEPENDI_LOCK_WAIT_STEPS:-}" ]; then
+            max_steps=$DEPENDI_LOCK_WAIT_STEPS
+        fi
+
+        # A lock is stale when its owner process is gone or its target is not a process id.
+        # A lock whose owner is still running is stale only after 30 minutes.
+        lock_is_stale() {
+            holder=$(readlink "$lock" 2>/dev/null || true)
+            case "$holder" in
+            "" | *[!0-9]*) return 0 ;;
+            esac
+            kill -0 "$holder" 2>/dev/null || return 0
+            [ -n "$(find "$lock" -maxdepth 0 -mmin +30 2>/dev/null)" ]
+        }
+
+        # Move the stale lock aside under a name no one else uses, then check what was moved.
+        # A lock that another process took in the meantime goes back.
+        reclaim_lock() {
+            grave="$lock.stale.$$"
+            rm -rf "$grave"
+            mv "$lock" "$grave" 2>/dev/null || return 0
+            moved=$(readlink "$grave" 2>/dev/null || true)
+            if [ "$moved" = "$holder" ]; then
+                rm -rf "$grave"
+            else
+                mv "$grave" "$lock" 2>/dev/null || rm -rf "$grave"
+            fi
+        }
+
         steps=0
-        while ! mkdir "$lock" 2>/dev/null; do
-            if [ -n "$(find "$lock" -maxdepth 0 -mmin +10 2>/dev/null)" ]; then
-                rmdir "$lock" 2>/dev/null || true
+        while ! ln -s "$token" "$lock" 2>/dev/null; do
+            if lock_is_stale; then
+                reclaim_lock
                 continue
             fi
             steps=$((steps + 1))
-            if [ "$steps" -ge 1500 ]; then
-                fail 'waited 300 seconds for another build to finish'
+            if [ "$steps" -ge "$max_steps" ]; then
+                fail 'waited for another build to finish'
             fi
             sleep 0.2
         done

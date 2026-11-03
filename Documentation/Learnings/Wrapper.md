@@ -24,11 +24,17 @@
 - **Finding:** The stub `git` unsets `DEVELOPER_DIR` and `SDKROOT` before it calls the real `git`.
 - **Rule:** Only the build step gets the allowed variables. Other tools run with what the caller gave.
 
-## A mutation of the lock needs the second process to start early
+## A lock test needs a handshake, not a delay
 
-- **Trap:** Two runs that start one after another cannot show a missing lock.
-- **Finding:** The stub `xcrun` sleeps one second, so the second process arrives during the build.
-- **Rule:** Count the `xcrun` calls. One build means the lock and the second check work.
+- **Trap:** A stub that slept one second let the test pass when the second script started late, even with the lock removed.
+- **Finding:** The stub now holds the build until the test creates a file. The test proves the second script is in the wait loop by finding its `sleep` child, then releases the build.
+- **Rule:** Count the `xcrun` calls. One build means the lock and the second check work. Order the events with files, never with sleeps.
+
+## A bare directory lock cannot name its owner
+
+- **Trap:** A lock folder removed after ten minutes lets two waiters both reclaim it, and a slow build then removes a lock that another run took.
+- **Finding:** The lock is a symlink whose target is the owner's process id. It is made in one step. Release checks the target. A stale lock is renamed away before it is removed. A dead owner is reclaimed at once.
+- **Rule:** Record the owner in the lock itself, remove only your own lock, and reclaim by rename and check.
 
 ## A version string alone does not pin a build
 

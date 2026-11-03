@@ -1203,8 +1203,8 @@
     "id": "wrapper-lock-removed",
     "slice": "10",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "mkdir \"$lock\" 2>/dev/null",
-    "replace": "true",
+    "search": "while ! ln -s \"$token\" \"$lock\" 2>/dev/null; do",
+    "replace": "while ! true; do",
     "test": "concurrentRunsBuildOnce"
   },
   {
@@ -1326,5 +1326,69 @@
     "search": "PATH=/usr/bin:/bin\n        export PATH",
     "replace": "export PATH",
     "test": "callerPathIsIgnored"
+  },
+  {
+    "id": "wrapper-lock-dead-owner-kept",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "kill -0 \"$holder\" 2>/dev/null || return 0",
+    "replace": "kill -0 \"$holder\" 2>/dev/null || true",
+    "test": "deadOwnerLockIsReclaimed"
+  },
+  {
+    "id": "wrapper-lock-live-owner-stolen",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "kill -0 \"$holder\" 2>/dev/null || return 0",
+    "replace": "return 0",
+    "test": "liveOwnerLockIsRespected"
+  },
+  {
+    "id": "wrapper-lock-age-ignored",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ -n \"$(find \"$lock\" -maxdepth 0 -mmin +30 2>/dev/null)\" ]",
+    "replace": "false",
+    "test": "oldLockWithLiveOwnerIsReclaimed"
+  },
+  {
+    "id": "wrapper-lock-age-too-short",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "-maxdepth 0 -mmin +30 2>/dev/null",
+    "replace": "-maxdepth 0 -mmin +1 2>/dev/null",
+    "test": "recentLockWithLiveOwnerIsRespected"
+  },
+  {
+    "id": "wrapper-lock-malformed-owner-kept",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "\"\" | *[!0-9]*) return 0 ;;",
+    "replace": "\"\") return 0 ;;",
+    "test": "malformedLockOwnerIsStale"
+  },
+  {
+    "id": "wrapper-lock-release-unconditional",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if [ \"$owner\" = \"$token\" ]; then",
+    "replace": "if true; then",
+    "test": "releaseKeepsForeignLock"
+  },
+  {
+    "id": "wrapper-lock-never-released",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "rm -f \"$lock\"",
+    "replace": "true",
+    "test": "releaseRemovesOwnLock"
+  },
+  {
+    "id": "wrapper-lock-reclaim-skipped",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "            if lock_is_stale; then",
+    "replace": "            if false; then",
+    "test": "concurrentRunsOnDeadLockBuildOnce"
   }
 ]

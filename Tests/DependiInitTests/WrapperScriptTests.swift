@@ -350,14 +350,18 @@ struct WrapperScriptTests {
         #expect(world.cacheEntries().isEmpty)
     }
 
-    @Test("two scripts started together build once and both succeed")
+    @Test("a second script that starts while the first holds the lock waits and builds nothing")
     func concurrentRunsBuildOnce() throws {
         let world = try world()
         let head = try world.makeOrigin()
         try world.writeConfig(["version": Self.version, "commit": head])
-        try world.flag("slow-build")
+        try world.flag("hold-build")
+        defer { try? world.flag("proceed") }
         let first = try world.start(environment: world.buildEnvironment())
+        try #require(world.waitForControlFile("building"), "the first build never started")
         let second = try world.start(environment: world.buildEnvironment())
+        try #require(world.waitUntilWaitingForLock(second), "the second script never waited")
+        try world.flag("proceed")
         let one = first.finish()
         let two = second.finish()
         #expect(one.status == 0)
@@ -368,18 +372,125 @@ struct WrapperScriptTests {
         #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
     }
 
-    @Test("a stale lock older than ten minutes is removed and the build goes on")
-    func staleLockIsRemoved() throws {
+    @Test("two scripts that meet a dead owner's lock together build once")
+    func concurrentRunsOnDeadLockBuildOnce() throws {
         let world = try world()
         let head = try world.makeOrigin()
         try world.writeConfig(["version": Self.version, "commit": head])
-        let lock = world.cache.appendingPathComponent("\(Self.version)-\(head).lock")
-        try FileManager.default.createDirectory(at: lock, withIntermediateDirectories: true)
-        try FileManager.default.setAttributes(
-            [.modificationDate: Date().addingTimeInterval(-700)], ofItemAtPath: lock.path)
+        try world.plantLock(
+            version: Self.version, commit: head,
+            owner: String(try world.deadProcessIdentifier()))
+        try world.flag("hold-build")
+        defer { try? world.flag("proceed") }
+        let first = try world.start(environment: world.buildEnvironment())
+        try #require(world.waitForControlFile("building"), "the first build never started")
+        let second = try world.start(environment: world.buildEnvironment())
+        try #require(world.waitUntilWaitingForLock(second), "the second script never waited")
+        try world.flag("proceed")
+        let one = first.finish()
+        let two = second.finish()
+        #expect(one.status == 0)
+        #expect(two.status == 0)
+        #expect(world.calls(of: "xcrun").count == 1)
+        #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
+    }
+
+    @Test("a lock whose owner process is gone is reclaimed at once")
+    func deadOwnerLockIsReclaimed() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        try world.plantLock(
+            version: Self.version, commit: head,
+            owner: String(try world.deadProcessIdentifier()))
+        // Three waits are less than a second. A script that waits for the lock fails.
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(run.stdout == "built-marker\n")
+        #expect(world.lockOwner(version: Self.version, commit: head) == nil)
+    }
+
+    @Test("a lock whose owner process is running is respected and left in place")
+    func liveOwnerLockIsRespected() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        let owner = String(getpid())
+        try world.plantLock(version: Self.version, commit: head, owner: owner)
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "5"]))
+        #expect(run.status == 1)
+        #expect(run.stderr.contains("waited for another build"))
+        #expect(world.calls().isEmpty)
+        #expect(world.lockOwner(version: Self.version, commit: head) == owner)
+    }
+
+    @Test("a lock whose owner is running but that is older than 30 minutes is reclaimed")
+    func oldLockWithLiveOwnerIsReclaimed() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        try world.plantLock(version: Self.version, commit: head, owner: String(getpid()))
+        try world.ageLock(version: Self.version, commit: head, seconds: 40 * 60)
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(run.stdout == "built-marker\n")
+    }
+
+    @Test("a lock that is 20 minutes old with a running owner is still respected")
+    func recentLockWithLiveOwnerIsRespected() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        try world.plantLock(version: Self.version, commit: head, owner: String(getpid()))
+        try world.ageLock(version: Self.version, commit: head, seconds: 20 * 60)
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(run.status == 1)
+        #expect(world.calls().isEmpty)
+    }
+
+    @Test("a lock whose target is not a process id is reclaimed")
+    func malformedLockOwnerIsStale() throws {
+        for owner in ["abc", "12x", "-1", "../etc", "1 2"] {
+            let world = try world()
+            let head = try world.makeOrigin()
+            try world.writeConfig(["version": Self.version, "commit": head])
+            try world.plantLock(version: Self.version, commit: head, owner: owner)
+            let run = try world.run(
+                environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+            #expect(run.status == 0, "owner \(owner): \(run.stderr)")
+            #expect(run.stdout == "built-marker\n", "owner \(owner)")
+        }
+    }
+
+    @Test("a build that finds another owner on its lock does not remove that lock")
+    func releaseKeepsForeignLock() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        try world.flag("hold-build")
+        defer { try? world.flag("proceed") }
+        let running = try world.start(environment: world.buildEnvironment())
+        try #require(world.waitForControlFile("building"), "the build never started")
+        let other = String(getpid())
+        try world.plantLock(version: Self.version, commit: head, owner: other)
+        try world.flag("proceed")
+        let run = running.finish()
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(world.lockOwner(version: Self.version, commit: head) == other)
+    }
+
+    @Test("a finished build removes its own lock")
+    func releaseRemovesOwnLock() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
         let run = try world.run(environment: world.buildEnvironment())
         #expect(run.status == 0)
-        #expect(run.stdout == "built-marker\n")
+        #expect(world.lockOwner(version: Self.version, commit: head) == nil)
         #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
     }
 
