@@ -29,6 +29,7 @@ struct WrapperScriptFuzzTests {
     @Test("random versions and commits never record a call unless both match the patterns exactly")
     func randomPinsOnlyPassWhenExact() throws {
         var generator = SeededGenerator()
+        let seed = generator.seed
         var accepted = 0
         var rejected = 0
         let world = try WrapperWorld()
@@ -54,12 +55,21 @@ struct WrapperScriptFuzzTests {
             let after = world.calls().count
             if Self.isVersion(version) && Self.isCommit(commit) {
                 accepted += 1
-                #expect(run.status == 0, "\(version.debugDescription) \(commit.debugDescription)")
+                #expect(
+                    run.status == 0,
+                    "seed \(seed) round \(round): \(version.debugDescription) \(commit.debugDescription)"
+                )
                 #expect(after == before + 1)
             } else {
                 rejected += 1
-                #expect(run.status == 1, "\(version.debugDescription) \(commit.debugDescription)")
-                #expect(after == before, "\(version.debugDescription) \(commit.debugDescription)")
+                #expect(
+                    run.status == 1,
+                    "seed \(seed) round \(round): \(version.debugDescription) \(commit.debugDescription)"
+                )
+                #expect(
+                    after == before,
+                    "seed \(seed) round \(round): \(version.debugDescription) \(commit.debugDescription)"
+                )
             }
         }
         #expect(accepted > 3)
