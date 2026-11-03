@@ -94,7 +94,7 @@ public enum WrapperScript {
         if [ -f "$bin_dir/dependi" ] && [ -x "$bin_dir/dependi" ] && [ -f "$bin_dir/VERSION" ]; then
             installed=
             read -r installed <"$bin_dir/VERSION" || true
-            if [ "$installed" = "$version" ]; then
+            if [ "$installed" = "$version-$commit" ]; then
                 exec "$bin_dir/dependi" "$@"
             fi
         fi

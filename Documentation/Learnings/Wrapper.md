@@ -30,6 +30,12 @@
 - **Finding:** The stub `xcrun` sleeps one second, so the second process arrives during the build.
 - **Rule:** Count the `xcrun` calls. One build means the lock and the second check work.
 
+## A version string alone does not pin a build
+
+- **Trap:** The project copy was accepted when `VERSION` equalled the config version. A new pinned commit with the same version kept running the old binary.
+- **Finding:** `init` now writes `<version>-<commit>` and the wrapper compares the same string.
+- **Rule:** Compare every part of the pin, not a label that people can leave unchanged.
+
 ## Mutation results
 
 | Mutation | Test that failed |

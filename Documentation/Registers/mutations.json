@@ -1179,9 +1179,9 @@
     "id": "wrapper-version-compare-removed",
     "slice": "10",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "[ \"$installed\" = \"$version\" ]",
+    "search": "[ \"$installed\" = \"$version-$commit\" ]",
     "replace": "true",
-    "test": "versionMismatchUsesCache"
+    "test": "otherCommitIgnoresProjectCopy"
   },
   {
     "id": "wrapper-sha-check-removed",
@@ -1238,5 +1238,13 @@
     "search": "root + \"/.dependi/Root.plist.bak\"",
     "replace": "plistPath + \".bak\"",
     "test": "paneAppended"
+  },
+  {
+    "id": "init-version-file-commit",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "let installed = commit.map { version + \"-\" + $0 } ?? version",
+    "replace": "let installed = version",
+    "test": "freshInstall"
   }
 ]

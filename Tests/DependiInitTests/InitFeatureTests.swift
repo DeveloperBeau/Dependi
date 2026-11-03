@@ -34,7 +34,9 @@ struct InitFeatureTests {
 
         #expect(try world.text("/proj/.dependi/bin/dependi") == "BINARY")
         #expect(world.files.isExecutable(at: "/proj/.dependi/bin/dependi"))
-        #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.0\n")
+        #expect(
+            try world.text("/proj/.dependi/bin/VERSION")
+                == "0.1.0-" + String(repeating: "ab", count: 20) + "\n")
         #expect(try world.text("/proj/.dependi/run.sh") == InitWorld.wrapper)
         #expect(world.files.isExecutable(at: "/proj/.dependi/run.sh"))
         #expect(
@@ -85,6 +87,8 @@ struct InitFeatureTests {
                 ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
             #expect(config.commit == nil, "scenario \(scenario)")
             #expect(config.version == "0.1.0")
+            #expect(
+                try world.text("/proj/.dependi/bin/VERSION") == "0.1.0\n", "scenario \(scenario)")
             #expect(
                 world.console.lines.contains { $0.contains("could not read the commit") },
                 "scenario \(scenario)")

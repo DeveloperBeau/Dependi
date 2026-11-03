@@ -45,7 +45,7 @@ struct WrapperScriptFuzzTests {
             if round % 3 != 1 { version = validVersion }
             if round % 3 != 0 { commit = validCommit }
             try world.writeConfig(["version": version, "commit": commit])
-            try world.installProjectBinary(version: version)
+            try world.installProjectBinary(contents: version + "-" + commit)
             let before = world.calls().count
             let run = try world.run(
                 environment: world.baseEnvironment([

@@ -6,6 +6,7 @@ import Testing
 struct WrapperScriptTests {
     static let version = "1.2.3"
     static let commit = String(repeating: "a", count: 40)
+    static let pin = version + "-" + commit
 
     private func world(config: [String: Any]? = nil) throws -> WrapperWorld {
         let world = try WrapperWorld()
@@ -37,7 +38,7 @@ struct WrapperScriptTests {
     @Test("a missing config file skips Debug and still runs Release")
     func missingConfigDefaultsToRelease() throws {
         let world = try WrapperWorld()
-        try world.installProjectBinary(version: Self.version)
+        try world.installProjectBinary(contents: Self.pin)
         let skipped = try world.run(
             environment: inXcode(world, action: "build", configuration: "Debug"))
         #expect(skipped.status == 0)
@@ -53,7 +54,7 @@ struct WrapperScriptTests {
     @Test("a config without a gate list defaults to Release and Release is not skipped")
     func missingGateListDefaultsToRelease() throws {
         let world = try world()
-        try world.installProjectBinary(version: Self.version)
+        try world.installProjectBinary(contents: Self.pin)
         let run = try world.run(
             environment: inXcode(world, action: "build", configuration: "Release"),
             arguments: ["generate"])
@@ -67,7 +68,7 @@ struct WrapperScriptTests {
             "version": Self.version, "commit": Self.commit,
             "gateConfigurations": ["Rel.*", "A/B", "[Z]"],
         ])
-        try world.installProjectBinary(version: Self.version)
+        try world.installProjectBinary(contents: Self.pin)
         for name in ["Release", "Rel", "AxB", "Z", "*"] {
             let run = try world.run(
                 environment: inXcode(world, action: "build", configuration: name))
@@ -85,7 +86,7 @@ struct WrapperScriptTests {
         let world = try world(config: [
             "version": Self.version, "commit": Self.commit, "gateConfigurations": [String](),
         ])
-        try world.installProjectBinary(version: Self.version)
+        try world.installProjectBinary(contents: Self.pin)
         let build = try world.run(
             environment: inXcode(world, action: "build", configuration: "Release"))
         #expect(build.stdout.hasPrefix("Dependi: skipped."))
@@ -108,7 +109,7 @@ struct WrapperScriptTests {
     @Test("an archive with a matching VERSION runs the project binary with the arguments")
     func matchingVersionRunsProjectBinary() throws {
         let world = try world()
-        try world.installProjectBinary(version: Self.version)
+        try world.installProjectBinary(contents: Self.pin)
         let run = try world.run(
             environment: world.baseEnvironment(["ACTION": "install", "CONFIGURATION": "Debug"]),
             arguments: ["generate", "--flag", "two words"])
@@ -120,11 +121,33 @@ struct WrapperScriptTests {
     @Test("a VERSION mismatch uses the verified cache and builds nothing")
     func versionMismatchUsesCache() throws {
         let world = try world()
-        try world.installProjectBinary(version: "9.9.9")
+        try world.installProjectBinary(contents: "9.9.9-" + Self.commit)
         try world.seedCache(version: Self.version, commit: Self.commit, sha: nil)
         let run = try world.run(environment: world.buildEnvironment(), arguments: ["generate"])
         #expect(run.status == 0)
         #expect(run.stdout == "cached-marker generate\n")
+        #expect(world.calls().isEmpty)
+    }
+
+    @Test("a VERSION with the right version but another commit is not used")
+    func otherCommitIgnoresProjectCopy() throws {
+        let world = try world()
+        try world.installProjectBinary(
+            contents: Self.version + "-" + String(repeating: "b", count: 40))
+        try world.seedCache(version: Self.version, commit: Self.commit, sha: nil)
+        let run = try world.run(environment: world.buildEnvironment(), arguments: ["generate"])
+        #expect(run.status == 0)
+        #expect(run.stdout == "cached-marker generate\n")
+        #expect(world.calls().isEmpty)
+    }
+
+    @Test("a VERSION with only the version, as an old init wrote it, is not used")
+    func versionOnlyIgnoresProjectCopy() throws {
+        let world = try world()
+        try world.installProjectBinary(contents: Self.version)
+        try world.seedCache(version: Self.version, commit: Self.commit, sha: nil)
+        let run = try world.run(environment: world.buildEnvironment())
+        #expect(run.stdout == "cached-marker\n")
         #expect(world.calls().isEmpty)
     }
 
@@ -337,7 +360,7 @@ struct WrapperScriptTests {
         ]
         for value in bad {
             let world = try world(config: ["version": value, "commit": Self.commit])
-            try world.installProjectBinary(version: value)
+            try world.installProjectBinary(contents: value + "-" + Self.commit)
             let run = try world.run(environment: world.buildEnvironment())
             #expect(run.status == 1, "version \(value.debugDescription)")
             #expect(run.stderr.hasPrefix("error:"), "version \(value.debugDescription)")
@@ -356,7 +379,7 @@ struct WrapperScriptTests {
         ]
         for value in bad {
             let world = try world(config: ["version": Self.version, "commit": value])
-            try world.installProjectBinary(version: Self.version)
+            try world.installProjectBinary(contents: Self.pin)
             let run = try world.run(environment: world.buildEnvironment())
             #expect(run.status == 1, "commit \(value.debugDescription)")
             #expect(run.stderr.hasPrefix("error:"), "commit \(value.debugDescription)")

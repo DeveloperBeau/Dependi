@@ -134,12 +134,12 @@ final class WrapperWorld {
         try data.write(to: project.appendingPathComponent(".dependi.json"))
     }
 
-    /// Puts the stub binary and a `VERSION` file in `.dependi/bin`.
-    func installProjectBinary(version: String) throws {
+    /// Puts the stub binary and a `VERSION` file with the given text in `.dependi/bin`.
+    func installProjectBinary(contents: String) throws {
         let bin = project.appendingPathComponent(".dependi/bin")
         let stub = try String(contentsOf: stubs.appendingPathComponent("installed-dependi"))
         try install(stub, at: bin.appendingPathComponent("dependi"))
-        try version.write(
+        try contents.write(
             to: bin.appendingPathComponent("VERSION"), atomically: true, encoding: .utf8)
     }
 
