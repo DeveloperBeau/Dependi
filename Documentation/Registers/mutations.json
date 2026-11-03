@@ -990,5 +990,61 @@
     "search": ", !text.isEmpty",
     "replace": "",
     "test": "missingAndEmptyAreNil"
+  },
+  {
+    "id": "comp-usage-exit-code",
+    "slice": "9b",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "return Self.usageExitCode",
+    "replace": "return 0",
+    "test": "commandLineErrors"
+  },
+  {
+    "id": "comp-unavailable-exit-code",
+    "slice": "9b",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "return Self.unavailableExitCode",
+    "replace": "return 0",
+    "test": "initNotAvailable"
+  },
+  {
+    "id": "comp-version-text",
+    "slice": "9b",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "\"dependi \\(DependiVersion.current)\"",
+    "replace": "\"dependi\"",
+    "test": "versionAndHelp"
+  },
+  {
+    "id": "comp-clean-environment",
+    "slice": "9b",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "\"PATH\": \"/usr/bin:/bin\"",
+    "replace": "\"PATH\": \"/usr/bin:/bin\", \"SDKROOT\": environment[\"SDKROOT\"] ?? \"\"",
+    "test": "processRequestsAreClean"
+  },
+  {
+    "id": "comp-toolchain-from-xcrun",
+    "slice": "9b",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "[\"--find\", \"swift\"]",
+    "replace": "[\"--find\", \"swiftc\"]",
+    "test": "processRequestsAreClean"
+  },
+  {
+    "id": "error-sandbox-message",
+    "slice": "9b",
+    "file": "Sources/DependiDomain/DomainError+Description.swift",
+    "search": "Set ENABLE_USER_SCRIPT_SANDBOXING to NO",
+    "replace": "Change the setting",
+    "test": "sandboxMessageNamesTheFix"
+  },
+  {
+    "id": "error-payload-package",
+    "slice": "9b",
+    "file": "Sources/DependiDomain/DomainError+Description.swift",
+    "search": "The package \\(package) has no license file.",
+    "replace": "A package has no license file.",
+    "test": "messagesNamePayloads"
   }
 ]
