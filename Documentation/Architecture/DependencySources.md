@@ -52,7 +52,7 @@ Version 1 reads `object.pins[]` with `repositoryURL`. Other versions read `pins[
 
 ## Trust model
 
-The reader returns each local package folder from `workspace-state.json` as a path. The package graph reader then runs `swift package dump-package` in that folder, which runs that folder's `Package.swift`. The same holds for each remote checkout. Dependi therefore runs the manifests of the packages the project already builds, with the rights of the build. It does not run anything from a package that the project does not build. A `workspace-state.json` that an attacker controls could point a local package at any folder, so the file must come from the project's own build folder, as it does in a normal archive. Dependi does not sandbox the manifest evaluation.
+The reader returns each local package folder from `workspace-state.json` as a path. The package graph reader then runs `swift package dump-package` in that folder, which runs that folder's `Package.swift`. The same holds for each remote checkout. Dependi therefore runs the manifests of the packages the project already builds, with the rights of the build. It does not run anything from a package that the project does not build. A `workspace-state.json` that an attacker controls could point a local package at any folder, so the file must come from the project's own build folder, as it does in a normal archive.
 
 ## Errors
 
