@@ -51,6 +51,8 @@ extension DomainError: CustomStringConvertible {
                 "The user script sandbox is on, so Dependi cannot read the package checkouts. Set ENABLE_USER_SCRIPT_SANDBOXING to NO for the target that runs Dependi."
         case .invalidOutputLocation(let path, let reason):
             return "The output location \(path) is not allowed: \(reason)."
+        case .projectNotFound(let path): return "There is no Xcode project at \(path)."
+        case .initRefused(let reason): return "Cannot set up Dependi: \(reason)"
         }
     }
 }

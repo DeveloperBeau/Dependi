@@ -66,6 +66,8 @@ struct DomainErrorDescriptionTests {
             (.packagesUnreached(["U23", "V23"]), ["U23", "V23"]),
             (.scriptSandboxEnabled, []),
             (.invalidOutputLocation(path: "P24", reason: "R24"), ["P24", "R24"]),
+            (.projectNotFound(path: "P25"), ["P25"]),
+            (.initRefused(reason: "R26"), ["R26"]),
         ]
         for (error, texts) in cases {
             #expect(!error.description.isEmpty)
