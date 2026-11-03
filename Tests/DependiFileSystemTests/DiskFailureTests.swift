@@ -20,10 +20,10 @@ struct DiskFailureTests {
         }
     }
 
-    @Test("an unreadable file is reported as fileUnreadable with the system text")
+    @Test(
+        "an unreadable file is reported as fileUnreadable with the system text",
+        .enabled(if: geteuid() != 0, "a root user can read any file, so the case cannot be set up"))
     func unreadableFile() throws {
-        // A root user can read any file, so the case cannot be set up.
-        guard geteuid() != 0 else { return }
         try TempFolder.run { temp in
             try arranger.addFile(at: temp.real + "/secret", contents: Data("x".utf8))
             chmod(temp.real + "/secret", 0o000)
@@ -54,9 +54,11 @@ struct DiskFailureTests {
         }
     }
 
-    @Test("a write into a read-only folder is refused and leaves the folder unchanged")
+    @Test(
+        "a write into a read-only folder is refused and leaves the folder unchanged",
+        .enabled(if: geteuid() != 0, "a root user can write anywhere, so the case cannot be set up")
+    )
     func writeIntoReadOnlyFolder() throws {
-        guard geteuid() != 0 else { return }
         try TempFolder.run { (temp: TempFolder) throws -> Void in
             try arranger.addDirectory(at: temp.real + "/locked")
             chmod(temp.real + "/locked", 0o555)
@@ -68,6 +70,41 @@ struct DiskFailureTests {
                 Issue.record("expected fileUnwritable")
             }
             #expect(try disk.topLevelNames(in: temp.real + "/locked").isEmpty)
+        }
+    }
+
+    @Test("a read below a regular file is reported as notRegularFile and runs for every user")
+    func readBelowRegularFile() throws {
+        try TempFolder.run { temp in
+            try arranger.addFile(at: temp.real + "/plain", contents: Data("x".utf8))
+            let target = temp.real + "/plain/child"
+            if case .notRegularFile(let path)? = caught({
+                try disk.readRegularFile(at: target, upToBytes: 10)
+            }) {
+                #expect(path == target)
+            } else {
+                Issue.record("expected notRegularFile")
+            }
+        }
+    }
+
+    @Test("a write below a regular file is refused and leaves the folder unchanged")
+    func writeBelowRegularFile() throws {
+        try TempFolder.run { (temp: TempFolder) throws -> Void in
+            try arranger.addFile(at: temp.real + "/plain", contents: Data("x".utf8))
+            let target = temp.real + "/plain/child"
+            if case .fileUnwritable(let path, let reason)? = caught({
+                try disk.write(Data("y".utf8), toPath: target)
+            }) {
+                #expect(path == target)
+                #expect(reason.contains("Not a directory"))
+            } else {
+                Issue.record("expected fileUnwritable")
+            }
+            #expect(try disk.topLevelNames(in: temp.real) == ["plain"])
+            #expect(
+                (try? disk.readRegularFile(at: temp.real + "/plain", upToBytes: 10))
+                    == Data("x".utf8))
         }
     }
 
