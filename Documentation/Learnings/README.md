@@ -10,3 +10,4 @@ One page for each area. Each entry has three parts: the trap, the finding that p
 | [Entities](Entities.md) | Strict configuration and safe names |
 | [Test doubles](TestDoubles.md) | Doubles and behavior suites |
 | [Domain logic](DomainLogic.md) | Identity, paths, gate and graph |
+| [System access](SystemAccess.md) | Links, pipes, bounded reads and names |

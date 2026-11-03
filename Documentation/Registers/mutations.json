@@ -318,5 +318,85 @@
     "search": "if data.count > Self.maximumBytes {",
     "replace": "if false {",
     "test": "oversizeAndFolder"
+  },
+  {
+    "id": "disk-nofollow",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "O_RDONLY | O_NOFOLLOW | O_NONBLOCK",
+    "replace": "O_RDONLY | O_NONBLOCK",
+    "test": "lastComponentLinkIsRefused"
+  },
+  {
+    "id": "disk-regular-check",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "guard (info.st_mode & S_IFMT) == S_IFREG else",
+    "replace": "guard (info.st_mode & S_IFMT) != 0 else",
+    "test": "folderIsRefused"
+  },
+  {
+    "id": "disk-limit-plus-one",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "max(limit, 0) + 1",
+    "replace": "max(limit, 0)",
+    "test": "readStopsAfterLimitPlusOne"
+  },
+  {
+    "id": "disk-not-found-mapping",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "case ENOENT, ENOTDIR: throw .fileNotFound(path: path)",
+    "replace": "case ENOTDIR: throw .fileNotFound(path: path)",
+    "test": "missingPathHasNoRealPath"
+  },
+  {
+    "id": "disk-loop-mapping",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "case ELOOP: throw .symlinkLoop(path: path)",
+    "replace": "case ELOOP: throw .fileNotFound(path: path)",
+    "test": "loopIsReported"
+  },
+  {
+    "id": "disk-exists-lstat",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "return lstat(path, &info) == 0",
+    "replace": "return stat(path, &info) == 0",
+    "test": "danglingLinkExists"
+  },
+  {
+    "id": "disk-sorted-listing",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "return names.sorted()",
+    "replace": "return names",
+    "test": "listingIsSorted"
+  },
+  {
+    "id": "disk-move-replaces",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "try removeItem(at: destination)",
+    "replace": "_ = destination",
+    "test": "moveReplacesDestination"
+  },
+  {
+    "id": "disk-remove-link-only",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "if lstat(path, &info) != 0 {",
+    "replace": "if stat(path, &info) != 0 {",
+    "test": "removingLinkKeepsTarget"
+  },
+  {
+    "id": "disk-write-atomic-rename",
+    "slice": "3",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "failure == nil && rename(temporary, path) != 0",
+    "replace": "failure == nil && rename(temporary, temporary) != 0",
+    "test": "writeIsCleanAndReplaces"
   }
 ]
