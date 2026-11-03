@@ -7,7 +7,7 @@ import Foundation
 
 /// Helpers that make small real packages and run the real tools.
 enum ContractSupport {
-    static let process = SystemProcessRunner()
+    static let process = SystemProcessRunner(children: ChildProcessRegistry())
     static let disk = DiskFileSystem()
 
     static func temporaryFolder(_ label: String) throws -> URL {
@@ -76,7 +76,8 @@ enum ContractSupport {
             localCacheDirectory: scratch.appendingPathComponent("local").path,
             remoteCacheDirectory: scratch.appendingPathComponent("remote").path,
             checkoutsDirectory: nil,
-            processTimeoutSeconds: 120, maximumOutputBytes: 64 * 1024 * 1024)
+            processTimeoutSeconds: 120, maximumOutputBytes: 64 * 1024 * 1024,
+            staleTemporaryFilesBefore: Date().addingTimeInterval(-86_400))
     }
 
     static func reader(scratch: URL, swift: String) -> PackageGraphReader {
