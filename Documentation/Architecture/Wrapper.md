@@ -13,13 +13,15 @@
 5. Cache. The cache root is `$HOME/Library/Caches/dependi`. `$DEPENDI_CACHE_ROOT` replaces it only with `DEPENDI_TESTING=1`. The script refuses a root that is a symlink, is not a folder, is not owned by the current user or can be written by the group or others. It makes a new root with mode 0700. The entry is `<version>-<commit>/bin`. It is used only when `dependi.sha256` equals the `shasum -a 256` of `dependi`.
 6. Build. The script takes the lock `<version>-<commit>.lock` with `mkdir`, polls every 0.2 s for at most 300 s and removes a lock older than 10 minutes. After it gets the lock it checks the cache again. Then it:
    - makes a temp folder `build.XXXXXX` under the cache root,
-   - runs `git clone --quiet`, `git checkout --quiet <commit>` and requires `git rev-parse HEAD` to equal the pin,
+   - runs `git clone --quiet --template=`, `git checkout --quiet <commit>` and requires `git rev-parse HEAD` to equal the pin. Each git call goes through `env -i` with `HOME` set to an empty folder in the temp folder, `PATH=/usr/bin:/bin`, `GIT_CONFIG_NOSYSTEM=1`, `GIT_CONFIG_GLOBAL=/dev/null`, `GIT_TERMINAL_PROMPT=0`, `TMPDIR` and, when set, `DEVELOPER_DIR`. It also passes `-c core.hooksPath=/dev/null`. An inherited `GIT_DIR` or a user config never reaches git,
    - builds under `env -i` with `HOME`, `PATH=/usr/bin:/bin`, `TMPDIR` and, when set, `DEVELOPER_DIR`,
    - copies `build/release/dependi` to `out/dependi`, writes `out/dependi.sha256`,
    - renames `out` to `<version>-<commit>/bin`.
 7. Release the lock and the temp folder, then `exec` the cached binary with the script arguments.
 
 ## Fixed values
+
+The script sets `PATH=/usr/bin:/bin` at the top. Every tool it calls resolves from there, and the caller's `PATH` is not used.
 
 The repository URL and the build command are constants in the script. Nothing comes from `.dependi.json` except the version, the commit and the gate list. With `DEPENDI_TESTING=1` three test hooks work: `DEPENDI_REPO_URL` replaces the URL, `DEPENDI_XCRUN` replaces `/usr/bin/xcrun` and `DEPENDI_CACHE_ROOT` replaces the cache folder.
 
@@ -37,4 +39,4 @@ The cache is trusted when the folder is private to the user. `dependi.sha256` si
 
 ## Tests
 
-`WrapperScriptTests` and `WrapperScriptFuzzTests` write the script into a temp project. Stub `git`, `xcrun` and `dependi` programs come first on `PATH` and log each call. The stub `git` forwards to the real `git` against a bare repository made in the test. The stub `xcrun` makes `<scratch>/release/dependi`, a small shell script that prints a marker.
+`WrapperScriptTests` and `WrapperScriptFuzzTests` write the script into a temp project. Stub `git`, `xcrun` and `dependi` programs come first on `PATH` and log each call. The script runs git as `/usr/bin/git`. The tests reach the stub through the Xcode shim: `DEVELOPER_DIR` points at a folder whose `usr/bin/xcrun` hands `git` calls to the stub. The stub `git` records its arguments and its environment, then forwards to the real `git` against a bare repository made in the test. The stub `xcrun` makes `<scratch>/release/dependi`, a small shell script that prints a marker.

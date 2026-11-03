@@ -48,6 +48,8 @@ final class WrapperWorld {
     let home: URL
     let callLog: URL
     let envLog: URL
+    let gitEnvLog: URL
+    let developerDir: URL
     let control: URL
     let stubs: URL
     let origin: URL
@@ -61,10 +63,15 @@ final class WrapperWorld {
         home = root.appendingPathComponent("home")
         callLog = root.appendingPathComponent("calls.log")
         envLog = root.appendingPathComponent("xcrun-env.log")
+        gitEnvLog = root.appendingPathComponent("git-env.log")
+        developerDir = root.appendingPathComponent("dev dir")
         control = root.appendingPathComponent("ctl")
         stubs = root.appendingPathComponent("stubs")
         origin = root.appendingPathComponent("origin.git")
-        for folder in [project.appendingPathComponent(".dependi/bin"), control, stubs] {
+        for folder in [
+            project.appendingPathComponent(".dependi/bin"), control, stubs,
+            developerDir.appendingPathComponent("usr/bin"),
+        ] {
             try fm.createDirectory(at: folder, withIntermediateDirectories: true)
         }
         try fm.createDirectory(
@@ -75,17 +82,31 @@ final class WrapperWorld {
             """
             #!/bin/sh
             echo "git $*" >> '\(callLog.path)'
-            if [ "$1" = clone ] && [ -f '\(control.path)/fail-clone' ]; then
-                echo 'clone refused' >&2
-                exit 1
-            fi
-            if [ "$3" = rev-parse ] && [ -f '\(control.path)/lie-head' ]; then
-                echo bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-                exit 0
-            fi
+            env | sort >> '\(gitEnvLog.path)'
+            for argument in "$@"; do
+                if [ "$argument" = clone ] && [ -f '\(control.path)/fail-clone' ]; then
+                    echo 'clone refused' >&2
+                    exit 1
+                fi
+                if [ "$argument" = rev-parse ] && [ -f '\(control.path)/lie-head' ]; then
+                    echo bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+                    exit 0
+                fi
+            done
             unset DEVELOPER_DIR SDKROOT
             exec /usr/bin/git "$@"
             """, at: stubs.appendingPathComponent("git"))
+        // The Xcode shim at /usr/bin/git runs "$DEVELOPER_DIR/usr/bin/xcrun git ...". This stub
+        // hands that call to the git stub, so the wrapper reaches the stub with no PATH lookup.
+        try install(
+            """
+            #!/bin/sh
+            if [ "$1" = git ]; then
+                shift
+                exec '\(stubs.path)/git' "$@"
+            fi
+            exit 1
+            """, at: developerDir.appendingPathComponent("usr/bin/xcrun"))
         try install(
             """
             #!/bin/sh
@@ -204,6 +225,7 @@ final class WrapperWorld {
             "PATH": stubs.path + ":/usr/bin:/bin",
             "HOME": home.path,
             "TMPDIR": root.path,
+            "DEVELOPER_DIR": developerDir.path,
             "DEPENDI_TESTING": "1",
             "DEPENDI_CACHE_ROOT": cache.path,
         ]

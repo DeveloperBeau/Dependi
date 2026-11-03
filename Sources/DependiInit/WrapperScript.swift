@@ -25,6 +25,10 @@ public enum WrapperScript {
         # The repository URL and the build command are fixed here and never come from config.
         set -eu
 
+        # Every tool below resolves from a fixed path, never from the caller's PATH.
+        PATH=/usr/bin:/bin
+        export PATH
+
         repo_url='https://github.com/\#(owner)/Dependi.git'
         nl='
         '
@@ -201,14 +205,21 @@ public enum WrapperScript {
         tmp=$(mktemp -d "$cache_root/build.XXXXXX")
         log="$tmp/build.log"
         : >"$log"
+        mkdir "$tmp/githome"
 
-        if ! git clone --quiet "$repo_url" "$tmp/src" >>"$log" 2>&1; then
+        # Git runs with a clean environment: no inherited GIT_DIR, no user or system config,
+        # no hooks and no template folder.
+        run_git() {
+            env -i HOME="$tmp/githome" PATH=/usr/bin:/bin TMPDIR="${TMPDIR:-/tmp}" GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null GIT_TERMINAL_PROMPT=0 ${DEVELOPER_DIR:+DEVELOPER_DIR="$DEVELOPER_DIR"} /usr/bin/git -c core.hooksPath=/dev/null "$@"
+        }
+
+        if ! run_git clone --quiet --template= "$repo_url" "$tmp/src" >>"$log" 2>&1; then
             fail 'git clone failed'
         fi
-        if ! git -C "$tmp/src" checkout --quiet "$commit" >>"$log" 2>&1; then
+        if ! run_git -C "$tmp/src" checkout --quiet "$commit" >>"$log" 2>&1; then
             fail "git checkout of $commit failed"
         fi
-        head=$(git -C "$tmp/src" rev-parse HEAD 2>>"$log") || head=
+        head=$(run_git -C "$tmp/src" rev-parse HEAD 2>>"$log") || head=
         if [ "$head" != "$commit" ]; then
             fail "the checked out commit is not the pinned commit $commit"
         fi

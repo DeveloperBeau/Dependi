@@ -42,6 +42,12 @@
 - **Finding:** Only folder ownership and mode keep a planted pair out. The override of the cache folder was open in production, so any caller could point the script at a folder it controlled.
 - **Rule:** Treat the cache folder as the trust boundary. Make it private, refuse a folder that is not, and keep test overrides behind the test flag.
 
+## Git reads the caller's environment and the user's config
+
+- **Trap:** An inherited `GIT_DIR` from a git hook makes `git checkout` act on another repository. `insteadOf`, `core.hooksPath` and `init.templateDir` in the user config change a clone.
+- **Finding:** A test with a hostile `GIT_DIR`, a `.gitconfig` that redirects the origin and a decoy `shasum` first on `PATH` shows each effect.
+- **Rule:** Run git under `env -i` with a fixed `PATH`, an empty `HOME`, no system or global config, no hooks and no template. Fix `PATH` for the whole script.
+
 ## Mutation results
 
 | Mutation | Test that failed |

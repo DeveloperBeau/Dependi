@@ -277,7 +277,9 @@ struct WrapperScriptTests {
         #expect(run.stdout == "built-marker generate\n")
         let calls = world.calls()
         #expect(calls.count == 4)
-        #expect(calls[0].hasPrefix("git clone --quiet \(world.origin.path) "))
+        #expect(
+            calls[0].hasPrefix(
+                "git -c core.hooksPath=/dev/null clone --quiet --template= \(world.origin.path) "))
         #expect(calls[1].contains("checkout --quiet \(head)"))
         #expect(calls[2].contains("rev-parse HEAD"))
         #expect(calls[3].hasPrefix("xcrun swift build -c release --package-path "))
@@ -389,7 +391,7 @@ struct WrapperScriptTests {
         let head = try world.makeOrigin()
         try world.writeConfig(["version": Self.version, "commit": head])
         let env = world.buildEnvironment([
-            "SDKROOT": "/some/sdk", "DEVELOPER_DIR": "/some/dev dir", "OTHER_LDFLAGS": "-x",
+            "SDKROOT": "/some/sdk", "OTHER_LDFLAGS": "-x",
         ])
         let run = try world.run(environment: env)
         #expect(run.status == 0, "\(run.stderr)")
@@ -397,9 +399,56 @@ struct WrapperScriptTests {
         #expect(!logged.contains("SDKROOT"))
         #expect(!logged.contains("OTHER_LDFLAGS"))
         #expect(!logged.contains("DEPENDI_"))
-        #expect(logged.contains("DEVELOPER_DIR=/some/dev dir\n"))
+        #expect(logged.contains("DEVELOPER_DIR=\(world.developerDir.path)\n"))
         #expect(logged.contains("HOME=\(world.root.path)/home\n"))
         #expect(logged.contains("PATH=/usr/bin:/bin\n"))
+    }
+
+    @Test("git runs with a clean environment, no user config and no hooks")
+    func gitEnvironmentIsClean() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        // A user config that sends the origin somewhere that does not exist.
+        try """
+        [url "file:///nonexistent/"]
+            insteadOf = \(world.origin.path)
+        """.write(
+            to: world.home.appendingPathComponent(".gitconfig"), atomically: true, encoding: .utf8)
+        let env = world.buildEnvironment([
+            "GIT_DIR": "/nonexistent/other.git", "GIT_WORK_TREE": "/nonexistent/tree",
+            "GIT_INDEX_FILE": "/nonexistent/index", "GIT_TEMPLATE_DIR": "/nonexistent/template",
+        ])
+        let run = try world.run(environment: env)
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(run.stdout == "built-marker\n")
+        let logged = try String(contentsOf: world.gitEnvLog, encoding: .utf8)
+        for name in ["GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_TEMPLATE_DIR", "DEPENDI_"] {
+            #expect(!logged.contains(name + "="), "\(name) reached git")
+            #expect(!logged.contains(name + "\n"), "\(name) reached git")
+        }
+        #expect(logged.contains("PATH=/usr/bin:/bin\n"))
+        #expect(logged.contains("GIT_CONFIG_GLOBAL=/dev/null\n"))
+        #expect(logged.contains("GIT_CONFIG_NOSYSTEM=1\n"))
+        #expect(!logged.contains("HOME=\(world.home.path)\n"))
+        for call in world.calls(of: "git") {
+            #expect(call.hasPrefix("git -c core.hooksPath=/dev/null "), "\(call)")
+        }
+    }
+
+    @Test("a tool placed first on the caller's PATH is not used")
+    func callerPathIsIgnored() throws {
+        let world = try world()
+        try world.seedCache(version: Self.version, commit: Self.commit, sha: nil)
+        let decoy = world.stubs.appendingPathComponent("shasum")
+        try "#!/bin/sh\necho decoy >> '\(world.callLog.path)'\necho 0000 -\n".write(
+            to: decoy, atomically: true, encoding: .utf8)
+        try FileManager.default.setAttributes(
+            [.posixPermissions: 0o755], ofItemAtPath: decoy.path)
+        let run = try world.run(environment: world.buildEnvironment())
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(run.stdout == "cached-marker\n")
+        #expect(world.calls().isEmpty)
     }
 
     @Test("a custom repo URL without DEPENDI_TESTING is ignored")

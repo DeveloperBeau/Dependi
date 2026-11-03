@@ -1219,8 +1219,8 @@
     "id": "wrapper-env-clean-removed",
     "slice": "10",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "env -i HOME=",
-    "replace": "env HOME=",
+    "search": "env -i HOME=\"$home\"",
+    "replace": "env HOME=\"$home\"",
     "test": "buildEnvironmentIsClean"
   },
   {
@@ -1286,5 +1286,45 @@
     "search": "find \"$cache_root\" -maxdepth 0 \\( -perm -020 -o -perm -002 \\) 2>/dev/null",
     "replace": "find \"$cache_root\" -maxdepth 0 -name nomatch 2>/dev/null",
     "test": "writableCacheFolderIsRefused"
+  },
+  {
+    "id": "wrapper-git-env-clean-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "env -i HOME=\"$tmp/githome\" ",
+    "replace": "env HOME=\"$tmp/githome\" ",
+    "test": "gitEnvironmentIsClean"
+  },
+  {
+    "id": "wrapper-git-hooks-enabled",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "-c core.hooksPath=/dev/null \"$@\"",
+    "replace": "\"$@\"",
+    "test": "gitEnvironmentIsClean"
+  },
+  {
+    "id": "wrapper-git-global-config-allowed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null ",
+    "replace": "GIT_CONFIG_NOSYSTEM=1 ",
+    "test": "gitEnvironmentIsClean"
+  },
+  {
+    "id": "wrapper-git-template-allowed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "clone --quiet --template= \"$repo_url\"",
+    "replace": "clone --quiet \"$repo_url\"",
+    "test": "missingBinaryBuildsAndRuns"
+  },
+  {
+    "id": "wrapper-path-pin-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "PATH=/usr/bin:/bin\n        export PATH",
+    "replace": "export PATH",
+    "test": "callerPathIsIgnored"
   }
 ]
