@@ -12,6 +12,12 @@
 - **Finding:** Each run has a time limit. The runner kills the whole process group, because the build tool leaves child processes behind.
 - **Rule:** A time-out counts as KILLED (TIMEOUT) and is shown as such.
 
+## A killed process group can leave the test helper running
+
+- **Trap:** Killing the process group of `swift test` on a time-out does not stop the test helper that it started. A looping mutant kept a CPU core busy long after the run, and later builds slowed down.
+- **Finding:** The helper leaves the group. A test that looked for processes with the package path in their command line found it.
+- **Rule:** On a time-out or an interrupt the runner kills the group and every descendant it finds in the process table.
+
 ## An interrupt can leave broken code in the tree
 
 - **Trap:** Ctrl-C between the edit and the restore leaves a mutated source file that a later commit could include.
@@ -30,3 +36,4 @@
 |---|---|
 | A build failure counts as killed | `mixedRegisterReportsEachOutcome` |
 | The interrupt handler does not restore | `interruptRestoresFile` |
+| A time-out kills the group only | `timeoutLeavesNoProcessBehind` |

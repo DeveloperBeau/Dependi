@@ -24,6 +24,16 @@ struct MutationRunnerTests {
         #expect(try package.gitStatus().isEmpty)
     }
 
+    @Test("a time-out leaves no process of the mutant package running")
+    func timeoutLeavesNoProcessBehind() throws {
+        let package = try MiniPackage.create()
+        defer { package.remove() }
+        let result = try RunnerBinary.run(
+            on: package, register: Register.list([Register.looping]), extra: ["--timeout", "90"])
+        #expect(result.output.contains("loop | KILLED (TIMEOUT) |"), "output: \(result.output)")
+        #expect(try MiniPackage.processes(mentioning: package.root.path).isEmpty)
+    }
+
     @Test("a register where every mutant is killed exits zero")
     func allKilledExitsZero() throws {
         let package = try MiniPackage.create()
@@ -171,6 +181,7 @@ struct MutationRunnerTests {
         #expect(!process.isRunning, "the runner did not stop after the interrupt")
         #expect(try package.sourceText() == MiniPackage.sourceText)
         #expect(try package.gitStatus().isEmpty)
+        #expect(try MiniPackage.processes(mentioning: package.root.path).isEmpty)
     }
 
     @Test("the markdown page is generated from the register and sorted by id")

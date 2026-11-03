@@ -38,7 +38,7 @@ SIGINT and SIGTERM restore the file that is being mutated and exit with 130.
 
 ## Processes
 
-Each command runs in its own process group. On a time-out the runner kills the whole group, so child build tools do not stay behind.
+Each command runs in its own process group. On a time-out or an interrupt the runner kills the group and every descendant in the process table. The test helper that `swift test` starts leaves the group, so the group kill alone is not enough.
 
 ## Test ids
 

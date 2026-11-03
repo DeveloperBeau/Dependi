@@ -103,5 +103,16 @@ struct MiniPackage {
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
+    /// Lists running processes whose command line mentions the given text.
+    static func processes(mentioning text: String) throws -> [String] {
+        let table = try ChildProcess.run(
+            ["ps", "-axo", "pid=,command="],
+            workingDirectory: FileManager.default.temporaryDirectory
+        ).output
+        return table.split(separator: "\n").map(String.init).filter {
+            $0.contains(text) && !$0.contains("ps -axo")
+        }
+    }
+
     func remove() { try? FileManager.default.removeItem(at: root) }
 }

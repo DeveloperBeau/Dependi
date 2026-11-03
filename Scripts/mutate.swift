@@ -31,6 +31,7 @@ var timeoutSeconds = 300.0
 var onlyID: String?
 var markdownPath: String?
 var mutatedFile: String?
+var activeProcessID: Int32?
 
 func fail(_ message: String, code: Int32 = 2) -> Never {
     FileHandle.standardError.write(Data((message + "\n").utf8))
@@ -52,6 +53,41 @@ func parseArguments() {
     }
 }
 
+/// Lists every process id with its parent id.
+func processTable() -> [(pid: Int32, parent: Int32)] {
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: "/bin/ps")
+    process.arguments = ["-axo", "pid=,ppid="]
+    let pipe = Pipe()
+    process.standardOutput = pipe
+    do { try process.run() } catch { return [] }
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    process.waitUntilExit()
+    return String(decoding: data, as: UTF8.self).split(separator: "\n").compactMap { line in
+        let parts = line.split(separator: " ")
+        guard parts.count == 2, let pid = Int32(parts[0]), let parent = Int32(parts[1]) else {
+            return nil
+        }
+        return (pid, parent)
+    }
+}
+
+/// Kills a process, its process group and every descendant. Test helpers can leave the group.
+func killTree(_ root: Int32) {
+    let table = processTable()
+    var found: [Int32] = []
+    var queue = [root]
+    while let next = queue.popLast() {
+        for entry in table where entry.parent == next && !found.contains(entry.pid) {
+            found.append(entry.pid)
+            queue.append(entry.pid)
+        }
+    }
+    kill(-root, SIGKILL)
+    for pid in found { kill(pid, SIGKILL) }
+    kill(root, SIGKILL)
+}
+
 /// Runs a command in its own process group and kills the whole group on timeout.
 func run(_ arguments: [String], timeout: Double) -> CommandResult {
     let outputURL = FileManager.default.temporaryDirectory
@@ -69,10 +105,12 @@ func run(_ arguments: [String], timeout: Double) -> CommandResult {
     let finished = DispatchSemaphore(value: 0)
     process.terminationHandler = { _ in finished.signal() }
     do { try process.run() } catch { fail("cannot start \(arguments[0]): \(error)") }
+    activeProcessID = process.processIdentifier
+    defer { activeProcessID = nil }
     var timedOut = false
     if finished.wait(timeout: .now() + timeout) == .timedOut {
         timedOut = true
-        kill(-process.processIdentifier, SIGKILL)
+        killTree(process.processIdentifier)
         _ = finished.wait(timeout: .now() + 30)
     }
     let text = String(decoding: (try? Data(contentsOf: outputURL)) ?? Data(), as: UTF8.self)
@@ -90,6 +128,7 @@ func installSignalHandlers() {
         signal(signalNumber, SIG_IGN)
         let source = DispatchSource.makeSignalSource(signal: signalNumber, queue: .global())
         source.setEventHandler {
+            if let pid = activeProcessID { killTree(pid) }
             if let file = mutatedFile { restore(file) }
             exit(130)
         }
