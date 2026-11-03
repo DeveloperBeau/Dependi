@@ -260,6 +260,41 @@ struct GenerateFeatureTests {
         #expect(throws: DomainError.unmatchedExclude("typo")) { try typo.run() }
     }
 
+    @Test(
+        "a LICENSES folder gives its files, a LICENSE folder is skipped and a variant name is read")
+    func licenseLayouts() throws {
+        let world = try GenerateWorld()
+        let reuse = try world.addRemote("reuse", license: nil)
+        try world.files.addDirectory(at: reuse.checkoutPath + "/LICENSES")
+        try world.files.addFile(
+            at: reuse.checkoutPath + "/LICENSES/MIT.txt", contents: Data("mit text".utf8))
+        try world.files.addFile(
+            at: reuse.checkoutPath + "/LICENSES/Apache-2.0.txt", contents: Data("apache text".utf8))
+        try world.files.addDirectory(at: reuse.checkoutPath + "/LICENSES/nested.txt")
+        let odd = try world.addRemote("odd", license: nil)
+        try world.files.addDirectory(at: odd.checkoutPath + "/LICENSE")
+        try world.files.addFile(
+            at: odd.checkoutPath + "/LICENSE.MIT", contents: Data("variant".utf8))
+        world.link("reuse", package: "reuse")
+        world.link("odd", package: "odd")
+        _ = try world.run()
+        let acknowledgements = try #require(world.writer.calls.first).acknowledgements
+        #expect(acknowledgements.map(\.displayName) == ["odd", "reuse"])
+        #expect(acknowledgements[0].documents.map(\.fileName) == ["LICENSE.MIT"])
+        #expect(acknowledgements[0].documents.map(\.text) == ["variant"])
+        #expect(acknowledgements[1].documents.map(\.fileName) == ["Apache-2.0.txt", "MIT.txt"])
+        #expect(acknowledgements[1].documents.map(\.text) == ["apache text", "mit text"])
+    }
+
+    @Test("a package whose only LICENSE is a folder fails as missing a license")
+    func licenseFolderOnlyIsMissing() throws {
+        let world = try GenerateWorld()
+        let package = try world.addRemote("kit", license: nil)
+        try world.files.addDirectory(at: package.checkoutPath + "/LICENSE")
+        world.link("kit", package: "kit")
+        #expect(throws: DomainError.licenseMissing(package: "kit")) { try world.run() }
+    }
+
     @Test("a package without a license file fails and names the package")
     func missingLicense() throws {
         let world = try GenerateWorld()

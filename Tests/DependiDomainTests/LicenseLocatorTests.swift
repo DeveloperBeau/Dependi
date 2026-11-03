@@ -31,9 +31,36 @@ struct LicenseLocatorTests {
     @Test("names that only look like license files are not matched")
     func lookalikesAreNotMatched() {
         let names = [
-            "LICENSE-notes.txt", "LICENSE.pdf", "LICENSEX", "my-LICENSE", "LICENSES", "docs", "",
+            "LICENSE-notes.txt", "LICENSE.pdf", "LICENSEX", "my-LICENSE", "license.swift", "docs",
+            "",
+            "LICENSE-NOTES", "LICENSE.txt.orig", "LICENSES.md", "NOTICE.swift", "LICENSE-MIT-x",
         ]
         #expect(locator.licenseFileNames(among: names).isEmpty)
+    }
+
+    @Test("common variants of license file names are found")
+    func variantsAreFound() {
+        let names = [
+            "LICENSE.MIT", "LICENSE-2.0.txt", "LICENSE.rtf", "LICENSE-APACHE-2.0", "COPYING.GPL",
+            "LICENSES", "licence.BSD.txt", "NOTICE.md",
+        ]
+        #expect(
+            locator.licenseFileNames(among: names)
+                == [
+                    "licence.BSD.txt", "LICENSE-2.0.txt", "LICENSE-APACHE-2.0", "LICENSE.MIT",
+                    "LICENSE.rtf", "LICENSES", "COPYING.GPL", "NOTICE.md",
+                ])
+    }
+
+    @Test("a LICENSES folder gives its text files and leaves out hidden and other files")
+    func licensesFolderFiles() {
+        let inside = [
+            "MIT.txt", "Apache-2.0.txt", ".DS_Store", "LicenseRef-Foo", "logo.png", "Notes.md",
+            ".hidden.txt", "sub",
+        ]
+        #expect(
+            locator.licenseFileNames(inLicensesFolder: inside)
+                == ["Apache-2.0.txt", "LicenseRef-Foo", "MIT.txt", "Notes.md", "sub"])
     }
 
     @Test("an empty list gives an empty list")

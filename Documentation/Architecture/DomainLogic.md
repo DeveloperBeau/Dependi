@@ -53,6 +53,12 @@ Names are compared exactly. An empty list means archive only.
 8. Each manifest is read once for a run.
 9. The result lists the linked packages and the resolved packages that nothing reached.
 
+## Finding license files
+
+The locator reads the top-level names of a package folder. A name matches when it is a stem (`license`, `licence`, `copying`, `unlicense`, `notice` or `copyright`), then any number of tokens, then an optional text extension. A token follows a dash or a dot. It is `mit`, `apache`, `bsd`, `isc`, `zlib`, `gpl`, `lgpl`, `agpl`, `mpl`, `cc0` or a version such as `2.0`. The extensions are `txt`, `md`, `markdown`, `rst` and `rtf`. Case does not matter. `LICENSE.MIT`, `LICENSE-2.0.txt` and `LICENSE.rtf` match. `LICENSE-NOTES`, `license.swift` and `LICENSE.pdf` do not.
+
+A name is also tried as a folder. A folder named `LICENSES` (the REUSE layout) gives the files inside it that have a text extension or none, sorted by name. Hidden files and subfolders are left out. Any other folder that matches, such as a `LICENSE` folder, is skipped. An RTF file is read as text, so its markup is part of the pane.
+
 ## License file checks
 
 1. The real path must be inside the real path of the package folder, compared by component.

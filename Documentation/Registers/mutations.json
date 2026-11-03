@@ -1262,5 +1262,37 @@
     "replace": " {",
     "test": "formFeedAccepted",
     "slice": "review-fix"
+  },
+  {
+    "id": "locator-licenses-folder",
+    "file": "Sources/DependiDomain/LicenseLocator.swift",
+    "search": "|licenses)$\"#,",
+    "replace": ")$\"#,",
+    "test": "variantsAreFound",
+    "slice": "review-fix"
+  },
+  {
+    "id": "locator-hidden-skipped",
+    "file": "Sources/DependiDomain/LicenseLocator.swift",
+    "search": "guard !name.hasPrefix(\".\") else { return false }",
+    "replace": "guard true else { return false }",
+    "test": "licensesFolderFiles",
+    "slice": "review-fix"
+  },
+  {
+    "id": "generate-folder-skipped",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "guard name.lowercased() == \"licenses\" else { continue }",
+    "replace": "guard true else { continue }",
+    "test": "licenseFolderOnlyIsMissing",
+    "slice": "review-fix"
+  },
+  {
+    "id": "generate-nested-folder-skipped",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "where (try? directories.topLevelNames(in: path + \"/\" + innerName)) == nil {",
+    "replace": "where true {",
+    "test": "licenseLayouts",
+    "slice": "review-fix"
   }
 ]
