@@ -17,3 +17,4 @@ One page for each area. Each entry has three parts: the trap, the finding that p
 | [Transitive graph](TransitiveGraph.md) | Manifest reading and its cache |
 | [Settings bundle output](SettingsBundleOutput.md) | Panes, manifest and cleanup |
 | [Command line](CommandLine.md) | Argument parsing and its traps |
+| [Generate flow](GenerateFlow.md) | Gate order, sandbox and output paths |

@@ -44,4 +44,12 @@ public enum DomainError: Error, Equatable, Sendable {
     case invalidLicenseName(package: String, file: String)
     /// A manual entry points outside the project folder.
     case manualEntryOutsideProject(name: String, path: String)
+    /// A checkout is at a different revision than the one pinned in `Package.resolved`.
+    case revisionMismatch(package: String, pinned: String, checkedOut: String)
+    /// Resolved packages that no linked product reaches, listed by identity.
+    case packagesUnreached([String])
+    /// The user script sandbox is on, so the tool cannot read the package checkouts.
+    case scriptSandboxEnabled
+    /// A path for the output is empty, not absolute where it must be, or leaves its folder.
+    case invalidOutputLocation(path: String, reason: String)
 }
