@@ -5,7 +5,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("Package graph parsing")
+@Suite("Package graph parsing", .timeLimit(.minutes(1)))
 struct PackageGraphParsingTests {
     private func manifest(_ fixtureName: String) throws -> PackageManifest {
         let files = try GraphTestSupport.files()

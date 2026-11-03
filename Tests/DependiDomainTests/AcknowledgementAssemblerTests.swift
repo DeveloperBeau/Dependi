@@ -2,7 +2,7 @@ import DependiDomain
 import DependiEntities
 import Testing
 
-@Suite("Acknowledgement assembler")
+@Suite("Acknowledgement assembler", .timeLimit(.minutes(1)))
 struct AcknowledgementAssemblerTests {
     private let assembler = AcknowledgementAssembler(slugger: OutputNameSlugger())
 

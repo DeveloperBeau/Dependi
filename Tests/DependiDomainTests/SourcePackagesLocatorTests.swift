@@ -2,7 +2,7 @@ import DependiDomain
 import TestHelpers
 import Testing
 
-@Suite("Source packages locator")
+@Suite("Source packages locator", .timeLimit(.minutes(1)))
 struct SourcePackagesLocatorTests {
     private let locator = SourcePackagesLocator()
 

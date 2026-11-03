@@ -5,7 +5,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Generate feature")
+@Suite("Generate feature", .timeLimit(.minutes(1)))
 struct GenerateFeatureTests {
     private func world(configuration: String? = "{}") throws -> GenerateWorld {
         let world = try GenerateWorld(configuration: configuration)

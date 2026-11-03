@@ -4,7 +4,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Disk file system behavior")
+@Suite("Disk file system behavior", .timeLimit(.minutes(5)))
 struct DiskBehaviorTests {
     private func problems(root: String) -> [String] {
         let disk = DiskFileSystem()

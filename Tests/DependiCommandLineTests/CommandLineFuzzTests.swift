@@ -2,7 +2,7 @@ import DependiCommandLine
 import TestHelpers
 import Testing
 
-@Suite("Command line fuzz")
+@Suite("Command line fuzz", .timeLimit(.minutes(5)))
 struct CommandLineFuzzTests {
     private let parser = CommandLineParser()
 

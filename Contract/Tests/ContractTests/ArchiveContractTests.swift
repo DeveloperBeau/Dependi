@@ -5,7 +5,7 @@ import DependiWorkspaceState
 import Foundation
 import Testing
 
-@Suite("A real Xcode archive", .serialized)
+@Suite("A real Xcode archive", .serialized, .timeLimit(.minutes(40)))
 struct ArchiveContractTests {
     private static let project = """
         // !$*UTF8*$!

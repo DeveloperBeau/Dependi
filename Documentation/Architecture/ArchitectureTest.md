@@ -27,6 +27,8 @@ The architecture test fails when code breaks a ring rule or a source rule. A too
 11. Production source holds no sandbox bypass flag, shell call or fixed shell path.
 12. Production source holds no hidden global state: no stored `static var`, no `nonisolated(unsafe)` and no global `var`.
 
+Beside the source rules, a repository test checks that every `@Suite` in `Tests` and `Contract/Tests` declares a `.timeLimit`.
+
 ## Data flow
 
 1. `Scripts/refresh-package-dump.sh` records the manifest into `Tests/ArchitectureTests/Fixtures/package-dump.json`. It replaces the machine path with `$ROOT` and stores a hash of `Package.swift` next to it.

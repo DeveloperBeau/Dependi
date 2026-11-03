@@ -2,7 +2,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("Mutation runner", .serialized)
+@Suite("Mutation runner", .serialized, .timeLimit(.minutes(20)))
 struct MutationRunnerTests {
     @Test("each outcome is reported: killed, survived, invalid and killed by timeout")
     func mixedRegisterReportsEachOutcome() throws {

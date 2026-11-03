@@ -3,7 +3,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("In-memory file system")
+@Suite("In-memory file system", .timeLimit(.minutes(1)))
 struct InMemoryFileSystemTests {
     @Test("the double passes the shared file behavior suite")
     func doublePassesBehaviorSuite() {

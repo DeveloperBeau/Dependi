@@ -2,7 +2,7 @@ import DependiDomain
 import TestHelpers
 import Testing
 
-@Suite("License locator")
+@Suite("License locator", .timeLimit(.minutes(1)))
 struct LicenseLocatorTests {
     private let locator = LicenseLocator()
 

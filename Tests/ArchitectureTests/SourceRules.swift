@@ -164,6 +164,25 @@ enum SourceRules {
         return found
     }
 
+    /// Returns the 1-based lines of test suites that declare no `.timeLimit`. Only a suite attribute at the start of a line counts.
+    static func suitesWithoutTimeLimit(in source: String) -> [Int] {
+        let code = SwiftSourceLexer.codeOnly(source).components(separatedBy: "\n")
+        var result: [Int] = []
+        for (offset, line) in code.enumerated() where line.hasPrefix("@Suite") {
+            // The attribute can wrap onto the next lines, so read up to its closing bracket.
+            var attribute = line
+            var cursor = offset
+            while !attribute.contains("struct"), !attribute.contains("class"),
+                cursor + 1 < code.count, cursor - offset < 6
+            {
+                cursor += 1
+                attribute += " " + code[cursor]
+            }
+            if !attribute.contains(".timeLimit") { result.append(offset + 1) }
+        }
+        return result
+    }
+
     /// Counts the enumerations that conform to `Error`.
     static func errorEnumCount(in source: String) -> Int {
         count(errorEnum, in: SwiftSourceLexer.codeOnly(source))

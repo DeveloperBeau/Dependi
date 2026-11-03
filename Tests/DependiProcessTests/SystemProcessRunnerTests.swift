@@ -63,7 +63,7 @@ private enum Probe {
     }
 }
 
-@Suite(.serialized)
+@Suite(.serialized, .timeLimit(.minutes(1)))
 struct SystemProcessRunnerTests {
     @Test func bigOutputOnBothStreamsArrivesWithExactBytesAndChecksum() throws {
         let script = "(yes abc | head -c 1500000) & (yes xyz | head -c 1700000 >&2) & wait"

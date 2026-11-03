@@ -2,7 +2,7 @@ import CryptoKit
 import Foundation
 import Testing
 
-@Suite("Repository architecture")
+@Suite("Repository architecture", .timeLimit(.minutes(1)))
 struct RepositoryArchitectureTests {
     private let root = URL(fileURLWithPath: #filePath)
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
@@ -61,6 +61,27 @@ struct RepositoryArchitectureTests {
         let found = ArchitectureChecker.check(
             dump: try recordedDump(), sources: try productionSources())
         #expect(found.isEmpty, "\(found.map(\.description).joined(separator: "\n"))")
+    }
+
+    @Test("every test suite carries a time limit so a hang fails with a name")
+    func everySuiteHasATimeLimit() throws {
+        var missing: [String] = []
+        var suiteCount = 0
+        for folder in ["Tests", "Contract/Tests"] {
+            let enumerator = FileManager.default.enumerator(
+                at: root.appendingPathComponent(folder), includingPropertiesForKeys: nil)
+            while let url = enumerator?.nextObject() as? URL {
+                guard url.pathExtension == "swift" else { continue }
+                let text = try String(contentsOf: url, encoding: .utf8)
+                suiteCount +=
+                    text.components(separatedBy: "\n").filter { $0.hasPrefix("@Suite") }.count
+                for line in SourceRules.suitesWithoutTimeLimit(in: text) {
+                    missing.append("\(url.lastPathComponent):\(line)")
+                }
+            }
+        }
+        #expect(suiteCount > 20, "the scan found only \(suiteCount) suites")
+        #expect(missing.isEmpty, "suites without .timeLimit: \(missing)")
     }
 
     @Test("the gate script runs lint, tests and the per-module build")

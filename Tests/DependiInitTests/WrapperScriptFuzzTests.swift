@@ -2,7 +2,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("Wrapper script fuzz")
+@Suite("Wrapper script fuzz", .timeLimit(.minutes(5)))
 struct WrapperScriptFuzzTests {
     private static let versionAlphabet = Array("0123456789..  ;$`\n/-ab\"'\\")
     private static let commitAlphabet = Array("0123456789abcdefABCDEFg ;$`\n/.")

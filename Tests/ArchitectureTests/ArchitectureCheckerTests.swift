@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 
-@Suite("Architecture checks")
+@Suite("Architecture checks", .timeLimit(.minutes(1)))
 struct ArchitectureCheckerTests {
     // MARK: Ring edges in declared dependencies
 
@@ -351,6 +351,26 @@ struct ArchitectureCheckerTests {
             var computedGlobal: Int { 3 }
             """
         #expect(SourceRules.hiddenGlobalState(in: text).isEmpty)
+    }
+
+    @Test("a suite without a time limit is found and suites with one are not")
+    func suiteTimeLimitRule() {
+        let bare = "import Testing\n@Suite(\"A\")\nstruct A {}\n"
+        let serialized = "@Suite(\"A\", .serialized)\nstruct A {}\n"
+        let bareNoArguments = "@Suite struct A {}\n"
+        let limited =
+            "@Suite(\"A\", .timeLimit(.minutes(1)))\nstruct A {}\n@Suite(.timeLimit(.minutes(2))) struct B {}\n"
+        let wrapped =
+            "@Suite(\n    \"A\",\n    .serialized, .timeLimit(.minutes(1)))\nstruct A {}\n"
+        let embedded = "let text = \"\"\"\n    @Suite struct Fake {}\n    \"\"\"\n"
+        let inString = "@Suite(\"mentions .timeLimit in text\")\nstruct A {}\n"
+        #expect(SourceRules.suitesWithoutTimeLimit(in: bare) == [2])
+        #expect(SourceRules.suitesWithoutTimeLimit(in: serialized) == [1])
+        #expect(SourceRules.suitesWithoutTimeLimit(in: bareNoArguments) == [1])
+        #expect(SourceRules.suitesWithoutTimeLimit(in: inString) == [1])
+        #expect(SourceRules.suitesWithoutTimeLimit(in: limited).isEmpty)
+        #expect(SourceRules.suitesWithoutTimeLimit(in: wrapped).isEmpty)
+        #expect(SourceRules.suitesWithoutTimeLimit(in: embedded).isEmpty)
     }
 
     @Test("two error enumerations in one module are a violation")
