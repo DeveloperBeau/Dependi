@@ -344,6 +344,34 @@ struct LinkedPackageResolverTests {
         #expect(result.linked.isEmpty)
     }
 
+    @Test("an exclude matches whatever its case, and a location names its package")
+    func excludeIsNormalized() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(product: "Kit"),
+            "/checkouts/own": simpleManifest(product: "Own"),
+            "/checkouts/spare": simpleManifest(product: "Spare"),
+        ]
+        let (result, _) = try resolve(
+            linked: [
+                ProductReference(productName: "Kit", packageName: "kit"),
+                ProductReference(productName: "Own", packageName: "own"),
+            ],
+            remote: [remote("kit"), remote("own"), remote("spare")], manifests: manifests,
+            excludes: ["OWN", "https://github.com/org/Spare.git"])
+        #expect(names(result.linked) == ["kit"])
+        #expect(result.unreached.isEmpty)
+    }
+
+    @Test("a mixed-case exclude that matches nothing still fails and keeps the typed text")
+    func mixedCaseExcludeMatchesNothing() {
+        #expect(throws: DomainError.unmatchedExclude("Typo")) {
+            try resolve(
+                linked: [], remote: [remote("kit")],
+                manifests: ["/checkouts/kit": simpleManifest(product: "Kit")],
+                excludes: ["Typo"])
+        }
+    }
+
     // MARK: Fuzz
 
     @Test("fuzz: the linked set equals the packages reachable in a random graph, cycles included")

@@ -1246,5 +1246,13 @@
     "replace": "digest.prefix(4)",
     "test": "slugMatchesHandComputedHash",
     "slice": "review-fix"
+  },
+  {
+    "id": "resolver-excludes-normalized",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "let excludes = Set(rawExcludes.map { normalizer.identity(forLocation: $0).value })",
+    "replace": "let excludes = rawExcludes",
+    "test": "excludeIsNormalized",
+    "slice": "review-fix"
   }
 ]

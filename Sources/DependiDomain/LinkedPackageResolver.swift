@@ -22,17 +22,18 @@ public struct LinkedPackageResolver: Sendable {
     ///   - linked: The products that the target links.
     ///   - remotePackages: The resolved remote packages.
     ///   - localPackages: The local packages, each with its folder.
-    ///   - excludes: Identities to leave out. Each must match a package or a product's package name.
+    ///   - excludes: Packages to leave out, by identity or location. Case does not matter. Each must match a package or a product's package name.
     ///   - platformNames: The manifest platform names that apply, or `nil` to follow every dependency.
     ///   - includeBuildTools: Whether to follow the dependencies of macro and plugin targets.
     public func resolve(
         linked: [ProductReference],
         remotePackages: [ResolvedPackage],
         localPackages: [ResolvedPackage],
-        excludes: Set<String>,
+        excludes rawExcludes: Set<String>,
         platformNames: Set<String>?,
         includeBuildTools: Bool
     ) throws(DomainError) -> LinkResult {
+        let excludes = Set(rawExcludes.map { normalizer.identity(forLocation: $0).value })
         var packages: [PackageIdentity: ResolvedPackage] = [:]
         for package in localPackages + remotePackages {
             if let existing = packages[package.identity] {
@@ -41,7 +42,7 @@ public struct LinkedPackageResolver: Sendable {
             }
             packages[package.identity] = package
         }
-        try checkExcludes(excludes, packages: packages, linked: linked)
+        try checkExcludes(rawExcludes, packages: packages, linked: linked)
         var cache: [PackageIdentity: PackageManifest] = [:]
 
         func manifest(_ identity: PackageIdentity) throws(DomainError) -> PackageManifest {
@@ -176,14 +177,16 @@ public struct LinkedPackageResolver: Sendable {
     }
 
     private func checkExcludes(
-        _ excludes: Set<String>, packages: [PackageIdentity: ResolvedPackage],
+        _ rawExcludes: Set<String>, packages: [PackageIdentity: ResolvedPackage],
         linked: [ProductReference]
     ) throws(DomainError) {
         let productPackages = Set(
             linked.compactMap { $0.packageName.map { normalizer.identity(forLocation: $0).value } })
-        for exclude in excludes.sorted()
-        where packages[PackageIdentity(exclude)] == nil && !productPackages.contains(exclude) {
-            throw .unmatchedExclude(exclude)
+        for exclude in rawExcludes.sorted() {
+            let identity = normalizer.identity(forLocation: exclude)
+            if packages[identity] == nil && !productPackages.contains(identity.value) {
+                throw .unmatchedExclude(exclude)
+            }
         }
     }
 }
