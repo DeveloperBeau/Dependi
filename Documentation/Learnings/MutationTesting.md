@@ -36,6 +36,18 @@
 - **Finding:** The output said `No matching test cases were run` and the first mutation check proved nothing.
 - **Rule:** A register test id is a function name and must resolve in `swift test list`. A mutation check that shows no test result is not a result.
 
+## A filter by substring can pick the wrong test
+
+- **Trap:** `swift test --filter name` matches every test whose id contains the name. Seven register entries named a function that two or three suites declare, and one name was also the start of a longer one. The kill could come from a test that the entry did not name.
+- **Finding:** `swift test list` showed several ids for each of those names.
+- **Rule:** The runner finds the one listed id for the entry and filters on that full id. A name with more than one match is a register error. Write the suite and the function when a bare name is shared.
+
+## A hang is not a kill
+
+- **Trap:** A mutant that only made a test loop was counted as killed, so a test that never failed looked connected.
+- **Finding:** The pass rule counted every outcome except survived and invalid.
+- **Rule:** A kill by time-out passes only when the entry says `"expected": "timeout"`. Any other outcome that differs from the expectation fails the run.
+
 ## Mutation results for the runner
 
 | Mutation | Test that failed |
@@ -43,3 +55,6 @@
 | A build failure counts as killed | `mixedRegisterReportsEachOutcome` |
 | The interrupt handler does not restore | `interruptRestoresFile` |
 | A time-out kills the group only | `timeoutLeavesNoProcessBehind` |
+| A bare name is used as a substring filter | `qualifiedTestRunsOnlyThatTest`, `prefixOfAnotherNameDoesNotMatch` |
+| A time-out counts as a pass | `undeclaredTimeoutFails` |
+| An expectation is not compared | `killWhereTimeoutExpectedFails` |

@@ -4,7 +4,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Package graph process and cache")
+@Suite("Package graph process and cache", .timeLimit(.minutes(5)))
 struct PackageGraphProcessAndCacheTests {
     private let log = try! GraphTestSupport.fixture("swift-log")
 

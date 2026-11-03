@@ -5,7 +5,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Linked products from a project file")
+@Suite("Linked products from a project file", .timeLimit(.minutes(1)))
 struct LinkedProductsTests {
     @Test("an app with a direct remote package product returns it with the package identity")
     func directRemoteProduct() throws {

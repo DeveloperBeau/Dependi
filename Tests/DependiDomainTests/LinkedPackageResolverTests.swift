@@ -4,7 +4,7 @@ import DependiTestSupport
 import TestHelpers
 import Testing
 
-@Suite("Linked package resolver")
+@Suite("Linked package resolver", .timeLimit(.minutes(1)))
 struct LinkedPackageResolverTests {
     private let normalizer = PackageIdentityNormalizer()
 

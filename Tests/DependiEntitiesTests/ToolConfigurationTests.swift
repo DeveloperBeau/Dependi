@@ -3,7 +3,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("Tool configuration decoding")
+@Suite("Tool configuration decoding", .timeLimit(.minutes(1)))
 struct ToolConfigurationTests {
     private func decode(_ json: String) throws -> ToolConfiguration {
         try JSONDecoder().decode(ToolConfiguration.self, from: Data(json.utf8))

@@ -3,7 +3,7 @@ import DependiEntities
 import TestHelpers
 import Testing
 
-@Suite("Output name slugger")
+@Suite("Output name slugger", .timeLimit(.minutes(1)))
 struct OutputNameSluggerTests {
     private let slugger = OutputNameSlugger()
 

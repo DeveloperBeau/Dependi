@@ -5,7 +5,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Generate feature")
+@Suite("Generate feature", .timeLimit(.minutes(1)))
 struct GenerateFeatureTests {
     private func world(configuration: String? = "{}") throws -> GenerateWorld {
         let world = try GenerateWorld(configuration: configuration)
@@ -302,7 +302,7 @@ struct GenerateFeatureTests {
     @Test(
         "an output path that leaves the product, is absolute or is empty is refused before writing",
         arguments: [
-            "../Other.bundle", "/abs/Other.bundle", "a/../../b",
+            "../Other.bundle", "/abs/Other.bundle", "a/../../b", "",
         ])
     func badOutputPath(path: String) throws {
         let world = try GenerateWorld(configuration: "{\"outputPath\":\"\(path)\"}")
@@ -315,6 +315,15 @@ struct GenerateFeatureTests {
             try world.run()
         }
         #expect(world.writer.calls.isEmpty)
+    }
+
+    @Test("two dots inside a name are not a parent folder and the path is accepted")
+    func dotsInsideANameAreAccepted() throws {
+        let world = try GenerateWorld(configuration: #"{"outputPath":"a..b/Settings.bundle"}"#)
+        try world.addRemote("kit")
+        world.link("kit", package: "kit")
+        _ = try world.run()
+        #expect(world.writer.calls.first?.bundlePath == "/products/App.app/a..b/Settings.bundle")
     }
 
     @Test("a custom relative output path is used")

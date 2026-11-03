@@ -3,7 +3,7 @@ import DependiFileSystem
 import Foundation
 import Testing
 
-@Suite("Disk file system failures")
+@Suite("Disk file system failures", .timeLimit(.minutes(5)))
 struct DiskFailureTests {
     private let disk = DiskFileSystem()
     private let arranger = DiskTreeArranger()

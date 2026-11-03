@@ -10,7 +10,7 @@ import Testing
 // Real files: `real-v2` comes from a Flutter benchmark app and `real-v3` from a Swift package on
 // this machine. Their own version fields are 2 and 3. Version 1 is written by hand.
 
-@Suite("Package.resolved file")
+@Suite("Package.resolved file", .timeLimit(.minutes(1)))
 struct PinnedRevisionsTests {
     private let project = "/work/App"
     private let tail = "/xcshareddata/swiftpm/Package.resolved"

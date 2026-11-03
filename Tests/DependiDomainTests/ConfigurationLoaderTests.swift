@@ -4,7 +4,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Configuration loader")
+@Suite("Configuration loader", .timeLimit(.minutes(1)))
 struct ConfigurationLoaderTests {
     private func system(configuration: String?) throws -> InMemoryFileSystem {
         let files = InMemoryFileSystem()

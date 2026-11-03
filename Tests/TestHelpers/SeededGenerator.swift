@@ -2,12 +2,16 @@
 public struct SeededGenerator: RandomNumberGenerator {
     private var state: UInt64
 
+    /// The seed this generator started from, for failure messages.
+    public let seed: UInt64
+
     /// The seed that every fuzz test uses unless a test passes another.
     public static let defaultSeed: UInt64 = 0x00D3_9E4D_1C0F_FEE5
 
     /// Creates a generator that starts from the given seed.
     public init(seed: UInt64 = SeededGenerator.defaultSeed) {
         state = seed
+        self.seed = seed
     }
 
     public mutating func next() -> UInt64 {

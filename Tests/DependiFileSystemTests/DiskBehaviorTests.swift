@@ -4,7 +4,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Disk file system behavior")
+@Suite("Disk file system behavior", .timeLimit(.minutes(5)))
 struct DiskBehaviorTests {
     private func problems(root: String) -> [String] {
         let disk = DiskFileSystem()
@@ -46,7 +46,7 @@ struct DiskBehaviorTests {
                 guard let data = FileManager.default.contents(atPath: realPath) else {
                     throw .fileNotFound(path: realPath)
                 }
-                return data.prefix(limit + 1)
+                return data.prefix(limit < Int.max ? max(limit, 0) + 1 : limit)
             }
             func exists(at path: String) -> Bool { DiskFileSystem().exists(at: path) }
         }

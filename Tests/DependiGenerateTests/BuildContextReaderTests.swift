@@ -2,7 +2,7 @@ import DependiGenerate
 import DependiTestSupport
 import Testing
 
-@Suite("Build context reader")
+@Suite("Build context reader", .timeLimit(.minutes(1)))
 struct BuildContextReaderTests {
     @Test("every build setting is read into its own field")
     func allFieldsRead() {

@@ -7,7 +7,7 @@ import TestHelpers
 
 @testable import DependiSettingsBundle
 
-@Suite struct SettingsBundleWriterTests {
+@Suite(.timeLimit(.minutes(1))) struct SettingsBundleWriterTests {
     // MARK: Shape
 
     @Test func singleDocumentPackageWritesIndexChildAndManifest() throws {

@@ -6,7 +6,7 @@ The runner breaks the code on purpose and checks that a named test fails. A test
 
 ## Parts
 
-- `Documentation/Registers/mutations.json` lists the mutations. Each entry has an id, the slice that owns it, a file under `Sources/`, the exact search text, the replacement text and a test id.
+- `Documentation/Registers/mutations.json` lists the mutations. Each entry has an id, the slice that owns it, a file under `Sources/`, the exact search text, the replacement text and a test id. Two optional fields exist. `expected` is `killed` (the default) or `timeout`. `lastRun` holds the date and the outcome of the latest run and the runner writes it.
 - `Scripts/mutate.swift` is the runner. Compile it with `swiftc Scripts/mutate.swift -o mutate`.
 - `Documentation/Registers/mutations.md` is generated from the JSON with `--markdown`. A test fails if it is stale.
 
@@ -19,19 +19,21 @@ The runner breaks the code on purpose and checks that a named test fails. A test
 | `--timeout` | The time limit in seconds for the named test of one mutant. A mutant that runs longer is killed by time-out. |
 | `--build-timeout` | The time limit in seconds for a build and for the baseline run. The default is 900. A build that runs longer is INVALID, never a kill. |
 | `--only` | Run one entry. |
+| `--record` | Pass `no` to leave the register file alone. The default records each outcome as `lastRun`. |
 | `--markdown` | Write the register page to the given path and stop. |
 
 ## Flow
 
 1. Refuse to start if the working tree is not clean.
-2. Validate every entry. The file is a relative path under `Sources/`. The search text occurs exactly once. The replacement differs. The test id appears in `swift test list`. The id is unique. A problem is a register error and the exit code is 2.
+2. Validate every entry. The file is a relative path under `Sources/`. The search text occurs exactly once. The replacement differs. The test id matches exactly one test in `swift test list`. A name that two suites share is ambiguous and is a register error. The id is unique. `expected` is `killed` or `timeout`. A problem is a register error and the exit code is 2.
 3. For each entry, run the named test on clean code. A failure is reported as BASELINE FAILED.
 4. Apply the mutation and build the tests. A build failure is INVALID.
-5. Run only the named test. A pass is SURVIVED. A failure with a test failure marker is KILLED. A time-out is KILLED (TIMEOUT).
+5. Run only the named test, selected with an anchored filter on its full listed id. A pass is SURVIVED. A failure with a test failure marker is KILLED. A time-out is KILLED (TIMEOUT).
 6. Restore the file with `git checkout -- <file>` and require a clean tree.
-7. Print one row for each entry with its seconds, and the total.
+7. Print one row for each entry with its seconds, and the total. An outcome that differs from `expected` prints an UNEXPECTED line. A kill by time-out is a pass only when the entry expects `timeout`.
+8. Write `lastRun` into each entry that ran, by editing the entry text in place. Other text in the file is not reformatted.
 
-A survivor, an invalid mutant or a baseline failure makes the exit code 1.
+A survivor, an invalid mutant, an unexpected outcome or a baseline failure makes the exit code 1.
 
 ## Interrupts
 
@@ -43,7 +45,7 @@ Each command runs in its own process group. On a time-out or an interrupt the ru
 
 ## Test ids
 
-Use the test function name, for example `interruptRestoresFile`. `swift test --filter` does not match display names.
+Use the test function name, for example `interruptRestoresFile`, when it is unique in the test target. When two suites share a name, write the suite and the function, for example `ReleaseGateTests/missingAction()`. A parameterized test lists its argument labels, for example `badOutputPath(path:)`. `swift test --filter` does not match display names. A bare `--filter name` matches every test whose id contains the name, so the runner never uses it.
 
 ## Tests
 

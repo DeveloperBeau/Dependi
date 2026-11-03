@@ -59,16 +59,16 @@
     "id": "double-limit-plus-one",
     "slice": "2a",
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
-    "search": "data.prefix(limit + 1)",
-    "replace": "data.prefix(limit)",
+    "search": "max(limit, 0) + 1 : limit",
+    "replace": "max(limit, 0) : limit",
     "test": "doublePassesBehaviorSuite"
   },
   {
     "id": "double-link-hop-limit",
     "slice": "2a",
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
-    "search": "steps > 40",
-    "replace": "steps > 20",
+    "search": "maximumLinkHops = 32",
+    "replace": "maximumLinkHops = 20",
     "test": "loopsAndChains"
   },
   {
@@ -117,7 +117,7 @@
     "file": "Sources/DependiDomain/ReleaseGate.swift",
     "search": "if insideXcode { throw .buildContextIncomplete(missing: [\"ACTION\"]) }",
     "replace": "",
-    "test": "missingAction"
+    "test": "ReleaseGateTests/missingAction()"
   },
   {
     "id": "gate-case-sensitive",
@@ -229,7 +229,7 @@
     "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
     "search": "if let first = identities[candidate.identity] {",
     "replace": "if let first = identities[candidate.identity], false {",
-    "test": "duplicateIdentity"
+    "test": "AcknowledgementAssemblerTests/duplicateIdentity()"
   },
   {
     "id": "assembler-slug-collision",
@@ -245,7 +245,7 @@
     "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
     "search": "if candidate.documents.isEmpty { throw .licenseMissing(package: candidate.displayName) }",
     "replace": "",
-    "test": "missingLicense"
+    "test": "AcknowledgementAssemblerTests/missingLicense()"
   },
   {
     "id": "assembler-sort",
@@ -269,7 +269,7 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "&& !includeBuildTools {",
     "replace": "&& !includeBuildTools && false {",
-    "test": "macroDependencies"
+    "test": "LinkedPackageResolverTests/macroDependencies()"
   },
   {
     "id": "resolver-platform",
@@ -285,7 +285,7 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "throw .productUnmatched(product: product.productName)",
     "replace": "continue",
-    "test": "unmatchedProduct"
+    "test": "LinkedPackageResolverTests/unmatchedProduct()"
   },
   {
     "id": "resolver-exclude-unmatched",
@@ -309,7 +309,7 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "if let existing = packages[package.identity] {",
     "replace": "if let existing = packages[package.identity], false {",
-    "test": "duplicateIdentity"
+    "test": "LinkedPackageResolverTests/duplicateIdentity()"
   },
   {
     "id": "loader-size-cap",
@@ -941,7 +941,7 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "if case .skip(let reason) = decision {",
     "replace": "if case .skip(let reason) = decision, reason.isEmpty {",
-    "test": "debugSkips"
+    "test": "GenerateFeatureTests/debugSkips()"
   },
   {
     "id": "gen-platform-ios",
@@ -1238,5 +1238,53 @@
     "search": "root + \"/.dependi/Root.plist.bak\"",
     "replace": "plistPath + \".bak\"",
     "test": "paneAppended"
+  },
+  {
+    "id": "gen-output-empty",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "!path.isEmpty && !path.hasPrefix(\"/\")",
+    "replace": "!path.hasPrefix(\"/\")",
+    "test": "badOutputPath"
+  },
+  {
+    "id": "gen-output-dots-in-name",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": ".contains(\"..\")",
+    "replace": ".contains(where: { $0.contains(\"..\") })",
+    "test": "dotsInsideANameAreAccepted"
+  },
+  {
+    "id": "double-write-onto-folder",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "if case .directory? = state.nodes[target] {",
+    "replace": "if false, case .directory? = state.nodes[target] {",
+    "test": "writeOntoFolderFails"
+  },
+  {
+    "id": "double-link-hop-limit-disk",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "maximumLinkHops = 32",
+    "replace": "maximumLinkHops = 40",
+    "test": "linkChainLimitMatchesDisk"
+  },
+  {
+    "id": "double-read-limit-floor",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "max(limit, 0) + 1 : limit",
+    "replace": "max(limit, 1) + 1 : limit",
+    "test": "extremeReadLimits"
+  },
+  {
+    "id": "double-read-limit-max",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "max(limit, 0) + 1 : limit",
+    "replace": "max(limit, 0) + 1 : 0",
+    "test": "extremeReadLimits"
   }
 ]

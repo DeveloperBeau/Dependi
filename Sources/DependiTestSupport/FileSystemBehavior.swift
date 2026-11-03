@@ -58,6 +58,14 @@ public enum FileSystemBehavior {
             check(
                 "a limit equal to the size returns the whole file",
                 (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: 10)) == bytes)
+            check(
+                "a negative limit is treated as zero and returns one byte",
+                (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: -5))
+                    == bytes.prefix(1))
+            check(
+                "the largest limit returns the whole file without overflow",
+                (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: Int.max))
+                    == bytes)
             expectFailure("a missing file cannot be read", kind: "fileNotFound") {
                 _ = try reader.readRegularFile(at: realRoot + "/absent", upToBytes: 4)
             }
@@ -89,6 +97,22 @@ public enum FileSystemBehavior {
                 "a linked parent folder is resolved",
                 (try? reader.realPath(of: root + "/dir-link/inner.txt")) == realRoot
                     + "/real-dir/inner.txt")
+            var previous = realRoot + "/file.txt"
+            for hop in 1...30 {
+                try arranger.addSymlink(at: root + "/hop30-\(hop)", pointingTo: previous)
+                previous = realRoot + "/hop30-\(hop)"
+            }
+            check(
+                "a chain of 30 links resolves to the file",
+                (try? reader.realPath(of: root + "/hop30-30")) == realRoot + "/file.txt")
+            previous = realRoot + "/file.txt"
+            for hop in 1...33 {
+                try arranger.addSymlink(at: root + "/hop33-\(hop)", pointingTo: previous)
+                previous = realRoot + "/hop33-\(hop)"
+            }
+            expectFailure("a chain of 33 links is reported as a loop", kind: "symlinkLoop") {
+                _ = try reader.realPath(of: root + "/hop33-33")
+            }
             try arranger.addSymlink(at: root + "/loop-a", pointingTo: realRoot + "/loop-b")
             try arranger.addSymlink(at: root + "/loop-b", pointingTo: realRoot + "/loop-a")
             expectFailure("a loop of links is reported", kind: "symlinkLoop") {
@@ -140,6 +164,15 @@ public enum FileSystemBehavior {
             expectFailure("a write into a missing folder fails", kind: "fileUnwritable") {
                 try writer.write(bytes, toPath: root + "/no-folder/file")
             }
+            try arranger.addDirectory(at: root + "/occupied")
+            try arranger.addFile(at: root + "/occupied/child", contents: bytes)
+            expectFailure("a write onto a folder fails", kind: "fileUnwritable") {
+                try writer.write(replacement, toPath: root + "/occupied")
+            }
+            check(
+                "a refused write leaves the folder and its contents",
+                (try? reader.readRegularFile(at: realRoot + "/occupied/child", upToBytes: 20))
+                    == bytes)
             try writer.createDirectory(at: root + "/made/deeper/still")
             check(
                 "nested folders are created",

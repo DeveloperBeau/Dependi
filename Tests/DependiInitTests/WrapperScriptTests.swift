@@ -2,7 +2,7 @@ import DependiInit
 import Foundation
 import Testing
 
-@Suite("Wrapper script")
+@Suite("Wrapper script", .timeLimit(.minutes(5)))
 struct WrapperScriptTests {
     static let version = "1.2.3"
     static let commit = String(repeating: "a", count: 40)

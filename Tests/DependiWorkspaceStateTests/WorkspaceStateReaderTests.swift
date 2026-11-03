@@ -11,7 +11,7 @@ import Testing
 // and SwiftPM wrote on this machine. Both carry the file's own `"version" : 7`. Paths are scrubbed
 // to `$ROOT`. The v5 and v6 files are written by hand from the SwiftPM history of this format.
 
-@Suite("Workspace state file")
+@Suite("Workspace state file", .timeLimit(.minutes(1)))
 struct WorkspaceStateReaderTests {
     private func reader(_ fileSystem: InMemoryFileSystem) -> WorkspaceStateReader {
         WorkspaceStateReader(files: fileSystem, directories: fileSystem)

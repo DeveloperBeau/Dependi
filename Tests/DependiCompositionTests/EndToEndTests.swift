@@ -4,7 +4,7 @@ import DependiInit
 import Foundation
 import Testing
 
-@Suite("End to end")
+@Suite("End to end", .timeLimit(.minutes(5)))
 struct EndToEndTests {
     /// An app that links Alamofire, which depends on swift-log.
     private func standardWorld() throws -> EndToEndWorld {

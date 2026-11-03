@@ -1,7 +1,7 @@
 import DependiDomain
 import Testing
 
-@Suite("Domain error messages")
+@Suite("Domain error messages", .timeLimit(.minutes(1)))
 struct DomainErrorDescriptionTests {
     @Test("a message names the package, file or command it is about")
     func messagesNamePayloads() {

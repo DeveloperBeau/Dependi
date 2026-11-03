@@ -5,7 +5,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("License file validator")
+@Suite("License file validator", .timeLimit(.minutes(1)))
 struct LicenseFileValidatorTests {
     private func setup() throws -> InMemoryFileSystem {
         let files = InMemoryFileSystem()

@@ -4,7 +4,7 @@ import DependiFileSystem
 import Foundation
 import Testing
 
-@Suite("License validation on a real tree")
+@Suite("License validation on a real tree", .timeLimit(.minutes(5)))
 struct LicenseOnDiskTests {
     private let arranger = DiskTreeArranger()
     private let limit = 16

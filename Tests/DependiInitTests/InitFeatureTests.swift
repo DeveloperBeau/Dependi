@@ -6,7 +6,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("Init feature")
+@Suite("Init feature", .timeLimit(.minutes(1)))
 struct InitFeatureTests {
     // MARK: A fresh install
 
