@@ -15,3 +15,4 @@ One page for each subsystem. Each page describes how the subsystem works today.
 | [Process and console](ProcessAndConsole.md) | Current |
 | [Dependency sources](DependencySources.md) | Current |
 | [Project file](ProjectFile.md) | Current |
+| [Transitive graph](TransitiveGraph.md) | Current |

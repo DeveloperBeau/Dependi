@@ -694,5 +694,85 @@
     "search": "fromTarget.isEmpty ? tokens(key, in: projectSettings) : fromTarget",
     "replace": "fromTarget",
     "test": "projectLevelFallback"
+  },
+  {
+    "id": "graph-key-versioned-manifests",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "^Package(@swift-",
+    "replace": "^Package(@swiftx-",
+    "test": "versionedManifestInvalidates"
+  },
+  {
+    "id": "graph-key-environment",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "environmentHash(),",
+    "replace": "\"\",",
+    "test": "toolchainAndEnvironmentInvalidate"
+  },
+  {
+    "id": "graph-key-toolchain",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "settings.toolchainVersion,",
+    "replace": "\"\",",
+    "test": "toolchainAndEnvironmentInvalidate"
+  },
+  {
+    "id": "graph-key-stored",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "entry.key == key",
+    "replace": "true",
+    "test": "wrongKeyValidDumpIsAMiss"
+  },
+  {
+    "id": "graph-remote-tier",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "return real.hasPrefix(root + \"/\")",
+    "replace": "return false",
+    "test": "cacheTiers"
+  },
+  {
+    "id": "graph-exit-status",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "guard result.exitStatus == 0 else {",
+    "replace": "guard true else {",
+    "test": "nonZeroExit"
+  },
+  {
+    "id": "graph-scratch-path",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "\"--scratch-path\", scratch, ",
+    "replace": "",
+    "test": "requestShape"
+  },
+  {
+    "id": "graph-stderr-snippet",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "standardError.prefix(300)",
+    "replace": "standardError.prefix(0)",
+    "test": "nonZeroExit"
+  },
+  {
+    "id": "graph-product-condition-index",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "values.count > 3 ? values[3] : nil",
+    "replace": "values.count > 2 ? values[2] : nil",
+    "test": "syntheticPackage"
+  },
+  {
+    "id": "graph-declared-lowercase",
+    "slice": "7",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "identities.append(identity.lowercased())",
+    "replace": "identities.append(identity)",
+    "test": "unknownDependencyShapeIgnored"
   }
 ]

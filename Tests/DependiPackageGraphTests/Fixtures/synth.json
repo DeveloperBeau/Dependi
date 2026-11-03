@@ -1,0 +1,219 @@
+{
+  "cLanguageStandard": null,
+  "cxxLanguageStandard": null,
+  "defaultLocalization": null,
+  "dependencies": [
+    {
+      "sourceControl": [
+        {
+          "identity": "helper-kit",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/example/Helper-Kit.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.0.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fileSystem": [
+        {
+          "identity": "localkit",
+          "path": "$ROOT",
+          "productFilter": null,
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name": "Synth",
+  "packageKind": {
+    "root": [
+      "$ROOT"
+    ]
+  },
+  "pkgConfig": null,
+  "platforms": [
+    {
+      "options": [],
+      "platformName": "ios",
+      "version": "16.0"
+    },
+    {
+      "options": [],
+      "platformName": "macos",
+      "version": "13.0"
+    }
+  ],
+  "products": [
+    {
+      "name": "Synth",
+      "settings": [],
+      "targets": [
+        "Synth"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name": "SynthPlugin",
+      "settings": [],
+      "targets": [
+        "SynthPlugin"
+      ],
+      "type": {
+        "plugin": null
+      }
+    }
+  ],
+  "providers": null,
+  "swiftLanguageVersions": null,
+  "targets": [
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "Shared",
+            null
+          ]
+        },
+        {
+          "product": [
+            "HelperKit",
+            "Helper-Kit",
+            null,
+            null
+          ]
+        },
+        {
+          "product": [
+            "MacOnly",
+            "Helper-Kit",
+            null,
+            {
+              "platformNames": [
+                "macos"
+              ]
+            }
+          ]
+        },
+        {
+          "product": [
+            "LocalProduct",
+            "LocalKit",
+            null,
+            null
+          ]
+        },
+        {
+          "target": [
+            "Frame",
+            {
+              "platformNames": [
+                "ios",
+                "visionos"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "Synth",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [],
+      "type": "regular"
+    },
+    {
+      "dependencies": [],
+      "exclude": [],
+      "name": "Shared",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [],
+      "type": "regular"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "Tool",
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "SynthPlugin",
+      "packageAccess": true,
+      "pluginCapability": {
+        "buildTool": null
+      },
+      "resources": [],
+      "settings": [],
+      "type": "plugin"
+    },
+    {
+      "dependencies": [],
+      "exclude": [],
+      "name": "Tool",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [],
+      "type": "executable"
+    },
+    {
+      "checksum": "abc123",
+      "dependencies": [],
+      "exclude": [],
+      "name": "Frame",
+      "packageAccess": false,
+      "resources": [],
+      "settings": [],
+      "type": "binary",
+      "url": "https://example.com/Frame.zip"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "Synth",
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "SynthTests",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [],
+      "type": "test"
+    }
+  ],
+  "toolsVersion": {
+    "_version": "6.0.0"
+  },
+  "traits": []
+}

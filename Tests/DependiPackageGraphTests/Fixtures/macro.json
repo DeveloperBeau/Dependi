@@ -1,0 +1,210 @@
+{
+  "cLanguageStandard": null,
+  "cxxLanguageStandard": null,
+  "defaultLocalization": null,
+  "dependencies": [
+    {
+      "sourceControl": [
+        {
+          "identity": "swift-syntax",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/swiftlang/swift-syntax.git"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "604.0.0-latest",
+                "upperBound": "605.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name": "MacroTpl",
+  "packageKind": {
+    "root": [
+      "$ROOT"
+    ]
+  },
+  "pkgConfig": null,
+  "platforms": [
+    {
+      "options": [],
+      "platformName": "macos",
+      "version": "10.15"
+    },
+    {
+      "options": [],
+      "platformName": "ios",
+      "version": "13.0"
+    },
+    {
+      "options": [],
+      "platformName": "tvos",
+      "version": "13.0"
+    },
+    {
+      "options": [],
+      "platformName": "watchos",
+      "version": "6.0"
+    },
+    {
+      "options": [],
+      "platformName": "maccatalyst",
+      "version": "13.0"
+    }
+  ],
+  "products": [
+    {
+      "name": "MacroTpl",
+      "settings": [],
+      "targets": [
+        "MacroTpl"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name": "MacroTplClient",
+      "settings": [],
+      "targets": [
+        "MacroTplClient"
+      ],
+      "type": {
+        "executable": null
+      }
+    }
+  ],
+  "providers": null,
+  "swiftLanguageVersions": null,
+  "targets": [
+    {
+      "dependencies": [
+        {
+          "product": [
+            "SwiftSyntaxMacros",
+            "swift-syntax",
+            null,
+            null
+          ]
+        },
+        {
+          "product": [
+            "SwiftCompilerPlugin",
+            "swift-syntax",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "MacroTplMacros",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [],
+      "type": "macro"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "MacroTplMacros",
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "MacroTpl",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ApproachableConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "regular"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "MacroTpl",
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "MacroTplClient",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ApproachableConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "executable"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "MacroTplMacros",
+            null
+          ]
+        },
+        {
+          "product": [
+            "SwiftSyntaxMacrosTestSupport",
+            "swift-syntax",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "MacroTplTests",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ApproachableConcurrency"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "test"
+    }
+  ],
+  "toolsVersion": {
+    "_version": "6.4.0"
+  },
+  "traits": []
+}

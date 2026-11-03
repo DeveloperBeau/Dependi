@@ -34,6 +34,16 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | gate-config-error-build-skips | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `unreadableConfigurationOnBuildSkips` |
 | gate-debug-skips | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `otherConfigurationsSkip` |
 | gate-missing-action | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `missingAction` |
+| graph-declared-lowercase | 7 | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `unknownDependencyShapeIgnored` |
+| graph-exit-status | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `nonZeroExit` |
+| graph-key-environment | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `toolchainAndEnvironmentInvalidate` |
+| graph-key-stored | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `wrongKeyValidDumpIsAMiss` |
+| graph-key-toolchain | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `toolchainAndEnvironmentInvalidate` |
+| graph-key-versioned-manifests | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `versionedManifestInvalidates` |
+| graph-product-condition-index | 7 | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `syntheticPackage` |
+| graph-remote-tier | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `cacheTiers` |
+| graph-scratch-path | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `requestShape` |
+| graph-stderr-snippet | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `nonZeroExit` |
 | identity-git-strip | 2b | `Sources/DependiDomain/PackageIdentityNormalizer.swift` | `formsJoin` |
 | identity-lowercase | 2b | `Sources/DependiDomain/PackageIdentityNormalizer.swift` | `formsJoin` |
 | license-name-dot-names | 1 | `Sources/DependiEntities/LicenseDocument.swift` | `unsafeNamesAreRejected` |
