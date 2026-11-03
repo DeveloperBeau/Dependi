@@ -1075,7 +1075,7 @@
     "id": "init-backup",
     "slice": "10",
     "file": "Sources/DependiInit/InitFeature.swift",
-    "search": "if let original { try writer.write(original, toPath: plistPath + \".bak\") }",
+    "search": "try writer.write(original, toPath: root + \"/.dependi/Root.plist.bak\")",
     "replace": "",
     "test": "paneAppended"
   },
@@ -1230,5 +1230,13 @@
     "search": "(try? files.realPath(of: path)) ?? path",
     "replace": "path",
     "test": "localPackageWithTwoPaths"
+  },
+  {
+    "id": "init-backup-outside-bundle",
+    "slice": "11",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "root + \"/.dependi/Root.plist.bak\"",
+    "replace": "plistPath + \".bak\"",
+    "test": "paneAppended"
   }
 ]

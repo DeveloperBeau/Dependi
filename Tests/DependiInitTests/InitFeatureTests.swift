@@ -116,6 +116,7 @@ struct InitFeatureTests {
         #expect(try world.run() == .installed)
         #expect(try world.data("/proj/.dependi.json") == config)
         #expect(try world.data("/proj/Settings.bundle/Root.plist") == plist)
+        #expect(!world.files.exists(at: "/proj/.dependi/Root.plist.bak"))
         #expect(!world.files.exists(at: "/proj/Settings.bundle/Root.plist.bak"))
         #expect(try world.text("/proj/.gitignore") == ".dependi/bin/\n")
         #expect(world.console.lines.contains("Dependi: kept the existing .dependi.json."))
@@ -160,7 +161,10 @@ struct InitFeatureTests {
         let specifiers = try world.specifiers("/proj/Settings.bundle/Root.plist")
         #expect(specifiers.map { $0["Title"] } == ["Sound", "About", "Acknowledgements"])
         #expect(specifiers.last?["File"] == "Acknowledgements")
-        #expect(try world.data("/proj/Settings.bundle/Root.plist.bak") == before)
+        #expect(try world.data("/proj/.dependi/Root.plist.bak") == before)
+        #expect(
+            !world.files.exists(at: "/proj/Settings.bundle/Root.plist.bak"),
+            "the backup would ship in the app")
         #expect(
             try world.plist("/proj/Settings.bundle/Root.plist")["StringsTable"] as? String == "Root"
         )
