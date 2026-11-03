@@ -10,7 +10,8 @@
 - `LazyManifestReader` creates the package graph reader when the first manifest is needed. A build that is skipped therefore starts no process.
 - `SourceRootFinder` walks up from the running program to find the Dependi source folder, if there is one. The wizard uses it to pin the commit.
 - `DependiVersion` holds the version text.
-- `main.swift` builds a `SystemProcessRunner` and calls the application with the real arguments and environment. It is the only place that touches the process arguments.
+- `TerminationHandler` calls a closure when the process receives given signals. It turns off the default action of each signal while it is active.
+- `main.swift` builds a `ChildProcessRegistry` and a `SystemProcessRunner` that reports to it. It starts a `TerminationHandler` for SIGINT, SIGTERM and SIGHUP. The closure kills every live child group and exits with 128 plus the signal. Then it calls the application with the real arguments and environment. It is the only place that touches the process arguments.
 
 ## Exit codes
 
@@ -19,6 +20,7 @@
 | 0 | The command succeeded, or the build was skipped. |
 | 1 | A domain error. The message names the package or file. |
 | 64 | The command line is not valid. The usage text is printed. |
+| 128 + n | Dependi received signal n. Its children were killed first. |
 
 
 ## The toolchain

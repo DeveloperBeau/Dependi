@@ -1390,5 +1390,21 @@
     "search": "self.init(terminate: { ProcessTree.kill(root: $0) })",
     "replace": "self.init(terminate: { _ in })",
     "test": "terminateAllStopsARealRunningChildQuickly"
+  },
+  {
+    "id": "comp-signal-number-forwarded",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/TerminationHandler.swift",
+    "search": "source.setEventHandler { handler(number) }",
+    "replace": "source.setEventHandler { handler(SIGUSR2) }",
+    "test": "eachWatchedSignalIsReportedUnderItsOwnNumber"
+  },
+  {
+    "id": "comp-signal-default-ignored",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/TerminationHandler.swift",
+    "search": "Darwin.signal(number, SIG_IGN)",
+    "replace": "_ = number",
+    "test": "aWatchedSignalCallsTheHandlerWithItsNumber"
   }
 ]
