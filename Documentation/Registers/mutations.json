@@ -451,8 +451,8 @@
     "id": "process-timeout-check",
     "slice": "4",
     "file": "Sources/DependiProcess/SystemProcessRunner.swift",
-    "search": "} else if DispatchTime.now() >= deadline {",
-    "replace": "} else if false {",
+    "search": "if now >= deadline {",
+    "replace": "if false {",
     "test": "aSlowChildIsTimedOutQuickly"
   },
   {
@@ -795,8 +795,8 @@
     "id": "settings-unknown-file-refusal",
     "slice": "8",
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
-    "search": "where name != Self.manifestName",
-    "replace": "where false",
+    "search": "where !Self.isTolerated(name) && !previous.contains(name)",
+    "replace": "where false && !previous.contains(name)",
     "test": "unknownFileInFolderFailsBeforeAnyWrite"
   },
   {
