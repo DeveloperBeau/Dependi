@@ -220,9 +220,8 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             for key in state.nodes.keys where key == to || key.hasPrefix(to + "/") {
                 state.nodes[key] = nil
             }
-            state.executablePaths = state.executablePaths.filter {
-                !($0 == to || $0.hasPrefix(to + "/"))
-            }
+            let replaced = state.executablePaths.filter { $0 == to || $0.hasPrefix(to + "/") }
+            state.executablePaths.subtract(replaced)
             let marked = state.executablePaths.filter { $0 == from || $0.hasPrefix(from + "/") }
             for key in state.nodes.keys.sorted() where key == from || key.hasPrefix(from + "/") {
                 let moved = to + key.dropFirst(from.count)

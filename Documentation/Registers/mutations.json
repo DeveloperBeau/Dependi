@@ -1491,8 +1491,8 @@
     "id": "memory-move-keeps-destination-mark",
     "slice": "review-fix",
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
-    "search": "!($0 == to || $0.hasPrefix(to + \"/\"))",
-    "replace": "true",
+    "search": "state.executablePaths.subtract(replaced)",
+    "replace": "_ = replaced",
     "test": "doublePassesExecutableSuite"
   },
   {

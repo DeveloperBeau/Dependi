@@ -259,7 +259,10 @@ struct WrapperScriptTests {
     func foreignCacheFolderIsRefused() throws {
         let world = try world()
         // /usr is owned by root on every Mac.
-        let run = try world.run(environment: world.buildEnvironment(["DEPENDI_CACHE_ROOT": "/usr"]))
+        let run = try world.run(
+            environment: world.buildEnvironment([
+                "DEPENDI_CACHE_ROOT": "/usr", "DEPENDI_LOCK_WAIT_STEPS": "3",
+            ]))
         #expect(run.status == 1)
         #expect(run.stderr.contains("not a folder that you own"))
         #expect(world.calls().isEmpty)

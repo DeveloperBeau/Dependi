@@ -233,6 +233,8 @@ public enum FileSystemBehavior {
             try writer.moveItem(at: root + "/target", to: root + "/moved")
             check("a moved file is executable at its new path", isExecutable(realRoot + "/moved"))
             check("a moved file is gone from its old path", !reader.exists(at: root + "/target"))
+            check(
+                "a moved file leaves no mark at its old path", !isExecutable(realRoot + "/target"))
             try writer.write(bytes, toPath: root + "/target")
             check(
                 "a new file at the old path is not executable", !isExecutable(realRoot + "/target"))
@@ -244,6 +246,7 @@ public enum FileSystemBehavior {
 
             // A removed file leaves no mark behind.
             try writer.removeItem(at: root + "/moved")
+            check("a removed file is not executable", !isExecutable(realRoot + "/moved"))
             try writer.write(bytes, toPath: root + "/moved")
             check(
                 "a file made after a removal is not executable", !isExecutable(realRoot + "/moved"))
