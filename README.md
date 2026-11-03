@@ -63,4 +63,4 @@ Every rule has an entry in the [mutation register](Documentation/Registers/mutat
 
 ## Requirements
 
-Xcode 26 or later with a Swift 6 toolchain, on macOS 14 or later.
+Built and tested with Xcode 27.2 (Swift 6.4) on macOS 27. The package declares macOS 14 as its minimum. Other Xcode versions are not tested yet.
