@@ -203,7 +203,7 @@
     "id": "validator-control",
     "slice": "2b",
     "file": "Sources/DependiDomain/LicenseFileValidator.swift",
-    "search": "if scalar != \"\\t\" && scalar != \"\\n\" && scalar != \"\\r\" {",
+    "search": "if scalar != \"\\t\" && scalar != \"\\n\" && scalar != \"\\r\" && scalar != \"\\u{0C}\" {",
     "replace": "if false {",
     "test": "controlCharactersRefused"
   },
@@ -1253,6 +1253,14 @@
     "search": "let excludes = Set(rawExcludes.map { normalizer.identity(forLocation: $0).value })",
     "replace": "let excludes = rawExcludes",
     "test": "excludeIsNormalized",
+    "slice": "review-fix"
+  },
+  {
+    "id": "validator-form-feed",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": " && scalar != \"\\u{0C}\" {",
+    "replace": " {",
+    "test": "formFeedAccepted",
     "slice": "review-fix"
   }
 ]

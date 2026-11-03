@@ -59,7 +59,7 @@ Names are compared exactly. An empty list means archive only.
 2. The file must be a regular file. The read stops one byte past the limit.
 3. A file over the limit fails. The limit itself passes.
 4. Text is UTF-8, or UTF-16 with a byte order mark.
-5. Control characters other than tab, line feed and carriage return fail.
+5. Control characters other than tab, line feed, form feed and carriage return fail. The property list writer keeps a form feed, and a test reads it back.
 
 ## Tests
 

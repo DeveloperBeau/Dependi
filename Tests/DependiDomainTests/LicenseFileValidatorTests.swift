@@ -120,10 +120,17 @@ struct LicenseFileValidatorTests {
         }
     }
 
-    @Test("a control character other than tab, line feed and carriage return is refused")
+    @Test("a form feed between pages of a license is kept")
+    func formFeedAccepted() throws {
+        let files = try setup()
+        try files.addFile(at: "/checkouts/kit/FF", contents: Data("Page one\u{0C}\nPage two".utf8))
+        #expect(try document(files, name: "FF").text == "Page one\u{0C}\nPage two")
+    }
+
+    @Test("a control character other than tab, line feed, form feed and carriage return is refused")
     func controlCharactersRefused() throws {
         let files = try setup()
-        for (index, byte) in ([0x00, 0x01, 0x08, 0x0B, 0x0C, 0x1B, 0x1F] as [UInt8]).enumerated() {
+        for (index, byte) in ([0x00, 0x01, 0x08, 0x0B, 0x0E, 0x1B, 0x1F] as [UInt8]).enumerated() {
             try files.addFile(at: "/checkouts/kit/N\(index)", contents: Data([65, byte, 66]))
             #expect(throws: DomainError.licenseControlCharacter(package: "kit", file: "N\(index)"))
             {
@@ -149,7 +156,7 @@ struct LicenseFileValidatorTests {
                     let text = String(data: bytes, encoding: .utf8)
                 {
                     expectedOK = !text.unicodeScalars.contains {
-                        $0.value < 0x20 && ![9, 10, 13].contains($0.value)
+                        $0.value < 0x20 && ![9, 10, 12, 13].contains($0.value)
                     }
                 }
                 let accepted = (try? document(files, name: "F\(index)")) != nil

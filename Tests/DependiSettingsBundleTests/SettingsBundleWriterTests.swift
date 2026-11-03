@@ -42,6 +42,17 @@ import TestHelpers
         #expect(String(decoding: manifest, as: UTF8.self) == "\(slug).plist\n")
     }
 
+    @Test("a form feed in a license text is written and read back unchanged")
+    func formFeedRoundTrips() throws {
+        let fs = try freshFileSystem()
+        let text = "Part one\u{0C}\nPart two\u{0C}"
+        let ack = makeAck("Kit", docs: [("LICENSE", text)])
+        try makeWriter(fs).write([ack], intoBundleAt: bundle)
+        let child = try readPlist(fs, "\(bundle)/Acknowledgements/\(slugOf(ack)).plist")
+        let groups = child["PreferenceSpecifiers"] as? [NSDictionary]
+        #expect(groups?.first?["FooterText"] as? String == "Part one\u{0C}\nPart two\u{0C}")
+    }
+
     @Test func multiDocumentPackageGivesOneGroupPerDocumentInOrder() throws {
         let fs = try freshFileSystem()
         let ack = makeAck("Kit", docs: [("LICENSE", "a"), ("NOTICE", "b"), ("COPYING.txt", "c")])
