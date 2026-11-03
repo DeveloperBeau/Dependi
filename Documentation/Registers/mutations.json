@@ -1326,5 +1326,21 @@
     "replace": "identity = normalizer.identity(forLocation: name); if excludes.contains(identity.value) { continue }",
     "test": "excludedRootStillBringsItsDependencies",
     "slice": "review-fix"
+  },
+  {
+    "id": "resolver-package-name-fallback",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if packages[wanted] != nil { return wanted }",
+    "replace": "if packages[wanted] != nil { return wanted }; throw .productUnmatched(product: name)",
+    "test": "manifestNameInsteadOfIdentity",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-package-name-in-error",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "packageName.map { \"\\(name) in package \\($0)\" } ?? name)",
+    "replace": "name)",
+    "test": "wrongPackageNameStillFails",
+    "slice": "review-fix"
   }
 ]

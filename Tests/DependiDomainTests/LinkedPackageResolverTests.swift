@@ -216,6 +216,39 @@ struct LinkedPackageResolverTests {
         #expect(names(result.linked) == ["helper-pkg", "kit"])
     }
 
+    @Test("a package name that is a manifest name and not an identity falls back to the product")
+    func manifestNameInsteadOfIdentity() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(
+                product: "Kit",
+                dependencies: [dependency(.product, "SwiftProtobuf", package: "SwiftProtobuf")],
+                declared: ["swift-protobuf", "other"]),
+            "/checkouts/swift-protobuf": simpleManifest(product: "SwiftProtobuf"),
+            "/checkouts/other": simpleManifest(product: "Other"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Kit", packageName: "kit")],
+            remote: [remote("kit"), remote("swift-protobuf"), remote("other")],
+            manifests: manifests)
+        #expect(names(result.linked) == ["kit", "swift-protobuf"])
+        #expect(names(result.unreached) == ["other"])
+    }
+
+    @Test("a wrong package name with no declared dependency that has the product still fails")
+    func wrongPackageNameStillFails() {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(
+                product: "Kit", dependencies: [dependency(.product, "Ghost", package: "Nowhere")],
+                declared: ["other"]),
+            "/checkouts/other": simpleManifest(product: "Other"),
+        ]
+        #expect(throws: DomainError.productUnmatched(product: "Ghost in package Nowhere")) {
+            try resolve(
+                linked: [ProductReference(productName: "Kit", packageName: "kit")],
+                remote: [remote("kit"), remote("other")], manifests: manifests)
+        }
+    }
+
     @Test("a name that two declared dependencies provide is ambiguous and names both")
     func byNameAmbiguous() {
         let manifests = [

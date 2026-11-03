@@ -58,10 +58,10 @@ public struct LinkedPackageResolver: Sendable {
         func owner(
             ofProduct name: String, packageName: String?, among declared: [String]
         ) throws(DomainError) -> PackageIdentity {
+            // A package name that is not an identity, such as a manifest name, falls back to a search by product name.
             if let packageName {
                 let wanted = normalizer.identity(forLocation: packageName)
                 if packages[wanted] != nil { return wanted }
-                throw .productUnmatched(product: "\(name) in package \(packageName)")
             }
             var found: [PackageIdentity] = []
             for identityText in declared {
@@ -72,7 +72,10 @@ public struct LinkedPackageResolver: Sendable {
                 }
             }
             if found.count == 1 { return found[0] }
-            if found.isEmpty { throw .productUnmatched(product: name) }
+            if found.isEmpty {
+                throw .productUnmatched(
+                    product: packageName.map { "\(name) in package \($0)" } ?? name)
+            }
             throw .productAmbiguous(product: name, candidates: found.map(\.value).sorted())
         }
 
