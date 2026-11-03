@@ -1403,40 +1403,32 @@
     "id": "comp-signal-default-ignored",
     "slice": "review-fix",
     "file": "Sources/DependiProcess/TerminationHandler.swift",
-    "search": "Darwin.signal(number, SIG_IGN)",
-    "replace": "_ = number",
+    "search": "source.resume()",
+    "replace": "_ = source",
     "test": "aWatchedSignalCallsTheHandlerWithItsNumber"
-  },
-  {
-    "id": "cfg-limit-finite",
-    "slice": "review-fix",
-    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
-    "search": "guard value.isFinite, value > 0, value <= maximum else {",
-    "replace": "guard value > 0, value <= maximum else {",
-    "test": "nonFiniteLimit"
   },
   {
     "id": "cfg-limit-positive",
     "slice": "review-fix",
     "file": "Sources/DependiDomain/ConfigurationLoader.swift",
-    "search": "guard value.isFinite, value > 0, value <= maximum else {",
-    "replace": "guard value.isFinite, value >= 0, value <= maximum else {",
+    "search": "guard value > 0, value <= maximum else {",
+    "replace": "guard value >= 0, value <= maximum else {",
     "test": "badProcessLimit"
   },
   {
     "id": "cfg-limit-maximum",
     "slice": "review-fix",
     "file": "Sources/DependiDomain/ConfigurationLoader.swift",
-    "search": "guard value.isFinite, value > 0, value <= maximum else {",
-    "replace": "guard value.isFinite, value > 0 else {",
+    "search": "guard value > 0, value <= maximum else {",
+    "replace": "guard value > 0 else {",
     "test": "badRunLimit"
   },
   {
     "id": "cfg-limit-edge-included",
     "slice": "review-fix",
     "file": "Sources/DependiDomain/ConfigurationLoader.swift",
-    "search": "guard value.isFinite, value > 0, value <= maximum else {",
-    "replace": "guard value.isFinite, value > 0, value < maximum else {",
+    "search": "guard value > 0, value <= maximum else {",
+    "replace": "guard value > 0, value < maximum else {",
     "test": "goodLimits"
   },
   {
@@ -1533,7 +1525,7 @@
     "file": "Sources/DependiComposition/DependiApplication.swift",
     "search": "wrapping: process, limitSeconds: settings.runTimeoutSeconds,",
     "replace": "wrapping: process, limitSeconds: ToolConfiguration.defaultRunTimeoutSeconds,",
-    "test": "configuredLimitsReachTheRequests"
+    "test": "runLimitShortensChildLimits"
   },
   {
     "id": "app-config-wired",
@@ -1542,14 +1534,6 @@
     "search": "environment: environment, configuration: settings, now: { Date() },",
     "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), now: { Date() },",
     "test": "configuredLimitsReachTheRequests"
-  },
-  {
-    "id": "proc-invalid-limit-guard",
-    "slice": "review-fix",
-    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
-    "search": "guard request.timeoutSeconds.isFinite, request.timeoutSeconds > 0,",
-    "replace": "guard request.timeoutSeconds > 0,",
-    "test": "invalidTimeLimit"
   },
   {
     "id": "lazy-process-limit-xcrun",

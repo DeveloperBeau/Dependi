@@ -49,7 +49,8 @@ public struct ConfigurationLoader: Sendable {
     private static func requireLimit(
         _ name: String, _ value: Double, maximum: Double, path: String
     ) throws(DomainError) {
-        guard value.isFinite, value > 0, value <= maximum else {
+        // NaN fails every comparison, so it is refused here too.
+        guard value > 0, value <= maximum else {
             throw .configurationCorrupt(
                 path: path,
                 reason: "\(name) must be a number above 0 and at most \(Int(maximum))")

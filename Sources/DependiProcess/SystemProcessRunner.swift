@@ -20,7 +20,8 @@ public struct SystemProcessRunner: ProcessRunning {
             .processFailed(command: command, reason: reason)
         }
 
-        guard request.timeoutSeconds.isFinite, request.timeoutSeconds > 0,
+        // NaN fails every comparison, so it is refused here too.
+        guard request.timeoutSeconds > 0,
             request.timeoutSeconds <= Self.longestTimeoutSeconds
         else {
             throw failure("the time limit must be a number above 0 and at most one week")

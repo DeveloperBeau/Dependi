@@ -114,6 +114,21 @@ struct EndToEndTests {
         #expect(limits.allSatisfy { $0 == 11 })
     }
 
+    @Test("the run limit shortens the limit of every child")
+    func runLimitShortensChildLimits() throws {
+        let world = try EndToEndWorld(
+            configuration: #"{"processTimeoutSeconds": 3000, "runTimeoutSeconds": 100}"#)
+        try world.addRemote(
+            "alamofire", owner: "Alamofire",
+            manifest: EndToEndWorld.manifest(product: "Alamofire"))
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        let limits = world.runner.requests.map(\.timeoutSeconds)
+        #expect(limits.count == 2)
+        #expect(limits.allSatisfy { $0 > 0 && $0 <= 100 })
+        #expect(limits.allSatisfy { $0 > 50 })
+    }
+
     @Test("a limit that is not valid fails the run before any process starts")
     func invalidLimitFailsEarly() throws {
         let world = try standardWorld(configuration: #"{"processTimeoutSeconds": 0}"#)
