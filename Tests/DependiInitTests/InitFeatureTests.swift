@@ -96,6 +96,39 @@ struct InitFeatureTests {
         }
     }
 
+    @Test("only exactly 40 lowercase hex digits are taken as the commit")
+    func commitFormatIsExact() throws {
+        let hex = "0123456789abcdef0123456789abcdef01234567"
+        let rejected = [
+            hex + "0", String(hex.dropLast()), hex.uppercased(), "x" + hex, hex + "x",
+            hex + " junk", hex + "\n" + hex, "", "g" + String(hex.dropFirst()),
+        ]
+        for answer in rejected {
+            let world = try InitWorld()
+            world.gitResult = .success(
+                ProcessOutput(
+                    exitStatus: 0, standardOutput: Data((answer + "\n").utf8),
+                    standardError: Data()))
+            _ = try world.run()
+            let config = try JSONDecoder().decode(
+                ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
+            #expect(config.commit == nil, "answer \(answer.debugDescription)")
+            #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.0\n")
+        }
+        for answer in [hex, String(repeating: "0", count: 40), String(repeating: "f", count: 40)] {
+            let world = try InitWorld()
+            world.gitResult = .success(
+                ProcessOutput(
+                    exitStatus: 0, standardOutput: Data((answer + "\n").utf8),
+                    standardError: Data()))
+            _ = try world.run()
+            let config = try JSONDecoder().decode(
+                ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
+            #expect(config.commit == answer)
+            #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.0-" + answer + "\n")
+        }
+    }
+
     // MARK: Dry run and reruns
 
     @Test("a dry run reports the plan, writes nothing and starts no process")

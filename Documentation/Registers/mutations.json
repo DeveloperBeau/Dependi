@@ -1069,7 +1069,7 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "^[0-9a-f]{40}$",
     "replace": "^.*$",
-    "test": "commitMissing"
+    "test": "commitFormatIsExact"
   },
   {
     "id": "init-backup",
@@ -1390,5 +1390,45 @@
     "search": "            if lock_is_stale; then",
     "replace": "            if false; then",
     "test": "concurrentRunsOnDeadLockBuildOnce"
+  },
+  {
+    "id": "init-binary-executable",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "try executables.makeExecutable(at: root + \"/.dependi/bin/dependi\")",
+    "replace": "",
+    "test": "freshInstall"
+  },
+  {
+    "id": "init-commit-end-anchor",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"^[0-9a-f]{40}\"#",
+    "test": "commitFormatIsExact"
+  },
+  {
+    "id": "init-commit-start-anchor",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"[0-9a-f]{40}$\"#",
+    "test": "commitFormatIsExact"
+  },
+  {
+    "id": "init-commit-uppercase",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"^[0-9a-fA-F]{40}$\"#",
+    "test": "commitFormatIsExact"
+  },
+  {
+    "id": "init-commit-length",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"^[0-9a-f]{39,41}$\"#",
+    "test": "commitFormatIsExact"
   }
 ]
