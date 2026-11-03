@@ -1222,5 +1222,13 @@
     "search": "env -i HOME=",
     "replace": "env HOME=",
     "test": "buildEnvironmentIsClean"
+  },
+  {
+    "id": "gen-local-real-path",
+    "slice": "11",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "(try? files.realPath(of: path)) ?? path",
+    "replace": "path",
+    "test": "localPackageWithTwoPaths"
   }
 ]
