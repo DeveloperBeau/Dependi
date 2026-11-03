@@ -147,6 +147,20 @@ let package = Package(
             exclude: ["Fixtures"],
             swiftSettings: sharedSettings
         ),
+        .target(
+            name: "DependiSettingsBundle",
+            dependencies: ["DependiEntities", "DependiDomain"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiSettingsBundleTests",
+            dependencies: [
+                "DependiSettingsBundle", "DependiDomain", "DependiEntities", "DependiTestSupport",
+                "TestHelpers",
+            ],
+            exclude: ["Fixtures"],
+            swiftSettings: sharedSettings
+        ),
     ],
     swiftLanguageModes: [.v6]
 )

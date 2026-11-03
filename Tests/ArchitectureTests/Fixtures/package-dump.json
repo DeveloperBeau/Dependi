@@ -913,6 +913,94 @@
         }
       ],
       "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiEntities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiSettingsBundle",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiSettingsBundle",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiEntities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiTestSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Fixtures"
+      ],
+      "name" : "DependiSettingsBundleTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
     }
   ],
   "toolsVersion" : {

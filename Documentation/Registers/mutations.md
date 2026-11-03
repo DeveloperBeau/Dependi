@@ -88,6 +88,13 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | resolver-platform | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `platformConditions` |
 | resolver-recursion | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `transitive` |
 | resolver-unmatched-product | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `unmatchedProduct` |
+| settings-cleanup-escapes-folder | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `manifestEntriesThatEscapeTheFolderAreNeverDeleted` |
+| settings-cleanup-removes-kept | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `removedPackageRemovesItsPlistAndManifestEntry` |
+| settings-manifest-not-updated | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `removedPackageRemovesItsPlistAndManifestEntry` |
+| settings-read-back-removed | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `readBackMismatchFailsWithFileUnwritable` |
+| settings-slug-replaced-by-raw-name | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `oddNamesStayInsideTheFolderAndAppearOnlyAsText` |
+| settings-unknown-file-refusal | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `unknownFileInFolderFailsBeforeAnyWrite` |
+| settings-write-only-when-different | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `secondIdenticalRunWritesNothing` |
 | slugger-hash-input | 2b | `Sources/DependiDomain/OutputNameSlugger.swift` | `slugMatchesHandComputedHash` |
 | slugger-sanitize | 2b | `Sources/DependiDomain/OutputNameSlugger.swift` | `unsafeIdentityIsReduced` |
 | validator-component | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `similarSiblingRefused` |
