@@ -1246,5 +1246,45 @@
     "search": "let installed = commit.map { version + \"-\" + $0 } ?? version",
     "replace": "let installed = version",
     "test": "freshInstall"
+  },
+  {
+    "id": "wrapper-cache-override-unconditional",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if testing && [ -n \"${DEPENDI_CACHE_ROOT:-}\" ]; then",
+    "replace": "if [ -n \"${DEPENDI_CACHE_ROOT:-}\" ]; then",
+    "test": "cacheOverrideNeedsTestingFlag"
+  },
+  {
+    "id": "wrapper-cache-umask-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "(umask 077 && mkdir -p \"$cache_root\")",
+    "replace": "mkdir -p \"$cache_root\"",
+    "test": "newCacheFolderIsPrivate"
+  },
+  {
+    "id": "wrapper-cache-owner-check-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ ! -O \"$cache_root\" ]; then",
+    "replace": "false; then",
+    "test": "foreignCacheFolderIsRefused"
+  },
+  {
+    "id": "wrapper-cache-symlink-check-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if [ -L \"$cache_root\" ] || [ ! -d \"$cache_root\" ]",
+    "replace": "if [ ! -d \"$cache_root\" ]",
+    "test": "symlinkCacheFolderIsRefused"
+  },
+  {
+    "id": "wrapper-cache-writable-check-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "find \"$cache_root\" -maxdepth 0 \\( -perm -020 -o -perm -002 \\) 2>/dev/null",
+    "replace": "find \"$cache_root\" -maxdepth 0 -name nomatch 2>/dev/null",
+    "test": "writableCacheFolderIsRefused"
   }
 ]

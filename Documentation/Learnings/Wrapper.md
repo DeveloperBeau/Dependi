@@ -36,6 +36,12 @@
 - **Finding:** `init` now writes `<version>-<commit>` and the wrapper compares the same string.
 - **Rule:** Compare every part of the pin, not a label that people can leave unchanged.
 
+## A digest next to the file proves nothing about who wrote it
+
+- **Trap:** `dependi.sha256` is in the same folder as the binary. A writer plants both.
+- **Finding:** Only folder ownership and mode keep a planted pair out. The override of the cache folder was open in production, so any caller could point the script at a folder it controlled.
+- **Rule:** Treat the cache folder as the trust boundary. Make it private, refuse a folder that is not, and keep test overrides behind the test flag.
+
 ## Mutation results
 
 | Mutation | Test that failed |

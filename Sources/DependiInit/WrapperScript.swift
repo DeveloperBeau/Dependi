@@ -6,8 +6,10 @@
 /// Test hooks work only when `DEPENDI_TESTING=1` is set:
 /// - `DEPENDI_REPO_URL` replaces the repository URL.
 /// - `DEPENDI_XCRUN` replaces the `xcrun` tool.
+/// - `DEPENDI_CACHE_ROOT` replaces the cache folder.
 ///
-/// Cache layout under `$DEPENDI_CACHE_ROOT` (default `$HOME/Library/Caches/dependi`):
+/// Cache layout under `$HOME/Library/Caches/dependi`. The script makes the folder private to the
+/// user and refuses a folder that another user owns or can write:
 /// - `<version>-<commit>/bin/dependi` and `dependi.sha256`: a finished build.
 /// - `<version>-<commit>.lock`: the build lock, a folder made with `mkdir`.
 /// - `build.XXXXXX`: a temporary build folder with `src`, `build`, `out` and `build.log`.
@@ -101,10 +103,23 @@ public enum WrapperScript {
 
         # Step 4: the user cache.
         home=${HOME:-}
-        cache_root=${DEPENDI_CACHE_ROOT:-$home/Library/Caches/dependi}
+        cache_root=$home/Library/Caches/dependi
+        if testing && [ -n "${DEPENDI_CACHE_ROOT:-}" ]; then
+            cache_root=$DEPENDI_CACHE_ROOT
+        fi
         if [ -z "$cache_root" ] || [ "$cache_root" = /Library/Caches/dependi ]; then
             echo 'error: Dependi: HOME is not set and no cache folder is given' >&2
             exit 1
+        fi
+        if [ -e "$cache_root" ]; then
+            if [ -L "$cache_root" ] || [ ! -d "$cache_root" ] || [ ! -O "$cache_root" ]; then
+                echo 'error: Dependi: the cache folder is not a folder that you own' >&2
+                exit 1
+            fi
+            if [ -n "$(find "$cache_root" -maxdepth 0 \( -perm -020 -o -perm -002 \) 2>/dev/null)" ]; then
+                echo 'error: Dependi: the cache folder can be written by other users' >&2
+                exit 1
+            fi
         fi
         key="$version-$commit"
         cached="$cache_root/$key/bin"
@@ -154,7 +169,7 @@ public enum WrapperScript {
             exit 1
         }
 
-        mkdir -p "$cache_root"
+        (umask 077 && mkdir -p "$cache_root")
 
         steps=0
         while ! mkdir "$lock" 2>/dev/null; do

@@ -176,6 +176,95 @@ struct WrapperScriptTests {
         #expect(world.calls(of: "xcrun").count == 1)
     }
 
+    // MARK: Cache folder safety
+
+    @Test("the cache folder override is ignored without DEPENDI_TESTING")
+    func cacheOverrideNeedsTestingFlag() throws {
+        let world = try world()
+        let homeCache = world.home.appendingPathComponent("Library/Caches/dependi")
+        try world.seedCache(version: Self.version, commit: Self.commit, sha: nil, in: homeCache)
+        var env = world.buildEnvironment()
+        env["DEPENDI_TESTING"] = nil
+        let run = try world.run(environment: env)
+        #expect(run.stdout == "cached-marker\n")
+        #expect(world.cacheEntries().isEmpty)
+    }
+
+    @Test("with DEPENDI_TESTING the cache folder override is used")
+    func cacheOverrideWorksWhenTesting() throws {
+        let world = try world()
+        let homeCache = world.home.appendingPathComponent("Library/Caches/dependi")
+        try world.seedCache(version: Self.version, commit: Self.commit, sha: nil, in: homeCache)
+        try world.seedCache(version: Self.version, commit: Self.commit, sha: nil)
+        let run = try world.run(environment: world.buildEnvironment())
+        #expect(run.stdout == "cached-marker\n")
+        #expect(
+            !FileManager.default.fileExists(
+                atPath: world.cache.appendingPathComponent(
+                    "\(Self.version)-\(Self.commit).build-lock"
+                ).path))
+    }
+
+    @Test("a new cache folder is private to the user")
+    func newCacheFolderIsPrivate() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        let run = try world.run(environment: world.buildEnvironment())
+        #expect(run.status == 0, "\(run.stderr)")
+        let attributes = try FileManager.default.attributesOfItem(atPath: world.cache.path)
+        #expect((attributes[.posixPermissions] as? Int) == 0o700)
+    }
+
+    @Test("a cache folder that other users can write is refused and nothing runs")
+    func writableCacheFolderIsRefused() throws {
+        for mode in [0o777, 0o775, 0o757, 0o722] {
+            let world = try world()
+            try world.seedCache(version: Self.version, commit: Self.commit, sha: nil)
+            try FileManager.default.setAttributes(
+                [.posixPermissions: mode], ofItemAtPath: world.cache.path)
+            let run = try world.run(environment: world.buildEnvironment())
+            #expect(run.status == 1, "mode \(String(mode, radix: 8))")
+            #expect(run.stderr.contains("can be written by other users"))
+            #expect(run.stdout.isEmpty)
+            #expect(world.calls().isEmpty)
+        }
+    }
+
+    @Test("a cache folder with mode 0755 that the user owns is accepted")
+    func ownedReadableCacheFolderIsAccepted() throws {
+        let world = try world()
+        try world.seedCache(version: Self.version, commit: Self.commit, sha: nil)
+        try FileManager.default.setAttributes(
+            [.posixPermissions: 0o755], ofItemAtPath: world.cache.path)
+        let run = try world.run(environment: world.buildEnvironment())
+        #expect(run.stdout == "cached-marker\n")
+    }
+
+    @Test("a cache folder that is a symlink is refused")
+    func symlinkCacheFolderIsRefused() throws {
+        let world = try world()
+        let real = world.root.appendingPathComponent("real-cache")
+        try FileManager.default.createDirectory(at: real, withIntermediateDirectories: true)
+        try FileManager.default.createSymbolicLink(at: world.cache, withDestinationURL: real)
+        let run = try world.run(environment: world.buildEnvironment())
+        #expect(run.status == 1)
+        #expect(run.stderr.contains("not a folder that you own"))
+        #expect(world.calls().isEmpty)
+    }
+
+    @Test(
+        "a cache folder that another user owns is refused",
+        .enabled(if: geteuid() != 0, "root owns every folder this test could use"))
+    func foreignCacheFolderIsRefused() throws {
+        let world = try world()
+        // /usr is owned by root on every Mac.
+        let run = try world.run(environment: world.buildEnvironment(["DEPENDI_CACHE_ROOT": "/usr"]))
+        #expect(run.status == 1)
+        #expect(run.stderr.contains("not a folder that you own"))
+        #expect(world.calls().isEmpty)
+    }
+
     // MARK: Build
 
     @Test("a missing binary clones, builds and runs the cached binary")

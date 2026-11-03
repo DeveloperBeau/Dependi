@@ -45,6 +45,7 @@ final class WrapperWorld {
     let root: URL
     let project: URL
     let cache: URL
+    let home: URL
     let callLog: URL
     let envLog: URL
     let control: URL
@@ -57,6 +58,7 @@ final class WrapperWorld {
         root = fm.temporaryDirectory.appendingPathComponent("wrapper-" + UUID().uuidString)
         project = root.appendingPathComponent("proj")
         cache = root.appendingPathComponent("cache")
+        home = root.appendingPathComponent("home")
         callLog = root.appendingPathComponent("calls.log")
         envLog = root.appendingPathComponent("xcrun-env.log")
         control = root.appendingPathComponent("ctl")
@@ -190,7 +192,6 @@ final class WrapperWorld {
     /// The environment for a run that passes the gate and uses the stubs and the origin.
     func buildEnvironment(_ extra: [String: String] = [:]) -> [String: String] {
         var env = baseEnvironment(["ACTION": "install", "CONFIGURATION": "Release"])
-        env["DEPENDI_TESTING"] = "1"
         env["DEPENDI_REPO_URL"] = origin.path
         env["DEPENDI_XCRUN"] = stubs.appendingPathComponent("xcrun").path
         for (key, value) in extra { env[key] = value }
@@ -201,8 +202,9 @@ final class WrapperWorld {
     func baseEnvironment(_ extra: [String: String] = [:]) -> [String: String] {
         var env = [
             "PATH": stubs.path + ":/usr/bin:/bin",
-            "HOME": root.appendingPathComponent("home").path,
+            "HOME": home.path,
             "TMPDIR": root.path,
+            "DEPENDI_TESTING": "1",
             "DEPENDI_CACHE_ROOT": cache.path,
         ]
         for (key, value) in extra { env[key] = value }
@@ -248,8 +250,10 @@ final class WrapperWorld {
     }
 
     /// Writes a cache entry for a pin. Pass a sha to override the real one.
-    func seedCache(version: String, commit: String, sha: String?, writeSha: Bool = true) throws {
-        let bin = cache.appendingPathComponent("\(version)-\(commit)/bin")
+    func seedCache(
+        version: String, commit: String, sha: String?, writeSha: Bool = true, in base: URL? = nil
+    ) throws {
+        let bin = (base ?? cache).appendingPathComponent("\(version)-\(commit)/bin")
         try fm.createDirectory(at: bin, withIntermediateDirectories: true)
         let body = "#!/bin/sh\necho cached-marker \"$@\"\n"
         try install(body, at: bin.appendingPathComponent("dependi"))
