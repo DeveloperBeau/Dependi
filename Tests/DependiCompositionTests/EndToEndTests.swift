@@ -61,13 +61,24 @@ struct EndToEndTests {
     @Test("the process requests use the clean environment and the resolved toolchain")
     func processRequestsAreClean() throws {
         let world = try standardWorld()
+        world.environment["OTHER_LDFLAGS"] = "-leak"
+        world.environment["CC"] = "/leak/cc"
+        world.environment["SWIFT_EXEC"] = "/leak/swiftc"
+        world.environment["SWIFT_DEBUG_INFORMATION_FORMAT"] = "dwarf"
+        world.environment["SDKROOT"] = "/leak/sdk"
+        world.environment["DEVELOPER_DIR"] = "/Apps/Xcode.app/Contents/Developer"
         _ = try world.run()
         let requests = world.runner.requests
         #expect(requests.first?.executable == "/usr/bin/xcrun")
         #expect(requests.first?.arguments == ["--find", "swift"])
+        let expected = [
+            "PATH": "/usr/bin:/bin", "TMPDIR": world.root.path + "/home",
+            "HOME": world.root.path + "/home",
+            "DEVELOPER_DIR": "/Apps/Xcode.app/Contents/Developer",
+        ]
+        #expect(requests.count == 3)
         for request in requests {
-            #expect(request.environment["SDKROOT"] == nil)
-            #expect(request.environment["PATH"] == "/usr/bin:/bin")
+            #expect(request.environment == expected)
             #expect(request.arguments.contains("--disable-sandbox") == false)
         }
         let dumps = requests.dropFirst()
@@ -76,6 +87,17 @@ struct EndToEndTests {
             dumps.allSatisfy {
                 $0.executable == "/toolchain/usr/bin/swift" && $0.arguments.last == "dump-package"
             })
+    }
+
+    @Test("a variable that is absent from the build environment is absent from the child")
+    func absentVariablesStayAbsent() throws {
+        let world = try standardWorld()
+        world.environment["HOME"] = nil
+        world.environment["TMPDIR"] = nil
+        _ = try world.run()
+        for request in world.runner.requests {
+            #expect(request.environment == ["PATH": "/usr/bin:/bin", "TMPDIR": "/tmp"])
+        }
     }
 
     @Test("the time limits of the configuration reach every child request")
@@ -330,7 +352,7 @@ struct EndToEndTests {
         let world = try EndToEndWorld()
         let version = try world.run(["--version"])
         #expect(version.code == 0)
-        #expect(version.output == "dependi \(DependiVersion.current)\n")
+        #expect(version.output == "dependi 0.1.0\n")
         let help = try world.run(["help"])
         #expect(help.code == 0)
         #expect(help.output.contains("generate"))
@@ -343,7 +365,7 @@ struct EndToEndTests {
     func commandLineErrors(arguments: [String]) throws {
         let world = try EndToEndWorld()
         let result = try world.run(arguments)
-        #expect(result.code == DependiApplication.usageExitCode)
+        #expect(result.code == 64)
         #expect(result.errors.contains("error:"))
         #expect(result.errors.contains("generate"))
     }
@@ -380,7 +402,7 @@ struct EndToEndTests {
         #expect(FileManager.default.isExecutableFile(atPath: world.project + "/.dependi/run.sh"))
         #expect(
             try String(contentsOfFile: world.project + "/.dependi/bin/VERSION", encoding: .utf8)
-                == "\(DependiVersion.current)\n")
+                == "0.1.0\n")
         #expect(
             try String(contentsOfFile: world.project + "/.gitignore", encoding: .utf8)
                 == ".dependi/bin/\n")
