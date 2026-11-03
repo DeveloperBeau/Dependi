@@ -203,7 +203,7 @@
     "id": "validator-control",
     "slice": "2b",
     "file": "Sources/DependiDomain/LicenseFileValidator.swift",
-    "search": "if scalar != \"\\t\" && scalar != \"\\n\" && scalar != \"\\r\" {",
+    "search": "if scalar != \"\\t\" && scalar != \"\\n\" && scalar != \"\\r\" && scalar != \"\\u{0C}\" {",
     "replace": "if false {",
     "test": "controlCharactersRefused"
   },
@@ -523,8 +523,8 @@
     "id": "pins-workspace-before-project",
     "slice": "5",
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
-    "search": "candidates.first(where:",
-    "replace": "candidates.last(where:",
+    "search": "let tiers = [workspaces.map(\\.path), projects, root]",
+    "replace": "let tiers = [root, projects, workspaces.map(\\.path)]",
     "test": "workspaceBeforeProject"
   },
   {
@@ -627,8 +627,8 @@
     "id": "pf-deduplication",
     "slice": "6",
     "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
-    "search": "Set(collector.found)",
-    "replace": "collector.found",
+    "search": "Set(products).sorted {",
+    "replace": "products.sorted {",
     "test": "sharedProductIsDeduplicated"
   },
   {
@@ -1926,5 +1926,205 @@
     "search": "if [ ! -L \"$lock\" ] && [ ! -e \"$lock\" ]; then",
     "replace": "if false; then",
     "test": "unwritableCacheFolderFailsAtOnce"
+  },
+  {
+    "id": "slugger-hash-width",
+    "file": "Sources/DependiDomain/OutputNameSlugger.swift",
+    "search": "digest.prefix(6)",
+    "replace": "digest.prefix(4)",
+    "test": "slugMatchesHandComputedHash",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-excludes-normalized",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "let excludes = Set(rawExcludes.map { normalizer.identity(forLocation: $0).value })",
+    "replace": "let excludes = rawExcludes",
+    "test": "excludeIsNormalized",
+    "slice": "review-fix"
+  },
+  {
+    "id": "validator-form-feed",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": " && scalar != \"\\u{0C}\" {",
+    "replace": " {",
+    "test": "formFeedAccepted",
+    "slice": "review-fix"
+  },
+  {
+    "id": "locator-licenses-folder",
+    "file": "Sources/DependiDomain/LicenseLocator.swift",
+    "search": "|licenses)$\"#,",
+    "replace": ")$\"#,",
+    "test": "variantsAreFound",
+    "slice": "review-fix"
+  },
+  {
+    "id": "locator-hidden-skipped",
+    "file": "Sources/DependiDomain/LicenseLocator.swift",
+    "search": "guard !name.hasPrefix(\".\") else { return false }",
+    "replace": "guard true else { return false }",
+    "test": "licensesFolderFiles",
+    "slice": "review-fix"
+  },
+  {
+    "id": "generate-folder-skipped",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "guard name.lowercased() == \"licenses\" else { continue }",
+    "replace": "guard true else { continue }",
+    "test": "licenseFolderOnlyIsMissing",
+    "slice": "review-fix"
+  },
+  {
+    "id": "generate-nested-folder-skipped",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "where (try? directories.topLevelNames(in: path + \"/\" + innerName)) == nil {",
+    "replace": "where true {",
+    "test": "licenseLayouts",
+    "slice": "review-fix"
+  },
+  {
+    "id": "workspace-registry-skipped",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "if ref.kind == \"registry\" { continue }",
+    "replace": "if false { continue }",
+    "test": "registryPackageIsSkipped",
+    "slice": "review-fix"
+  },
+  {
+    "id": "pins-revisionless-skipped",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "guard let revision = pin.revision else { continue }",
+    "replace": "let revision = pin.revision ?? \"\"",
+    "test": "registryPinIsSkipped",
+    "slice": "review-fix"
+  },
+  {
+    "id": "pins-only-registry-may-lack-revision",
+    "file": "Sources/DependiWorkspaceState/PackageResolvedDocument.swift",
+    "search": "if kind == \"registry\" { return nil }",
+    "replace": "if true { return nil }",
+    "test": "sourceControlPinWithoutRevisionFails",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-excluded-root-skipped",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "identity = normalizer.identity(forLocation: name)",
+    "replace": "identity = normalizer.identity(forLocation: name); if excludes.contains(identity.value) { return nil }",
+    "test": "excludedRootStillBringsItsDependencies",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-package-name-fallback",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if packages[wanted] != nil { return wanted }",
+    "replace": "if packages[wanted] != nil { return wanted }; throw .productUnmatched(product: name)",
+    "test": "manifestNameInsteadOfIdentity",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-package-name-in-error",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "packageName.map { \"\\(name) in package \\($0)\" } ?? name)",
+    "replace": "name)",
+    "test": "wrongPackageNameStillFails",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-remote-search-no-early-exit",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "                    break",
+    "replace": "                    _ = 0",
+    "test": "remoteSearchStopsAtFirstMatch",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-remote-search-unsorted",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "remotePackages.sorted(by: { $0.identity < $1.identity })",
+    "replace": "remotePackages",
+    "test": "remoteSearchStopsAtFirstMatch",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-plugin-product-gate",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if !includeBuildTools, !product.targetNames.isEmpty,",
+    "replace": "if false, !product.targetNames.isEmpty,",
+    "test": "pluginProductIsNotShipped",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-plugin-product-kinds",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "return kind == .macro || kind == .plugin",
+    "replace": "return kind == .macro",
+    "test": "pluginProductIsNotShipped",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-mixed-product-all",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "product.targetNames.allSatisfy({ targetName in",
+    "replace": "product.targetNames.contains(where: { targetName in",
+    "test": "mixedProductShips",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-plugin-only-reported",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "!reached.contains($0.identity) && !buildToolOnly.contains($0.identity)",
+    "replace": "!reached.contains($0.identity)",
+    "test": "pluginProductIsNotShipped",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-other-targets-expected",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "&& !expected.contains($0.identity) && !excludes.contains($0.identity.value)",
+    "replace": "&& !excludes.contains($0.identity.value)",
+    "test": "otherTargetPackagesAreNotUnreached",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-other-targets-walk",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "expected.formUnion(walked.reached)",
+    "replace": "expected.insert(found.0)",
+    "test": "otherTargetPackagesAreNotUnreached",
+    "slice": "review-fix"
+  },
+  {
+    "id": "projectfile-tests-in-other-products",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "includeTests || !Self.isTestTarget(target)",
+    "replace": "!Self.isTestTarget(target)",
+    "test": "testTargetProductsAreOtherProducts",
+    "slice": "review-fix"
+  },
+  {
+    "id": "projectfile-other-products-subtract-app",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "everything.found.filter { !ownProducts.contains($0) }",
+    "replace": "everything.found",
+    "test": "appProductsAreNotOtherProducts",
+    "slice": "review-fix"
+  },
+  {
+    "id": "pins-named-workspace-preferred",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "if named.count == 1 { workspaces = named }",
+    "replace": "if false { workspaces = named }",
+    "test": "workspaceNamedLikeProjectWins",
+    "slice": "review-fix"
+  },
+  {
+    "id": "pins-conflict-dropped",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "where revisions.count == 1 {",
+    "replace": "where revisions.count >= 1 {",
+    "test": "conflictingWorkspacesDropThePin",
+    "slice": "review-fix"
   }
 ]

@@ -28,7 +28,7 @@ public struct LicenseFileValidator: Sendable {
         if data.count > maximumBytes { throw .licenseTooLarge(package: owner, file: fileName) }
         let text = try decode(data, owner: owner, fileName: fileName)
         for scalar in text.unicodeScalars where scalar.value < 0x20 {
-            if scalar != "\t" && scalar != "\n" && scalar != "\r" {
+            if scalar != "\t" && scalar != "\n" && scalar != "\r" && scalar != "\u{0C}" {
                 throw .licenseControlCharacter(package: owner, file: fileName)
             }
         }

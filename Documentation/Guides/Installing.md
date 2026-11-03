@@ -61,7 +61,7 @@ echo <version> > .dependi/bin/VERSION
 | `excludes` | Package names to leave out. The wizard excludes your own local packages. |
 | `manualEntries` | Code that has no package, each with a `name` and a `licensePath` inside the project. |
 | `gateConfigurations` | Configurations that run besides an archive. The default is `Release`. |
-| `allowUnreached` | Allow resolved packages that your app does not link. |
+| `allowUnreached` | Allow resolved packages that no target of your project links. |
 | `includeBuildTools` | Include the dependencies of macro and plugin targets. |
 | `sourcePackagesPath` | Where `SourcePackages` is, if it is not next to the build folder. |
 | `outputPath` | A path inside the product to use instead of `Settings.bundle`. |
