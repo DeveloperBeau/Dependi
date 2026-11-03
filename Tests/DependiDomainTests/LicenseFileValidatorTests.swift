@@ -45,7 +45,7 @@ struct LicenseFileValidatorTests {
         let files = try setup()
         try files.addFile(at: "/secrets", contents: Data("secret".utf8))
         try files.addSymlink(at: "/checkouts/kit/NOTICE", pointingTo: "/secrets")
-        #expect(throws: DomainError.licenseOutsideCheckout(package: "kit", path: "/secrets")) {
+        #expect(throws: DomainError.licenseOutsideCheckout(package: "kit", file: "NOTICE")) {
             try document(files, name: "NOTICE")
         }
     }
@@ -58,7 +58,7 @@ struct LicenseFileValidatorTests {
         try files.addSymlink(at: "/checkouts/kit/NOTICE", pointingTo: "/checkouts/kit-evil/LICENSE")
         #expect(
             throws: DomainError.licenseOutsideCheckout(
-                package: "kit", path: "/checkouts/kit-evil/LICENSE")
+                package: "kit", file: "NOTICE")
         ) {
             try document(files, name: "NOTICE")
         }

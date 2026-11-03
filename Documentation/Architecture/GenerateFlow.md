@@ -32,7 +32,7 @@
 
 ## Where the bundle goes
 
-The bundle is `TARGET_BUILD_DIR/UNLOCALIZED_RESOURCES_FOLDER_PATH/Settings.bundle`. For an iOS product that is `App.app/Settings.bundle`. For Mac Catalyst it is `App.app/Contents/Resources/Settings.bundle`. A configured `outputPath` replaces `Settings.bundle`. Every part must be relative and must not contain `..`. `TARGET_BUILD_DIR` must be absolute. The check runs before any write.
+The bundle is `TARGET_BUILD_DIR/UNLOCALIZED_RESOURCES_FOLDER_PATH/Settings.bundle`. For an iOS product that is `App.app/Settings.bundle`. For Mac Catalyst it is `App.app/Contents/Resources/Settings.bundle`. A configured `outputPath` replaces `Settings.bundle`. Every part must be relative and must not contain `..`. `TARGET_BUILD_DIR` must be absolute. Every existing part of the product folder and of the bundle path must resolve to itself. A link, even a dangling one, is refused with `invalidOutputLocation`, because it would send the writes elsewhere. The check runs before any write.
 
 ## Errors
 

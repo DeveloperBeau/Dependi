@@ -211,3 +211,21 @@ struct DiskOperationTests {
         }
     }
 }
+
+extension DiskOperationTests {
+    @Test("the modification date is the date the file system reports, and a link is not followed")
+    func modificationDateOfALinkIsTheLinksOwn() throws {
+        try TempFolder.run { temp in
+            let old = Date(timeIntervalSince1970: 1_000_000)
+            try arranger.addFile(at: temp.real + "/target", contents: Data("a".utf8))
+            try FileManager.default.setAttributes(
+                [.modificationDate: old], ofItemAtPath: temp.real + "/target")
+            try arranger.addSymlink(at: temp.real + "/link", pointingTo: "target")
+            let target = try #require(disk.modificationDate(of: temp.real + "/target"))
+            #expect(abs(target.timeIntervalSince(old)) < 1)
+            let link = try #require(disk.modificationDate(of: temp.real + "/link"))
+            #expect(link.timeIntervalSince(old) > 1_000)
+            #expect(disk.modificationDate(of: temp.real + "/absent") == nil)
+        }
+    }
+}

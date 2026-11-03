@@ -7,7 +7,8 @@ import TestHelpers
 
 /// Helpers shared by the process tests.
 private enum Probe {
-    static let runner = SystemProcessRunner()
+    static let registry = ChildProcessRegistry()
+    static let runner = SystemProcessRunner(children: registry)
 
     static func request(
         _ executable: String,
@@ -200,15 +201,56 @@ struct SystemProcessRunnerTests {
         #expect(Probe.markerDisappears(marker))
     }
 
-    @Test func manyRunsLeaveNoOpenDescriptorsBehind() throws {
-        func openCount() -> Int {
-            (try? FileManager.default.contentsOfDirectory(atPath: "/dev/fd").count) ?? 0
+    /// The descriptors of this process that are pipes. The runner creates pipes and nothing else,
+    /// and the tests of other suites that run at the same time open files, not pipes.
+    private static func openPipes() -> Set<Int32> {
+        var found: Set<Int32> = []
+        for descriptor in 0..<Int32(1024) {
+            var info = stat()
+            if fstat(descriptor, &info) == 0 && (info.st_mode & S_IFMT) == S_IFIFO {
+                found.insert(descriptor)
+            }
         }
-        let before = openCount()
+        return found
+    }
+
+    /// Waits until the set of pipes is the same as before. A leak never goes away, so the wait
+    /// is bounded by two seconds and a late close of another test does not count.
+    private static func pipesReturn(to before: Set<Int32>) -> Set<Int32> {
+        var extra = openPipes().subtracting(before)
+        for _ in 0..<40 where !extra.isEmpty {
+            usleep(50_000)
+            extra = openPipes().subtracting(before)
+        }
+        return extra
+    }
+
+    @Test func successfulRunsLeaveNoPipeDescriptorBehind() throws {
+        let before = Self.openPipes()
         for _ in 0..<20 { _ = try Probe.runner.run(Probe.shell("printf a; printf b >&2")) }
+        #expect(Self.pipesReturn(to: before).isEmpty)
+    }
+
+    @Test func timedOutRunsLeaveNoPipeDescriptorBehind() {
+        let before = Self.openPipes()
         for _ in 0..<5 { _ = Probe.failureReason(Probe.shell("sleep 30", timeout: 0.1)) }
-        _ = Probe.failureReason(Probe.request("/nonexistent/tool"))
-        #expect(openCount() - before < 10)
+        #expect(Self.pipesReturn(to: before).isEmpty)
+    }
+
+    @Test func overflowAndSpawnFailureLeaveNoPipeDescriptorBehind() {
+        let before = Self.openPipes()
+        for _ in 0..<5 { _ = Probe.failureReason(Probe.shell("yes", maximumBytes: 100)) }
+        for _ in 0..<5 { _ = Probe.failureReason(Probe.request("/nonexistent/tool")) }
+        #expect(Self.pipesReturn(to: before).isEmpty)
+    }
+
+    @Test func theChildHoldsOnlyTheThreeStandardDescriptors() throws {
+        // The listing shows the descriptors of `ls` itself. It adds two for its own scan.
+        let output = try Probe.runner.run(Probe.request("/bin/ls", ["/dev/fd"]))
+        let lines = String(decoding: output.standardOutput, as: UTF8.self)
+            .split(separator: "\n").map(String.init)
+        #expect(Array(lines.prefix(3)) == ["0", "1", "2"])
+        #expect(lines.count <= 5, "\(lines)")
     }
 
     @Test func randomExitCodesAndOutputSizesRoundTripExactly() throws {

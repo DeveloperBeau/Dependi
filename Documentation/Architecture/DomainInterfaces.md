@@ -8,7 +8,7 @@
 
 | Interface | Capability |
 |---|---|
-| `FileReading` | Resolve real paths, read a regular file up to a limit, test for existence. |
+| `FileReading` | Resolve real paths, read a regular file up to a limit, test for existence, tell the modification date. A reader that cannot tell the age returns `nil`. |
 | `FileWriting` | Write, create a folder, remove and move. |
 | `DirectoryListing` | List the top level of one folder. |
 | `EnvironmentReading` | Read one variable. |

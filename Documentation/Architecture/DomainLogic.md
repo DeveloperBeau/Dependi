@@ -10,7 +10,7 @@ The domain logic turns raw project data into the list of acknowledgements to wri
 |---|---|
 | `PackageIdentityNormalizer` | Turns a URL or path into an identity and a normalized location. |
 | `SourcePackagesLocator` | Finds `SourcePackages` from the build directory. |
-| `ConfigurationLoader` | Reads `.dependi.json` and maps failures to errors. |
+| `ConfigurationLoader` | Reads `.dependi.json` and maps failures to errors. A time limit must be a finite number above 0. A process limit is at most 3600 seconds and a run limit at most 86400. |
 | `ReleaseGate` | Decides whether a build runs. |
 | `LinkedPackageResolver` | Joins products to packages and follows the product graph. |
 | `LicenseLocator` | Picks license file names from a folder listing. |

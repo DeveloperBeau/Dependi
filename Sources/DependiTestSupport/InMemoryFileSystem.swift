@@ -17,6 +17,7 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
         var nodes: [String: Node] = ["/": .directory]
         var readOnlyPaths: Set<String> = []
         var executablePaths: Set<String> = []
+        var modified: [String: Date] = [:]
     }
 
     private let state = LockedBox(State())
@@ -128,6 +129,21 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
                 return false
             }
             return state.nodes[resolved] != nil
+        }
+    }
+
+    /// Sets the modification date that `modificationDate(of:)` reports for a path.
+    public func setModificationDate(_ date: Date, at path: String) {
+        state.withValue { $0.modified[Self.normalize(path)] = date }
+    }
+
+    /// Implements `modificationDate` for `InMemoryFileSystem`.
+    public func modificationDate(of path: String) -> Date? {
+        state.withValue { state in
+            guard let resolved = try? Self.resolve(path, followFinal: false, nodes: state.nodes),
+                state.nodes[resolved] != nil
+            else { return nil }
+            return state.modified[resolved]
         }
     }
 

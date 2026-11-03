@@ -995,8 +995,8 @@
     "id": "comp-usage-exit-code",
     "slice": "9b",
     "file": "Sources/DependiComposition/DependiApplication.swift",
-    "search": "return Self.usageExitCode",
-    "replace": "return 0",
+    "search": "public static let usageExitCode: Int32 = 64",
+    "replace": "public static let usageExitCode: Int32 = 1",
     "test": "commandLineErrors"
   },
   {
@@ -1286,5 +1286,373 @@
     "search": "max(limit, 0) + 1 : limit",
     "replace": "max(limit, 0) + 1 : 0",
     "test": "extremeReadLimits"
+  },
+  {
+    "id": "out-link-resolved-compare",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "guard resolved == path else {",
+    "replace": "guard resolved == resolved else {",
+    "test": "linkOutsideIsRefused"
+  },
+  {
+    "id": "out-link-walk-components",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "try requirePlain(walked, name: bundleName)",
+    "replace": "try requirePlain(bundle, name: bundleName)",
+    "test": "middleLinkIsRefused"
+  },
+  {
+    "id": "out-link-dangling",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "guard files.exists(at: path) else { return }",
+    "replace": "guard files.exists(at: path), (try? files.realPath(of: path)) != nil else { return }",
+    "test": "danglingLinkIsRefused"
+  },
+  {
+    "id": "writer-link-folder-compare",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "guard resolvedFolder == Self.join(resolvedBundle, Self.folderName) else { throw refusal }",
+    "replace": "guard resolvedFolder == resolvedFolder, !resolvedBundle.isEmpty else { throw refusal }",
+    "test": "linkToAFolderInsideTheBundleIsRefused"
+  },
+  {
+    "id": "writer-link-folder-checked",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try requirePlainFolder(folder, inBundle: bundlePath)",
+    "replace": "_ = bundlePath",
+    "test": "linkToAnOutsideFolderAsAcknowledgementsIsRefusedAndNothingIsWritten"
+  },
+  {
+    "id": "writer-hidden-tolerated",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "name.hasPrefix(\".\") || isTemporaryLeftover(name)",
+    "replace": "isTemporaryLeftover(name)",
+    "test": "hiddenFilesAreIgnoredAndKept"
+  },
+  {
+    "id": "writer-leftovers-swept",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "leftovers = present.filter(Self.isTemporaryLeftover)",
+    "replace": "leftovers = []",
+    "test": "temporaryLeftoversOfOurOwnWritesAreSwept"
+  },
+  {
+    "id": "writer-leftover-uuid-check",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "guard UUID(uuidString: String(name[range.upperBound...])) != nil else { return false }",
+    "replace": "guard UUID(uuidString: String(name[range.upperBound...])) == nil else { return false }",
+    "test": "realForeignFilesAreStillRefused"
+  },
+  {
+    "id": "writer-manifest-union",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "Data(Self.manifestText(previous.union(newNames)).utf8), to: manifestPath)",
+    "replace": "Data(Self.manifestText(newNames).utf8), to: manifestPath)",
+    "test": "aStopAfterAnyNumberOfChangesLosesNoFileAndTheNextRunRecovers"
+  },
+  {
+    "id": "proc-reap-failure-as-success",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildWait.swift",
+    "search": "if errno != EINTR { return .failure(WaitFailure(code: errno)) }",
+    "replace": "if errno != EINTR { return .success(0) }",
+    "test": "aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess"
+  },
+  {
+    "id": "proc-state-failure-as-exited",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildWait.swift",
+    "search": "if errno != EINTR { return .failed(errno) }",
+    "replace": "if errno != EINTR { return .exited }",
+    "test": "aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess"
+  },
+  {
+    "id": "proc-look-reaps-child",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildWait.swift",
+    "search": "WEXITED | WNOHANG | WNOWAIT",
+    "replace": "WEXITED | WNOHANG",
+    "test": "aLookAtAnExitedChildDoesNotReapIt"
+  },
+  {
+    "id": "proc-child-not-tracked",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "children.started(pid)",
+    "replace": "_ = children",
+    "test": "theRunnerTellsTheTrackerAboutStartAndFinishAndNothingMore"
+  },
+  {
+    "id": "proc-finish-after-reap",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "_ = ChildWait.reap(pid)",
+    "replace": "_ = ChildWait.reap(pid); children.finished(pid)",
+    "test": "aTimedOutChildIsFinishedBeforeItIsReaped"
+  },
+  {
+    "id": "proc-parent-pipes-not-closed",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "parentEnds.forEach { close($0) }",
+    "replace": "_ = parentEnds",
+    "test": "timedOutRunsLeaveNoPipeDescriptorBehind"
+  },
+  {
+    "id": "proc-late-child-not-killed",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "if isTerminating { terminate(pid) }",
+    "replace": "if isTerminating && false { terminate(pid) }",
+    "test": "aChildThatStartsAfterTerminateAllIsKilledAtOnce"
+  },
+  {
+    "id": "proc-terminate-first-only",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "for pid in live { terminate(pid) }",
+    "replace": "for pid in live.prefix(1) { terminate(pid) }",
+    "test": "terminateAllKillsEveryLiveChildAndNoFinishedOne"
+  },
+  {
+    "id": "proc-finished-not-forgotten",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "lock.withLock { _ = live.remove(pid) }",
+    "replace": "lock.withLock { _ = live.count }",
+    "test": "terminateAllKillsEveryLiveChildAndNoFinishedOne"
+  },
+  {
+    "id": "proc-real-child-terminated",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "self.init(terminate: { ProcessTree.kill(root: $0) })",
+    "replace": "self.init(terminate: { _ in })",
+    "test": "terminateAllStopsARealRunningChildQuickly"
+  },
+  {
+    "id": "comp-signal-number-forwarded",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/TerminationHandler.swift",
+    "search": "source.setEventHandler { handler(number) }",
+    "replace": "source.setEventHandler { handler(SIGUSR2) }",
+    "test": "eachWatchedSignalIsReportedUnderItsOwnNumber"
+  },
+  {
+    "id": "comp-signal-default-ignored",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/TerminationHandler.swift",
+    "search": "source.resume()",
+    "replace": "_ = source",
+    "test": "aWatchedSignalCallsTheHandlerWithItsNumber"
+  },
+  {
+    "id": "cfg-limit-positive",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value > 0, value <= maximum else {",
+    "replace": "guard value >= 0, value <= maximum else {",
+    "test": "badProcessLimit"
+  },
+  {
+    "id": "cfg-limit-maximum",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value > 0, value <= maximum else {",
+    "replace": "guard value > 0 else {",
+    "test": "badRunLimit"
+  },
+  {
+    "id": "cfg-limit-edge-included",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value > 0, value <= maximum else {",
+    "replace": "guard value > 0, value < maximum else {",
+    "test": "goodLimits"
+  },
+  {
+    "id": "lazy-process-limit-dump",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "processTimeoutSeconds: configuration.processTimeoutSeconds,",
+    "replace": "processTimeoutSeconds: ToolConfiguration.defaultProcessTimeoutSeconds,",
+    "test": "processLimitIsUsed"
+  },
+  {
+    "id": "lazy-swift-path-absolute",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "guard swift.hasPrefix(\"/\") else {",
+    "replace": "guard !swift.isEmpty else {",
+    "test": "relativeSwiftPath"
+  },
+  {
+    "id": "lazy-version-unknown",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "?? \"unknown\"",
+    "replace": "?? \"\"",
+    "test": "unknownVersion"
+  },
+  {
+    "id": "lazy-env-leak-cc",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home }",
+    "replace": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home; result[\"CC\"] = environment[\"CC\"] }",
+    "test": "processRequestsAreClean"
+  },
+  {
+    "id": "lazy-env-drops-developer-dir",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "if let developer = environment[\"DEVELOPER_DIR\"] { result[\"DEVELOPER_DIR\"] = developer }",
+    "replace": "_ = environment[\"DEVELOPER_DIR\"]",
+    "test": "processRequestsAreClean"
+  },
+  {
+    "id": "lazy-env-home-dropped",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home }",
+    "replace": "result[\"HOME\"] = environment[\"HOME\"] ?? \"/root\"",
+    "test": "absentVariablesStayAbsent"
+  },
+  {
+    "id": "lazy-home-fallback",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "let home = environment[\"HOME\"] ?? child[\"TMPDIR\"] ?? \"/tmp\"",
+    "replace": "let home = environment[\"HOME\"] ?? \"/tmp\"",
+    "test": "foldersFallBackToTmpdir"
+  },
+  {
+    "id": "lazy-build-dir-fallback",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "let buildBase = environment[\"BUILD_DIR\"] ?? child[\"TMPDIR\"] ?? \"/tmp\"",
+    "replace": "let buildBase = environment[\"BUILD_DIR\"] ?? \"/tmp\"",
+    "test": "foldersFallBackToTmpdir"
+  },
+  {
+    "id": "dead-check-before-spawn",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DeadlineProcessRunner.swift",
+    "search": "guard remaining > 0 else {",
+    "replace": "guard remaining > -1_000_000 else {",
+    "test": "afterTheLimit"
+  },
+  {
+    "id": "dead-clamp-child-time",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DeadlineProcessRunner.swift",
+    "search": "timeoutSeconds: min(request.timeoutSeconds, remaining),",
+    "replace": "timeoutSeconds: request.timeoutSeconds,",
+    "test": "childTimeIsClamped"
+  },
+  {
+    "id": "dead-boundary-inclusive",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DeadlineProcessRunner.swift",
+    "search": "guard remaining > 0 else {",
+    "replace": "guard remaining >= 0 else {",
+    "test": "afterTheLimit"
+  },
+  {
+    "id": "app-run-limit-wired",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "wrapping: process, limitSeconds: settings.runTimeoutSeconds,",
+    "replace": "wrapping: process, limitSeconds: ToolConfiguration.defaultRunTimeoutSeconds,",
+    "test": "runLimitShortensChildLimits"
+  },
+  {
+    "id": "app-config-wired",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "environment: environment, configuration: settings, now: { Date() },",
+    "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), now: { Date() },",
+    "test": "configuredLimitsReachTheRequests"
+  },
+  {
+    "id": "lazy-process-limit-xcrun",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "timeoutSeconds: configuration.processTimeoutSeconds,",
+    "replace": "timeoutSeconds: 60,",
+    "test": "processLimitIsUsed"
+  },
+  {
+    "id": "graph-printable-controls",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "let isControl = value < 0x20 || value == 0x7F || (0x80...0x9F).contains(value)",
+    "replace": "let isControl = value < 0x20",
+    "test": "childErrorIsPrintable"
+  },
+  {
+    "id": "graph-sweep-cutoff",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "changed < settings.staleTemporaryFilesBefore",
+    "replace": "changed > settings.staleTemporaryFilesBefore",
+    "test": "staleTemporaryFilesAreSwept"
+  },
+  {
+    "id": "graph-sweep-only-temporaries",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "for name in names where Self.isTemporaryCacheFile(name) {",
+    "replace": "for name in names {",
+    "test": "staleTemporaryFilesAreSwept"
+  },
+  {
+    "id": "graph-sweep-uuid-check",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "return UUID(uuidString: String(name[range.upperBound...])) != nil",
+    "replace": "return !name.isEmpty",
+    "test": "staleTemporaryFilesAreSwept"
+  },
+  {
+    "id": "graph-sweep-called",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "sweepStaleTemporaryFiles(in: directory)",
+    "replace": "_ = directory",
+    "test": "staleTemporaryFilesAreSwept"
+  },
+  {
+    "id": "domain-license-outside-names-file",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": "throw .licenseOutsideCheckout(package: owner, file: fileName)",
+    "replace": "throw .licenseOutsideCheckout(package: owner, file: real)",
+    "test": "outsideLinkRefused"
+  },
+  {
+    "id": "disk-modification-date-no-follow",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "guard lstat(path, &info) == 0 else { return nil }",
+    "replace": "guard stat(path, &info) == 0 else { return nil }",
+    "test": "modificationDateOfALinkIsTheLinksOwn"
+  },
+  {
+    "id": "graph-printable-keeps-newline",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "return isControl && scalar != \"\\n\" && scalar != \"\\t\" ? \" \" : Character(scalar)",
+    "replace": "return isControl ? \" \" : Character(scalar)",
+    "test": "printableTextIsKept"
   }
 ]
