@@ -49,6 +49,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | gen-debug-skip | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `debugSkips` |
 | gen-empty-variable | 9a | `Sources/DependiGenerate/BuildContextReader.swift` | `missingAndEmptyAreNil` |
 | gen-local-packages | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageFromProject` |
+| gen-local-real-path | 11 | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageWithTwoPaths` |
 | gen-manual-absolute | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` |
 | gen-manual-outside | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` |
 | gen-output-absolute-build | 9a | `Sources/DependiGenerate/OutputLocation.swift` | `badProductLocation` |
@@ -74,6 +75,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | identity-lowercase | 2b | `Sources/DependiDomain/PackageIdentityNormalizer.swift` | `formsJoin` |
 | init-already-present | 10 | `Sources/DependiInit/RootPlistEditor.swift` | `secondRunChangesNothingNew` |
 | init-backup | 10 | `Sources/DependiInit/InitFeature.swift` | `paneAppended` |
+| init-backup-outside-bundle | 11 | `Sources/DependiInit/InitFeature.swift` | `paneAppended` |
 | init-binary-format | 10 | `Sources/DependiInit/RootPlistEditor.swift` | `binaryFormatKept` |
 | init-clash-confirmation | 10 | `Sources/DependiInit/InitFeature.swift` | `clashesNeedConfirmation` |
 | init-commit-format | 10 | `Sources/DependiInit/InitFeature.swift` | `commitMissing` |
