@@ -1068,7 +1068,7 @@
     "slice": "10",
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "$0.hasPrefix(location.root + \"/\")",
-    "replace": "true",
+    "replace": "$0.hasPrefix(\"\")",
     "test": "freshInstall"
   },
   {
