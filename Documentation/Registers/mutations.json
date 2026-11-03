@@ -1254,5 +1254,37 @@
     "search": ".contains(\"..\")",
     "replace": ".contains(where: { $0.contains(\"..\") })",
     "test": "dotsInsideANameAreAccepted"
+  },
+  {
+    "id": "double-write-onto-folder",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "if case .directory? = state.nodes[target] {",
+    "replace": "if false, case .directory? = state.nodes[target] {",
+    "test": "writeOntoFolderFails"
+  },
+  {
+    "id": "double-link-hop-limit",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "maximumLinkHops = 32",
+    "replace": "maximumLinkHops = 40",
+    "test": "linkChainLimitMatchesDisk"
+  },
+  {
+    "id": "double-read-limit-floor",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "max(limit, 0) + 1 : limit",
+    "replace": "max(limit, 1) + 1 : limit",
+    "test": "extremeReadLimits"
+  },
+  {
+    "id": "double-read-limit-max",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "max(limit, 0) + 1 : limit",
+    "replace": "max(limit, 0) + 1 : 0",
+    "test": "extremeReadLimits"
   }
 ]
