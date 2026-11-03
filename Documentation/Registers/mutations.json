@@ -284,7 +284,7 @@
     "slice": "2b",
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "throw .productUnmatched(product: product.productName)",
-    "replace": "continue",
+    "replace": "return nil",
     "test": "LinkedPackageResolverTests/unmatchedProduct()"
   },
   {
