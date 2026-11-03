@@ -14,6 +14,9 @@ final class RunningWrapper {
     private let outURL: URL
     private let errURL: URL
 
+    /// The process id of the wrapper.
+    var processIdentifier: Int32 { process.processIdentifier }
+
     init(process: Process, outURL: URL, errURL: URL) {
         self.process = process
         self.outURL = outURL
@@ -45,8 +48,11 @@ final class WrapperWorld {
     let root: URL
     let project: URL
     let cache: URL
+    let home: URL
     let callLog: URL
     let envLog: URL
+    let gitEnvLog: URL
+    let developerDir: URL
     let control: URL
     let stubs: URL
     let origin: URL
@@ -57,12 +63,18 @@ final class WrapperWorld {
         root = fm.temporaryDirectory.appendingPathComponent("wrapper-" + UUID().uuidString)
         project = root.appendingPathComponent("proj")
         cache = root.appendingPathComponent("cache")
+        home = root.appendingPathComponent("home")
         callLog = root.appendingPathComponent("calls.log")
         envLog = root.appendingPathComponent("xcrun-env.log")
+        gitEnvLog = root.appendingPathComponent("git-env.log")
+        developerDir = root.appendingPathComponent("dev dir")
         control = root.appendingPathComponent("ctl")
         stubs = root.appendingPathComponent("stubs")
         origin = root.appendingPathComponent("origin.git")
-        for folder in [project.appendingPathComponent(".dependi/bin"), control, stubs] {
+        for folder in [
+            project.appendingPathComponent(".dependi/bin"), control, stubs,
+            developerDir.appendingPathComponent("usr/bin"),
+        ] {
             try fm.createDirectory(at: folder, withIntermediateDirectories: true)
         }
         try fm.createDirectory(
@@ -73,17 +85,31 @@ final class WrapperWorld {
             """
             #!/bin/sh
             echo "git $*" >> '\(callLog.path)'
-            if [ "$1" = clone ] && [ -f '\(control.path)/fail-clone' ]; then
-                echo 'clone refused' >&2
-                exit 1
-            fi
-            if [ "$3" = rev-parse ] && [ -f '\(control.path)/lie-head' ]; then
-                echo bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-                exit 0
-            fi
+            env | sort >> '\(gitEnvLog.path)'
+            for argument in "$@"; do
+                if [ "$argument" = clone ] && [ -f '\(control.path)/fail-clone' ]; then
+                    echo 'clone refused' >&2
+                    exit 1
+                fi
+                if [ "$argument" = rev-parse ] && [ -f '\(control.path)/lie-head' ]; then
+                    echo bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+                    exit 0
+                fi
+            done
             unset DEVELOPER_DIR SDKROOT
             exec /usr/bin/git "$@"
             """, at: stubs.appendingPathComponent("git"))
+        // The Xcode shim at /usr/bin/git runs "$DEVELOPER_DIR/usr/bin/xcrun git ...". This stub
+        // hands that call to the git stub, so the wrapper reaches the stub with no PATH lookup.
+        try install(
+            """
+            #!/bin/sh
+            if [ "$1" = git ]; then
+                shift
+                exec '\(stubs.path)/git' "$@"
+            fi
+            exit 1
+            """, at: developerDir.appendingPathComponent("usr/bin/xcrun"))
         try install(
             """
             #!/bin/sh
@@ -93,8 +119,13 @@ final class WrapperWorld {
                 echo 'compile error: boom' >&2
                 exit 1
             fi
-            if [ -f '\(control.path)/slow-build' ]; then
-                sleep 1
+            if [ -f '\(control.path)/hold-build' ]; then
+                : > '\(control.path)/building'
+                waited=0
+                while [ ! -f '\(control.path)/proceed' ] && [ "$waited" -lt 1200 ]; do
+                    sleep 0.05
+                    waited=$((waited + 1))
+                done
             fi
             scratch=
             while [ $# -gt 0 ]; do
@@ -134,13 +165,85 @@ final class WrapperWorld {
         try data.write(to: project.appendingPathComponent(".dependi.json"))
     }
 
-    /// Puts the stub binary and a `VERSION` file in `.dependi/bin`.
-    func installProjectBinary(version: String) throws {
+    /// Puts the stub binary and a `VERSION` file with the given text in `.dependi/bin`.
+    func installProjectBinary(contents: String) throws {
         let bin = project.appendingPathComponent(".dependi/bin")
         let stub = try String(contentsOf: stubs.appendingPathComponent("installed-dependi"))
         try install(stub, at: bin.appendingPathComponent("dependi"))
-        try version.write(
+        try contents.write(
             to: bin.appendingPathComponent("VERSION"), atomically: true, encoding: .utf8)
+    }
+
+    /// The lock file for a pin.
+    func lock(version: String, commit: String) -> URL {
+        cache.appendingPathComponent("\(version)-\(commit).build-lock")
+    }
+
+    /// Replaces the lock for a pin with a symlink that holds `owner` as its target.
+    func plantLock(version: String, commit: String, owner: String) throws {
+        try fm.createDirectory(at: cache, withIntermediateDirectories: true)
+        let url = lock(version: version, commit: commit)
+        try? fm.removeItem(at: url)
+        try fm.createSymbolicLink(atPath: url.path, withDestinationPath: owner)
+    }
+
+    /// The owner recorded in a lock, or nil when there is no lock.
+    func lockOwner(version: String, commit: String) -> String? {
+        try? fm.destinationOfSymbolicLink(atPath: lock(version: version, commit: commit).path)
+    }
+
+    /// Sets the modification time of a symlink, in seconds before now.
+    func ageLock(version: String, commit: String, seconds: Int) throws {
+        let date = Date().addingTimeInterval(-Double(seconds))
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyyMMddHHmm"
+        let touch = Process()
+        touch.executableURL = URL(fileURLWithPath: "/usr/bin/touch")
+        touch.arguments = [
+            "-h", "-t", formatter.string(from: date),
+            lock(version: version, commit: commit).path,
+        ]
+        try touch.run()
+        touch.waitUntilExit()
+    }
+
+    /// The id of a process that has already exited.
+    func deadProcessIdentifier() throws -> Int32 {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/true")
+        try process.run()
+        process.waitUntilExit()
+        return process.processIdentifier
+    }
+
+    /// Waits at most 30 seconds for a control file to appear. Returns whether it did.
+    func waitForControlFile(_ name: String) -> Bool {
+        let path = control.appendingPathComponent(name).path
+        let deadline = Date().addingTimeInterval(30)
+        while Date() < deadline {
+            if fm.fileExists(atPath: path) { return true }
+            Thread.sleep(forTimeInterval: 0.01)
+        }
+        return false
+    }
+
+    /// Waits at most 30 seconds until the wrapper has a running `sleep` child, which means it is
+    /// inside the lock wait loop. Returns whether it got there.
+    func waitUntilWaitingForLock(_ running: RunningWrapper) -> Bool {
+        let deadline = Date().addingTimeInterval(30)
+        while Date() < deadline {
+            let pgrep = Process()
+            pgrep.executableURL = URL(fileURLWithPath: "/usr/bin/pgrep")
+            pgrep.arguments = ["-P", String(running.processIdentifier), "-x", "sleep"]
+            pgrep.standardOutput = FileHandle.nullDevice
+            pgrep.standardError = FileHandle.nullDevice
+            try? pgrep.run()
+            pgrep.waitUntilExit()
+            if pgrep.terminationStatus == 0 { return true }
+            Thread.sleep(forTimeInterval: 0.01)
+        }
+        return false
     }
 
     /// Sets a control flag that changes a stub.
@@ -190,7 +293,6 @@ final class WrapperWorld {
     /// The environment for a run that passes the gate and uses the stubs and the origin.
     func buildEnvironment(_ extra: [String: String] = [:]) -> [String: String] {
         var env = baseEnvironment(["ACTION": "install", "CONFIGURATION": "Release"])
-        env["DEPENDI_TESTING"] = "1"
         env["DEPENDI_REPO_URL"] = origin.path
         env["DEPENDI_XCRUN"] = stubs.appendingPathComponent("xcrun").path
         for (key, value) in extra { env[key] = value }
@@ -201,8 +303,10 @@ final class WrapperWorld {
     func baseEnvironment(_ extra: [String: String] = [:]) -> [String: String] {
         var env = [
             "PATH": stubs.path + ":/usr/bin:/bin",
-            "HOME": root.appendingPathComponent("home").path,
+            "HOME": home.path,
             "TMPDIR": root.path,
+            "DEVELOPER_DIR": developerDir.path,
+            "DEPENDI_TESTING": "1",
             "DEPENDI_CACHE_ROOT": cache.path,
         ]
         for (key, value) in extra { env[key] = value }
@@ -248,8 +352,10 @@ final class WrapperWorld {
     }
 
     /// Writes a cache entry for a pin. Pass a sha to override the real one.
-    func seedCache(version: String, commit: String, sha: String?, writeSha: Bool = true) throws {
-        let bin = cache.appendingPathComponent("\(version)-\(commit)/bin")
+    func seedCache(
+        version: String, commit: String, sha: String?, writeSha: Bool = true, in base: URL? = nil
+    ) throws {
+        let bin = (base ?? cache).appendingPathComponent("\(version)-\(commit)/bin")
         try fm.createDirectory(at: bin, withIntermediateDirectories: true)
         let body = "#!/bin/sh\necho cached-marker \"$@\"\n"
         try install(body, at: bin.appendingPathComponent("dependi"))

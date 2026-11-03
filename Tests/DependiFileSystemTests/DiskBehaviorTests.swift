@@ -58,4 +58,77 @@ struct DiskBehaviorTests {
             #expect(found.contains { $0.hasPrefix("a link in the last component is refused") })
         }
     }
+
+    private func isExecutable(_ path: String) -> Bool {
+        var info = stat()
+        return stat(path, &info) == 0 && (info.st_mode & 0o111) != 0
+    }
+
+    @Test("the disk passes the shared executable marking rules")
+    func passesExecutableSuite() throws {
+        try TempFolder.run { temp in
+            let disk = DiskFileSystem()
+            let found = FileSystemBehavior.executableProblems(
+                root: temp.root, reader: disk, writer: disk, executables: disk,
+                isExecutable: isExecutable)
+            #expect(found.isEmpty, "\(found)")
+        }
+    }
+
+    @Test("marking a file executable sets the mode to rwxr-xr-x and follows a link")
+    func makeExecutableSetsMode() throws {
+        try TempFolder.run { temp in
+            let disk = DiskFileSystem()
+            try DiskTreeArranger().addFile(at: temp.real + "/tool", contents: Data("x".utf8))
+            chmod(temp.real + "/tool", 0o600)
+            try DiskTreeArranger().addSymlink(
+                at: temp.real + "/link", pointingTo: temp.real + "/tool")
+            try disk.makeExecutable(at: temp.real + "/link")
+            var info = stat()
+            #expect(stat(temp.real + "/tool", &info) == 0)
+            #expect(info.st_mode & 0o777 == 0o755)
+        }
+    }
+
+    @Test(
+        "a chmod that the system refuses is reported as fileUnwritable with the system text",
+        .enabled(
+            if: geteuid() != 0, "a root user can change any mode, so the case cannot be set up")
+    )
+    func makeExecutableRefused() throws {
+        try TempFolder.run { temp in
+            let disk = DiskFileSystem()
+            try DiskTreeArranger().addDirectory(at: temp.real + "/locked")
+            try DiskTreeArranger().addFile(
+                at: temp.real + "/locked/tool", contents: Data("x".utf8))
+            chmod(temp.real + "/locked", 0o000)
+            defer { chmod(temp.real + "/locked", 0o755) }
+            do {
+                try disk.makeExecutable(at: temp.real + "/locked/tool")
+                Issue.record("expected fileUnwritable")
+            } catch let error as DomainError {
+                guard case .fileUnwritable(let path, let reason) = error else {
+                    Issue.record("expected fileUnwritable but got \(error)")
+                    return
+                }
+                #expect(path == temp.real + "/locked/tool")
+                #expect(reason.contains("chmod failed"))
+                #expect(reason.contains("Permission denied"))
+            }
+        }
+    }
+
+    @Test("the executable suite fails for a marker that does nothing")
+    func diskExecutableSuiteDetectsNoopMarker() throws {
+        struct Noop: ExecutableMarking {
+            func makeExecutable(at path: String) throws(DomainError) {}
+        }
+        try TempFolder.run { temp in
+            let disk = DiskFileSystem()
+            let found = FileSystemBehavior.executableProblems(
+                root: temp.root, reader: disk, writer: disk, executables: Noop(),
+                isExecutable: isExecutable)
+            #expect(found.contains("a marked file is executable"))
+        }
+    }
 }

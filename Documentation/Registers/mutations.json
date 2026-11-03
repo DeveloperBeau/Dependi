@@ -1069,7 +1069,7 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "^[0-9a-f]{40}$",
     "replace": "^.*$",
-    "test": "commitMissing"
+    "test": "commitFormatIsExact"
   },
   {
     "id": "init-backup",
@@ -1179,9 +1179,9 @@
     "id": "wrapper-version-compare-removed",
     "slice": "10",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "[ \"$installed\" = \"$version\" ]",
+    "search": "[ \"$installed\" = \"$version-$commit\" ]",
     "replace": "true",
-    "test": "versionMismatchUsesCache"
+    "test": "otherCommitIgnoresProjectCopy"
   },
   {
     "id": "wrapper-sha-check-removed",
@@ -1203,8 +1203,8 @@
     "id": "wrapper-lock-removed",
     "slice": "10",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "mkdir \"$lock\" 2>/dev/null",
-    "replace": "true",
+    "search": "while ! ln -s \"$token\" \"$lock\" 2>/dev/null; do",
+    "replace": "while ! true; do",
     "test": "concurrentRunsBuildOnce"
   },
   {
@@ -1219,8 +1219,8 @@
     "id": "wrapper-env-clean-removed",
     "slice": "10",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "env -i HOME=",
-    "replace": "env HOME=",
+    "search": "env -i HOME=\"$home\"",
+    "replace": "env HOME=\"$home\"",
     "test": "buildEnvironmentIsClean"
   },
   {
@@ -1654,5 +1654,277 @@
     "search": "return isControl && scalar != \"\\n\" && scalar != \"\\t\" ? \" \" : Character(scalar)",
     "replace": "return isControl ? \" \" : Character(scalar)",
     "test": "printableTextIsKept"
+  },
+  {
+    "id": "init-version-file-commit",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "let installed = commit.map { version + \"-\" + $0 } ?? version",
+    "replace": "let installed = version",
+    "test": "freshInstall"
+  },
+  {
+    "id": "wrapper-cache-override-unconditional",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if testing && [ -n \"${DEPENDI_CACHE_ROOT:-}\" ]; then",
+    "replace": "if [ -n \"${DEPENDI_CACHE_ROOT:-}\" ]; then",
+    "test": "cacheOverrideNeedsTestingFlag"
+  },
+  {
+    "id": "wrapper-cache-umask-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "(umask 077 && mkdir -p \"$cache_root\")",
+    "replace": "mkdir -p \"$cache_root\"",
+    "test": "newCacheFolderIsPrivate"
+  },
+  {
+    "id": "wrapper-cache-owner-check-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ ! -O \"$cache_root\" ]; then",
+    "replace": "false; then",
+    "test": "foreignCacheFolderIsRefused"
+  },
+  {
+    "id": "wrapper-cache-symlink-check-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if [ -L \"$cache_root\" ] || [ ! -d \"$cache_root\" ]",
+    "replace": "if [ ! -d \"$cache_root\" ]",
+    "test": "symlinkCacheFolderIsRefused"
+  },
+  {
+    "id": "wrapper-cache-writable-check-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "find \"$cache_root\" -maxdepth 0 \\( -perm -020 -o -perm -002 \\) 2>/dev/null",
+    "replace": "find \"$cache_root\" -maxdepth 0 -name nomatch 2>/dev/null",
+    "test": "writableCacheFolderIsRefused"
+  },
+  {
+    "id": "wrapper-git-env-clean-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "env -i HOME=\"$tmp/githome\" ",
+    "replace": "env HOME=\"$tmp/githome\" ",
+    "test": "gitEnvironmentIsClean"
+  },
+  {
+    "id": "wrapper-git-hooks-enabled",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "-c core.hooksPath=/dev/null \"$@\"",
+    "replace": "\"$@\"",
+    "test": "gitEnvironmentIsClean"
+  },
+  {
+    "id": "wrapper-git-global-config-allowed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null ",
+    "replace": "GIT_CONFIG_NOSYSTEM=1 ",
+    "test": "gitEnvironmentIsClean"
+  },
+  {
+    "id": "wrapper-git-template-allowed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "clone --quiet --template= \"$repo_url\"",
+    "replace": "clone --quiet \"$repo_url\"",
+    "test": "missingBinaryBuildsAndRuns"
+  },
+  {
+    "id": "wrapper-path-pin-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "PATH=/usr/bin:/bin\n        export PATH",
+    "replace": "export PATH",
+    "test": "callerPathIsIgnored"
+  },
+  {
+    "id": "wrapper-lock-dead-owner-kept",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "kill -0 \"$holder\" 2>/dev/null || return 0",
+    "replace": "kill -0 \"$holder\" 2>/dev/null || true",
+    "test": "deadOwnerLockIsReclaimed"
+  },
+  {
+    "id": "wrapper-lock-live-owner-stolen",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "kill -0 \"$holder\" 2>/dev/null || return 0",
+    "replace": "return 0",
+    "test": "liveOwnerLockIsRespected"
+  },
+  {
+    "id": "wrapper-lock-age-ignored",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ -n \"$(find \"$lock\" -maxdepth 0 -mmin +30 2>/dev/null)\" ]",
+    "replace": "false",
+    "test": "oldLockWithLiveOwnerIsReclaimed"
+  },
+  {
+    "id": "wrapper-lock-age-too-short",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "-maxdepth 0 -mmin +30 2>/dev/null",
+    "replace": "-maxdepth 0 -mmin +1 2>/dev/null",
+    "test": "recentLockWithLiveOwnerIsRespected"
+  },
+  {
+    "id": "wrapper-lock-malformed-owner-kept",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "\"\" | *[!0-9]*) return 0 ;;",
+    "replace": "\"\") return 0 ;;",
+    "test": "malformedLockOwnerIsStale"
+  },
+  {
+    "id": "wrapper-lock-release-unconditional",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if [ \"$owner\" = \"$token\" ]; then",
+    "replace": "if true; then",
+    "test": "releaseKeepsForeignLock"
+  },
+  {
+    "id": "wrapper-lock-never-released",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "rm -f \"$lock\"",
+    "replace": "true",
+    "test": "releaseRemovesOwnLock"
+  },
+  {
+    "id": "wrapper-lock-reclaim-skipped",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "            if lock_is_stale; then",
+    "replace": "            if false; then",
+    "test": "concurrentRunsOnDeadLockBuildOnce"
+  },
+  {
+    "id": "init-binary-executable",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "try executables.makeExecutable(at: root + \"/.dependi/bin/dependi\")",
+    "replace": "",
+    "test": "freshInstall"
+  },
+  {
+    "id": "init-commit-end-anchor",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"^[0-9a-f]{40}\"#",
+    "test": "commitFormatIsExact"
+  },
+  {
+    "id": "init-commit-start-anchor",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"[0-9a-f]{40}$\"#",
+    "test": "commitFormatIsExact"
+  },
+  {
+    "id": "init-commit-uppercase",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"^[0-9a-fA-F]{40}$\"#",
+    "test": "commitFormatIsExact"
+  },
+  {
+    "id": "init-commit-length",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"^[0-9a-f]{39,41}$\"#",
+    "test": "commitFormatIsExact"
+  },
+  {
+    "id": "disk-executable-mode",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "if chmod(path, 0o755) != 0 {",
+    "replace": "if chmod(path, 0o644) != 0 {",
+    "test": "makeExecutableSetsMode"
+  },
+  {
+    "id": "disk-executable-missing",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "if code == ENOENT || code == ENOTDIR {",
+    "replace": "if code == ENOTDIR {",
+    "test": "passesExecutableSuite"
+  },
+  {
+    "id": "disk-executable-not-directory",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "if code == ENOENT || code == ENOTDIR {",
+    "replace": "if code == ENOENT {",
+    "test": "passesExecutableSuite"
+  },
+  {
+    "id": "disk-executable-error-text",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "path: path, reason: \"chmod failed: \\(String(cString: strerror(code)))\")",
+    "replace": "path: path, reason: \"failed\")",
+    "test": "makeExecutableRefused"
+  },
+  {
+    "id": "memory-write-keeps-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.remove(target)",
+    "replace": "_ = target",
+    "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "memory-remove-keeps-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.remove(key)",
+    "replace": "_ = key",
+    "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "memory-move-drops-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.formUnion(marked.map { to + $0.dropFirst(from.count) })",
+    "replace": "_ = marked",
+    "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "memory-move-keeps-destination-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.subtract(replaced)",
+    "replace": "_ = replaced",
+    "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "memory-move-keeps-source-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.subtract(marked)",
+    "replace": "_ = marked",
+    "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "wrapper-lock-create-failure-ignored",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if [ ! -L \"$lock\" ] && [ ! -e \"$lock\" ]; then",
+    "replace": "if false; then",
+    "test": "unwritableCacheFolderFailsAtOnce"
   }
 ]
