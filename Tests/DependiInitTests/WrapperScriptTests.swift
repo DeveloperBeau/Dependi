@@ -427,7 +427,7 @@ struct WrapperScriptTests {
                 [.posixPermissions: 0o700], ofItemAtPath: world.cache.path)
         }
         let run = try world.run(
-            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "100000"]))
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "5"]))
         #expect(run.status == 1)
         #expect(run.stderr.contains("could not create the build lock"))
         #expect(world.calls().isEmpty)

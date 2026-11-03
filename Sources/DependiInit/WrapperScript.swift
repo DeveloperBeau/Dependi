@@ -217,13 +217,13 @@ public enum WrapperScript {
             if [ ! -L "$lock" ] && [ ! -e "$lock" ]; then
                 fail 'could not create the build lock in the cache folder'
             fi
-            if lock_is_stale; then
-                reclaim_lock
-                continue
-            fi
             steps=$((steps + 1))
             if [ "$steps" -ge "$max_steps" ]; then
                 fail 'waited for another build to finish'
+            fi
+            if lock_is_stale; then
+                reclaim_lock
+                continue
             fi
             sleep 0.2
         done
