@@ -4,7 +4,7 @@ import Foundation
 
 /// Reads the package products that a target links from an Xcode project file.
 public struct ProjectFileReader: LinkedProductReading {
-    private let files: any FileReading
+    let files: any FileReading
 
     /// Creates a reader that reads project files through the given file interface.
     public init(files: any FileReading) {
@@ -38,7 +38,7 @@ public struct ProjectFileReader: LinkedProductReading {
             supportedPlatforms: try SupportedPlatformDeriver.platforms(of: object, in: model))
     }
 
-    private func fileLocation(_ path: String) -> String {
+    func fileLocation(_ path: String) -> String {
         let name = path.split(separator: "/", omittingEmptySubsequences: true).last
         return name == "project.pbxproj" ? path : path + "/project.pbxproj"
     }

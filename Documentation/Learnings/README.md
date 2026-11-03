@@ -19,3 +19,5 @@ One page for each area. Each entry has three parts: the trap, the finding that p
 | [Command line](CommandLine.md) | Argument parsing and its traps |
 | [Generate flow](GenerateFlow.md) | Gate order, sandbox and output paths |
 | [Composition](Composition.md) | Lazy toolchain, exit codes and messages |
+| [Wizard](Wizard.md) | Safe, repeatable setup |
+| [Wrapper](Wrapper.md) | Shell traps, gate matching and the build lock |

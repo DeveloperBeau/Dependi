@@ -196,7 +196,8 @@ final class EndToEndWorld {
         let errHandle = try FileHandle(forWritingTo: err)
         let nullInput = try requireValue(FileHandle(forReadingAtPath: "/dev/null"))
         let application = DependiApplication(
-            process: runner, input: nullInput, output: outHandle, error: errHandle)
+            process: runner, input: nullInput, output: outHandle, error: errHandle,
+            executablePath: root.path + "/dependi-bin", currentDirectory: root.path)
         let code = application.run(arguments: arguments, environment: environment)
         try outHandle.close()
         try errHandle.close()

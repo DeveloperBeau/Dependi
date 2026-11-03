@@ -3,7 +3,7 @@ import Darwin
 import Foundation
 
 /// The real file system. It holds no configuration. Every error keeps the text of the system error.
-public struct DiskFileSystem: FileReading, FileWriting, DirectoryListing {
+public struct DiskFileSystem: FileReading, FileWriting, DirectoryListing, ExecutableMarking {
     /// Creates a file system that works on the real disk.
     public init() {}
 

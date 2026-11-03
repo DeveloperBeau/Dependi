@@ -11,12 +11,25 @@ let package = Package(
     platforms: [.macOS(.v14)],
     targets: [
         .target(
+            name: "DependiInit",
+            dependencies: ["DependiEntities", "DependiDomain"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiInitTests",
+            dependencies: [
+                "DependiInit", "DependiDomain", "DependiEntities", "DependiTestSupport",
+                "TestHelpers",
+            ],
+            swiftSettings: sharedSettings
+        ),
+        .target(
             name: "DependiComposition",
             dependencies: [
                 "DependiEntities", "DependiDomain", "DependiFileSystem", "DependiEnvironment",
                 "DependiConsole", "DependiWorkspaceState", "DependiProjectFile",
                 "DependiPackageGraph",
-                "DependiSettingsBundle", "DependiGenerate", "DependiCommandLine",
+                "DependiSettingsBundle", "DependiGenerate", "DependiCommandLine", "DependiInit",
             ],
             swiftSettings: sharedSettings
         ),

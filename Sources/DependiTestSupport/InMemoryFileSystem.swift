@@ -4,7 +4,7 @@ import Foundation
 /// A file system in memory with files, folders, links and pipes. It follows the rules of `FileReading`.
 public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListing,
     FileTreeArranging,
-    @unchecked Sendable
+    ExecutableMarking, @unchecked Sendable
 {
     private enum Node: Sendable, Equatable {
         case file(Data)
@@ -16,6 +16,7 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
     private struct State: Sendable {
         var nodes: [String: Node] = ["/": .directory]
         var readOnlyPaths: Set<String> = []
+        var executablePaths: Set<String> = []
     }
 
     private let state = LockedBox(State())
@@ -26,6 +27,26 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
     /// Makes every write under a path fail, to test error handling.
     public func markReadOnly(_ path: String) {
         state.withValue { $0.readOnlyPaths.insert(Self.normalize(path)) }
+    }
+
+    /// Whether `makeExecutable` was called for the file at the path.
+    public func isExecutable(at path: String) -> Bool {
+        state.withValue { state in
+            guard let resolved = try? Self.resolve(path, followFinal: true, nodes: state.nodes)
+            else {
+                return false
+            }
+            return state.executablePaths.contains(resolved)
+        }
+    }
+
+    /// Implements `makeExecutable` for `InMemoryFileSystem`. The file must exist.
+    public func makeExecutable(at path: String) throws(DomainError) {
+        try state.withValue { state throws(DomainError) in
+            let resolved = try Self.resolve(path, followFinal: true, nodes: state.nodes)
+            guard case .file? = state.nodes[resolved] else { throw .fileNotFound(path: path) }
+            state.executablePaths.insert(resolved)
+        }
     }
 
     // MARK: Paths

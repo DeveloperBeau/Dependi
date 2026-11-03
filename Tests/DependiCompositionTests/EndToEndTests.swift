@@ -1,5 +1,6 @@
 import DependiComposition
 import DependiDomain
+import DependiInit
 import Foundation
 import Testing
 
@@ -324,10 +325,72 @@ struct EndToEndTests {
         #expect(result.errors.contains("generate"))
     }
 
-    @Test("the init command is reported as not available yet")
-    func initNotAvailable() throws {
-        let world = try EndToEndWorld()
-        let result = try world.run(["init", "--project", "x"])
-        #expect(result.code == DependiApplication.unavailableExitCode)
+    // MARK: Init
+
+    private func initWorld() throws -> EndToEndWorld {
+        let world = try EndToEndWorld(configuration: nil)
+        try world.addRemote(
+            "alamofire", owner: "Alamofire",
+            manifest: EndToEndWorld.manifest(
+                product: "Alamofire", dependencies: ["Logging"], declared: ["swift-log"]))
+        try world.addRemote(
+            "swift-log", owner: "apple", manifest: EndToEndWorld.manifest(product: "Logging"))
+        try "BINARY".write(
+            toFile: world.root.path + "/dependi-bin", atomically: true, encoding: .utf8)
+        return world
+    }
+
+    @Test("init installs the files and the configuration it writes is read by generate")
+    func initThenGenerate() throws {
+        let world = try initWorld()
+        let installed = try world.run(["init", "--project", world.project])
+        #expect(installed.code == 0, "errors: \(installed.errors)")
+        #expect(FileManager.default.fileExists(atPath: world.project + "/.dependi.json"))
+        #expect(
+            try String(contentsOfFile: world.project + "/.dependi/run.sh", encoding: .utf8)
+                == WrapperScript.text)
+        #expect(
+            try String(contentsOfFile: world.project + "/.dependi/bin/dependi", encoding: .utf8)
+                == "BINARY")
+        #expect(
+            FileManager.default.isExecutableFile(atPath: world.project + "/.dependi/bin/dependi"))
+        #expect(FileManager.default.isExecutableFile(atPath: world.project + "/.dependi/run.sh"))
+        #expect(
+            try String(contentsOfFile: world.project + "/.dependi/bin/VERSION", encoding: .utf8)
+                == "\(DependiVersion.current)\n")
+        #expect(
+            try String(contentsOfFile: world.project + "/.gitignore", encoding: .utf8)
+                == ".dependi/bin/\n")
+        #expect(installed.output.contains("\"${SRCROOT}/.dependi/run.sh\" generate"))
+
+        let generated = try world.run(["generate"])
+        #expect(generated.code == 0, "errors: \(generated.errors)")
+        #expect(try world.indexTitles() == ["alamofire", "swift-log"])
+    }
+
+    @Test("a relative project path is resolved against the current folder")
+    func relativeInitPath() throws {
+        let world = try initWorld()
+        let result = try world.run(["init", "--project", "proj"])
+        #expect(result.code == 0, "errors: \(result.errors)")
+        #expect(FileManager.default.fileExists(atPath: world.project + "/.dependi.json"))
+    }
+
+    @Test("a dry run writes nothing")
+    func initDryRun() throws {
+        let world = try initWorld()
+        let result = try world.run(["init", "--project", world.project, "--dry-run"])
+        #expect(result.code == 0)
+        #expect(!FileManager.default.fileExists(atPath: world.project + "/.dependi.json"))
+        #expect(!FileManager.default.fileExists(atPath: world.project + "/.dependi"))
+        #expect(result.output.contains("Dry run. Nothing is changed."))
+    }
+
+    @Test("a project that does not exist fails with the path in the message")
+    func initMissingProject() throws {
+        let world = try initWorld()
+        let result = try world.run(["init", "--project", world.root.path + "/nowhere"])
+        #expect(result.code == 1)
+        #expect(result.errors.contains("There is no Xcode project at"))
     }
 }

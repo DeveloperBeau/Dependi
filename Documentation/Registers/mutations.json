@@ -1000,14 +1000,6 @@
     "test": "commandLineErrors"
   },
   {
-    "id": "comp-unavailable-exit-code",
-    "slice": "9b",
-    "file": "Sources/DependiComposition/DependiApplication.swift",
-    "search": "return Self.unavailableExitCode",
-    "replace": "return 0",
-    "test": "initNotAvailable"
-  },
-  {
     "id": "comp-version-text",
     "slice": "9b",
     "file": "Sources/DependiComposition/DependiApplication.swift",
@@ -1046,5 +1038,189 @@
     "search": "The package \\(package) has no license file.",
     "replace": "A package has no license file.",
     "test": "messagesNamePayloads"
+  },
+  {
+    "id": "init-dry-run",
+    "slice": "10",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if isDryRun {",
+    "replace": "if false {",
+    "test": "dryRun"
+  },
+  {
+    "id": "init-macos-refused",
+    "slice": "10",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "linked.supportedPlatforms.allSatisfy({ $0 == \"macosx\" })",
+    "replace": "linked.supportedPlatforms.allSatisfy({ $0 == \"never\" })",
+    "test": "platforms"
+  },
+  {
+    "id": "init-local-excludes",
+    "slice": "10",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "$0.hasPrefix(location.root + \"/\")",
+    "replace": "$0.hasPrefix(\"\")",
+    "test": "freshInstall"
+  },
+  {
+    "id": "init-commit-format",
+    "slice": "10",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "^[0-9a-f]{40}$",
+    "replace": "^.*$",
+    "test": "commitMissing"
+  },
+  {
+    "id": "init-backup",
+    "slice": "10",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if let original { try writer.write(original, toPath: plistPath + \".bak\") }",
+    "replace": "",
+    "test": "paneAppended"
+  },
+  {
+    "id": "init-clash-confirmation",
+    "slice": "10",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if try prompts.askConfirmation(",
+    "replace": "if try !prompts.askConfirmation(",
+    "test": "clashesNeedConfirmation"
+  },
+  {
+    "id": "init-run-script-executable",
+    "slice": "10",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "try executables.makeExecutable(at: root + \"/.dependi/run.sh\")",
+    "replace": "",
+    "test": "freshInstall"
+  },
+  {
+    "id": "init-gitignore-duplicate",
+    "slice": "10",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if lines.contains(rule) { return }",
+    "replace": "",
+    "test": "gitignoreRules"
+  },
+  {
+    "id": "init-existing-config",
+    "slice": "10",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "output.writeLine(\"Dependi: kept the existing .dependi.json.\")\n            return",
+    "replace": "output.writeLine(\"Dependi: kept the existing .dependi.json.\")",
+    "test": "existingConfigurationKept"
+  },
+  {
+    "id": "init-old-entry",
+    "slice": "10",
+    "file": "Sources/DependiInit/RootPlistEditor.swift",
+    "search": "$0[\"File\"] as? String == oldPaneName",
+    "replace": "$0[\"File\"] as? String == oldPaneName + \"x\"",
+    "test": "oldEntryRewritten"
+  },
+  {
+    "id": "init-binary-format",
+    "slice": "10",
+    "file": "Sources/DependiInit/RootPlistEditor.swift",
+    "search": "format == .binary ? .binary : .xml",
+    "replace": "PropertyListSerialization.PropertyListFormat.xml",
+    "test": "binaryFormatKept"
+  },
+  {
+    "id": "init-workspace-sibling",
+    "slice": "10",
+    "file": "Sources/DependiInit/ProjectLocator.swift",
+    "search": "guard files.exists(at: sibling) else {",
+    "replace": "guard true else {",
+    "test": "workspaceWithoutProject"
+  },
+  {
+    "id": "init-dependi-itself",
+    "slice": "10",
+    "file": "Sources/DependiInit/ProjectLocator.swift",
+    "search": "?.contains(\"DependiDomain\")",
+    "replace": "?.contains(\"NoSuchFolder\")",
+    "test": "dependiItself"
+  },
+  {
+    "id": "init-already-present",
+    "slice": "10",
+    "file": "Sources/DependiInit/RootPlistEditor.swift",
+    "search": "return (original, .unchanged)",
+    "replace": "return (original, .added)",
+    "test": "secondRunChangesNothingNew"
+  },
+  {
+    "id": "wrapper-pre-gate-inverted",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ \"${ACTION:-}\" != install ] && ! in_gate",
+    "replace": "[ \"${ACTION:-}\" != install ] && in_gate",
+    "test": "debugBuildSkipsBeforeAnyCall"
+  },
+  {
+    "id": "wrapper-version-validation-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "'^[0-9]+\\.[0-9]+\\.[0-9]+$'",
+    "replace": "'^.*$'",
+    "test": "badVersionsAreRejected"
+  },
+  {
+    "id": "wrapper-commit-validation-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "'^[0-9a-f]{40}$'",
+    "replace": "'^.*$'",
+    "test": "badCommitsAreRejected"
+  },
+  {
+    "id": "wrapper-version-compare-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ \"$installed\" = \"$version\" ]",
+    "replace": "true",
+    "test": "versionMismatchUsesCache"
+  },
+  {
+    "id": "wrapper-sha-check-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ -n \"$actual\" ] && [ \"$actual\" = \"$recorded\" ]",
+    "replace": "true",
+    "test": "cacheWithWrongShaIsRebuilt"
+  },
+  {
+    "id": "wrapper-commit-recheck-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ \"$head\" != \"$commit\" ]",
+    "replace": "false",
+    "test": "movedCommitFailsClean"
+  },
+  {
+    "id": "wrapper-lock-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "mkdir \"$lock\" 2>/dev/null",
+    "replace": "true",
+    "test": "concurrentRunsBuildOnce"
+  },
+  {
+    "id": "wrapper-repo-override-unconditional",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if testing && [ -n \"${DEPENDI_REPO_URL:-}\" ]",
+    "replace": "if [ -n \"${DEPENDI_REPO_URL:-}\" ]",
+    "test": "repoOverrideNeedsTestingFlag"
+  },
+  {
+    "id": "wrapper-env-clean-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "env -i HOME=",
+    "replace": "env HOME=",
+    "test": "buildEnvironmentIsClean"
   }
 ]

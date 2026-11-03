@@ -4,7 +4,8 @@ import Foundation
 
 let application = DependiApplication(
     process: SystemProcessRunner(), input: .standardInput, output: .standardOutput,
-    error: .standardError)
+    error: .standardError, executablePath: Bundle.main.executablePath ?? CommandLine.arguments[0],
+    currentDirectory: FileManager.default.currentDirectoryPath)
 exit(
     application.run(
         arguments: Array(CommandLine.arguments.dropFirst()),
