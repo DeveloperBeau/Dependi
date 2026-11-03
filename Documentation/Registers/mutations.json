@@ -1502,5 +1502,13 @@
     "search": "state.executablePaths.subtract(marked)",
     "replace": "_ = marked",
     "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "wrapper-lock-create-failure-ignored",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if [ ! -L \"$lock\" ] && [ ! -e \"$lock\" ]; then",
+    "replace": "if false; then",
+    "test": "unwritableCacheFolderFailsAtOnce"
   }
 ]

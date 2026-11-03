@@ -414,6 +414,25 @@ struct WrapperScriptTests {
         #expect(world.lockOwner(version: Self.version, commit: head) == nil)
     }
 
+    @Test(
+        "a cache folder that cannot take a lock fails at once and does not wait",
+        .enabled(if: geteuid() != 0, "a root user can write to any folder"))
+    func unwritableCacheFolderFailsAtOnce() throws {
+        let world = try world()
+        try FileManager.default.createDirectory(at: world.cache, withIntermediateDirectories: true)
+        try FileManager.default.setAttributes(
+            [.posixPermissions: 0o500], ofItemAtPath: world.cache.path)
+        defer {
+            try? FileManager.default.setAttributes(
+                [.posixPermissions: 0o700], ofItemAtPath: world.cache.path)
+        }
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "100000"]))
+        #expect(run.status == 1)
+        #expect(run.stderr.contains("could not create the build lock"))
+        #expect(world.calls().isEmpty)
+    }
+
     @Test("a lock whose owner process is running is respected and left in place")
     func liveOwnerLockIsRespected() throws {
         let world = try world()

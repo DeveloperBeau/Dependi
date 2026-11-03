@@ -214,6 +214,9 @@ public enum WrapperScript {
 
         steps=0
         while ! ln -s "$token" "$lock" 2>/dev/null; do
+            if [ ! -L "$lock" ] && [ ! -e "$lock" ]; then
+                fail 'could not create the build lock in the cache folder'
+            fi
             if lock_is_stale; then
                 reclaim_lock
                 continue
