@@ -51,7 +51,8 @@ Names are compared exactly. An empty list means archive only.
 6. A macro or plugin target is visited but its dependencies are not followed, unless build tools are included.
 7. A `byName` dependency is a target of the same package first, then a product of a declared dependency.
 8. Each manifest is read once for a run.
-9. The result lists the linked packages and the resolved packages that nothing reached.
+9. A product of an excluded package is still followed, so its dependencies ship. Only the excluded package itself is left out.
+10. The result lists the linked packages and the resolved packages that nothing reached.
 
 ## Finding license files
 

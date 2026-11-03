@@ -1318,5 +1318,13 @@
     "replace": "if true { return nil }",
     "test": "sourceControlPinWithoutRevisionFails",
     "slice": "review-fix"
+  },
+  {
+    "id": "resolver-excluded-root-skipped",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "identity = normalizer.identity(forLocation: name)",
+    "replace": "identity = normalizer.identity(forLocation: name); if excludes.contains(identity.value) { continue }",
+    "test": "excludedRootStillBringsItsDependencies",
+    "slice": "review-fix"
   }
 ]

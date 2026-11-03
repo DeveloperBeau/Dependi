@@ -344,6 +344,38 @@ struct LinkedPackageResolverTests {
         #expect(result.linked.isEmpty)
     }
 
+    @Test("the dependencies of an excluded package that a product links still ship")
+    func excludedRootStillBringsItsDependencies() throws {
+        let manifests = [
+            "/checkouts/own": simpleManifest(
+                product: "Own", dependencies: [dependency(.product, "Dep", package: "dep")],
+                declared: ["dep"]),
+            "/checkouts/dep": simpleManifest(product: "Dep"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Own", packageName: "own")],
+            remote: [remote("own"), remote("dep")], manifests: manifests, excludes: ["own"])
+        #expect(names(result.linked) == ["dep"])
+        #expect(result.unreached.isEmpty)
+    }
+
+    @Test("an excluded package that is not linked does not pull in its dependencies")
+    func excludedUnlinkedPackageBringsNothing() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(product: "Kit"),
+            "/checkouts/own": simpleManifest(
+                product: "Own", dependencies: [dependency(.product, "Dep", package: "dep")],
+                declared: ["dep"]),
+            "/checkouts/dep": simpleManifest(product: "Dep"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Kit", packageName: "kit")],
+            remote: [remote("kit"), remote("own"), remote("dep")], manifests: manifests,
+            excludes: ["own"])
+        #expect(names(result.linked) == ["kit"])
+        #expect(names(result.unreached) == ["dep"])
+    }
+
     @Test("an exclude matches whatever its case, and a location names its package")
     func excludeIsNormalized() throws {
         let manifests = [

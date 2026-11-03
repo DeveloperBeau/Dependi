@@ -80,9 +80,9 @@ public struct LinkedPackageResolver: Sendable {
         var roots: [(PackageIdentity, String)] = []
         for product in linked {
             if let name = product.packageName {
-                if excludes.contains(normalizer.identity(forLocation: name).value) { continue }
                 let identity = normalizer.identity(forLocation: name)
                 guard packages[identity] != nil else {
+                    if excludes.contains(identity.value) { continue }
                     throw .productUnmatched(product: "\(product.productName) in package \(name)")
                 }
                 roots.append((identity, product.productName))
