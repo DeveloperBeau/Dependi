@@ -93,8 +93,7 @@ struct ConfigurationLoaderTests {
 
     @Test("a file over one megabyte is corrupt and a folder with the name is refused")
     func oversizeAndFolder() throws {
-        let big = try system(
-            configuration: "{\"excludes\":[\"" + String(repeating: "a", count: 1_048_600) + "\"]}")
+        let big = try system(configuration: "{}" + String(repeating: " ", count: 1_048_600))
         do {
             _ = try ConfigurationLoader(files: big).load(projectDirectory: "/proj")
             Issue.record("accepted a large file")
