@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Delta",
+        "repositoryURL": "https://github.com/Example/Delta.git",
+        "state": {
+          "branch": null,
+          "revision": "4444444444444444444444444444444444444444",
+          "version": "1.0.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

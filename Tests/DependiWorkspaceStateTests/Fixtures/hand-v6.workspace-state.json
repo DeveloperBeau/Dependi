@@ -1,0 +1,43 @@
+{
+  "object" : {
+    "artifacts" : [
+
+    ],
+    "dependencies" : [
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "beta-kit",
+          "kind" : "remoteSourceControl",
+          "location" : "git@github.com:Example/Beta-Kit.git",
+          "name" : "BetaKit"
+        },
+        "state" : {
+          "checkoutState" : {
+            "branch" : "main",
+            "revision" : "2222222222222222222222222222222222222222"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "Beta-Kit"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "gamma",
+          "kind" : "localSourceControl",
+          "location" : "$ROOT/Packages/Gamma",
+          "name" : "Gamma"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "3333333333333333333333333333333333333333"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "Gamma"
+      }
+    ]
+  },
+  "version" : 6
+}

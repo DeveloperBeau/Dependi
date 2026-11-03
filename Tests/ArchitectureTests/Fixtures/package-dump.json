@@ -189,6 +189,177 @@
     },
     {
       "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiEntities",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiEntities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiEntitiesTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TestHelpers",
+      "packageAccess" : true,
+      "path" : "Tests/TestHelpers",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Fixtures"
+      ],
+      "name" : "RepositoryChecksTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "MutationRunnerTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Fixtures"
+      ],
+      "name" : "ArchitectureTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
         {
           "byName" : [
             "DependiDomain",
@@ -323,65 +494,6 @@
 
       ],
       "name" : "DependiEnvironmentTests",
-      "packageAccess" : true,
-      "resources" : [
-
-      ],
-      "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "ExistentialAny"
-            }
-          },
-          "tool" : "swift"
-        }
-      ],
-      "type" : "test"
-    },
-    {
-      "dependencies" : [
-
-      ],
-      "exclude" : [
-
-      ],
-      "name" : "DependiEntities",
-      "packageAccess" : true,
-      "resources" : [
-
-      ],
-      "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "ExistentialAny"
-            }
-          },
-          "tool" : "swift"
-        }
-      ],
-      "type" : "regular"
-    },
-    {
-      "dependencies" : [
-        {
-          "byName" : [
-            "DependiEntities",
-            null
-          ]
-        },
-        {
-          "byName" : [
-            "TestHelpers",
-            null
-          ]
-        }
-      ],
-      "exclude" : [
-
-      ],
-      "name" : "DependiEntitiesTests",
       "packageAccess" : true,
       "resources" : [
 
@@ -540,14 +652,24 @@
     },
     {
       "dependencies" : [
-
+        {
+          "byName" : [
+            "DependiEntities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        }
       ],
       "exclude" : [
 
       ],
-      "name" : "TestHelpers",
+      "name" : "DependiWorkspaceState",
       "packageAccess" : true,
-      "path" : "Tests/TestHelpers",
       "resources" : [
 
       ],
@@ -567,62 +689,28 @@
       "dependencies" : [
         {
           "byName" : [
-            "TestHelpers",
+            "DependiWorkspaceState",
             null
           ]
-        }
-      ],
-      "exclude" : [
-        "Fixtures"
-      ],
-      "name" : "RepositoryChecksTests",
-      "packageAccess" : true,
-      "resources" : [
-
-      ],
-      "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "ExistentialAny"
-            }
-          },
-          "tool" : "swift"
-        }
-      ],
-      "type" : "test"
-    },
-    {
-      "dependencies" : [
+        },
         {
           "byName" : [
-            "TestHelpers",
+            "DependiDomain",
             null
           ]
-        }
-      ],
-      "exclude" : [
-
-      ],
-      "name" : "MutationRunnerTests",
-      "packageAccess" : true,
-      "resources" : [
-
-      ],
-      "settings" : [
+        },
         {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "ExistentialAny"
-            }
-          },
-          "tool" : "swift"
-        }
-      ],
-      "type" : "test"
-    },
-    {
-      "dependencies" : [
+          "byName" : [
+            "DependiEntities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiTestSupport",
+            null
+          ]
+        },
         {
           "byName" : [
             "TestHelpers",
@@ -633,7 +721,7 @@
       "exclude" : [
         "Fixtures"
       ],
-      "name" : "ArchitectureTests",
+      "name" : "DependiWorkspaceStateTests",
       "packageAccess" : true,
       "resources" : [
 

@@ -12,3 +12,4 @@ One page for each area. Each entry has three parts: the trap, the finding that p
 | [Domain logic](DomainLogic.md) | Identity, paths, gate and graph |
 | [System access](SystemAccess.md) | Links, pipes, bounded reads and names |
 | [Process and console](ProcessAndConsole.md) | Spawning, killing, pipes and prompts |
+| [Dependency sources](DependencySources.md) | Workspace state and pinned revisions |

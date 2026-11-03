@@ -43,6 +43,8 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | loader-size-cap | 2b | `Sources/DependiDomain/ConfigurationLoader.swift` | `oversizeAndFolder` |
 | locator-anchor-next | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `schemeNamedBuild` |
 | locator-last-anchor | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `earlierBuildFolderIsIgnored` |
+| pins-identity-from-location | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `pinIdentityFromLocation` |
+| pins-workspace-before-project | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `workspaceBeforeProject` |
 | process-clean-environment | 4 | `Sources/DependiProcess/SystemProcessRunner.swift` | `theChildEnvironmentIsExactlyTheRequestEnvironment` |
 | process-descendant-kill | 4 | `Sources/DependiProcess/ProcessTree.swift` | `aDescendantThatLeftTheProcessGroupIsKilledOnTimeout` |
 | process-group-kill | 4 | `Sources/DependiProcess/ProcessTree.swift` | `aGrandchildHoldingStandardOutputIsKilledOnTimeout` |
@@ -63,3 +65,10 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | validator-containment | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `outsideLinkRefused` |
 | validator-control | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `controlCharactersRefused` |
 | validator-size | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `sizeBoundary` |
+| workspace-containment-prefix | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `siblingWithSimilarNameIsRefused` |
+| workspace-identity-from-location | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `identityFromLocation` |
+| workspace-kind-file-system | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `localPackageIsLocal` |
+| workspace-kind-remote | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `realVersion7Remote` |
+| workspace-subpath-absolute | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `absoluteSubpathIsRefused` |
+| workspace-subpath-empty | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `emptySubpathIsRefused` |
+| workspace-subpath-traversal | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `subpathTraversalIsRefused` |
