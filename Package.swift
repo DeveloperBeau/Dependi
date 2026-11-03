@@ -10,6 +10,12 @@ let package = Package(
     name: "Dependi",
     platforms: [.macOS(.v14)],
     targets: [
+        .target(name: "DependiEntities", swiftSettings: sharedSettings),
+        .testTarget(
+            name: "DependiEntitiesTests",
+            dependencies: ["DependiEntities", "TestHelpers"],
+            swiftSettings: sharedSettings
+        ),
         .target(
             name: "TestHelpers",
             path: "Tests/TestHelpers",
