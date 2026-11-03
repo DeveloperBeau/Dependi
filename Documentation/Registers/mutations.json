@@ -1310,5 +1310,85 @@
     "search": "Data(Self.manifestText(previous.union(newNames)).utf8), to: manifestPath)",
     "replace": "Data(Self.manifestText(newNames).utf8), to: manifestPath)",
     "test": "aStopAfterAnyNumberOfChangesLosesNoFileAndTheNextRunRecovers"
+  },
+  {
+    "id": "proc-reap-failure-as-success",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildWait.swift",
+    "search": "if errno != EINTR { return .failure(WaitFailure(code: errno)) }",
+    "replace": "if errno != EINTR { return .success(0) }",
+    "test": "aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess"
+  },
+  {
+    "id": "proc-state-failure-as-exited",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildWait.swift",
+    "search": "if errno != EINTR { return .failed(errno) }",
+    "replace": "if errno != EINTR { return .exited }",
+    "test": "aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess"
+  },
+  {
+    "id": "proc-look-reaps-child",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildWait.swift",
+    "search": "WEXITED | WNOHANG | WNOWAIT",
+    "replace": "WEXITED | WNOHANG",
+    "test": "aLookAtAnExitedChildDoesNotReapIt"
+  },
+  {
+    "id": "proc-child-not-tracked",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "children.started(pid)",
+    "replace": "_ = children",
+    "test": "theRunnerTellsTheTrackerAboutStartAndFinishAndNothingMore"
+  },
+  {
+    "id": "proc-finish-after-reap",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "_ = ChildWait.reap(pid)",
+    "replace": "_ = ChildWait.reap(pid); children.finished(pid)",
+    "test": "aTimedOutChildIsFinishedBeforeItIsReaped"
+  },
+  {
+    "id": "proc-parent-pipes-not-closed",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "parentEnds.forEach { close($0) }",
+    "replace": "_ = parentEnds",
+    "test": "timedOutRunsLeaveNoPipeDescriptorBehind"
+  },
+  {
+    "id": "proc-late-child-not-killed",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "if isTerminating { terminate(pid) }",
+    "replace": "if isTerminating && false { terminate(pid) }",
+    "test": "aChildThatStartsAfterTerminateAllIsKilledAtOnce"
+  },
+  {
+    "id": "proc-terminate-first-only",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "for pid in live { terminate(pid) }",
+    "replace": "for pid in live.prefix(1) { terminate(pid) }",
+    "test": "terminateAllKillsEveryLiveChildAndNoFinishedOne"
+  },
+  {
+    "id": "proc-finished-not-forgotten",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "lock.withLock { _ = live.remove(pid) }",
+    "replace": "lock.withLock { _ = live.count }",
+    "test": "terminateAllKillsEveryLiveChildAndNoFinishedOne"
+  },
+  {
+    "id": "proc-real-child-terminated",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "self.init(terminate: { ProcessTree.kill(root: $0) })",
+    "replace": "self.init(terminate: { _ in })",
+    "test": "terminateAllStopsARealRunningChildQuickly"
   }
 ]
