@@ -16,3 +16,4 @@ One page for each subsystem. Each page describes how the subsystem works today.
 | [Dependency sources](DependencySources.md) | Current |
 | [Project file](ProjectFile.md) | Current |
 | [Transitive graph](TransitiveGraph.md) | Current |
+| [Settings bundle output](SettingsBundleOutput.md) | Current |
