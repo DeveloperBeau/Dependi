@@ -54,5 +54,29 @@
     "search": "fileName != \"..\", ",
     "replace": "",
     "test": "unsafeNamesAreRejected"
+  },
+  {
+    "id": "double-limit-plus-one",
+    "slice": "2a",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "data.prefix(limit + 1)",
+    "replace": "data.prefix(limit)",
+    "test": "doublePassesBehaviorSuite"
+  },
+  {
+    "id": "double-link-hop-limit",
+    "slice": "2a",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "steps > 40",
+    "replace": "steps > 20",
+    "test": "loopsAndChains"
+  },
+  {
+    "id": "double-readonly-component",
+    "slice": "2a",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "path.hasPrefix(readOnly + \"/\")",
+    "replace": "path.hasPrefix(readOnly)",
+    "test": "readOnlyIsMatchedByComponent"
   }
 ]
