@@ -165,6 +165,8 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
                 throw .fileUnwritable(path: path, reason: "the folder does not exist")
             }
             state.nodes[target] = .file(data)
+            // The real write replaces the file with a new one that has the default mode.
+            state.executablePaths.remove(target)
         }
     }
 
@@ -196,6 +198,7 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             }
             for key in state.nodes.keys where key == target || key.hasPrefix(target + "/") {
                 state.nodes[key] = nil
+                state.executablePaths.remove(key)
             }
         }
     }
@@ -217,11 +220,17 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             for key in state.nodes.keys where key == to || key.hasPrefix(to + "/") {
                 state.nodes[key] = nil
             }
+            state.executablePaths = state.executablePaths.filter {
+                !($0 == to || $0.hasPrefix(to + "/"))
+            }
+            let marked = state.executablePaths.filter { $0 == from || $0.hasPrefix(from + "/") }
             for key in state.nodes.keys.sorted() where key == from || key.hasPrefix(from + "/") {
                 let moved = to + key.dropFirst(from.count)
                 state.nodes[moved] = state.nodes[key]
                 state.nodes[key] = nil
             }
+            state.executablePaths.subtract(marked)
+            state.executablePaths.formUnion(marked.map { to + $0.dropFirst(from.count) })
         }
     }
 

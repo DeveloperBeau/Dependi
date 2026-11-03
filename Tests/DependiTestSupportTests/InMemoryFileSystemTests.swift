@@ -15,6 +15,29 @@ struct InMemoryFileSystemTests {
         #expect(problems.isEmpty, "\(problems)")
     }
 
+    @Test("the double passes the shared executable marking rules")
+    func doublePassesExecutableSuite() throws {
+        let fileSystem = InMemoryFileSystem()
+        try fileSystem.addDirectory(at: "/work")
+        let problems = FileSystemBehavior.executableProblems(
+            root: "/work", reader: fileSystem, writer: fileSystem, executables: fileSystem,
+            isExecutable: { fileSystem.isExecutable(at: $0) })
+        #expect(problems.isEmpty, "\(problems)")
+    }
+
+    @Test("the executable suite fails for a marker that does nothing")
+    func executableSuiteDetectsNoopMarker() throws {
+        struct Noop: ExecutableMarking {
+            func makeExecutable(at path: String) throws(DomainError) {}
+        }
+        let fileSystem = InMemoryFileSystem()
+        try fileSystem.addDirectory(at: "/work")
+        let problems = FileSystemBehavior.executableProblems(
+            root: "/work", reader: fileSystem, writer: fileSystem, executables: Noop(),
+            isExecutable: { fileSystem.isExecutable(at: $0) })
+        #expect(problems.contains("a marked file is executable"))
+    }
+
     @Test("the suite passes when the root is reached through a linked folder")
     func suitePassesThroughLinkedRoot() throws {
         let fileSystem = InMemoryFileSystem()

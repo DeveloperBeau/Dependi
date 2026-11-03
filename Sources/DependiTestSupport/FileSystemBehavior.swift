@@ -167,4 +167,89 @@ public enum FileSystemBehavior {
         }
         return problems
     }
+
+    /// Runs the executable marking rules inside `root`, which must be an empty folder that can be
+    /// written. `isExecutable` answers for a real path. It returns one sentence for each rule that
+    /// failed. An empty list means success.
+    public static func executableProblems(
+        root: String,
+        reader: some FileReading,
+        writer: some FileWriting,
+        executables: some ExecutableMarking,
+        isExecutable: (String) -> Bool
+    ) -> [String] {
+        var problems: [String] = []
+
+        func check(_ rule: String, _ condition: Bool) {
+            if !condition { problems.append(rule) }
+        }
+        func expectFailure(_ rule: String, kind expected: String, _ body: () throws -> Void) {
+            do {
+                try body()
+                problems.append("\(rule): expected \(expected) but nothing failed")
+            } catch let error as DomainError {
+                let actual = kind(error)
+                if actual != expected {
+                    problems.append("\(rule): expected \(expected) but got \(actual)")
+                }
+            } catch {
+                problems.append("\(rule): expected \(expected) but got \(error)")
+            }
+        }
+
+        do {
+            let realRoot = try reader.realPath(of: root)
+            let bytes = Data("tool".utf8)
+
+            try writer.write(bytes, toPath: root + "/tool")
+            check("a new file is not executable", !isExecutable(realRoot + "/tool"))
+            try executables.makeExecutable(at: root + "/tool")
+            check("a marked file is executable", isExecutable(realRoot + "/tool"))
+            check(
+                "marking keeps the contents",
+                (try? reader.readRegularFile(at: realRoot + "/tool", upToBytes: 20)) == bytes)
+            try executables.makeExecutable(at: root + "/tool")
+            check("marking twice keeps the file executable", isExecutable(realRoot + "/tool"))
+
+            expectFailure("marking a missing file fails", kind: "fileNotFound") {
+                try executables.makeExecutable(at: root + "/absent")
+            }
+            expectFailure("marking below a regular file fails", kind: "fileNotFound") {
+                try executables.makeExecutable(at: root + "/tool/child")
+            }
+
+            try writer.write(bytes, toPath: root + "/plain")
+            try writer.write(bytes, toPath: root + "/target")
+            try executables.makeExecutable(at: root + "/target")
+            check(
+                "a neighbour of a marked file is not executable", !isExecutable(realRoot + "/plain")
+            )
+
+            // A write replaces the file through a new file, so the mark is gone.
+            try writer.write(Data("new".utf8), toPath: root + "/tool")
+            check("a rewritten file is not executable", !isExecutable(realRoot + "/tool"))
+
+            // A move carries the mark and replaces the destination's mark.
+            try writer.moveItem(at: root + "/target", to: root + "/moved")
+            check("a moved file is executable at its new path", isExecutable(realRoot + "/moved"))
+            check("a moved file is gone from its old path", !reader.exists(at: root + "/target"))
+            try writer.write(bytes, toPath: root + "/target")
+            check(
+                "a new file at the old path is not executable", !isExecutable(realRoot + "/target"))
+            try executables.makeExecutable(at: root + "/target")
+            try writer.moveItem(at: root + "/plain", to: root + "/target")
+            check(
+                "a plain file moved over a marked file is not executable",
+                !isExecutable(realRoot + "/target"))
+
+            // A removed file leaves no mark behind.
+            try writer.removeItem(at: root + "/moved")
+            try writer.write(bytes, toPath: root + "/moved")
+            check(
+                "a file made after a removal is not executable", !isExecutable(realRoot + "/moved"))
+        } catch {
+            problems.append("the executable suite could not arrange its files: \(error)")
+        }
+        return problems
+    }
 }

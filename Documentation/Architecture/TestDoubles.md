@@ -27,6 +27,8 @@ A double that is too forgiving makes every test that uses it wrong. `FileSystemB
 
 The suite covers exact reads, the size limit, a link in the last component, folders, pipes, chains of links, a linked parent folder, loops, a missing path, dangling links, sorted top-level listing, writes, replacement, nested folders, moves and removal.
 
+A second function, `FileSystemBehavior.executableProblems`, holds the executable marking rules. Both the double and the real file system pass it. A new or rewritten file is not executable. A marked file stays executable when moved and loses the mark when it is replaced, rewritten or removed. Marking a missing path, or a path below a regular file, fails with `fileNotFound`. The suite takes a closure that tells whether a real path is executable. The double answers with `isExecutable(at:)` and the disk test reads the mode bits.
+
 ## Why the random generator is not here
 
 `SeededGenerator` lives in `TestHelpers`, which has no dependency on the domain. Every test target can use it, and one place owns it.

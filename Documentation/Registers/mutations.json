@@ -1430,5 +1430,77 @@
     "search": "#\"^[0-9a-f]{40}$\"#",
     "replace": "#\"^[0-9a-f]{39,41}$\"#",
     "test": "commitFormatIsExact"
+  },
+  {
+    "id": "disk-executable-mode",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "if chmod(path, 0o755) != 0 {",
+    "replace": "if chmod(path, 0o644) != 0 {",
+    "test": "makeExecutableSetsMode"
+  },
+  {
+    "id": "disk-executable-missing",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "if code == ENOENT || code == ENOTDIR {",
+    "replace": "if code == ENOTDIR {",
+    "test": "passesExecutableSuite"
+  },
+  {
+    "id": "disk-executable-not-directory",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "if code == ENOENT || code == ENOTDIR {",
+    "replace": "if code == ENOENT {",
+    "test": "passesExecutableSuite"
+  },
+  {
+    "id": "disk-executable-error-text",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "path: path, reason: \"chmod failed: \\(String(cString: strerror(code)))\")",
+    "replace": "path: path, reason: \"failed\")",
+    "test": "makeExecutableRefused"
+  },
+  {
+    "id": "memory-write-keeps-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.remove(target)",
+    "replace": "_ = target",
+    "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "memory-remove-keeps-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.remove(key)",
+    "replace": "_ = key",
+    "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "memory-move-drops-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.formUnion(marked.map { to + $0.dropFirst(from.count) })",
+    "replace": "_ = marked",
+    "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "memory-move-keeps-destination-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "!($0 == to || $0.hasPrefix(to + \"/\"))",
+    "replace": "true",
+    "test": "doublePassesExecutableSuite"
+  },
+  {
+    "id": "memory-move-keeps-source-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.subtract(marked)",
+    "replace": "_ = marked",
+    "test": "doublePassesExecutableSuite"
   }
 ]
