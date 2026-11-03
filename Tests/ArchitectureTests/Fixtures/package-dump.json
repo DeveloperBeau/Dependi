@@ -22,7 +22,38 @@
     }
   ],
   "products" : [
+    {
+      "name" : "DependiKit",
+      "settings" : [
 
+      ],
+      "targets" : [
+        "DependiEntities",
+        "DependiDomain",
+        "DependiFileSystem",
+        "DependiProcess",
+        "DependiPackageGraph",
+        "DependiComposition",
+        "DependiInit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "dependi",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "dependi"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
   ],
   "providers" : null,
   "swiftLanguageVersions" : [
