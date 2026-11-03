@@ -78,5 +78,245 @@
     "search": "path.hasPrefix(readOnly + \"/\")",
     "replace": "path.hasPrefix(readOnly)",
     "test": "readOnlyIsMatchedByComponent"
+  },
+  {
+    "id": "gate-archive-runs",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/ReleaseGate.swift",
+    "search": "if isArchive { return .run(reason: \"archive build\") }",
+    "replace": "",
+    "test": "archiveRuns"
+  },
+  {
+    "id": "gate-debug-skips",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/ReleaseGate.swift",
+    "search": "return .skip(reason: \"configuration \\(context.configuration ?? \"(none)\") is not in the gate list\")",
+    "replace": "return .run(reason: \"always\")",
+    "test": "otherConfigurationsSkip"
+  },
+  {
+    "id": "gate-config-error-archive",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/ReleaseGate.swift",
+    "search": "if isArchive { throw error }",
+    "replace": "",
+    "test": "unreadableConfigurationOnArchiveFails"
+  },
+  {
+    "id": "gate-config-error-build-skips",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/ReleaseGate.swift",
+    "search": "return .skip(reason: \"the configuration cannot be read: \\(error)\")",
+    "replace": "throw error",
+    "test": "unreadableConfigurationOnBuildSkips"
+  },
+  {
+    "id": "gate-missing-action",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/ReleaseGate.swift",
+    "search": "if insideXcode { throw .buildContextIncomplete(missing: [\"ACTION\"]) }",
+    "replace": "",
+    "test": "missingAction"
+  },
+  {
+    "id": "gate-case-sensitive",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/ReleaseGate.swift",
+    "search": "settings.gateConfigurations.contains(name)",
+    "replace": "settings.gateConfigurations.contains { $0.lowercased() == name.lowercased() }",
+    "test": "otherConfigurationsSkip"
+  },
+  {
+    "id": "identity-git-strip",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/PackageIdentityNormalizer.swift",
+    "search": "if text.lowercased().hasSuffix(\".git\") { text.removeLast(4) }",
+    "replace": "",
+    "test": "formsJoin"
+  },
+  {
+    "id": "identity-lowercase",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/PackageIdentityNormalizer.swift",
+    "search": "return text.lowercased()",
+    "replace": "return text",
+    "test": "formsJoin"
+  },
+  {
+    "id": "locator-last-anchor",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/SourcePackagesLocator.swift",
+    "search": "anchor = index",
+    "replace": "anchor = anchor ?? index",
+    "test": "earlierBuildFolderIsIgnored"
+  },
+  {
+    "id": "locator-anchor-next",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/SourcePackagesLocator.swift",
+    "search": "parts[index + 1] == \"Products\" || parts[index + 1] == \"Intermediates.noindex\"",
+    "replace": "true",
+    "test": "schemeNamedBuild"
+  },
+  {
+    "id": "license-notice-pattern",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LicenseLocator.swift",
+    "search": "|unlicense|notice|copyright)",
+    "replace": "|unlicense|copyright)",
+    "test": "noticeNextToLicense"
+  },
+  {
+    "id": "license-order",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LicenseLocator.swift",
+    "search": "return leftKey < rightKey",
+    "replace": "return false",
+    "test": "foundInFixedOrder"
+  },
+  {
+    "id": "validator-containment",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": "guard real == realRoot || real.hasPrefix(realRoot + \"/\") else {",
+    "replace": "guard true else {",
+    "test": "outsideLinkRefused"
+  },
+  {
+    "id": "validator-component",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": "real.hasPrefix(realRoot + \"/\")",
+    "replace": "real.hasPrefix(realRoot)",
+    "test": "similarSiblingRefused"
+  },
+  {
+    "id": "validator-size",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": "if data.count > maximumBytes {",
+    "replace": "if data.count > maximumBytes + 1 {",
+    "test": "sizeBoundary"
+  },
+  {
+    "id": "validator-control",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": "if scalar != \"\\t\" && scalar != \"\\n\" && scalar != \"\\r\" {",
+    "replace": "if false {",
+    "test": "controlCharactersRefused"
+  },
+  {
+    "id": "slugger-hash-input",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/OutputNameSlugger.swift",
+    "search": "Data(normalizedLocation.utf8)",
+    "replace": "Data(identity.value.utf8)",
+    "test": "slugMatchesHandComputedHash"
+  },
+  {
+    "id": "slugger-sanitize",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/OutputNameSlugger.swift",
+    "search": "allowed.contains($0) ? $0 : \"-\"",
+    "replace": "$0",
+    "test": "unsafeIdentityIsReduced"
+  },
+  {
+    "id": "assembler-duplicate-identity",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
+    "search": "if let first = identities[candidate.identity] {",
+    "replace": "if let first = identities[candidate.identity], false {",
+    "test": "duplicateIdentity"
+  },
+  {
+    "id": "assembler-slug-collision",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
+    "search": "if let first = slugs[slug] {",
+    "replace": "if let first = slugs[slug], false {",
+    "test": "slugCollision"
+  },
+  {
+    "id": "assembler-missing-license",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
+    "search": "if candidate.documents.isEmpty { throw .licenseMissing(package: candidate.displayName) }",
+    "replace": "",
+    "test": "missingLicense"
+  },
+  {
+    "id": "assembler-sort",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
+    "search": "return leftKey < rightKey",
+    "replace": "return false",
+    "test": "sortedWithoutCase"
+  },
+  {
+    "id": "resolver-recursion",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "for targetName in product.targetNames { stack.append(.target(identity, targetName)) }",
+    "replace": "",
+    "test": "transitive"
+  },
+  {
+    "id": "resolver-macro",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if (target.kind == .macro || target.kind == .plugin) && !includeBuildTools { continue }",
+    "replace": "",
+    "test": "macroDependencies"
+  },
+  {
+    "id": "resolver-platform",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "platformNames.isDisjoint(with: dependency.platforms)",
+    "replace": "false",
+    "test": "platformConditions"
+  },
+  {
+    "id": "resolver-unmatched-product",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "guard let match = matches.first else { throw .productUnmatched(product: product.productName) }",
+    "replace": "guard let match = matches.first else { continue }",
+    "test": "unmatchedProduct"
+  },
+  {
+    "id": "resolver-exclude-unmatched",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "throw .unmatchedExclude(exclude)",
+    "replace": "continue",
+    "test": "excludeMatchesNothing"
+  },
+  {
+    "id": "resolver-ambiguous",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if matches.count > 1 {",
+    "replace": "if matches.count > 99 {",
+    "test": "localProductAmbiguous"
+  },
+  {
+    "id": "resolver-identity-conflict",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if let existing = packages[package.identity] {",
+    "replace": "if let existing = packages[package.identity], false {",
+    "test": "duplicateIdentity"
+  },
+  {
+    "id": "loader-size-cap",
+    "slice": "2b",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "if data.count > Self.maximumBytes {",
+    "replace": "if false {",
+    "test": "oversizeAndFolder"
   }
 ]

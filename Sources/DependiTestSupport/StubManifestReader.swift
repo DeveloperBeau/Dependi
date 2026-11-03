@@ -24,7 +24,7 @@ public final class StubManifestReader: PackageManifestReading, @unchecked Sendab
             return state.manifests[path]
         }
         guard let manifest else {
-            throw .fileUnreadable(path: path, reason: "no manifest scripted")
+            throw .fileNotFound(path: path)
         }
         return manifest
     }

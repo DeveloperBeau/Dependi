@@ -21,6 +21,11 @@ let package = Package(
             swiftSettings: sharedSettings
         ),
         .testTarget(
+            name: "DependiDomainTests",
+            dependencies: ["DependiDomain", "DependiEntities", "DependiTestSupport", "TestHelpers"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
             name: "DependiTestSupportTests",
             dependencies: ["DependiTestSupport", "DependiDomain", "DependiEntities", "TestHelpers"],
             swiftSettings: sharedSettings
