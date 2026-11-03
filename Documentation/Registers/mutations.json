@@ -59,16 +59,16 @@
     "id": "double-limit-plus-one",
     "slice": "2a",
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
-    "search": "data.prefix(limit + 1)",
-    "replace": "data.prefix(limit)",
+    "search": "max(limit, 0) + 1 : limit",
+    "replace": "limit : limit",
     "test": "doublePassesBehaviorSuite"
   },
   {
     "id": "double-link-hop-limit",
     "slice": "2a",
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
-    "search": "steps > 40",
-    "replace": "steps > 20",
+    "search": "maximumLinkHops = 32",
+    "replace": "maximumLinkHops = 20",
     "test": "loopsAndChains"
   },
   {
@@ -1264,7 +1264,7 @@
     "test": "writeOntoFolderFails"
   },
   {
-    "id": "double-link-hop-limit",
+    "id": "double-link-hop-limit-disk",
     "slice": "review-fix",
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
     "search": "maximumLinkHops = 32",
