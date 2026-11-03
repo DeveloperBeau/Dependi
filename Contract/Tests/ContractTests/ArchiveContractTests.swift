@@ -250,10 +250,13 @@ struct ArchiveContractTests {
         let remote = try makeRemotePackage()
         // Git serves the address below from the local repository. SwiftPM sees a network address,
         // so it records the package as a remote source control package, as it does for a real one.
-        let address = "https://example.invalid/RemoteLib.git"
-        let gitConfig = remote.url.deletingLastPathComponent().appendingPathComponent("gitconfig")
+        // The folder name is unique, so the address is too. SwiftPM caches a repository by address
+        // and refuses a cached copy whose commit differs from the one it recorded.
+        let remoteParent = remote.url.deletingLastPathComponent()
+        let address = "https://example.invalid/\(remoteParent.lastPathComponent)/RemoteLib.git"
+        let gitConfig = remoteParent.appendingPathComponent("gitconfig")
         try
-            "[url \"file://\(remote.url.deletingLastPathComponent().path)/\"]\n\tinsteadOf = https://example.invalid/\n"
+            "[url \"file://\(remoteParent.deletingLastPathComponent().path)/\"]\n\tinsteadOf = https://example.invalid/\n"
             .write(to: gitConfig, atomically: true, encoding: .utf8)
         let gitEnvironment = ["GIT_CONFIG_GLOBAL": gitConfig.path, "GIT_CONFIG_NOSYSTEM": "1"]
         let sample = try makeSample(
