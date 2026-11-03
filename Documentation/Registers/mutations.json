@@ -60,7 +60,7 @@
     "slice": "2a",
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
     "search": "max(limit, 0) + 1 : limit",
-    "replace": "limit : limit",
+    "replace": "max(limit, 0) : limit",
     "test": "doublePassesBehaviorSuite"
   },
   {
