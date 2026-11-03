@@ -98,12 +98,15 @@ public struct LinkedPackageResolver: Sendable {
             }) {
                 matches.append(package.identity)
             }
+            // Remote packages are read in identity order and the search stops at the first match.
+            // That bounds the number of manifest reads, and each read runs a process.
             if matches.isEmpty {
-                for package in remotePackages
+                for package in remotePackages.sorted(by: { $0.identity < $1.identity })
                 where try manifest(package.identity).products.contains(where: {
                     $0.name == product.productName
                 }) {
                     matches.append(package.identity)
+                    break
                 }
             }
             if matches.count > 1 {

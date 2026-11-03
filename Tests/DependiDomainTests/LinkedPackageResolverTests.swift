@@ -296,6 +296,37 @@ struct LinkedPackageResolverTests {
         }
     }
 
+    @Test("a product with no package name stops at the first remote package that provides it")
+    func remoteSearchStopsAtFirstMatch() throws {
+        let manifests = [
+            "/checkouts/aaa": simpleManifest(product: "Other"),
+            "/checkouts/bbb": simpleManifest(product: "Wanted"),
+            "/checkouts/ccc": simpleManifest(product: "Wanted"),
+            "/checkouts/ddd": simpleManifest(product: "Extra"),
+        ]
+        let (result, reader) = try resolve(
+            linked: [ProductReference(productName: "Wanted", packageName: nil)],
+            remote: [remote("ddd"), remote("ccc"), remote("bbb"), remote("aaa")],
+            manifests: manifests)
+        #expect(names(result.linked) == ["bbb"])
+        #expect(reader.readCounts["/checkouts/bbb"] == 1)
+        #expect(reader.readCounts["/checkouts/ccc"] == nil)
+        #expect(reader.readCounts["/checkouts/ddd"] == nil)
+    }
+
+    @Test("a product with no package name reads no remote manifest when a local package has it")
+    func localMatchReadsNoRemote() throws {
+        let (result, reader) = try resolve(
+            linked: [ProductReference(productName: "Core", packageName: nil)],
+            remote: [remote("net")], local: [local("core")],
+            manifests: [
+                "/proj/Packages/core": simpleManifest(product: "Core"),
+                "/checkouts/net": simpleManifest(product: "Core"),
+            ])
+        #expect(names(result.linked) == ["core"])
+        #expect(reader.readCounts["/checkouts/net"] == nil)
+    }
+
     @Test("a product that no package provides is unmatched and named")
     func unmatchedProduct() {
         #expect(throws: DomainError.productUnmatched(product: "Ghost")) {

@@ -45,7 +45,7 @@ Names are compared exactly. An empty list means archive only.
 
 1. Remote and local packages are joined into one table. Two with the same identity fail.
 2. Excludes are matched by identity, so their case does not matter and a location names its package. Every exclude must match a package or the package name of a linked product.
-3. A product with a package name maps to that package. A product without one is searched in the local packages first and then in the remote ones. More than one match fails and lists them.
+3. A product with a package name maps to that package. A product without one is searched in the local packages first and then in the remote ones. More than one local match fails and lists them. The remote search reads manifests in identity order and stops at the first package that has the product, so it reads as few manifests as it can.
 4. The walk goes from product to targets to dependencies and keeps a visited set, so a cycle ends.
 5. A dependency for platforms that do not apply is ignored.
 6. A macro or plugin target is visited but its dependencies are not followed, unless build tools are included.

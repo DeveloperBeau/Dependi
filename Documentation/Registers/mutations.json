@@ -1342,5 +1342,21 @@
     "replace": "name)",
     "test": "wrongPackageNameStillFails",
     "slice": "review-fix"
+  },
+  {
+    "id": "resolver-remote-search-no-early-exit",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "                    break",
+    "replace": "                    _ = 0",
+    "test": "remoteSearchStopsAtFirstMatch",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-remote-search-unsorted",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "remotePackages.sorted(by: { $0.identity < $1.identity })",
+    "replace": "remotePackages",
+    "test": "remoteSearchStopsAtFirstMatch",
+    "slice": "review-fix"
   }
 ]
