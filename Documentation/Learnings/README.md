@@ -5,3 +5,4 @@ One page for each area. Each entry has three parts: the trap, the finding that p
 | Page | Area |
 |---|---|
 | [Tooling](Tooling.md) | Lint, formatter and repository checks |
+| [Architecture checks](ArchitectureChecks.md) | Ring rules and source rules |
