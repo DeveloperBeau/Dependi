@@ -1158,5 +1158,77 @@
     "search": "return (original, .unchanged)",
     "replace": "return (original, .added)",
     "test": "secondRunChangesNothingNew"
+  },
+  {
+    "id": "wrapper-pre-gate-inverted",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ \"${ACTION:-}\" != install ] && ! in_gate",
+    "replace": "[ \"${ACTION:-}\" != install ] && in_gate",
+    "test": "debugBuildSkipsBeforeAnyCall"
+  },
+  {
+    "id": "wrapper-version-validation-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "'^[0-9]+\\.[0-9]+\\.[0-9]+$'",
+    "replace": "'^.*$'",
+    "test": "badVersionsAreRejected"
+  },
+  {
+    "id": "wrapper-commit-validation-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "'^[0-9a-f]{40}$'",
+    "replace": "'^.*$'",
+    "test": "badCommitsAreRejected"
+  },
+  {
+    "id": "wrapper-version-compare-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ \"$installed\" = \"$version\" ]",
+    "replace": "true",
+    "test": "versionMismatchUsesCache"
+  },
+  {
+    "id": "wrapper-sha-check-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ -n \"$actual\" ] && [ \"$actual\" = \"$recorded\" ]",
+    "replace": "true",
+    "test": "cacheWithWrongShaIsRebuilt"
+  },
+  {
+    "id": "wrapper-commit-recheck-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ \"$head\" != \"$commit\" ]",
+    "replace": "false",
+    "test": "movedCommitFailsClean"
+  },
+  {
+    "id": "wrapper-lock-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "mkdir \"$lock\" 2>/dev/null",
+    "replace": "true",
+    "test": "concurrentRunsBuildOnce"
+  },
+  {
+    "id": "wrapper-repo-override-unconditional",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if testing && [ -n \"${DEPENDI_REPO_URL:-}\" ]",
+    "replace": "if [ -n \"${DEPENDI_REPO_URL:-}\" ]",
+    "test": "repoOverrideNeedsTestingFlag"
+  },
+  {
+    "id": "wrapper-env-clean-removed",
+    "slice": "10",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "env -i HOME=",
+    "replace": "env HOME=",
+    "test": "buildEnvironmentIsClean"
   }
 ]
