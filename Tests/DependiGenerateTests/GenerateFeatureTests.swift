@@ -331,6 +331,8 @@ struct GenerateFeatureTests {
         let world = try GenerateWorld()
         let package = try world.addRemote("kit", license: nil)
         try world.files.addDirectory(at: package.checkoutPath + "/LICENSE")
+        try world.files.addFile(
+            at: package.checkoutPath + "/LICENSE/MIT.txt", contents: Data("inside".utf8))
         world.link("kit", package: "kit")
         #expect(throws: DomainError.licenseMissing(package: "kit")) { try world.run() }
     }
