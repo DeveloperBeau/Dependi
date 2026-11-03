@@ -2,160 +2,271 @@
 
 This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown`. Do not edit it.
 
-| Id | Slice | File | Test |
-|---|---|---|---|
-| assembler-duplicate-identity | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `duplicateIdentity` |
-| assembler-missing-license | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `missingLicense` |
-| assembler-slug-collision | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `slugCollision` |
-| assembler-sort | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `sortedWithoutCase` |
-| cli-dashed-value | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `missingValues` |
-| cli-dry-run-ignored | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `tableRowsAreAccepted` |
-| cli-duplicate-flag | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `duplicates` |
-| cli-equals-form | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `unknownFlags` |
-| cli-help-alias | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `tableRowsAreAccepted` |
-| cli-required-flag | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `missingRequired` |
-| comp-clean-environment | 9b | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` |
-| comp-toolchain-from-xcrun | 9b | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` |
-| comp-usage-exit-code | 9b | `Sources/DependiComposition/DependiApplication.swift` | `commandLineErrors` |
-| comp-version-text | 9b | `Sources/DependiComposition/DependiApplication.swift` | `versionAndHelp` |
-| config-commit-case | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badCommitsFail` |
-| config-default-gate | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `emptyObjectGivesDefaults` |
-| config-mistyped-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `mistypedKeyFails` |
-| config-unknown-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `unknownKeyFailsNamingTheKey` |
-| config-version-pattern | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badVersionsFail` |
-| console-attempt-bound-high | 4 | `Sources/DependiConsole/StandardConsole.swift` | `threeInvalidLinesFailEvenWhenAValidLineFollows` |
-| console-attempt-bound-low | 4 | `Sources/DependiConsole/StandardConsole.swift` | `twoInvalidLinesThenAValidOneStillSucceeds` |
-| disk-exists-lstat | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `danglingLinkExists` |
-| disk-limit-plus-one | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `readStopsAfterLimitPlusOne` |
-| disk-loop-mapping | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `loopIsReported` |
-| disk-move-replaces | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `moveReplacesDestination` |
-| disk-nofollow | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `lastComponentLinkIsRefused` |
-| disk-not-found-mapping | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `missingPathHasNoRealPath` |
-| disk-regular-check | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `folderIsRefused` |
-| disk-remove-link-only | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `removingLinkKeepsTarget` |
-| disk-sorted-listing | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `listingIsSorted` |
-| disk-write-atomic-rename | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `writeIsCleanAndReplaces` |
-| double-limit-plus-one | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `doublePassesBehaviorSuite` |
-| double-link-hop-limit | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `loopsAndChains` |
-| double-readonly-component | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `readOnlyIsMatchedByComponent` |
-| error-payload-package | 9b | `Sources/DependiDomain/DomainError+Description.swift` | `messagesNamePayloads` |
-| error-sandbox-message | 9b | `Sources/DependiDomain/DomainError+Description.swift` | `sandboxMessageNamesTheFix` |
-| gate-archive-runs | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `archiveRuns` |
-| gate-case-sensitive | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `otherConfigurationsSkip` |
-| gate-config-error-archive | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `unreadableConfigurationOnArchiveFails` |
-| gate-config-error-build-skips | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `unreadableConfigurationOnBuildSkips` |
-| gate-debug-skips | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `otherConfigurationsSkip` |
-| gate-missing-action | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `missingAction` |
-| gen-debug-skip | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `debugSkips` |
-| gen-empty-variable | 9a | `Sources/DependiGenerate/BuildContextReader.swift` | `missingAndEmptyAreNil` |
-| gen-local-packages | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageFromProject` |
-| gen-local-real-path | 11 | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageWithTwoPaths` |
-| gen-manual-absolute | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` |
-| gen-manual-outside | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` |
-| gen-output-absolute-build | 9a | `Sources/DependiGenerate/OutputLocation.swift` | `badProductLocation` |
-| gen-output-dotdot | 9a | `Sources/DependiGenerate/OutputLocation.swift` | `badOutputPath` |
-| gen-output-relative | 9a | `Sources/DependiGenerate/OutputLocation.swift` | `badOutputPath` |
-| gen-permission-mapping | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `permissionErrorMeansSandbox` |
-| gen-platform-ios | 9a | `Sources/DependiGenerate/PlatformNames.swift` | `platformConditionUsed` |
-| gen-revision-check | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `revisionMismatch` |
-| gen-sandbox-check | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `sandboxOnFails` |
-| gen-sandbox-yes | 9a | `Sources/DependiGenerate/BuildContextReader.swift` | `sandboxValues` |
-| gen-unreached | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `unreachedPackages` |
-| graph-declared-lowercase | 7 | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `unknownDependencyShapeIgnored` |
-| graph-exit-status | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `nonZeroExit` |
-| graph-key-environment | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `toolchainAndEnvironmentInvalidate` |
-| graph-key-stored | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `wrongKeyValidDumpIsAMiss` |
-| graph-key-toolchain | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `toolchainAndEnvironmentInvalidate` |
-| graph-key-versioned-manifests | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `versionedManifestInvalidates` |
-| graph-product-condition-index | 7 | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `syntheticPackage` |
-| graph-remote-tier | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `cacheTiers` |
-| graph-scratch-path | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `requestShape` |
-| graph-stderr-snippet | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `nonZeroExit` |
-| identity-git-strip | 2b | `Sources/DependiDomain/PackageIdentityNormalizer.swift` | `formsJoin` |
-| identity-lowercase | 2b | `Sources/DependiDomain/PackageIdentityNormalizer.swift` | `formsJoin` |
-| init-already-present | 10 | `Sources/DependiInit/RootPlistEditor.swift` | `secondRunChangesNothingNew` |
-| init-backup | 10 | `Sources/DependiInit/InitFeature.swift` | `paneAppended` |
-| init-backup-outside-bundle | 11 | `Sources/DependiInit/InitFeature.swift` | `paneAppended` |
-| init-binary-format | 10 | `Sources/DependiInit/RootPlistEditor.swift` | `binaryFormatKept` |
-| init-clash-confirmation | 10 | `Sources/DependiInit/InitFeature.swift` | `clashesNeedConfirmation` |
-| init-commit-format | 10 | `Sources/DependiInit/InitFeature.swift` | `commitMissing` |
-| init-dependi-itself | 10 | `Sources/DependiInit/ProjectLocator.swift` | `dependiItself` |
-| init-dry-run | 10 | `Sources/DependiInit/InitFeature.swift` | `dryRun` |
-| init-existing-config | 10 | `Sources/DependiInit/InitFeature.swift` | `existingConfigurationKept` |
-| init-gitignore-duplicate | 10 | `Sources/DependiInit/InitFeature.swift` | `gitignoreRules` |
-| init-local-excludes | 10 | `Sources/DependiInit/InitFeature.swift` | `freshInstall` |
-| init-macos-refused | 10 | `Sources/DependiInit/InitFeature.swift` | `platforms` |
-| init-old-entry | 10 | `Sources/DependiInit/RootPlistEditor.swift` | `oldEntryRewritten` |
-| init-run-script-executable | 10 | `Sources/DependiInit/InitFeature.swift` | `freshInstall` |
-| init-workspace-sibling | 10 | `Sources/DependiInit/ProjectLocator.swift` | `workspaceWithoutProject` |
-| license-name-dot-names | 1 | `Sources/DependiEntities/LicenseDocument.swift` | `unsafeNamesAreRejected` |
-| license-name-separator | 1 | `Sources/DependiEntities/LicenseDocument.swift` | `unsafeNamesAreRejected` |
-| license-notice-pattern | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `noticeNextToLicense` |
-| license-order | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `foundInFixedOrder` |
-| loader-size-cap | 2b | `Sources/DependiDomain/ConfigurationLoader.swift` | `oversizeAndFolder` |
-| locator-anchor-next | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `schemeNamedBuild` |
-| locator-last-anchor | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `earlierBuildFolderIsIgnored` |
-| pf-catalyst | 6 | `Sources/DependiProjectFile/SupportedPlatformDeriver.swift` | `catalystDisabled` |
-| pf-cross-project-following | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `crossProjectReachable` |
-| pf-deduplication | 6 | `Sources/DependiProjectFile/ProjectFileReader.swift` | `sharedProductIsDeduplicated` |
-| pf-dependency-following | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `directTargetDependency` |
-| pf-embed-following | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `embeddedFrameworkIsIncluded` |
-| pf-local-package-reference | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `localPackageProducts` |
-| pf-local-without-package | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `localPackageProducts` |
-| pf-project-fallback | 6 | `Sources/DependiProjectFile/SupportedPlatformDeriver.swift` | `projectLevelFallback` |
-| pf-proxy-following | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `proxyDependencyInSameProject` |
-| pf-relative-base | 6 | `Sources/DependiProjectFile/ProjectPathMath.swift` | `localPackageProducts` |
-| pf-relative-current | 6 | `Sources/DependiProjectFile/ProjectPathMath.swift` | `localPackageProducts` |
-| pf-relative-parent | 6 | `Sources/DependiProjectFile/ProjectPathMath.swift` | `localPackageProducts` |
-| pf-remote-name-normalization | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `sameProductNameTwoPackages` |
-| pf-same-project-portal | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `proxyDependencyInSameProject` |
-| pf-sdk-auto | 6 | `Sources/DependiProjectFile/SupportedPlatformDeriver.swift` | `autoSDKRoot` |
-| pf-size-cap | 6 | `Sources/DependiProjectFile/ProjectFileLoader.swift` | `oversizeFile` |
-| pf-test-exclusion-ui | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `uiTestProductsAreExcludedToo` |
-| pf-test-exclusion-unit | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `testOnlyProductsAreExcluded` |
-| pf-unknown-target-list | 6 | `Sources/DependiProjectFile/ProjectFileReader.swift` | `unknownTarget` |
-| pins-identity-from-location | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `pinIdentityFromLocation` |
-| pins-workspace-before-project | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `workspaceBeforeProject` |
-| process-clean-environment | 4 | `Sources/DependiProcess/SystemProcessRunner.swift` | `theChildEnvironmentIsExactlyTheRequestEnvironment` |
-| process-descendant-kill | 4 | `Sources/DependiProcess/ProcessTree.swift` | `aDescendantThatLeftTheProcessGroupIsKilledOnTimeout` |
-| process-group-kill | 4 | `Sources/DependiProcess/ProcessTree.swift` | `aGrandchildHoldingStandardOutputIsKilledOnTimeout` |
-| process-output-cap | 4 | `Sources/DependiProcess/StreamCollector.swift` | `outputOverTheCapFailsAndNamesTheLimit` |
-| process-output-cap-edge | 4 | `Sources/DependiProcess/StreamCollector.swift` | `outputExactlyAtTheCapIsKept` |
-| process-pipe-drain | 4 | `Sources/DependiProcess/StreamCollector.swift` | `bigOutputOnBothStreamsArrivesWithExactBytesAndChecksum` |
-| process-timeout-check | 4 | `Sources/DependiProcess/SystemProcessRunner.swift` | `aSlowChildIsTimedOutQuickly` |
-| resolver-ambiguous | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `localProductAmbiguous` |
-| resolver-exclude-unmatched | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `excludeMatchesNothing` |
-| resolver-identity-conflict | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `duplicateIdentity` |
-| resolver-macro | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `macroDependencies` |
-| resolver-platform | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `platformConditions` |
-| resolver-recursion | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `transitive` |
-| resolver-unmatched-product | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `unmatchedProduct` |
-| settings-cleanup-escapes-folder | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `manifestEntriesThatEscapeTheFolderAreNeverDeleted` |
-| settings-cleanup-removes-kept | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `removedPackageRemovesItsPlistAndManifestEntry` |
-| settings-manifest-not-updated | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `removedPackageRemovesItsPlistAndManifestEntry` |
-| settings-read-back-removed | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `readBackMismatchFailsWithFileUnwritable` |
-| settings-slug-replaced-by-raw-name | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `oddNamesStayInsideTheFolderAndAppearOnlyAsText` |
-| settings-unknown-file-refusal | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `unknownFileInFolderFailsBeforeAnyWrite` |
-| settings-write-only-when-different | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `secondIdenticalRunWritesNothing` |
-| slugger-hash-input | 2b | `Sources/DependiDomain/OutputNameSlugger.swift` | `slugMatchesHandComputedHash` |
-| slugger-sanitize | 2b | `Sources/DependiDomain/OutputNameSlugger.swift` | `unsafeIdentityIsReduced` |
-| validator-component | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `similarSiblingRefused` |
-| validator-containment | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `outsideLinkRefused` |
-| validator-control | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `controlCharactersRefused` |
-| validator-size | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `sizeBoundary` |
-| workspace-containment-prefix | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `siblingWithSimilarNameIsRefused` |
-| workspace-identity-from-location | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `identityFromLocation` |
-| workspace-kind-file-system | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `localPackageIsLocal` |
-| workspace-kind-remote | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `realVersion7Remote` |
-| workspace-subpath-absolute | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `absoluteSubpathIsRefused` |
-| workspace-subpath-empty | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `emptySubpathIsRefused` |
-| workspace-subpath-traversal | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `subpathTraversalIsRefused` |
-| wrapper-commit-recheck-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `movedCommitFailsClean` |
-| wrapper-commit-validation-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `badCommitsAreRejected` |
-| wrapper-env-clean-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `buildEnvironmentIsClean` |
-| wrapper-lock-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `concurrentRunsBuildOnce` |
-| wrapper-pre-gate-inverted | 10 | `Sources/DependiInit/WrapperScript.swift` | `debugBuildSkipsBeforeAnyCall` |
-| wrapper-repo-override-unconditional | 10 | `Sources/DependiInit/WrapperScript.swift` | `repoOverrideNeedsTestingFlag` |
-| wrapper-sha-check-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `cacheWithWrongShaIsRebuilt` |
-| wrapper-version-compare-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `versionMismatchUsesCache` |
-| wrapper-version-validation-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `badVersionsAreRejected` |
+| Id | Slice | File | Test | Expected | Last run |
+|---|---|---|---|---|---|
+| app-config-wired | review-fix | `Sources/DependiComposition/DependiApplication.swift` | `configuredLimitsReachTheRequests` | killed | not run |
+| app-run-limit-wired | review-fix | `Sources/DependiComposition/DependiApplication.swift` | `runLimitShortensChildLimits` | killed | not run |
+| assembler-duplicate-identity | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `AcknowledgementAssemblerTests/duplicateIdentity()` | killed | not run |
+| assembler-missing-license | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `AcknowledgementAssemblerTests/missingLicense()` | killed | not run |
+| assembler-slug-collision | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `slugCollision` | killed | not run |
+| assembler-sort | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `sortedWithoutCase` | killed | not run |
+| cfg-limit-edge-included | review-fix | `Sources/DependiDomain/ConfigurationLoader.swift` | `goodLimits` | killed | not run |
+| cfg-limit-maximum | review-fix | `Sources/DependiDomain/ConfigurationLoader.swift` | `badRunLimit` | killed | not run |
+| cfg-limit-positive | review-fix | `Sources/DependiDomain/ConfigurationLoader.swift` | `badProcessLimit` | killed | not run |
+| cli-dashed-value | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `missingValues` | killed | not run |
+| cli-dry-run-ignored | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `tableRowsAreAccepted` | killed | not run |
+| cli-duplicate-flag | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `duplicates` | killed | not run |
+| cli-equals-form | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `unknownFlags` | killed | not run |
+| cli-help-alias | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `tableRowsAreAccepted` | killed | not run |
+| cli-required-flag | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `missingRequired` | killed | not run |
+| comp-clean-environment | 9b | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` | killed | not run |
+| comp-signal-default-ignored | review-fix | `Sources/DependiProcess/TerminationHandler.swift` | `aWatchedSignalCallsTheHandlerWithItsNumber` | killed | not run |
+| comp-signal-number-forwarded | review-fix | `Sources/DependiProcess/TerminationHandler.swift` | `eachWatchedSignalIsReportedUnderItsOwnNumber` | killed | not run |
+| comp-toolchain-from-xcrun | 9b | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` | killed | not run |
+| comp-usage-exit-code | 9b | `Sources/DependiComposition/DependiApplication.swift` | `commandLineErrors` | killed | not run |
+| comp-version-text | 9b | `Sources/DependiComposition/DependiApplication.swift` | `versionAndHelp` | killed | not run |
+| config-commit-case | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badCommitsFail` | killed | not run |
+| config-default-gate | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `emptyObjectGivesDefaults` | killed | not run |
+| config-mistyped-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `mistypedKeyFails` | killed | not run |
+| config-unknown-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `unknownKeyFailsNamingTheKey` | killed | not run |
+| config-version-pattern | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badVersionsFail` | killed | not run |
+| console-attempt-bound-high | 4 | `Sources/DependiConsole/StandardConsole.swift` | `threeInvalidLinesFailEvenWhenAValidLineFollows` | killed | not run |
+| console-attempt-bound-low | 4 | `Sources/DependiConsole/StandardConsole.swift` | `twoInvalidLinesThenAValidOneStillSucceeds` | killed | not run |
+| dead-boundary-inclusive | review-fix | `Sources/DependiComposition/DeadlineProcessRunner.swift` | `afterTheLimit` | killed | not run |
+| dead-check-before-spawn | review-fix | `Sources/DependiComposition/DeadlineProcessRunner.swift` | `afterTheLimit` | killed | not run |
+| dead-clamp-child-time | review-fix | `Sources/DependiComposition/DeadlineProcessRunner.swift` | `childTimeIsClamped` | killed | not run |
+| disk-executable-error-text | review-fix | `Sources/DependiFileSystem/DiskFileSystem+Executable.swift` | `makeExecutableRefused` | killed | not run |
+| disk-executable-missing | review-fix | `Sources/DependiFileSystem/DiskFileSystem+Executable.swift` | `passesExecutableSuite` | killed | not run |
+| disk-executable-mode | review-fix | `Sources/DependiFileSystem/DiskFileSystem+Executable.swift` | `makeExecutableSetsMode` | killed | not run |
+| disk-executable-not-directory | review-fix | `Sources/DependiFileSystem/DiskFileSystem+Executable.swift` | `passesExecutableSuite` | killed | not run |
+| disk-exists-lstat | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `danglingLinkExists` | killed | not run |
+| disk-limit-plus-one | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `readStopsAfterLimitPlusOne` | killed | not run |
+| disk-loop-mapping | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `loopIsReported` | killed | not run |
+| disk-modification-date-no-follow | review-fix | `Sources/DependiFileSystem/DiskFileSystem.swift` | `modificationDateOfALinkIsTheLinksOwn` | killed | not run |
+| disk-move-replaces | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `moveReplacesDestination` | killed | not run |
+| disk-nofollow | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `lastComponentLinkIsRefused` | killed | not run |
+| disk-not-found-mapping | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `missingPathHasNoRealPath` | killed | not run |
+| disk-regular-check | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `folderIsRefused` | killed | not run |
+| disk-remove-link-only | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `removingLinkKeepsTarget` | killed | not run |
+| disk-sorted-listing | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `listingIsSorted` | killed | not run |
+| disk-write-atomic-rename | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `writeIsCleanAndReplaces` | killed | not run |
+| domain-license-outside-names-file | review-fix | `Sources/DependiDomain/LicenseFileValidator.swift` | `outsideLinkRefused` | killed | not run |
+| double-limit-plus-one | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `doublePassesBehaviorSuite` | killed | not run |
+| double-link-hop-limit | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `loopsAndChains` | killed | not run |
+| double-link-hop-limit-disk | review-fix | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `linkChainLimitMatchesDisk` | killed | not run |
+| double-read-limit-floor | review-fix | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `extremeReadLimits` | killed | not run |
+| double-read-limit-max | review-fix | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `extremeReadLimits` | killed | not run |
+| double-readonly-component | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `readOnlyIsMatchedByComponent` | killed | not run |
+| double-write-onto-folder | review-fix | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `writeOntoFolderFails` | killed | not run |
+| error-payload-package | 9b | `Sources/DependiDomain/DomainError+Description.swift` | `messagesNamePayloads` | killed | not run |
+| error-sandbox-message | 9b | `Sources/DependiDomain/DomainError+Description.swift` | `sandboxMessageNamesTheFix` | killed | not run |
+| gate-archive-runs | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `archiveRuns` | killed | not run |
+| gate-case-sensitive | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `otherConfigurationsSkip` | killed | not run |
+| gate-config-error-archive | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `unreadableConfigurationOnArchiveFails` | killed | not run |
+| gate-config-error-build-skips | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `unreadableConfigurationOnBuildSkips` | killed | not run |
+| gate-debug-skips | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `otherConfigurationsSkip` | killed | not run |
+| gate-missing-action | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `ReleaseGateTests/missingAction()` | killed | not run |
+| gen-debug-skip | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `GenerateFeatureTests/debugSkips()` | killed | not run |
+| gen-empty-variable | 9a | `Sources/DependiGenerate/BuildContextReader.swift` | `missingAndEmptyAreNil` | killed | not run |
+| gen-local-packages | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageFromProject` | killed | not run |
+| gen-local-real-path | 11 | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageWithTwoPaths` | killed | not run |
+| gen-manual-absolute | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` | killed | not run |
+| gen-manual-outside | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` | killed | not run |
+| gen-output-absolute-build | 9a | `Sources/DependiGenerate/OutputLocation.swift` | `badProductLocation` | killed | not run |
+| gen-output-dotdot | 9a | `Sources/DependiGenerate/OutputLocation.swift` | `badOutputPath` | killed | not run |
+| gen-output-dots-in-name | review-fix | `Sources/DependiGenerate/OutputLocation.swift` | `dotsInsideANameAreAccepted` | killed | not run |
+| gen-output-empty | review-fix | `Sources/DependiGenerate/OutputLocation.swift` | `badOutputPath` | killed | not run |
+| gen-output-relative | 9a | `Sources/DependiGenerate/OutputLocation.swift` | `badOutputPath` | killed | not run |
+| gen-permission-mapping | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `permissionErrorMeansSandbox` | killed | not run |
+| gen-platform-ios | 9a | `Sources/DependiGenerate/PlatformNames.swift` | `platformConditionUsed` | killed | not run |
+| gen-revision-check | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `revisionMismatch` | killed | not run |
+| gen-sandbox-check | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `sandboxOnFails` | killed | not run |
+| gen-sandbox-yes | 9a | `Sources/DependiGenerate/BuildContextReader.swift` | `sandboxValues` | killed | not run |
+| gen-unreached | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `unreachedPackages` | killed | not run |
+| generate-folder-skipped | review-fix | `Sources/DependiGenerate/GenerateFeature.swift` | `licenseFolderOnlyIsMissing` | killed | not run |
+| generate-nested-folder-skipped | review-fix | `Sources/DependiGenerate/GenerateFeature.swift` | `licenseLayouts` | killed | not run |
+| graph-declared-lowercase | 7 | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `unknownDependencyShapeIgnored` | killed | not run |
+| graph-exit-status | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `nonZeroExit` | killed | not run |
+| graph-key-environment | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `toolchainAndEnvironmentInvalidate` | killed | not run |
+| graph-key-stored | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `wrongKeyValidDumpIsAMiss` | killed | not run |
+| graph-key-toolchain | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `toolchainAndEnvironmentInvalidate` | killed | not run |
+| graph-key-versioned-manifests | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `versionedManifestInvalidates` | killed | not run |
+| graph-printable-controls | review-fix | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `childErrorIsPrintable` | killed | not run |
+| graph-printable-keeps-newline | review-fix | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `printableTextIsKept` | killed | not run |
+| graph-product-condition-index | 7 | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `syntheticPackage` | killed | not run |
+| graph-remote-tier | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `cacheTiers` | killed | not run |
+| graph-scratch-path | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `requestShape` | killed | not run |
+| graph-stderr-snippet | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `nonZeroExit` | killed | not run |
+| graph-sweep-called | review-fix | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `staleTemporaryFilesAreSwept` | killed | not run |
+| graph-sweep-cutoff | review-fix | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `staleTemporaryFilesAreSwept` | killed | not run |
+| graph-sweep-only-temporaries | review-fix | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `staleTemporaryFilesAreSwept` | killed | not run |
+| graph-sweep-uuid-check | review-fix | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `staleTemporaryFilesAreSwept` | killed | not run |
+| identity-git-strip | 2b | `Sources/DependiDomain/PackageIdentityNormalizer.swift` | `formsJoin` | killed | not run |
+| identity-lowercase | 2b | `Sources/DependiDomain/PackageIdentityNormalizer.swift` | `formsJoin` | killed | not run |
+| init-already-present | 10 | `Sources/DependiInit/RootPlistEditor.swift` | `secondRunChangesNothingNew` | killed | not run |
+| init-backup | 10 | `Sources/DependiInit/InitFeature.swift` | `paneAppended` | killed | not run |
+| init-backup-outside-bundle | 11 | `Sources/DependiInit/InitFeature.swift` | `paneAppended` | killed | not run |
+| init-binary-executable | review-fix | `Sources/DependiInit/InitFeature.swift` | `freshInstall` | killed | not run |
+| init-binary-format | 10 | `Sources/DependiInit/RootPlistEditor.swift` | `binaryFormatKept` | killed | not run |
+| init-clash-confirmation | 10 | `Sources/DependiInit/InitFeature.swift` | `clashesNeedConfirmation` | killed | not run |
+| init-commit-end-anchor | review-fix | `Sources/DependiInit/InitFeature.swift` | `commitFormatIsExact` | killed | not run |
+| init-commit-format | 10 | `Sources/DependiInit/InitFeature.swift` | `commitFormatIsExact` | killed | not run |
+| init-commit-length | review-fix | `Sources/DependiInit/InitFeature.swift` | `commitFormatIsExact` | killed | not run |
+| init-commit-start-anchor | review-fix | `Sources/DependiInit/InitFeature.swift` | `commitFormatIsExact` | killed | not run |
+| init-commit-uppercase | review-fix | `Sources/DependiInit/InitFeature.swift` | `commitFormatIsExact` | killed | not run |
+| init-dependi-itself | 10 | `Sources/DependiInit/ProjectLocator.swift` | `dependiItself` | killed | not run |
+| init-dry-run | 10 | `Sources/DependiInit/InitFeature.swift` | `dryRun` | killed | not run |
+| init-existing-config | 10 | `Sources/DependiInit/InitFeature.swift` | `existingConfigurationKept` | killed | not run |
+| init-gitignore-duplicate | 10 | `Sources/DependiInit/InitFeature.swift` | `gitignoreRules` | killed | not run |
+| init-local-excludes | 10 | `Sources/DependiInit/InitFeature.swift` | `freshInstall` | killed | not run |
+| init-macos-refused | 10 | `Sources/DependiInit/InitFeature.swift` | `platforms` | killed | not run |
+| init-old-entry | 10 | `Sources/DependiInit/RootPlistEditor.swift` | `oldEntryRewritten` | killed | not run |
+| init-run-script-executable | 10 | `Sources/DependiInit/InitFeature.swift` | `freshInstall` | killed | not run |
+| init-version-file-commit | review-fix | `Sources/DependiInit/InitFeature.swift` | `freshInstall` | killed | not run |
+| init-workspace-sibling | 10 | `Sources/DependiInit/ProjectLocator.swift` | `workspaceWithoutProject` | killed | not run |
+| lazy-build-dir-fallback | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `foldersFallBackToTmpdir` | killed | not run |
+| lazy-env-drops-developer-dir | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` | killed | not run |
+| lazy-env-home-dropped | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `absentVariablesStayAbsent` | killed | not run |
+| lazy-env-leak-cc | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` | killed | not run |
+| lazy-home-fallback | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `foldersFallBackToTmpdir` | killed | not run |
+| lazy-process-limit-dump | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `processLimitIsUsed` | killed | not run |
+| lazy-process-limit-xcrun | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `processLimitIsUsed` | killed | not run |
+| lazy-swift-path-absolute | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `relativeSwiftPath` | killed | not run |
+| lazy-version-unknown | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `unknownVersion` | killed | not run |
+| license-name-dot-names | 1 | `Sources/DependiEntities/LicenseDocument.swift` | `unsafeNamesAreRejected` | killed | not run |
+| license-name-separator | 1 | `Sources/DependiEntities/LicenseDocument.swift` | `unsafeNamesAreRejected` | killed | not run |
+| license-notice-pattern | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `noticeNextToLicense` | killed | not run |
+| license-order | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `foundInFixedOrder` | killed | not run |
+| loader-size-cap | 2b | `Sources/DependiDomain/ConfigurationLoader.swift` | `oversizeAndFolder` | killed | not run |
+| locator-anchor-next | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `schemeNamedBuild` | killed | not run |
+| locator-hidden-skipped | review-fix | `Sources/DependiDomain/LicenseLocator.swift` | `licensesFolderFiles` | killed | not run |
+| locator-last-anchor | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `earlierBuildFolderIsIgnored` | killed | not run |
+| locator-licenses-folder | review-fix | `Sources/DependiDomain/LicenseLocator.swift` | `variantsAreFound` | killed | not run |
+| memory-move-drops-mark | review-fix | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `doublePassesExecutableSuite` | killed | not run |
+| memory-move-keeps-destination-mark | review-fix | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `doublePassesExecutableSuite` | killed | not run |
+| memory-move-keeps-source-mark | review-fix | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `doublePassesExecutableSuite` | killed | not run |
+| memory-remove-keeps-mark | review-fix | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `doublePassesExecutableSuite` | killed | not run |
+| memory-write-keeps-mark | review-fix | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `doublePassesExecutableSuite` | killed | not run |
+| out-link-dangling | review-fix | `Sources/DependiGenerate/OutputLocation.swift` | `danglingLinkIsRefused` | killed | not run |
+| out-link-resolved-compare | review-fix | `Sources/DependiGenerate/OutputLocation.swift` | `linkOutsideIsRefused` | killed | not run |
+| out-link-walk-components | review-fix | `Sources/DependiGenerate/OutputLocation.swift` | `middleLinkIsRefused` | killed | not run |
+| pf-catalyst | 6 | `Sources/DependiProjectFile/SupportedPlatformDeriver.swift` | `catalystDisabled` | killed | not run |
+| pf-cross-project-following | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `crossProjectReachable` | killed | not run |
+| pf-deduplication | 6 | `Sources/DependiProjectFile/ProjectFileReader.swift` | `sharedProductIsDeduplicated` | killed | not run |
+| pf-dependency-following | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `directTargetDependency` | killed | not run |
+| pf-embed-following | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `embeddedFrameworkIsIncluded` | killed | not run |
+| pf-local-package-reference | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `localPackageProducts` | killed | not run |
+| pf-local-without-package | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `localPackageProducts` | killed | not run |
+| pf-project-fallback | 6 | `Sources/DependiProjectFile/SupportedPlatformDeriver.swift` | `projectLevelFallback` | killed | not run |
+| pf-proxy-following | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `proxyDependencyInSameProject` | killed | not run |
+| pf-relative-base | 6 | `Sources/DependiProjectFile/ProjectPathMath.swift` | `localPackageProducts` | killed | not run |
+| pf-relative-current | 6 | `Sources/DependiProjectFile/ProjectPathMath.swift` | `localPackageProducts` | killed | not run |
+| pf-relative-parent | 6 | `Sources/DependiProjectFile/ProjectPathMath.swift` | `localPackageProducts` | killed | not run |
+| pf-remote-name-normalization | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `sameProductNameTwoPackages` | killed | not run |
+| pf-same-project-portal | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `proxyDependencyInSameProject` | killed | not run |
+| pf-sdk-auto | 6 | `Sources/DependiProjectFile/SupportedPlatformDeriver.swift` | `autoSDKRoot` | killed | not run |
+| pf-size-cap | 6 | `Sources/DependiProjectFile/ProjectFileLoader.swift` | `oversizeFile` | killed | not run |
+| pf-test-exclusion-ui | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `uiTestProductsAreExcludedToo` | killed | not run |
+| pf-test-exclusion-unit | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `testOnlyProductsAreExcluded` | killed | not run |
+| pf-unknown-target-list | 6 | `Sources/DependiProjectFile/ProjectFileReader.swift` | `unknownTarget` | killed | not run |
+| pins-conflict-dropped | review-fix | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `conflictingWorkspacesDropThePin` | killed | not run |
+| pins-identity-from-location | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `pinIdentityFromLocation` | killed | not run |
+| pins-named-workspace-preferred | review-fix | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `workspaceNamedLikeProjectWins` | killed | not run |
+| pins-only-registry-may-lack-revision | review-fix | `Sources/DependiWorkspaceState/PackageResolvedDocument.swift` | `sourceControlPinWithoutRevisionFails` | killed | not run |
+| pins-revisionless-skipped | review-fix | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `registryPinIsSkipped` | killed | not run |
+| pins-workspace-before-project | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `workspaceBeforeProject` | killed | not run |
+| proc-child-not-tracked | review-fix | `Sources/DependiProcess/SystemProcessRunner.swift` | `theRunnerTellsTheTrackerAboutStartAndFinishAndNothingMore` | killed | not run |
+| proc-finish-after-reap | review-fix | `Sources/DependiProcess/SystemProcessRunner.swift` | `aTimedOutChildIsFinishedBeforeItIsReaped` | killed | not run |
+| proc-finished-not-forgotten | review-fix | `Sources/DependiProcess/ChildProcessRegistry.swift` | `terminateAllKillsEveryLiveChildAndNoFinishedOne` | killed | not run |
+| proc-late-child-not-killed | review-fix | `Sources/DependiProcess/ChildProcessRegistry.swift` | `aChildThatStartsAfterTerminateAllIsKilledAtOnce` | killed | not run |
+| proc-look-reaps-child | review-fix | `Sources/DependiProcess/ChildWait.swift` | `aLookAtAnExitedChildDoesNotReapIt` | killed | not run |
+| proc-parent-pipes-not-closed | review-fix | `Sources/DependiProcess/SystemProcessRunner.swift` | `timedOutRunsLeaveNoPipeDescriptorBehind` | killed | not run |
+| proc-real-child-terminated | review-fix | `Sources/DependiProcess/ChildProcessRegistry.swift` | `terminateAllStopsARealRunningChildQuickly` | killed | not run |
+| proc-reap-failure-as-success | review-fix | `Sources/DependiProcess/ChildWait.swift` | `aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess` | killed | not run |
+| proc-state-failure-as-exited | review-fix | `Sources/DependiProcess/ChildWait.swift` | `aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess` | killed | not run |
+| proc-terminate-first-only | review-fix | `Sources/DependiProcess/ChildProcessRegistry.swift` | `terminateAllKillsEveryLiveChildAndNoFinishedOne` | killed | not run |
+| process-clean-environment | 4 | `Sources/DependiProcess/SystemProcessRunner.swift` | `theChildEnvironmentIsExactlyTheRequestEnvironment` | killed | not run |
+| process-descendant-kill | 4 | `Sources/DependiProcess/ProcessTree.swift` | `aDescendantThatLeftTheProcessGroupIsKilledOnTimeout` | killed | not run |
+| process-group-kill | 4 | `Sources/DependiProcess/ProcessTree.swift` | `aGrandchildHoldingStandardOutputIsKilledOnTimeout` | killed | not run |
+| process-output-cap | 4 | `Sources/DependiProcess/StreamCollector.swift` | `outputOverTheCapFailsAndNamesTheLimit` | killed | not run |
+| process-output-cap-edge | 4 | `Sources/DependiProcess/StreamCollector.swift` | `outputExactlyAtTheCapIsKept` | killed | not run |
+| process-pipe-drain | 4 | `Sources/DependiProcess/StreamCollector.swift` | `bigOutputOnBothStreamsArrivesWithExactBytesAndChecksum` | killed | not run |
+| process-timeout-check | 4 | `Sources/DependiProcess/SystemProcessRunner.swift` | `aSlowChildIsTimedOutQuickly` | killed | not run |
+| projectfile-other-products-subtract-app | review-fix | `Sources/DependiProjectFile/ProjectFileReader.swift` | `appProductsAreNotOtherProducts` | killed | not run |
+| projectfile-tests-in-other-products | review-fix | `Sources/DependiProjectFile/ProductCollector.swift` | `testTargetProductsAreOtherProducts` | killed | not run |
+| resolver-ambiguous | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `localProductAmbiguous` | killed | not run |
+| resolver-exclude-unmatched | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `excludeMatchesNothing` | killed | not run |
+| resolver-excluded-root-skipped | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `excludedRootStillBringsItsDependencies` | killed | not run |
+| resolver-excludes-normalized | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `excludeIsNormalized` | killed | not run |
+| resolver-identity-conflict | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `LinkedPackageResolverTests/duplicateIdentity()` | killed | not run |
+| resolver-macro | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `LinkedPackageResolverTests/macroDependencies()` | killed | not run |
+| resolver-mixed-product-all | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `mixedProductShips` | killed | not run |
+| resolver-other-targets-expected | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `otherTargetPackagesAreNotUnreached` | killed | not run |
+| resolver-other-targets-walk | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `otherTargetPackagesAreNotUnreached` | killed | not run |
+| resolver-package-name-fallback | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `manifestNameInsteadOfIdentity` | killed | not run |
+| resolver-package-name-in-error | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `wrongPackageNameStillFails` | killed | not run |
+| resolver-platform | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `platformConditions` | killed | not run |
+| resolver-plugin-only-reported | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `pluginProductIsNotShipped` | killed | not run |
+| resolver-plugin-product-gate | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `pluginProductIsNotShipped` | killed | not run |
+| resolver-plugin-product-kinds | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `pluginProductIsNotShipped` | killed | not run |
+| resolver-recursion | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `transitive` | killed | not run |
+| resolver-remote-search-no-early-exit | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `remoteSearchStopsAtFirstMatch` | killed | not run |
+| resolver-remote-search-unsorted | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `remoteSearchStopsAtFirstMatch` | killed | not run |
+| resolver-unmatched-product | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `LinkedPackageResolverTests/unmatchedProduct()` | killed | not run |
+| settings-cleanup-escapes-folder | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `manifestEntriesThatEscapeTheFolderAreNeverDeleted` | killed | not run |
+| settings-cleanup-removes-kept | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `removedPackageRemovesItsPlistAndManifestEntry` | killed | not run |
+| settings-manifest-not-updated | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `removedPackageRemovesItsPlistAndManifestEntry` | killed | not run |
+| settings-read-back-removed | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `readBackMismatchFailsWithFileUnwritable` | killed | not run |
+| settings-slug-replaced-by-raw-name | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `oddNamesStayInsideTheFolderAndAppearOnlyAsText` | killed | not run |
+| settings-unknown-file-refusal | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `unknownFileInFolderFailsBeforeAnyWrite` | killed | not run |
+| settings-write-only-when-different | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `secondIdenticalRunWritesNothing` | killed | not run |
+| slugger-hash-input | 2b | `Sources/DependiDomain/OutputNameSlugger.swift` | `slugMatchesHandComputedHash` | killed | not run |
+| slugger-hash-width | review-fix | `Sources/DependiDomain/OutputNameSlugger.swift` | `slugMatchesHandComputedHash` | killed | not run |
+| slugger-sanitize | 2b | `Sources/DependiDomain/OutputNameSlugger.swift` | `unsafeIdentityIsReduced` | killed | not run |
+| validator-component | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `similarSiblingRefused` | killed | not run |
+| validator-containment | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `outsideLinkRefused` | killed | not run |
+| validator-control | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `controlCharactersRefused` | killed | not run |
+| validator-form-feed | review-fix | `Sources/DependiDomain/LicenseFileValidator.swift` | `formFeedAccepted` | killed | not run |
+| validator-size | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `sizeBoundary` | killed | not run |
+| workspace-containment-prefix | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `siblingWithSimilarNameIsRefused` | killed | not run |
+| workspace-identity-from-location | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `identityFromLocation` | killed | not run |
+| workspace-kind-file-system | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `localPackageIsLocal` | killed | not run |
+| workspace-kind-remote | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `realVersion7Remote` | killed | not run |
+| workspace-registry-skipped | review-fix | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `registryPackageIsSkipped` | killed | not run |
+| workspace-subpath-absolute | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `absoluteSubpathIsRefused` | killed | not run |
+| workspace-subpath-empty | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `emptySubpathIsRefused` | killed | not run |
+| workspace-subpath-traversal | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `subpathTraversalIsRefused` | killed | not run |
+| wrapper-cache-override-unconditional | review-fix | `Sources/DependiInit/WrapperScript.swift` | `cacheOverrideNeedsTestingFlag` | killed | not run |
+| wrapper-cache-owner-check-removed | review-fix | `Sources/DependiInit/WrapperScript.swift` | `foreignCacheFolderIsRefused` | killed | not run |
+| wrapper-cache-symlink-check-removed | review-fix | `Sources/DependiInit/WrapperScript.swift` | `symlinkCacheFolderIsRefused` | killed | not run |
+| wrapper-cache-umask-removed | review-fix | `Sources/DependiInit/WrapperScript.swift` | `newCacheFolderIsPrivate` | killed | not run |
+| wrapper-cache-writable-check-removed | review-fix | `Sources/DependiInit/WrapperScript.swift` | `writableCacheFolderIsRefused` | killed | not run |
+| wrapper-commit-recheck-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `movedCommitFailsClean` | killed | not run |
+| wrapper-commit-validation-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `badCommitsAreRejected` | killed | not run |
+| wrapper-env-clean-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `buildEnvironmentIsClean` | killed | not run |
+| wrapper-git-env-clean-removed | review-fix | `Sources/DependiInit/WrapperScript.swift` | `gitEnvironmentIsClean` | killed | not run |
+| wrapper-git-global-config-allowed | review-fix | `Sources/DependiInit/WrapperScript.swift` | `gitEnvironmentIsClean` | killed | not run |
+| wrapper-git-hooks-enabled | review-fix | `Sources/DependiInit/WrapperScript.swift` | `gitEnvironmentIsClean` | killed | not run |
+| wrapper-git-template-allowed | review-fix | `Sources/DependiInit/WrapperScript.swift` | `missingBinaryBuildsAndRuns` | killed | not run |
+| wrapper-lock-age-ignored | review-fix | `Sources/DependiInit/WrapperScript.swift` | `oldLockWithLiveOwnerIsReclaimed` | killed | not run |
+| wrapper-lock-age-too-short | review-fix | `Sources/DependiInit/WrapperScript.swift` | `recentLockWithLiveOwnerIsRespected` | killed | not run |
+| wrapper-lock-create-failure-ignored | review-fix | `Sources/DependiInit/WrapperScript.swift` | `unwritableCacheFolderFailsAtOnce` | killed | not run |
+| wrapper-lock-dead-owner-kept | review-fix | `Sources/DependiInit/WrapperScript.swift` | `deadOwnerLockIsReclaimed` | killed | not run |
+| wrapper-lock-live-owner-stolen | review-fix | `Sources/DependiInit/WrapperScript.swift` | `liveOwnerLockIsRespected` | killed | not run |
+| wrapper-lock-malformed-owner-kept | review-fix | `Sources/DependiInit/WrapperScript.swift` | `malformedLockOwnerIsStale` | killed | not run |
+| wrapper-lock-never-released | review-fix | `Sources/DependiInit/WrapperScript.swift` | `releaseRemovesOwnLock` | killed | not run |
+| wrapper-lock-reclaim-skipped | review-fix | `Sources/DependiInit/WrapperScript.swift` | `concurrentRunsOnDeadLockBuildOnce` | killed | not run |
+| wrapper-lock-release-unconditional | review-fix | `Sources/DependiInit/WrapperScript.swift` | `releaseKeepsForeignLock` | killed | not run |
+| wrapper-lock-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `concurrentRunsBuildOnce` | killed | not run |
+| wrapper-path-pin-removed | review-fix | `Sources/DependiInit/WrapperScript.swift` | `callerPathIsIgnored` | killed | not run |
+| wrapper-pre-gate-inverted | 10 | `Sources/DependiInit/WrapperScript.swift` | `debugBuildSkipsBeforeAnyCall` | killed | not run |
+| wrapper-repo-override-unconditional | 10 | `Sources/DependiInit/WrapperScript.swift` | `repoOverrideNeedsTestingFlag` | killed | not run |
+| wrapper-sha-check-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `cacheWithWrongShaIsRebuilt` | killed | not run |
+| wrapper-version-compare-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `otherCommitIgnoresProjectCopy` | killed | not run |
+| wrapper-version-validation-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `badVersionsAreRejected` | killed | not run |
+| writer-hidden-tolerated | review-fix | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `hiddenFilesAreIgnoredAndKept` | killed | not run |
+| writer-leftover-uuid-check | review-fix | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `realForeignFilesAreStillRefused` | killed | not run |
+| writer-leftovers-swept | review-fix | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `temporaryLeftoversOfOurOwnWritesAreSwept` | killed | not run |
+| writer-link-folder-checked | review-fix | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `linkToAnOutsideFolderAsAcknowledgementsIsRefusedAndNothingIsWritten` | killed | not run |
+| writer-link-folder-compare | review-fix | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `linkToAFolderInsideTheBundleIsRefused` | killed | not run |
+| writer-manifest-union | review-fix | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `aStopAfterAnyNumberOfChangesLosesNoFileAndTheNextRunRecovers` | killed | not run |
