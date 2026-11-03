@@ -67,7 +67,11 @@ struct RepositoryArchitectureTests {
     func gateScriptCoversEveryCheck() throws {
         let gate = try String(
             contentsOf: root.appendingPathComponent("Scripts/gate.sh"), encoding: .utf8)
-        for step in ["Scripts/lint.sh", "swift test", "Scripts/build-each-target.sh"] {
+        for step in [
+            "Scripts/lint.sh", "Scripts/refresh-package-dump.sh",
+            "git diff --exit-code -- Tests/ArchitectureTests/Fixtures", "swift test",
+            "Scripts/build-each-target.sh",
+        ] {
             #expect(gate.contains(step), "the gate does not run \(step)")
         }
     }
