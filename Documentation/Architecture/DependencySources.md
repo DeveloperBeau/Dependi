@@ -25,7 +25,8 @@ The `DependiWorkspaceState` module reads what Xcode resolved for a project. It i
 | `remoteSourceControl` | `.remote`, folder `checkouts/<subpath>` |
 | `fileSystem`, `localSourceControl` | `.local`, folder from `location` |
 | state `edited` | `.local`, folder from `state.path` |
-| anything else, such as `registry` | Error that names the kind |
+| `registry` | Skipped. A product that links one finds no package and fails as unmatched |
+| anything else | Error that names the kind |
 
 A remote package needs `state.checkoutState`. Its version and revision come from there. A branch checkout has a revision and no version.
 
@@ -43,7 +44,7 @@ The first file that exists wins, in this order.
 2. `*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved`
 3. `Package.resolved` at the folder root
 
-Only the top level of the folder is listed. With no file the result is empty. Version 1 reads `object.pins[]` with `repositoryURL`. Other versions read `pins[]` with `location`. Each pin needs a revision. The key is the normalizer identity of the location. Two pins with one identity give `identityConflict`.
+Only the top level of the folder is listed. With no file the result is empty. Version 1 reads `object.pins[]` with `repositoryURL`. Other versions read `pins[]` with `location`. A pin needs a revision, except a registry pin, which has none and is skipped. The key is the normalizer identity of the location. Two pins with one identity give `identityConflict`.
 
 ## Errors
 

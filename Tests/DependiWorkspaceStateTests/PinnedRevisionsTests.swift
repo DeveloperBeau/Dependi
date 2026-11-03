@@ -152,6 +152,22 @@ struct PinnedRevisionsTests {
         #expect(reason.contains("revision"))
     }
 
+    @Test("a registry pin has no revision and is skipped while the other pins are kept")
+    func registryPinIsSkipped() throws {
+        let text =
+            "{\"pins\":[{\"identity\":\"scope.kit\",\"kind\":\"registry\",\"location\":\"\",\"state\":{\"version\":\"1.0.0\"}},{\"identity\":\"a\",\"kind\":\"remoteSourceControl\",\"location\":\"https://h/o/a\",\"state\":{\"revision\":\"r1\"}}],\"version\":3}"
+        let fileSystem = try tree(["Package.resolved": text])
+        #expect(try pins(fileSystem) == [PackageIdentity("a"): "r1"])
+    }
+
+    @Test("a source control pin without a revision still fails when a registry pin sits beside it")
+    func sourceControlPinWithoutRevisionFails() throws {
+        let text =
+            "{\"pins\":[{\"identity\":\"scope.kit\",\"kind\":\"registry\",\"location\":\"\",\"state\":{\"version\":\"1.0.0\"}},{\"identity\":\"a\",\"kind\":\"remoteSourceControl\",\"location\":\"https://h/o/a\",\"state\":{\"version\":\"1.0.0\"}}],\"version\":3}"
+        let fileSystem = try tree(["Package.resolved": text])
+        #expect(throws: DomainError.self) { try pins(fileSystem) }
+    }
+
     @Test("a version 1 file with a missing repository URL names version 1")
     func version1MissingField() throws {
         let text =

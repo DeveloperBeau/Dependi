@@ -1294,5 +1294,29 @@
     "replace": "where true {",
     "test": "licenseLayouts",
     "slice": "review-fix"
+  },
+  {
+    "id": "workspace-registry-skipped",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "if ref.kind == \"registry\" { continue }",
+    "replace": "if false { continue }",
+    "test": "registryPackageIsSkipped",
+    "slice": "review-fix"
+  },
+  {
+    "id": "pins-revisionless-skipped",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "guard let revision = pin.revision else { continue }",
+    "replace": "let revision = pin.revision ?? \"\"",
+    "test": "registryPinIsSkipped",
+    "slice": "review-fix"
+  },
+  {
+    "id": "pins-only-registry-may-lack-revision",
+    "file": "Sources/DependiWorkspaceState/PackageResolvedDocument.swift",
+    "search": "if kind == \"registry\" { return nil }",
+    "replace": "if true { return nil }",
+    "test": "sourceControlPinWithoutRevisionFails",
+    "slice": "review-fix"
   }
 ]

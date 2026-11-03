@@ -53,6 +53,8 @@ public struct WorkspaceStateReader: DependencySourceReading {
                         version: nil, revision: nil, checkoutPath: folder))
                 continue
             }
+            // A registry package has no checkout here. A product that links one is not matched later.
+            if ref.kind == "registry" { continue }
             guard ref.kind == "remoteSourceControl" else {
                 throw fail("unsupported package kind \(ref.kind ?? "(none)")")
             }
@@ -105,6 +107,7 @@ public struct WorkspaceStateReader: DependencySourceReading {
         let pins = try PackageResolvedDocument.decode(data, path: path)
         var result: [PackageIdentity: String] = [:]
         for pin in pins.pins {
+            guard let revision = pin.revision else { continue }
             let identity =
                 pin.location.isEmpty
                 ? PackageIdentity(pin.identity.lowercased())
@@ -116,7 +119,7 @@ public struct WorkspaceStateReader: DependencySourceReading {
             if result[identity] != nil {
                 throw .identityConflict(first: identity.value, second: pin.location)
             }
-            result[identity] = pin.revision
+            result[identity] = revision
         }
         return result
     }
