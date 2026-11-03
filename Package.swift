@@ -167,6 +167,19 @@ let package = Package(
             dependencies: ["DependiCommandLine", "TestHelpers"],
             swiftSettings: sharedSettings
         ),
+        .target(
+            name: "DependiGenerate",
+            dependencies: ["DependiEntities", "DependiDomain"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiGenerateTests",
+            dependencies: [
+                "DependiGenerate", "DependiDomain", "DependiEntities", "DependiTestSupport",
+                "TestHelpers",
+            ],
+            swiftSettings: sharedSettings
+        ),
     ],
     swiftLanguageModes: [.v6]
 )

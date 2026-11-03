@@ -878,5 +878,117 @@
     "search": "case \"help\", \"--help\", \"-h\":",
     "replace": "case \"help\", \"--help\":",
     "test": "tableRowsAreAccepted"
+  },
+  {
+    "id": "gen-sandbox-check",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "if context.isScriptSandboxEnabled == true { throw .scriptSandboxEnabled }",
+    "replace": "",
+    "test": "sandboxOnFails"
+  },
+  {
+    "id": "gen-revision-check",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "wanted != actual",
+    "replace": "false",
+    "test": "revisionMismatch"
+  },
+  {
+    "id": "gen-unreached",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "if !result.unreached.isEmpty && !settings.allowUnreached {",
+    "replace": "if false {",
+    "test": "unreachedPackages"
+  },
+  {
+    "id": "gen-permission-mapping",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "reason.lowercased().contains(\"not permitted\")",
+    "replace": "false",
+    "test": "permissionErrorMeansSandbox"
+  },
+  {
+    "id": "gen-manual-outside",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "catch .licenseOutsideCheckout {",
+    "replace": "catch .licenseMissing {",
+    "test": "manualEntryRefused"
+  },
+  {
+    "id": "gen-manual-absolute",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "!path.hasPrefix(\"/\"), ",
+    "replace": "",
+    "test": "manualEntryRefused"
+  },
+  {
+    "id": "gen-local-packages",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "where !knownPaths.contains(path) {",
+    "replace": "where false {",
+    "test": "localPackageFromProject"
+  },
+  {
+    "id": "gen-debug-skip",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "if case .skip(let reason) = decision {",
+    "replace": "if case .skip(let reason) = decision, reason.isEmpty {",
+    "test": "debugSkips"
+  },
+  {
+    "id": "gen-platform-ios",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/PlatformNames.swift",
+    "search": "return [\"ios\"]",
+    "replace": "return nil",
+    "test": "platformConditionUsed"
+  },
+  {
+    "id": "gen-output-relative",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "&& !path.hasPrefix(\"/\")",
+    "replace": "",
+    "test": "badOutputPath"
+  },
+  {
+    "id": "gen-output-dotdot",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": ".contains(\"..\")",
+    "replace": ".contains(\"...\")",
+    "test": "badOutputPath"
+  },
+  {
+    "id": "gen-output-absolute-build",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "guard targetBuildDirectory.hasPrefix(\"/\") else {",
+    "replace": "guard true else {",
+    "test": "badProductLocation"
+  },
+  {
+    "id": "gen-sandbox-yes",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/BuildContextReader.swift",
+    "search": "$0 == \"YES\"",
+    "replace": "$0 != \"NO\"",
+    "test": "sandboxValues"
+  },
+  {
+    "id": "gen-empty-variable",
+    "slice": "9a",
+    "file": "Sources/DependiGenerate/BuildContextReader.swift",
+    "search": ", !text.isEmpty",
+    "replace": "",
+    "test": "missingAndEmptyAreNil"
   }
 ]
