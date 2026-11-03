@@ -1150,5 +1150,13 @@
     "search": "?.contains(\"DependiDomain\")",
     "replace": "?.contains(\"NoSuchFolder\")",
     "test": "dependiItself"
+  },
+  {
+    "id": "init-already-present",
+    "slice": "10",
+    "file": "Sources/DependiInit/RootPlistEditor.swift",
+    "search": "return (original, .unchanged)",
+    "replace": "return (original, .added)",
+    "test": "secondRunChangesNothingNew"
   }
 ]
