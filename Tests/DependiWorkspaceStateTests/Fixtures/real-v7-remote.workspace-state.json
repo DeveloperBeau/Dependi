@@ -1,0 +1,81 @@
+{
+  "object" : {
+    "artifacts" : [
+
+    ],
+    "dependencies" : [
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "swift-async-algorithms",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/apple/swift-async-algorithms",
+          "name" : "swift-async-algorithms"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "9d349bcc328ac3c31ce40e746b5882742a0d1272",
+            "version" : "1.1.3"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "swift-async-algorithms"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "swift-collections",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/apple/swift-collections.git",
+          "name" : "swift-collections"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "6675bc0ff86e61436e615df6fc5174e043e57924",
+            "version" : "1.4.1"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "swift-collections"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "swift-docc-plugin",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/apple/swift-docc-plugin",
+          "name" : "swift-docc-plugin"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "e977f65879f82b375a044c8837597f690c067da6",
+            "version" : "1.4.6"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "swift-docc-plugin"
+      },
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "swift-docc-symbolkit",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/swiftlang/swift-docc-symbolkit",
+          "name" : "swift-docc-symbolkit"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "b45d1f2ed151d057b54504d653e0da5552844e34",
+            "version" : "1.0.0"
+          },
+          "name" : "sourceControlCheckout"
+        },
+        "subpath" : "swift-docc-symbolkit"
+      }
+    ],
+    "prebuilts" : [
+
+    ]
+  },
+  "version" : 7
+}

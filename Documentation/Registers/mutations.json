@@ -470,5 +470,77 @@
     "search": "maximumAttempts = 3",
     "replace": "maximumAttempts = 2",
     "test": "twoInvalidLinesThenAValidOneStillSucceeds"
+  },
+  {
+    "id": "workspace-containment-prefix",
+    "slice": "5",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "let prefix = rootReal.hasSuffix(\"/\") ? rootReal : rootReal + \"/\"",
+    "replace": "let prefix = rootReal",
+    "test": "siblingWithSimilarNameIsRefused"
+  },
+  {
+    "id": "workspace-subpath-traversal",
+    "slice": "5",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": ".contains(\"..\")",
+    "replace": ".contains(\"...\")",
+    "test": "subpathTraversalIsRefused"
+  },
+  {
+    "id": "workspace-subpath-absolute",
+    "slice": "5",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "subpath.hasPrefix(\"/\")",
+    "replace": "subpath.hasPrefix(\"//\")",
+    "test": "absoluteSubpathIsRefused"
+  },
+  {
+    "id": "workspace-subpath-empty",
+    "slice": "5",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "if subpath.isEmpty {",
+    "replace": "if subpath == \"\\u{0}\" {",
+    "test": "emptySubpathIsRefused"
+  },
+  {
+    "id": "workspace-identity-from-location",
+    "slice": "5",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "normalizer.identity(forLocation: location)",
+    "replace": "PackageIdentity(ref.identity ?? \"\")",
+    "test": "identityFromLocation"
+  },
+  {
+    "id": "pins-identity-from-location",
+    "slice": "5",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "normalizer.identity(forLocation: pin.location)",
+    "replace": "PackageIdentity(pin.identity)",
+    "test": "pinIdentityFromLocation"
+  },
+  {
+    "id": "pins-workspace-before-project",
+    "slice": "5",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "candidates.first(where:",
+    "replace": "candidates.last(where:",
+    "test": "workspaceBeforeProject"
+  },
+  {
+    "id": "workspace-kind-file-system",
+    "slice": "5",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "ref.kind == \"fileSystem\" ||",
+    "replace": "ref.kind == \"fileSystemX\" ||",
+    "test": "localPackageIsLocal"
+  },
+  {
+    "id": "workspace-kind-remote",
+    "slice": "5",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "ref.kind == \"remoteSourceControl\"",
+    "replace": "ref.kind == \"remoteSourceControlX\"",
+    "test": "realVersion7Remote"
   }
 ]

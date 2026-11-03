@@ -51,6 +51,17 @@ let package = Package(
         .testTarget(
             name: "DependiEnvironmentTests",
             dependencies: ["DependiEnvironment", "DependiDomain", "TestHelpers"],
+            name: "DependiWorkspaceState",
+            dependencies: ["DependiEntities", "DependiDomain"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiWorkspaceStateTests",
+            dependencies: [
+                "DependiWorkspaceState", "DependiDomain", "DependiEntities", "DependiTestSupport",
+                "TestHelpers",
+            ],
+            exclude: ["Fixtures"],
             swiftSettings: sharedSettings
         ),
         .target(name: "DependiEntities", swiftSettings: sharedSettings),
