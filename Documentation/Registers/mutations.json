@@ -995,8 +995,8 @@
     "id": "comp-usage-exit-code",
     "slice": "9b",
     "file": "Sources/DependiComposition/DependiApplication.swift",
-    "search": "return Self.usageExitCode",
-    "replace": "return 0",
+    "search": "public static let usageExitCode: Int32 = 64",
+    "replace": "public static let usageExitCode: Int32 = 1",
     "test": "commandLineErrors"
   },
   {
@@ -1406,5 +1406,157 @@
     "search": "Darwin.signal(number, SIG_IGN)",
     "replace": "_ = number",
     "test": "aWatchedSignalCallsTheHandlerWithItsNumber"
+  },
+  {
+    "id": "cfg-limit-finite",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value.isFinite, value > 0, value <= maximum else {",
+    "replace": "guard value > 0, value <= maximum else {",
+    "test": "nonFiniteLimit"
+  },
+  {
+    "id": "cfg-limit-positive",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value.isFinite, value > 0, value <= maximum else {",
+    "replace": "guard value.isFinite, value >= 0, value <= maximum else {",
+    "test": "badProcessLimit"
+  },
+  {
+    "id": "cfg-limit-maximum",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value.isFinite, value > 0, value <= maximum else {",
+    "replace": "guard value.isFinite, value > 0 else {",
+    "test": "badRunLimit"
+  },
+  {
+    "id": "cfg-limit-edge-included",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value.isFinite, value > 0, value <= maximum else {",
+    "replace": "guard value.isFinite, value > 0, value < maximum else {",
+    "test": "goodLimits"
+  },
+  {
+    "id": "lazy-process-limit-dump",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "processTimeoutSeconds: configuration.processTimeoutSeconds,",
+    "replace": "processTimeoutSeconds: ToolConfiguration.defaultProcessTimeoutSeconds,",
+    "test": "processLimitIsUsed"
+  },
+  {
+    "id": "lazy-swift-path-absolute",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "guard swift.hasPrefix(\"/\") else {",
+    "replace": "guard !swift.isEmpty else {",
+    "test": "relativeSwiftPath"
+  },
+  {
+    "id": "lazy-version-unknown",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "?? \"unknown\"",
+    "replace": "?? \"\"",
+    "test": "unknownVersion"
+  },
+  {
+    "id": "lazy-env-leak-cc",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home }",
+    "replace": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home; result[\"CC\"] = environment[\"CC\"] }",
+    "test": "processRequestsAreClean"
+  },
+  {
+    "id": "lazy-env-drops-developer-dir",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "if let developer = environment[\"DEVELOPER_DIR\"] { result[\"DEVELOPER_DIR\"] = developer }",
+    "replace": "_ = environment[\"DEVELOPER_DIR\"]",
+    "test": "processRequestsAreClean"
+  },
+  {
+    "id": "lazy-env-home-dropped",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home }",
+    "replace": "result[\"HOME\"] = environment[\"HOME\"] ?? \"/root\"",
+    "test": "absentVariablesStayAbsent"
+  },
+  {
+    "id": "lazy-home-fallback",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "let home = environment[\"HOME\"] ?? child[\"TMPDIR\"] ?? \"/tmp\"",
+    "replace": "let home = environment[\"HOME\"] ?? \"/tmp\"",
+    "test": "foldersFallBackToTmpdir"
+  },
+  {
+    "id": "lazy-build-dir-fallback",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "let buildBase = environment[\"BUILD_DIR\"] ?? child[\"TMPDIR\"] ?? \"/tmp\"",
+    "replace": "let buildBase = environment[\"BUILD_DIR\"] ?? \"/tmp\"",
+    "test": "foldersFallBackToTmpdir"
+  },
+  {
+    "id": "dead-check-before-spawn",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DeadlineProcessRunner.swift",
+    "search": "guard remaining > 0 else {",
+    "replace": "guard remaining > -1_000_000 else {",
+    "test": "afterTheLimit"
+  },
+  {
+    "id": "dead-clamp-child-time",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DeadlineProcessRunner.swift",
+    "search": "timeoutSeconds: min(request.timeoutSeconds, remaining),",
+    "replace": "timeoutSeconds: request.timeoutSeconds,",
+    "test": "childTimeIsClamped"
+  },
+  {
+    "id": "dead-boundary-inclusive",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DeadlineProcessRunner.swift",
+    "search": "guard remaining > 0 else {",
+    "replace": "guard remaining >= 0 else {",
+    "test": "afterTheLimit"
+  },
+  {
+    "id": "app-run-limit-wired",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "wrapping: process, limitSeconds: settings.runTimeoutSeconds,",
+    "replace": "wrapping: process, limitSeconds: ToolConfiguration.defaultRunTimeoutSeconds,",
+    "test": "configuredLimitsReachTheRequests"
+  },
+  {
+    "id": "app-config-wired",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "environment: environment, configuration: settings, process: limited, files: disk,",
+    "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), process: limited, files: disk,",
+    "test": "configuredLimitsReachTheRequests"
+  },
+  {
+    "id": "proc-invalid-limit-guard",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "guard request.timeoutSeconds.isFinite, request.timeoutSeconds > 0,",
+    "replace": "guard request.timeoutSeconds > 0,",
+    "test": "invalidTimeLimit"
+  },
+  {
+    "id": "lazy-process-limit-xcrun",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "timeoutSeconds: configuration.processTimeoutSeconds,",
+    "replace": "timeoutSeconds: 60,",
+    "test": "processLimitIsUsed"
   }
 ]

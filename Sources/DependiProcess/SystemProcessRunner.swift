@@ -5,6 +5,7 @@ import Foundation
 /// Runs child processes with `posix_spawn`. Each child leads its own process group, so a time-out kills all of it.
 public struct SystemProcessRunner: ProcessRunning {
     private static let pollInterval: DispatchTimeInterval = .milliseconds(50)
+    private static let longestTimeoutSeconds = 604_800.0
     private let children: any ChildProcessTracking
 
     /// Creates a runner that reports each live child to `children`.
@@ -17,6 +18,12 @@ public struct SystemProcessRunner: ProcessRunning {
         let command = ([request.executable] + request.arguments).joined(separator: " ")
         func failure(_ reason: String) -> DomainError {
             .processFailed(command: command, reason: reason)
+        }
+
+        guard request.timeoutSeconds.isFinite, request.timeoutSeconds > 0,
+            request.timeoutSeconds <= Self.longestTimeoutSeconds
+        else {
+            throw failure("the time limit must be a number above 0 and at most one week")
         }
 
         var outPipe: [Int32] = [0, 0]

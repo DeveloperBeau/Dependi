@@ -7,6 +7,7 @@ import Foundation
 /// A skipped build therefore starts no process at all.
 final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
     private let environment: [String: String]
+    private let configuration: ToolConfiguration
     private let process: any ProcessRunning
     private let files: any FileReading
     private let directories: any DirectoryListing
@@ -15,10 +16,12 @@ final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
     private var reader: PackageGraphReader?
 
     init(
-        environment: [String: String], process: any ProcessRunning, files: any FileReading,
+        environment: [String: String], configuration: ToolConfiguration,
+        process: any ProcessRunning, files: any FileReading,
         directories: any DirectoryListing, writer: any FileWriting
     ) {
         self.environment = environment
+        self.configuration = configuration
         self.process = process
         self.files = files
         self.directories = directories
@@ -34,7 +37,8 @@ final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
         defer { lock.unlock() }
         if let reader { return reader }
         let created = PackageGraphReader(
-            settings: try Self.settings(environment: environment, process: process),
+            settings: try Self.settings(
+                environment: environment, configuration: configuration, process: process),
             process: process,
             files: files, directories: directories, writer: writer)
         reader = created
@@ -48,8 +52,9 @@ final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
         return result
     }
 
-    private static func settings(
-        environment: [String: String], process: any ProcessRunning
+    static func settings(
+        environment: [String: String], configuration: ToolConfiguration,
+        process: any ProcessRunning
     ) throws(DomainError) -> PackageGraphSettings {
         let child = cleanEnvironment(environment)
         func run(_ executable: String, _ arguments: [String]) throws(DomainError) -> String {
@@ -57,7 +62,8 @@ final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
                 ProcessRequest(
                     executable: executable, arguments: arguments, environment: child,
                     workingDirectory: nil,
-                    timeoutSeconds: 60, maximumOutputBytes: 1_048_576))
+                    timeoutSeconds: configuration.processTimeoutSeconds,
+                    maximumOutputBytes: 1_048_576))
             guard output.exitStatus == 0 else {
                 throw .processFailed(
                     command: executable, reason: "exit status \(output.exitStatus)")
@@ -90,7 +96,7 @@ final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
             localCacheDirectory: buildBase + "/dependi/manifests",
             remoteCacheDirectory: home + "/Library/Caches/dependi/manifests",
             checkoutsDirectory: checkouts,
-            processTimeoutSeconds: ToolConfiguration.defaultProcessTimeoutSeconds,
+            processTimeoutSeconds: configuration.processTimeoutSeconds,
             maximumOutputBytes: 64 * 1024 * 1024)
     }
 }

@@ -18,11 +18,17 @@
 - **Finding:** Each case now has a plain sentence, and a test checks that every payload text appears in it.
 - **Rule:** Every error that reaches a user has a sentence that names the package or file and, where there is one, the fix.
 
+## Time limits that nothing read
+
+- **Trap:** `processTimeoutSeconds` and `runTimeoutSeconds` were decoded and never used. The reader had a hard-coded 60 seconds, and a cold cache with a hung toolchain could stall an archive for many packages times 60 seconds.
+- **Finding:** A search for the field names found no reader.
+- **Rule:** Every setting that is documented has a test that shows it reaches the process request. The run limit is checked before each spawn and also shortens the limit of the child.
+
 ## Mutation results
 
 | Mutation | Test that failed |
 |---|---|
-| The usage exit code becomes 0 | `commandLineErrors` |
+| The usage exit code constant becomes 1 | `commandLineErrors` |
 | The unavailable exit code becomes 0 | `initNotAvailable` |
 | The version text drops the number | `versionAndHelp` |
 | The child environment passes `SDKROOT` | `processRequestsAreClean` |

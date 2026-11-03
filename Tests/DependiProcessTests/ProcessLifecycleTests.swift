@@ -188,3 +188,31 @@ private final class ResultBox: @unchecked Sendable {
         try lock.withLock { stored }!.get()
     }
 }
+
+extension ProcessLifecycleTests {
+    @Test(
+        "a time limit that is not a finite positive number is refused before any process starts",
+        arguments: [Double.nan, 0, -1, -0.001, .infinity, -.infinity, 604_800.5, 1e300])
+    func invalidTimeLimit(seconds: Double) {
+        let tracker = RecordingTracker()
+        let runner = SystemProcessRunner(children: tracker)
+        var request = shell("exit 0")
+        request = ProcessRequest(
+            executable: request.executable, arguments: request.arguments,
+            environment: request.environment, workingDirectory: nil, timeoutSeconds: seconds,
+            maximumOutputBytes: 100)
+        #expect(
+            throws: DomainError.processFailed(
+                command: "/bin/sh -c exit 0",
+                reason: "the time limit must be a number above 0 and at most one week")
+        ) { try runner.run(request) }
+        #expect(tracker.recorded.isEmpty)
+    }
+
+    @Test("the longest allowed limit still runs a child")
+    func longestLimitWorks() throws {
+        let runner = SystemProcessRunner(children: RecordingTracker())
+        let output = try runner.run(shell("printf ok", timeout: 604_800))
+        #expect(output.standardOutput == Data("ok".utf8))
+    }
+}

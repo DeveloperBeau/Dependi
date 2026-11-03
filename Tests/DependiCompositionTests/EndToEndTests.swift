@@ -7,8 +7,8 @@ import Testing
 @Suite("End to end")
 struct EndToEndTests {
     /// An app that links Alamofire, which depends on swift-log.
-    private func standardWorld() throws -> EndToEndWorld {
-        let world = try EndToEndWorld()
+    private func standardWorld(configuration: String = "{}") throws -> EndToEndWorld {
+        let world = try EndToEndWorld(configuration: configuration)
         try world.addRemote(
             "alamofire", owner: "Alamofire",
             manifest: EndToEndWorld.manifest(
@@ -76,6 +76,29 @@ struct EndToEndTests {
             dumps.allSatisfy {
                 $0.executable == "/toolchain/usr/bin/swift" && $0.arguments.last == "dump-package"
             })
+    }
+
+    @Test("the time limits of the configuration reach every child request")
+    func configuredLimitsReachTheRequests() throws {
+        let world = try EndToEndWorld(
+            configuration: #"{"processTimeoutSeconds": 11, "runTimeoutSeconds": 4000}"#)
+        try world.addRemote(
+            "alamofire", owner: "Alamofire",
+            manifest: EndToEndWorld.manifest(product: "Alamofire"))
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        let limits = world.runner.requests.map(\.timeoutSeconds)
+        #expect(limits.count == 2)
+        #expect(limits.allSatisfy { $0 == 11 })
+    }
+
+    @Test("a limit that is not valid fails the run before any process starts")
+    func invalidLimitFailsEarly() throws {
+        let world = try standardWorld(configuration: #"{"processTimeoutSeconds": 0}"#)
+        let result = try world.run()
+        #expect(result.code == 1)
+        #expect(result.errors.contains("processTimeoutSeconds must be a number above 0"))
+        #expect(world.runner.requests.isEmpty)
     }
 
     @Test("a second run gives identical bytes and changes no modification time")
