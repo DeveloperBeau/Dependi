@@ -16,7 +16,8 @@ The runner breaks the code on purpose and checks that a named test fails. A test
 |---|---|
 | `--root` | The package folder. The default is the current folder. |
 | `--register` | The register file. |
-| `--timeout` | The time limit in seconds for each build and test run. |
+| `--timeout` | The time limit in seconds for the named test of one mutant. A mutant that runs longer is killed by time-out. |
+| `--build-timeout` | The time limit in seconds for a build and for the baseline run. The default is 900. A build that runs longer is INVALID, never a kill. |
 | `--only` | Run one entry. |
 | `--markdown` | Write the register page to the given path and stop. |
 

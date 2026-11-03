@@ -18,6 +18,12 @@
 - **Finding:** The helper leaves the group. A test that looked for processes with the package path in their command line found it.
 - **Rule:** On a time-out or an interrupt the runner kills the group and every descendant it finds in the process table.
 
+## A slow build must not look like a looping mutant
+
+- **Trap:** One time limit covered the build and the test. On a busy machine a build took longer than the limit and the runner tests failed without a clear reason.
+- **Finding:** An agent saw the runner tests fail once while several gates ran at the same time.
+- **Rule:** The build and the baseline have their own, longer limit. Only the named test can be killed by time-out.
+
 ## An interrupt can leave broken code in the tree
 
 - **Trap:** Ctrl-C between the edit and the restore leaves a mutated source file that a later commit could include.

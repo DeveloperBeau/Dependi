@@ -42,6 +42,19 @@ struct ArchitectureCheckerTests {
         #expect(ArchitectureChecker.checkDeclaredDependencies(dump: dump).isEmpty)
     }
 
+    @Test(
+        "the executable may depend on the composition library and no other ring may depend on itself"
+    )
+    func compositionMayUseItsOwnRing() {
+        let allowed = Planted.dump([Planted.target("dependi", dependsOn: ["DependiComposition"])])
+        #expect(ArchitectureChecker.checkDeclaredDependencies(dump: allowed).isEmpty)
+        let features = Planted.dump([Planted.target("DependiGenerate", dependsOn: ["DependiInit"])])
+        #expect(
+            Planted.rules(ArchitectureChecker.checkDeclaredDependencies(dump: features)) == [
+                "ringEdge"
+            ])
+    }
+
     @Test("an external product is a third-party violation")
     func externalProductFails() {
         let dump = Planted.dump([Planted.target("DependiDomain", products: ["Collections"])])

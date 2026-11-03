@@ -28,6 +28,7 @@ struct CommandResult {
 var root = FileManager.default.currentDirectoryPath
 var registerPath = "Documentation/Registers/mutations.json"
 var timeoutSeconds = 300.0
+var buildTimeoutSeconds = 900.0
 var onlyID: String?
 var markdownPath: String?
 var mutatedFile: String?
@@ -46,6 +47,7 @@ func parseArguments() {
         case "--root": root = value
         case "--register": registerPath = value
         case "--timeout": timeoutSeconds = Double(value) ?? timeoutSeconds
+        case "--build-timeout": buildTimeoutSeconds = Double(value) ?? buildTimeoutSeconds
         case "--only": onlyID = value
         case "--markdown": markdownPath = value
         default: fail("unknown flag \(flag)")
@@ -209,7 +211,7 @@ func requireCleanTree() {
 }
 
 func baseline(_ entry: Entry) -> Bool {
-    let result = run(["swift", "test", "--filter", entry.test], timeout: timeoutSeconds)
+    let result = run(["swift", "test", "--filter", entry.test], timeout: buildTimeoutSeconds)
     return result.status == 0 && !result.timedOut
 }
 
@@ -225,9 +227,8 @@ func mutate(_ entry: Entry) -> Outcome {
     do { try mutated.write(toFile: path, atomically: true, encoding: .utf8) } catch {
         return .invalid
     }
-    let build = run(["swift", "build", "--build-tests"], timeout: timeoutSeconds)
-    if build.status != 0 && !build.timedOut { return .invalid }
-    if build.timedOut { return .killedByTimeout }
+    let build = run(["swift", "build", "--build-tests"], timeout: buildTimeoutSeconds)
+    if build.status != 0 || build.timedOut { return .invalid }
     let test = run(
         ["swift", "test", "--skip-build", "--filter", entry.test], timeout: timeoutSeconds)
     if test.timedOut { return .killedByTimeout }
