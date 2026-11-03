@@ -22,7 +22,7 @@ public struct LicenseFileValidator: Sendable {
         let real = try files.realPath(of: folder + "/" + fileName)
         let realRoot = try files.realPath(of: root)
         guard real == realRoot || real.hasPrefix(realRoot + "/") else {
-            throw .licenseOutsideCheckout(package: owner, path: real)
+            throw .licenseOutsideCheckout(package: owner, file: fileName)
         }
         let data = try files.readRegularFile(at: real, upToBytes: maximumBytes)
         if data.count > maximumBytes { throw .licenseTooLarge(package: owner, file: fileName) }
