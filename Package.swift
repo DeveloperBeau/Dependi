@@ -52,6 +52,7 @@ let package = Package(
             name: "DependiEnvironmentTests",
             dependencies: ["DependiEnvironment", "DependiDomain", "TestHelpers"],
             name: "DependiWorkspaceState",
+            name: "DependiProjectFile",
             dependencies: ["DependiEntities", "DependiDomain"],
             swiftSettings: sharedSettings
         ),
@@ -59,6 +60,9 @@ let package = Package(
             name: "DependiWorkspaceStateTests",
             dependencies: [
                 "DependiWorkspaceState", "DependiDomain", "DependiEntities", "DependiTestSupport",
+            name: "DependiProjectFileTests",
+            dependencies: [
+                "DependiProjectFile", "DependiDomain", "DependiEntities", "DependiTestSupport",
                 "TestHelpers",
             ],
             exclude: ["Fixtures"],

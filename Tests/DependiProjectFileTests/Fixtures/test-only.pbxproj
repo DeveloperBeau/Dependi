@@ -1,0 +1,32 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		P0 = {isa = PBXProject; buildConfigurationList = PL; targets = (T1, T2, T3); packageReferences = (R1, R2); };
+		PL = {isa = XCConfigurationList; buildConfigurations = (PC); };
+		PC = {isa = XCBuildConfiguration; buildSettings = {SDKROOT = iphoneos;}; name = Release; };
+		R1 = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/Alamofire/Alamofire.git"; };
+		R2 = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/Quick/Quick.git"; };
+		D1 = {isa = XCSwiftPackageProductDependency; package = R1; productName = Alamofire; };
+		D2 = {isa = XCSwiftPackageProductDependency; package = R2; productName = Quick; };
+		D3 = {isa = XCSwiftPackageProductDependency; package = R2; productName = Nimble; };
+		T1 = {isa = PBXNativeTarget; name = App; productType = "com.apple.product-type.application"; dependencies = (X1, X2); packageProductDependencies = (D1); buildPhases = (); productReference = F1; buildConfigurationList = T1L; };
+		T1L = {isa = XCConfigurationList; buildConfigurations = (T1C); };
+		T1C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+		T2 = {isa = PBXNativeTarget; name = AppTests; productType = "com.apple.product-type.bundle.unit-test"; dependencies = (); packageProductDependencies = (D2); buildPhases = (); productReference = F2; buildConfigurationList = T2L; };
+		T2L = {isa = XCConfigurationList; buildConfigurations = (T2C); };
+		T2C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+		T3 = {isa = PBXNativeTarget; name = AppUITests; productType = "com.apple.product-type.bundle.ui-testing"; dependencies = (); packageProductDependencies = (D3); buildPhases = (); productReference = F3; buildConfigurationList = T3L; };
+		T3L = {isa = XCConfigurationList; buildConfigurations = (T3C); };
+		T3C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+		X1 = {isa = PBXTargetDependency; target = T2; };
+		X2 = {isa = PBXTargetDependency; target = T3; };
+		F1 = {isa = PBXFileReference; path = "App.app"; sourceTree = SOURCE_ROOT; };
+		F2 = {isa = PBXFileReference; path = "AppTests.xctest"; sourceTree = SOURCE_ROOT; };
+		F3 = {isa = PBXFileReference; path = "AppUITests.xctest"; sourceTree = SOURCE_ROOT; };
+	};
+	rootObject = P0;
+}

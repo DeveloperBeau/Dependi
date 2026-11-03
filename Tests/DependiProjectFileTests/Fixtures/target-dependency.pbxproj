@@ -1,0 +1,24 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		P0 = {isa = PBXProject; buildConfigurationList = PL; targets = (T1, T2); packageReferences = (R1, R2); };
+		PL = {isa = XCConfigurationList; buildConfigurations = (PC); };
+		PC = {isa = XCBuildConfiguration; buildSettings = {SDKROOT = iphoneos;}; name = Release; };
+		R1 = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/Alamofire/Alamofire.git"; };
+		R2 = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/kean/Nuke.git"; };
+		D1 = {isa = XCSwiftPackageProductDependency; package = R1; productName = Alamofire; };
+		D2 = {isa = XCSwiftPackageProductDependency; package = R2; productName = Nuke; };
+		T1 = {isa = PBXNativeTarget; name = App; productType = "com.apple.product-type.application"; dependencies = (X1); packageProductDependencies = (D1); buildPhases = (); buildConfigurationList = T1L; };
+		T1L = {isa = XCConfigurationList; buildConfigurations = (T1C); };
+		T1C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+		T2 = {isa = PBXNativeTarget; name = Core; productType = "com.apple.product-type.framework"; dependencies = (); packageProductDependencies = (D2); buildPhases = (); buildConfigurationList = T2L; };
+		T2L = {isa = XCConfigurationList; buildConfigurations = (T2C); };
+		T2C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+		X1 = {isa = PBXTargetDependency; target = T2; };
+	};
+	rootObject = P0;
+}

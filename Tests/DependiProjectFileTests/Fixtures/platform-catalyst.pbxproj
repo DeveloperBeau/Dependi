@@ -1,0 +1,16 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		P0 = {isa = PBXProject; buildConfigurationList = PL; targets = (T1); packageReferences = (); };
+		PL = {isa = XCConfigurationList; buildConfigurations = (PC); };
+		PC = {isa = XCBuildConfiguration; buildSettings = {SDKROOT = iphoneos;}; name = Release; };
+		T1 = {isa = PBXNativeTarget; name = App; productType = "com.apple.product-type.application"; dependencies = (); packageProductDependencies = (); buildPhases = (); buildConfigurationList = T1L; };
+		T1L = {isa = XCConfigurationList; buildConfigurations = (T1C); };
+		T1C = {isa = XCBuildConfiguration; buildSettings = {SUPPORTS_MACCATALYST = YES; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";}; name = Release; };
+	};
+	rootObject = P0;
+}
