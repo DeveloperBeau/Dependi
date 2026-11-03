@@ -35,10 +35,11 @@ struct EndToEndTests {
         let entries = try requireValue(index["PreferenceSpecifiers"] as? [[String: String]])
         #expect(
             entries.map { $0["File"] } == [
-                "Acknowledgements/alamofire-5f720a3f", "Acknowledgements/swift-log-8051385e",
+                "Acknowledgements/alamofire-5f720a3f84a5",
+                "Acknowledgements/swift-log-8051385eb569",
             ])
         #expect(entries.allSatisfy { $0["Type"] == "PSChildPaneSpecifier" })
-        let pane = try childPane(world, slug: "alamofire-5f720a3f")
+        let pane = try childPane(world, slug: "alamofire-5f720a3f84a5")
         let groups = try requireValue(pane["PreferenceSpecifiers"] as? [[String: String]])
         #expect(
             groups == [
@@ -47,13 +48,13 @@ struct EndToEndTests {
                     "FooterText": "license of alamofire",
                 ]
             ])
-        let logPane = try childPane(world, slug: "swift-log-8051385e")
+        let logPane = try childPane(world, slug: "swift-log-8051385eb569")
         #expect(
             (logPane["PreferenceSpecifiers"] as? [[String: String]])?.first?["FooterText"]
                 == "license of swift-log")
         #expect(
             world.files(in: "Acknowledgements") == [
-                ".dependi-manifest", "alamofire-5f720a3f.plist", "swift-log-8051385e.plist",
+                ".dependi-manifest", "alamofire-5f720a3f84a5.plist", "swift-log-8051385eb569.plist",
             ])
         #expect(result.output.contains("Dependi: wrote 2 acknowledgements"))
     }
@@ -112,7 +113,7 @@ struct EndToEndTests {
     func droppedDependencyRemovesPane() throws {
         let world = try standardWorld()
         _ = try world.run()
-        #expect(world.files(in: "Acknowledgements").contains("swift-log-8051385e.plist"))
+        #expect(world.files(in: "Acknowledgements").contains("swift-log-8051385eb569.plist"))
         try world.removeRemote("swift-log")
         world.runner.dumps["alamofire"] = EndToEndWorld.manifest(product: "Alamofire")
         try "// changed manifest".write(
@@ -122,7 +123,7 @@ struct EndToEndTests {
         #expect(result.code == 0, "errors: \(result.errors)")
         #expect(
             world.files(in: "Acknowledgements") == [
-                ".dependi-manifest", "alamofire-5f720a3f.plist",
+                ".dependi-manifest", "alamofire-5f720a3f84a5.plist",
             ])
         #expect(try world.indexTitles() == ["alamofire"])
     }

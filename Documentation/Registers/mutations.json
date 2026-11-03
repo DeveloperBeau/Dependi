@@ -1238,5 +1238,13 @@
     "search": "root + \"/.dependi/Root.plist.bak\"",
     "replace": "plistPath + \".bak\"",
     "test": "paneAppended"
+  },
+  {
+    "id": "slugger-hash-width",
+    "file": "Sources/DependiDomain/OutputNameSlugger.swift",
+    "search": "digest.prefix(6)",
+    "replace": "digest.prefix(4)",
+    "test": "slugMatchesHandComputedHash",
+    "slice": "review-fix"
   }
 ]

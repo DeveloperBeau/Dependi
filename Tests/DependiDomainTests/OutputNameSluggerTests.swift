@@ -8,17 +8,17 @@ struct OutputNameSluggerTests {
     private let slugger = OutputNameSlugger()
 
     @Test(
-        "the slug is the identity, a dash and eight hex characters of the SHA-256 of the location")
+        "the slug is the identity, a dash and twelve hex characters of the SHA-256 of the location")
     func slugMatchesHandComputedHash() {
         #expect(
             slugger.slug(identity: PackageIdentity("kit"), normalizedLocation: "org/kit")
-                == "kit-79623b0b")
+                == "kit-79623b0b4842")
         #expect(
             slugger.slug(identity: PackageIdentity("utils"), normalizedLocation: "a/utils")
-                == "utils-62b0e77e")
+                == "utils-62b0e77e4755")
         #expect(
             slugger.slug(identity: PackageIdentity("utils"), normalizedLocation: "b/utils")
-                == "utils-da5a3048")
+                == "utils-da5a304808a3")
     }
 
     @Test("two locations with one identity give different slugs")
@@ -40,19 +40,20 @@ struct OutputNameSluggerTests {
     func unsafeIdentityIsReduced() {
         #expect(
             slugger.slug(identity: PackageIdentity("../x y"), normalizedLocation: "x/y")
-                == "x-y-bd3c9047")
+                == "x-y-bd3c9047d681")
         #expect(
             slugger.slug(identity: PackageIdentity(""), normalizedLocation: "")
-                == "package-e3b0c442")
+                == "package-e3b0c44298fc")
         #expect(
             slugger.slug(identity: PackageIdentity("///"), normalizedLocation: "")
-                == "package-e3b0c442")
+                == "package-e3b0c44298fc")
         #expect(
-            slugger.slug(identity: PackageIdentity("A.B"), normalizedLocation: "") == "a-b-e3b0c442"
+            slugger.slug(identity: PackageIdentity("A.B"), normalizedLocation: "")
+                == "a-b-e3b0c44298fc"
         )
     }
 
-    @Test("fuzz: a slug only holds safe characters and ends with eight hex characters")
+    @Test("fuzz: a slug only holds safe characters and ends with twelve hex characters")
     func fuzzSlugShape() {
         let alphabet = Array("abcXYZ019./\\:;$()- _é\u{0}")
         for seed in [SeededGenerator.defaultSeed, 21, 22] as [UInt64] {
@@ -64,7 +65,7 @@ struct OutputNameSluggerTests {
                 let slug = slugger.slug(
                     identity: PackageIdentity(identity), normalizedLocation: identity)
                 let valid =
-                    slug.range(of: #"^[a-z0-9_-]+-[0-9a-f]{8}$"#, options: .regularExpression)
+                    slug.range(of: #"^[a-z0-9_-]+-[0-9a-f]{12}$"#, options: .regularExpression)
                     != nil
                 #expect(valid, "slug \(slug.debugDescription) for \(identity.debugDescription)")
                 #expect(!slug.contains("/") && !slug.contains("."))
