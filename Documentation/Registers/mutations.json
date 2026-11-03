@@ -12,7 +12,7 @@
     "slice": "1",
     "file": "Sources/DependiEntities/ToolConfiguration.swift",
     "search": "!Self.knownKeys.contains($0)",
-    "replace": "false",
+    "replace": "$0 == \"\"",
     "test": "mistypedKeyFails"
   },
   {
@@ -36,7 +36,7 @@
     "slice": "1",
     "file": "Sources/DependiEntities/ToolConfiguration.swift",
     "search": "defaultGateConfigurations = [\"Release\"]",
-    "replace": "defaultGateConfigurations = []",
+    "replace": "defaultGateConfigurations = [String]()",
     "test": "emptyObjectGivesDefaults"
   },
   {
