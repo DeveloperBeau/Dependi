@@ -21,6 +21,9 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
 
     private let state = LockedBox(State())
 
+    /// The number of links one path may pass through. The real system reports a loop after 32.
+    private static let maximumLinkHops = 32
+
     /// Creates a file system that holds only the root folder.
     public init() {}
 
@@ -78,7 +81,7 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             let candidate = join(resolved + [name])
             if case .symlink(let target)? = nodes[candidate], followFinal || !pending.isEmpty {
                 steps += 1
-                if steps > 40 { throw .symlinkLoop(path: path) }
+                if steps > Self.maximumLinkHops { throw .symlinkLoop(path: path) }
                 let targetParts = components(
                     normalize(target.hasPrefix("/") ? target : join(resolved) + "/" + target))
                 resolved = []
@@ -108,7 +111,9 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
         try state.withValue { state throws(DomainError) in
             let path = try Self.resolve(realPath, followFinal: false, nodes: state.nodes)
             switch state.nodes[path] {
-            case .file(let data): return data.prefix(limit + 1)
+            case .file(let data):
+                let wanted = limit < Int.max ? max(limit, 0) + 1 : limit
+                return data.prefix(wanted)
             case nil: throw .fileNotFound(path: realPath)
             default: throw .notRegularFile(path: realPath)
             }
@@ -163,6 +168,9 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             let parent = Self.join(Array(Self.components(target).dropLast()))
             guard case .directory? = state.nodes[parent] else {
                 throw .fileUnwritable(path: path, reason: "the folder does not exist")
+            }
+            if case .directory? = state.nodes[target] {
+                throw .fileUnwritable(path: path, reason: "a folder is in the way")
             }
             state.nodes[target] = .file(data)
         }
