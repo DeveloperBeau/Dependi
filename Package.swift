@@ -22,12 +22,44 @@ let package = Package(
         ),
         .testTarget(
             name: "DependiDomainTests",
-            dependencies: ["DependiDomain", "DependiEntities", "DependiTestSupport", "TestHelpers"],
+            dependencies: [
+                "DependiDomain", "DependiEntities", "DependiTestSupport", "TestHelpers",
+            ],
             swiftSettings: sharedSettings
         ),
         .testTarget(
             name: "DependiTestSupportTests",
-            dependencies: ["DependiTestSupport", "DependiDomain", "DependiEntities", "TestHelpers"],
+            dependencies: [
+                "DependiTestSupport", "DependiDomain", "DependiEntities", "TestHelpers",
+            ],
+            swiftSettings: sharedSettings
+        ),
+        .target(name: "DependiEntities", swiftSettings: sharedSettings),
+        .testTarget(
+            name: "DependiEntitiesTests",
+            dependencies: ["DependiEntities", "TestHelpers"],
+            swiftSettings: sharedSettings
+        ),
+        .target(
+            name: "TestHelpers",
+            path: "Tests/TestHelpers",
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "RepositoryChecksTests",
+            dependencies: ["TestHelpers"],
+            exclude: ["Fixtures"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "MutationRunnerTests",
+            dependencies: ["TestHelpers"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "ArchitectureTests",
+            dependencies: ["TestHelpers"],
+            exclude: ["Fixtures"],
             swiftSettings: sharedSettings
         ),
         .target(
@@ -51,23 +83,6 @@ let package = Package(
         .testTarget(
             name: "DependiEnvironmentTests",
             dependencies: ["DependiEnvironment", "DependiDomain", "TestHelpers"],
-            name: "DependiWorkspaceState",
-            dependencies: ["DependiEntities", "DependiDomain"],
-            swiftSettings: sharedSettings
-        ),
-        .testTarget(
-            name: "DependiWorkspaceStateTests",
-            dependencies: [
-                "DependiWorkspaceState", "DependiDomain", "DependiEntities", "DependiTestSupport",
-                "TestHelpers",
-            ],
-            exclude: ["Fixtures"],
-            swiftSettings: sharedSettings
-        ),
-        .target(name: "DependiEntities", swiftSettings: sharedSettings),
-        .testTarget(
-            name: "DependiEntitiesTests",
-            dependencies: ["DependiEntities", "TestHelpers"],
             swiftSettings: sharedSettings
         ),
         .target(
@@ -91,24 +106,30 @@ let package = Package(
             swiftSettings: sharedSettings
         ),
         .target(
-            name: "TestHelpers",
-            path: "Tests/TestHelpers",
+            name: "DependiWorkspaceState",
+            dependencies: ["DependiEntities", "DependiDomain"],
             swiftSettings: sharedSettings
         ),
         .testTarget(
-            name: "RepositoryChecksTests",
-            dependencies: ["TestHelpers"],
+            name: "DependiWorkspaceStateTests",
+            dependencies: [
+                "DependiWorkspaceState", "DependiDomain", "DependiEntities", "DependiTestSupport",
+                "TestHelpers",
+            ],
             exclude: ["Fixtures"],
             swiftSettings: sharedSettings
         ),
-        .testTarget(
-            name: "MutationRunnerTests",
-            dependencies: ["TestHelpers"],
+        .target(
+            name: "DependiProjectFile",
+            dependencies: ["DependiEntities", "DependiDomain"],
             swiftSettings: sharedSettings
         ),
         .testTarget(
-            name: "ArchitectureTests",
-            dependencies: ["TestHelpers"],
+            name: "DependiProjectFileTests",
+            dependencies: [
+                "DependiProjectFile", "DependiDomain", "DependiEntities", "DependiTestSupport",
+                "TestHelpers",
+            ],
             exclude: ["Fixtures"],
             swiftSettings: sharedSettings
         ),

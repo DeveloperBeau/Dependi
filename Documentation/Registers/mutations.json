@@ -542,5 +542,157 @@
     "search": "ref.kind == \"remoteSourceControl\"",
     "replace": "ref.kind == \"remoteSourceControlX\"",
     "test": "realVersion7Remote"
+  },
+  {
+    "id": "pf-test-exclusion-unit",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "type.hasSuffix(\"unit-test\") ||",
+    "replace": "false ||",
+    "test": "testOnlyProductsAreExcluded"
+  },
+  {
+    "id": "pf-test-exclusion-ui",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "|| type.hasSuffix(\"ui-testing\")",
+    "replace": "|| false",
+    "test": "uiTestProductsAreExcludedToo"
+  },
+  {
+    "id": "pf-embed-following",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "try followEmbeds(of: target, in: model)",
+    "replace": "_ = 0",
+    "test": "embeddedFrameworkIsIncluded"
+  },
+  {
+    "id": "pf-dependency-following",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "try followDependencies(of: target, in: model)",
+    "replace": "_ = 0",
+    "test": "directTargetDependency"
+  },
+  {
+    "id": "pf-proxy-following",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "let proxyID = dependency[\"targetProxy\"] as? String,",
+    "replace": "let proxyID = dependency[\"targetProxy\"] as? String, proxyID.isEmpty,",
+    "test": "proxyDependencyInSameProject"
+  },
+  {
+    "id": "pf-same-project-portal",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "portal == nil || portal == model.projectID",
+    "replace": "portal == nil",
+    "test": "proxyDependencyInSameProject"
+  },
+  {
+    "id": "pf-cross-project-following",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "let portal, let other",
+    "replace": "let portal, portal.isEmpty, let other",
+    "test": "crossProjectReachable"
+  },
+  {
+    "id": "pf-local-without-package",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "dependency[\"package\"] as? String else { return nil }",
+    "replace": "dependency[\"package\"] as? String else { throw .fileUnreadable(path: \"\", reason: \"\") }",
+    "test": "localPackageProducts"
+  },
+  {
+    "id": "pf-local-package-reference",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "if model.object(id, isa: \"XCLocalSwiftPackageReference\") != nil { return nil }",
+    "replace": "if id.isEmpty { return nil }",
+    "test": "localPackageProducts"
+  },
+  {
+    "id": "pf-remote-name-normalization",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "normalizer.identity(forLocation: url).value",
+    "replace": "url",
+    "test": "sameProductNameTwoPackages"
+  },
+  {
+    "id": "pf-deduplication",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "Set(collector.found)",
+    "replace": "collector.found",
+    "test": "sharedProductIsDeduplicated"
+  },
+  {
+    "id": "pf-relative-base",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProjectPathMath.swift",
+    "search": "base + \"/\" + relative)",
+    "replace": "relative)",
+    "test": "localPackageProducts"
+  },
+  {
+    "id": "pf-relative-parent",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProjectPathMath.swift",
+    "search": "if component == \"..\" {",
+    "replace": "if component == \"...\" {",
+    "test": "localPackageProducts"
+  },
+  {
+    "id": "pf-relative-current",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProjectPathMath.swift",
+    "search": "if component == \".\" { continue }",
+    "replace": "if component == \"..\" { continue }",
+    "test": "localPackageProducts"
+  },
+  {
+    "id": "pf-unknown-target-list",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "targets.map(\\.name).sorted()",
+    "replace": "[String]()",
+    "test": "unknownTarget"
+  },
+  {
+    "id": "pf-size-cap",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/ProjectFileLoader.swift",
+    "search": "data.count <= sizeLimit",
+    "replace": "data.count <= sizeLimit * 2",
+    "test": "oversizeFile"
+  },
+  {
+    "id": "pf-catalyst",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/SupportedPlatformDeriver.swift",
+    "search": "values(\"SUPPORTS_MACCATALYST\").contains(\"yes\")",
+    "replace": "values(\"SUPPORTS_MACCATALYST\").contains(\"no\")",
+    "test": "catalystDisabled"
+  },
+  {
+    "id": "pf-sdk-auto",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/SupportedPlatformDeriver.swift",
+    "search": "where sdk != \"auto\"",
+    "replace": "where sdk != \"automatic\"",
+    "test": "autoSDKRoot"
+  },
+  {
+    "id": "pf-project-fallback",
+    "slice": "6",
+    "file": "Sources/DependiProjectFile/SupportedPlatformDeriver.swift",
+    "search": "fromTarget.isEmpty ? tokens(key, in: projectSettings) : fromTarget",
+    "replace": "fromTarget",
+    "test": "projectLevelFallback"
   }
 ]
