@@ -523,8 +523,8 @@
     "id": "pins-workspace-before-project",
     "slice": "5",
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
-    "search": "candidates.first(where:",
-    "replace": "candidates.last(where:",
+    "search": "let tiers = [workspaces.map(\\.path), projects, root]",
+    "replace": "let tiers = [root, projects, workspaces.map(\\.path)]",
     "test": "workspaceBeforeProject"
   },
   {
