@@ -1238,5 +1238,21 @@
     "search": "root + \"/.dependi/Root.plist.bak\"",
     "replace": "plistPath + \".bak\"",
     "test": "paneAppended"
+  },
+  {
+    "id": "gen-output-empty",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "!path.isEmpty && !path.hasPrefix(\"/\")",
+    "replace": "!path.hasPrefix(\"/\")",
+    "test": "badOutputPath"
+  },
+  {
+    "id": "gen-output-dots-in-name",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": ".contains(\"..\")",
+    "replace": ".contains(where: { $0.contains(\"..\") })",
+    "test": "dotsInsideANameAreAccepted"
   }
 ]
