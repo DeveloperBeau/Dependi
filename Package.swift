@@ -60,6 +60,26 @@ let package = Package(
             swiftSettings: sharedSettings
         ),
         .target(
+            name: "DependiProcess",
+            dependencies: ["DependiDomain"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiProcessTests",
+            dependencies: ["DependiProcess", "DependiDomain", "TestHelpers"],
+            swiftSettings: sharedSettings
+        ),
+        .target(
+            name: "DependiConsole",
+            dependencies: ["DependiDomain"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiConsoleTests",
+            dependencies: ["DependiConsole", "DependiDomain", "TestHelpers"],
+            swiftSettings: sharedSettings
+        ),
+        .target(
             name: "TestHelpers",
             path: "Tests/TestHelpers",
             swiftSettings: sharedSettings

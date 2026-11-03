@@ -400,6 +400,146 @@
     },
     {
       "dependencies" : [
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiProcess",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiProcess",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiProcessTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiConsole",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiConsole",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiConsoleTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
 
       ],
       "exclude" : [

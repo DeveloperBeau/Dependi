@@ -398,5 +398,77 @@
     "search": "failure == nil && rename(temporary, path) != 0",
     "replace": "failure == nil && rename(temporary, temporary) != 0",
     "test": "writeIsCleanAndReplaces"
+  },
+  {
+    "id": "process-pipe-drain",
+    "slice": "4",
+    "file": "Sources/DependiProcess/StreamCollector.swift",
+    "search": "while !signals.isStopped {",
+    "replace": "while signals.isStopped {",
+    "test": "bigOutputOnBothStreamsArrivesWithExactBytesAndChecksum"
+  },
+  {
+    "id": "process-group-kill",
+    "slice": "4",
+    "file": "Sources/DependiProcess/ProcessTree.swift",
+    "search": "static func kill(root: pid_t) {",
+    "replace": "static func kill(root: pid_t) { _ = Darwin.kill(root, SIGKILL); return",
+    "test": "aGrandchildHoldingStandardOutputIsKilledOnTimeout"
+  },
+  {
+    "id": "process-descendant-kill",
+    "slice": "4",
+    "file": "Sources/DependiProcess/ProcessTree.swift",
+    "search": "let known = descendants(of: root)",
+    "replace": "let known = [pid_t]()",
+    "test": "aDescendantThatLeftTheProcessGroupIsKilledOnTimeout"
+  },
+  {
+    "id": "process-clean-environment",
+    "slice": "4",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "request.environment.map",
+    "replace": "ProcessInfo.processInfo.environment.map",
+    "test": "theChildEnvironmentIsExactlyTheRequestEnvironment"
+  },
+  {
+    "id": "process-output-cap",
+    "slice": "4",
+    "file": "Sources/DependiProcess/StreamCollector.swift",
+    "search": "buffer.count + count > limit",
+    "replace": "buffer.count + count > limit * 1000",
+    "test": "outputOverTheCapFailsAndNamesTheLimit"
+  },
+  {
+    "id": "process-output-cap-edge",
+    "slice": "4",
+    "file": "Sources/DependiProcess/StreamCollector.swift",
+    "search": "buffer.count + count > limit",
+    "replace": "buffer.count + count >= limit",
+    "test": "outputExactlyAtTheCapIsKept"
+  },
+  {
+    "id": "process-timeout-check",
+    "slice": "4",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "} else if DispatchTime.now() >= deadline {",
+    "replace": "} else if false {",
+    "test": "aSlowChildIsTimedOutQuickly"
+  },
+  {
+    "id": "console-attempt-bound-high",
+    "slice": "4",
+    "file": "Sources/DependiConsole/StandardConsole.swift",
+    "search": "maximumAttempts = 3",
+    "replace": "maximumAttempts = 4",
+    "test": "threeInvalidLinesFailEvenWhenAValidLineFollows"
+  },
+  {
+    "id": "console-attempt-bound-low",
+    "slice": "4",
+    "file": "Sources/DependiConsole/StandardConsole.swift",
+    "search": "maximumAttempts = 3",
+    "replace": "maximumAttempts = 2",
+    "test": "twoInvalidLinesThenAValidOneStillSucceeds"
   }
 ]

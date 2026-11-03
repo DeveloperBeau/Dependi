@@ -13,6 +13,8 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | config-mistyped-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `mistypedKeyFails` |
 | config-unknown-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `unknownKeyFailsNamingTheKey` |
 | config-version-pattern | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badVersionsFail` |
+| console-attempt-bound-high | 4 | `Sources/DependiConsole/StandardConsole.swift` | `threeInvalidLinesFailEvenWhenAValidLineFollows` |
+| console-attempt-bound-low | 4 | `Sources/DependiConsole/StandardConsole.swift` | `twoInvalidLinesThenAValidOneStillSucceeds` |
 | disk-exists-lstat | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `danglingLinkExists` |
 | disk-limit-plus-one | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `readStopsAfterLimitPlusOne` |
 | disk-loop-mapping | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `loopIsReported` |
@@ -41,6 +43,13 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | loader-size-cap | 2b | `Sources/DependiDomain/ConfigurationLoader.swift` | `oversizeAndFolder` |
 | locator-anchor-next | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `schemeNamedBuild` |
 | locator-last-anchor | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `earlierBuildFolderIsIgnored` |
+| process-clean-environment | 4 | `Sources/DependiProcess/SystemProcessRunner.swift` | `theChildEnvironmentIsExactlyTheRequestEnvironment` |
+| process-descendant-kill | 4 | `Sources/DependiProcess/ProcessTree.swift` | `aDescendantThatLeftTheProcessGroupIsKilledOnTimeout` |
+| process-group-kill | 4 | `Sources/DependiProcess/ProcessTree.swift` | `aGrandchildHoldingStandardOutputIsKilledOnTimeout` |
+| process-output-cap | 4 | `Sources/DependiProcess/StreamCollector.swift` | `outputOverTheCapFailsAndNamesTheLimit` |
+| process-output-cap-edge | 4 | `Sources/DependiProcess/StreamCollector.swift` | `outputExactlyAtTheCapIsKept` |
+| process-pipe-drain | 4 | `Sources/DependiProcess/StreamCollector.swift` | `bigOutputOnBothStreamsArrivesWithExactBytesAndChecksum` |
+| process-timeout-check | 4 | `Sources/DependiProcess/SystemProcessRunner.swift` | `aSlowChildIsTimedOutQuickly` |
 | resolver-ambiguous | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `localProductAmbiguous` |
 | resolver-exclude-unmatched | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `excludeMatchesNothing` |
 | resolver-identity-conflict | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `duplicateIdentity` |
