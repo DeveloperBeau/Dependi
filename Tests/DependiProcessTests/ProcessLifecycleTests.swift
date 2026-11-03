@@ -50,7 +50,7 @@ private func spawnDirect(_ script: String) -> pid_t {
     return pid
 }
 
-@Suite(.serialized)
+@Suite(.serialized, .timeLimit(.minutes(1)))
 struct ProcessLifecycleTests {
     // MARK: Waiting
 

@@ -5,7 +5,7 @@ import Testing
 
 @testable import DependiComposition
 
-@Suite("Run deadline")
+@Suite("Run deadline", .timeLimit(.minutes(1)))
 struct DeadlineProcessRunnerTests {
     private let ok = Result<ProcessOutput, DomainError>.success(
         ProcessOutput(exitStatus: 0, standardOutput: Data(), standardError: Data()))

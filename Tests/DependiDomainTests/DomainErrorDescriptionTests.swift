@@ -78,7 +78,7 @@ struct DomainErrorDescriptionTests {
     }
 }
 
-@Suite("Outside-checkout message")
+@Suite("Outside-checkout message", .timeLimit(.minutes(1)))
 struct OutsideCheckoutMessageTests {
     @Test("the message names the package and the file and nothing about where the link leads")
     func messageHoldsNoTarget() {

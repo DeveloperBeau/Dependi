@@ -4,7 +4,7 @@ import Testing
 
 @testable import DependiProcess
 
-@Suite(.serialized)
+@Suite(.serialized, .timeLimit(.minutes(1)))
 struct TerminationHandlerTests {
     private final class Received: @unchecked Sendable {
         private let lock = NSLock()

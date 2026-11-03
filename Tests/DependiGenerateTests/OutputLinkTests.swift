@@ -5,7 +5,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Output location links")
+@Suite("Output location links", .timeLimit(.minutes(1)))
 struct OutputLinkTests {
     private func world() throws -> GenerateWorld {
         let world = try GenerateWorld()

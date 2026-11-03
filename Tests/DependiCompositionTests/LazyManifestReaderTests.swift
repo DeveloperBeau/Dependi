@@ -7,7 +7,7 @@ import Testing
 
 @testable import DependiComposition
 
-@Suite("Lazy manifest reader")
+@Suite("Lazy manifest reader", .timeLimit(.minutes(1)))
 struct LazyManifestReaderTests {
     private static let now = Date(timeIntervalSince1970: 2_000_000)
 
