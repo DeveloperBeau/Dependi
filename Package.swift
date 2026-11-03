@@ -30,6 +30,29 @@ let package = Package(
             dependencies: ["DependiTestSupport", "DependiDomain", "DependiEntities", "TestHelpers"],
             swiftSettings: sharedSettings
         ),
+        .target(
+            name: "DependiFileSystem",
+            dependencies: ["DependiDomain"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiFileSystemTests",
+            dependencies: [
+                "DependiFileSystem", "DependiDomain", "DependiEntities", "DependiTestSupport",
+                "TestHelpers",
+            ],
+            swiftSettings: sharedSettings
+        ),
+        .target(
+            name: "DependiEnvironment",
+            dependencies: ["DependiDomain"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiEnvironmentTests",
+            dependencies: ["DependiEnvironment", "DependiDomain", "TestHelpers"],
+            swiftSettings: sharedSettings
+        ),
         .target(name: "DependiEntities", swiftSettings: sharedSettings),
         .testTarget(
             name: "DependiEntitiesTests",

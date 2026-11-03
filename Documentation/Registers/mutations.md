@@ -13,6 +13,16 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | config-mistyped-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `mistypedKeyFails` |
 | config-unknown-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `unknownKeyFailsNamingTheKey` |
 | config-version-pattern | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badVersionsFail` |
+| disk-exists-lstat | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `danglingLinkExists` |
+| disk-limit-plus-one | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `readStopsAfterLimitPlusOne` |
+| disk-loop-mapping | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `loopIsReported` |
+| disk-move-replaces | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `moveReplacesDestination` |
+| disk-nofollow | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `lastComponentLinkIsRefused` |
+| disk-not-found-mapping | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `missingPathHasNoRealPath` |
+| disk-regular-check | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `folderIsRefused` |
+| disk-remove-link-only | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `removingLinkKeepsTarget` |
+| disk-sorted-listing | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `listingIsSorted` |
+| disk-write-atomic-rename | 3 | `Sources/DependiFileSystem/DiskFileSystem.swift` | `writeIsCleanAndReplaces` |
 | double-limit-plus-one | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `doublePassesBehaviorSuite` |
 | double-link-hop-limit | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `loopsAndChains` |
 | double-readonly-component | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `readOnlyIsMatchedByComponent` |
