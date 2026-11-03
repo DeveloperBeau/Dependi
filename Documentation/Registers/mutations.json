@@ -117,7 +117,7 @@
     "file": "Sources/DependiDomain/ReleaseGate.swift",
     "search": "if insideXcode { throw .buildContextIncomplete(missing: [\"ACTION\"]) }",
     "replace": "",
-    "test": "missingAction"
+    "test": "ReleaseGateTests/missingAction()"
   },
   {
     "id": "gate-case-sensitive",
@@ -229,7 +229,7 @@
     "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
     "search": "if let first = identities[candidate.identity] {",
     "replace": "if let first = identities[candidate.identity], false {",
-    "test": "duplicateIdentity"
+    "test": "AcknowledgementAssemblerTests/duplicateIdentity()"
   },
   {
     "id": "assembler-slug-collision",
@@ -245,7 +245,7 @@
     "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
     "search": "if candidate.documents.isEmpty { throw .licenseMissing(package: candidate.displayName) }",
     "replace": "",
-    "test": "missingLicense"
+    "test": "AcknowledgementAssemblerTests/missingLicense()"
   },
   {
     "id": "assembler-sort",
@@ -269,7 +269,7 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "&& !includeBuildTools {",
     "replace": "&& !includeBuildTools && false {",
-    "test": "macroDependencies"
+    "test": "LinkedPackageResolverTests/macroDependencies()"
   },
   {
     "id": "resolver-platform",
@@ -285,7 +285,7 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "throw .productUnmatched(product: product.productName)",
     "replace": "continue",
-    "test": "unmatchedProduct"
+    "test": "LinkedPackageResolverTests/unmatchedProduct()"
   },
   {
     "id": "resolver-exclude-unmatched",
@@ -309,7 +309,7 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "if let existing = packages[package.identity] {",
     "replace": "if let existing = packages[package.identity], false {",
-    "test": "duplicateIdentity"
+    "test": "LinkedPackageResolverTests/duplicateIdentity()"
   },
   {
     "id": "loader-size-cap",
@@ -941,7 +941,7 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "if case .skip(let reason) = decision {",
     "replace": "if case .skip(let reason) = decision, reason.isEmpty {",
-    "test": "debugSkips"
+    "test": "GenerateFeatureTests/debugSkips()"
   },
   {
     "id": "gen-platform-ios",
