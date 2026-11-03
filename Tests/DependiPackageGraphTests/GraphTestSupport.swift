@@ -6,6 +6,8 @@ import TestHelpers
 
 /// Shared setup for the package graph reader tests.
 enum GraphTestSupport {
+    /// The moment before which a temporary cache file counts as stale.
+    static let cutoff = Date(timeIntervalSince1970: 1_000_000)
     static let packagePath = "/checkouts/kit"
 
     static func fixture(_ name: String) throws -> Data {
@@ -25,7 +27,8 @@ enum GraphTestSupport {
             scratchDirectory: "/build/dependi/scratch",
             localCacheDirectory: "/build/dependi/manifests",
             remoteCacheDirectory: "/cache/dependi/manifests", checkoutsDirectory: checkouts,
-            processTimeoutSeconds: 45, maximumOutputBytes: 64 * 1024 * 1024)
+            processTimeoutSeconds: 45, maximumOutputBytes: 64 * 1024 * 1024,
+            staleTemporaryFilesBefore: cutoff)
     }
 
     static func files(

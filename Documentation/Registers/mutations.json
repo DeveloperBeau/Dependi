@@ -1394,7 +1394,7 @@
   {
     "id": "comp-signal-number-forwarded",
     "slice": "review-fix",
-    "file": "Sources/DependiComposition/TerminationHandler.swift",
+    "file": "Sources/DependiProcess/TerminationHandler.swift",
     "search": "source.setEventHandler { handler(number) }",
     "replace": "source.setEventHandler { handler(SIGUSR2) }",
     "test": "eachWatchedSignalIsReportedUnderItsOwnNumber"
@@ -1402,7 +1402,7 @@
   {
     "id": "comp-signal-default-ignored",
     "slice": "review-fix",
-    "file": "Sources/DependiComposition/TerminationHandler.swift",
+    "file": "Sources/DependiProcess/TerminationHandler.swift",
     "search": "Darwin.signal(number, SIG_IGN)",
     "replace": "_ = number",
     "test": "aWatchedSignalCallsTheHandlerWithItsNumber"
@@ -1539,8 +1539,8 @@
     "id": "app-config-wired",
     "slice": "review-fix",
     "file": "Sources/DependiComposition/DependiApplication.swift",
-    "search": "environment: environment, configuration: settings, process: limited, files: disk,",
-    "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), process: limited, files: disk,",
+    "search": "environment: environment, configuration: settings, now: { Date() },",
+    "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), now: { Date() },",
     "test": "configuredLimitsReachTheRequests"
   },
   {
@@ -1558,5 +1558,69 @@
     "search": "timeoutSeconds: configuration.processTimeoutSeconds,",
     "replace": "timeoutSeconds: 60,",
     "test": "processLimitIsUsed"
+  },
+  {
+    "id": "graph-printable-controls",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "let isControl = value < 0x20 || value == 0x7F || (0x80...0x9F).contains(value)",
+    "replace": "let isControl = value < 0x20",
+    "test": "childErrorIsPrintable"
+  },
+  {
+    "id": "graph-sweep-cutoff",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "changed < settings.staleTemporaryFilesBefore",
+    "replace": "changed > settings.staleTemporaryFilesBefore",
+    "test": "staleTemporaryFilesAreSwept"
+  },
+  {
+    "id": "graph-sweep-only-temporaries",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "for name in names where Self.isTemporaryCacheFile(name) {",
+    "replace": "for name in names {",
+    "test": "staleTemporaryFilesAreSwept"
+  },
+  {
+    "id": "graph-sweep-uuid-check",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "return UUID(uuidString: String(name[range.upperBound...])) != nil",
+    "replace": "return !name.isEmpty",
+    "test": "staleTemporaryFilesAreSwept"
+  },
+  {
+    "id": "graph-sweep-called",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "sweepStaleTemporaryFiles(in: directory)",
+    "replace": "_ = directory",
+    "test": "staleTemporaryFilesAreSwept"
+  },
+  {
+    "id": "domain-license-outside-names-file",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": "throw .licenseOutsideCheckout(package: owner, file: fileName)",
+    "replace": "throw .licenseOutsideCheckout(package: owner, file: real)",
+    "test": "outsideLinkRefused"
+  },
+  {
+    "id": "disk-modification-date-no-follow",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "guard lstat(path, &info) == 0 else { return nil }",
+    "replace": "guard stat(path, &info) == 0 else { return nil }",
+    "test": "modificationDateOfALinkIsTheLinksOwn"
+  },
+  {
+    "id": "graph-printable-keeps-newline",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "return isControl && scalar != \"\\n\" && scalar != \"\\t\" ? \" \" : Character(scalar)",
+    "replace": "return isControl ? \" \" : Character(scalar)",
+    "test": "printableTextIsKept"
   }
 ]

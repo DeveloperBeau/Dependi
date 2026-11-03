@@ -65,6 +65,14 @@ public struct DiskFileSystem: FileReading, FileWriting, DirectoryListing, Execut
         return lstat(path, &info) == 0
     }
 
+    /// Returns the modification time that `lstat` reports.
+    public func modificationDate(of path: String) -> Date? {
+        var info = stat()
+        guard lstat(path, &info) == 0 else { return nil }
+        let time = info.st_mtimespec
+        return Date(timeIntervalSince1970: Double(time.tv_sec) + Double(time.tv_nsec) / 1e9)
+    }
+
     // MARK: DirectoryListing
 
     /// Returns the sorted names directly inside a folder.

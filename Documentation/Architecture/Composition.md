@@ -11,8 +11,7 @@
 - `DeadlineProcessRunner` wraps the process runner for the generate command. It starts the run clock when it is built. Before each process it checks the run limit and fails with a message that names `runTimeoutSeconds`. It also caps the time of the child at the time that is left.
 - `SourceRootFinder` walks up from the running program to find the Dependi source folder, if there is one. The wizard uses it to pin the commit.
 - `DependiVersion` holds the version text.
-- `TerminationHandler` calls a closure when the process receives given signals. It turns off the default action of each signal while it is active.
-- `main.swift` builds a `ChildProcessRegistry` and a `SystemProcessRunner` that reports to it. It starts a `TerminationHandler` for SIGINT, SIGTERM and SIGHUP. The closure kills every live child group and exits with 128 plus the signal. Then it calls the application with the real arguments and environment. It is the only place that touches the process arguments.
+- `main.swift` builds a `ChildProcessRegistry` and a `SystemProcessRunner` that reports to it. It starts a `TerminationHandler` (from `DependiProcess`) for SIGINT, SIGTERM and SIGHUP. The closure kills every live child group and exits with 128 plus the signal. Then it calls the application with the real arguments and environment. It is the only place that touches the process arguments.
 
 ## Exit codes
 

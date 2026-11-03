@@ -15,6 +15,7 @@
 | `ChildWait` | Looks at a child without reaping it (`waitid` with `WNOWAIT`) and reaps it. A failed wait is an error. Internal. |
 | `ChildProcessTracking` | The interface through which the runner reports each live child. |
 | `ChildProcessRegistry` | Keeps the live child groups. `terminateAll` kills them all and every child that starts later. |
+| `TerminationHandler` | Calls a closure when the process receives given signals. It turns off the default action of each signal while it is active. |
 | `StandardConsole` | `Prompting` and `OutputWriting` over three `FileHandle` values. |
 
 ## Data flow of a run
