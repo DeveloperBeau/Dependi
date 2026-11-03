@@ -356,3 +356,28 @@ extension GenerateWorld {
             at: "/proj/.dependi.json", contents: Data(#"{"allowUnreached":true}"#.utf8))
     }
 }
+
+extension GenerateFeatureTests {
+    @Test("a local package that arrives under two spellings of one path is one package")
+    func localPackageWithTwoPaths() throws {
+        let world = try GenerateWorld()
+        try world.files.addDirectory(at: "/private/tmp/proj/Packages/Core")
+        try world.files.addSymlink(at: "/tmp", pointingTo: "/private/tmp")
+        try world.files.addFile(
+            at: "/private/tmp/proj/Packages/Core/LICENSE", contents: Data("Core license".utf8))
+        let local = ResolvedPackage(
+            identity: PackageIdentity("core"), kind: .local,
+            normalizedLocation: "/private/tmp/proj/packages/core",
+            version: nil, revision: nil, checkoutPath: "/private/tmp/proj/Packages/Core")
+        world.packages = [local]
+        world.manifests["/private/tmp/proj/Packages/Core"] = PackageManifest(
+            products: [ManifestProduct(name: "Core", targetNames: ["Core"])],
+            targets: [ManifestTarget(name: "Core", kind: .regular, dependencies: [])],
+            declaredDependencies: [])
+        world.linked = LinkedProductSet(
+            products: [ProductReference(productName: "Core", packageName: nil)],
+            localPackagePaths: ["/tmp/proj/Packages/Core"], supportedPlatforms: ["iphoneos"])
+        #expect(try world.run() == .wrote(count: 1))
+        #expect(world.writer.calls.first?.acknowledgements.map(\.displayName) == ["core"])
+    }
+}

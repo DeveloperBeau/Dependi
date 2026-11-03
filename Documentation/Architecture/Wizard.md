@@ -24,7 +24,7 @@
    - If a pane with `File` equal to `Acknowledgements` exists, change nothing.
    - If the old LicensePlist pane exists, change its `File` and keep its other keys and its place.
    - Otherwise append the pane.
-   - Write `Root.plist.bak` first. Keep the format, XML or binary.
+   - Write the old file to `.dependi/Root.plist.bak` first. The backup stays outside the bundle, because everything inside `Settings.bundle` ships in the app. Keep the format, XML or binary.
 8. If the source bundle holds `Acknowledgements`, or old LicensePlist files, name them and ask before removing each one. Without a yes nothing is removed.
 9. Copy the running program to `.dependi/bin/dependi`, write `VERSION`, `run.sh` and `inputs.xcfilelist`, and mark the program and the script executable.
 10. Add `.dependi/bin/` to `.gitignore` once.

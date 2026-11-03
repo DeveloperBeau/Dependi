@@ -80,7 +80,8 @@ public struct InitFeature: Sendable {
             return .reported
         }
         try writeConfiguration(location: location, linked: linked)
-        try prepareSettingsBundle(at: bundle ?? location.root + "/Settings.bundle")
+        try prepareSettingsBundle(
+            at: bundle ?? location.root + "/Settings.bundle", root: location.root)
         try installTool(in: location.root)
         try updateIgnoreFile(in: location.root)
         printRunScript(root: location.root)
@@ -175,7 +176,7 @@ public struct InitFeature: Sendable {
         }
     }
 
-    private func prepareSettingsBundle(at bundle: String) throws(DomainError) {
+    private func prepareSettingsBundle(at bundle: String, root: String) throws(DomainError) {
         let plistPath = bundle + "/Root.plist"
         let original: Data? =
             files.exists(at: plistPath)
@@ -184,7 +185,10 @@ public struct InitFeature: Sendable {
         let edit = try RootPlistEditor.edited(original)
         if edit.change != .unchanged {
             try writer.createDirectory(at: bundle)
-            if let original { try writer.write(original, toPath: plistPath + ".bak") }
+            if let original {
+                try writer.createDirectory(at: root + "/.dependi")
+                try writer.write(original, toPath: root + "/.dependi/Root.plist.bak")
+            }
             try writer.write(edit.data, toPath: plistPath)
         }
         switch edit.change {
@@ -193,7 +197,7 @@ public struct InitFeature: Sendable {
         case .added: output.writeLine("Dependi: added the Acknowledgements pane to \(plistPath).")
         case .rewroteOldEntry:
             output.writeLine(
-                "Dependi: changed the old LicensePlist pane in \(plistPath) to Acknowledgements. The old file is saved as Root.plist.bak."
+                "Dependi: changed the old LicensePlist pane in \(plistPath) to Acknowledgements. The old file is saved as .dependi/Root.plist.bak, outside the bundle so it does not ship."
             )
         }
         if original == nil {

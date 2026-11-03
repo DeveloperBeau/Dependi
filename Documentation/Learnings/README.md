@@ -21,3 +21,4 @@ One page for each area. Each entry has three parts: the trap, the finding that p
 | [Composition](Composition.md) | Lazy toolchain, exit codes and messages |
 | [Wizard](Wizard.md) | Safe, repeatable setup |
 | [Wrapper](Wrapper.md) | Shell traps, gate matching and the build lock |
+| [Build integration](BuildIntegration.md) | What a real archive showed |
