@@ -91,8 +91,8 @@
     "id": "gate-debug-skips",
     "slice": "2b",
     "file": "Sources/DependiDomain/ReleaseGate.swift",
-    "search": "return .skip(reason: \"configuration \\(context.configuration ?? \"(none)\") is not in the gate list\")",
-    "replace": "return .run(reason: \"always\")",
+    "search": "            return .skip(\n                reason: \"configuration",
+    "replace": "            return .run(\n                reason: \"configuration",
     "test": "otherConfigurationsSkip"
   },
   {
@@ -259,16 +259,16 @@
     "id": "resolver-recursion",
     "slice": "2b",
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
-    "search": "for targetName in product.targetNames { stack.append(.target(identity, targetName)) }",
-    "replace": "",
+    "search": "stack.append(.target(identity, targetName))",
+    "replace": "_ = targetName",
     "test": "transitive"
   },
   {
     "id": "resolver-macro",
     "slice": "2b",
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
-    "search": "if (target.kind == .macro || target.kind == .plugin) && !includeBuildTools { continue }",
-    "replace": "",
+    "search": "&& !includeBuildTools {",
+    "replace": "&& !includeBuildTools && false {",
     "test": "macroDependencies"
   },
   {
@@ -283,8 +283,8 @@
     "id": "resolver-unmatched-product",
     "slice": "2b",
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
-    "search": "guard let match = matches.first else { throw .productUnmatched(product: product.productName) }",
-    "replace": "guard let match = matches.first else { continue }",
+    "search": "throw .productUnmatched(product: product.productName)",
+    "replace": "continue",
     "test": "unmatchedProduct"
   },
   {
