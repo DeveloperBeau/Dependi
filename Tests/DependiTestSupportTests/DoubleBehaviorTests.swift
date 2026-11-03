@@ -73,12 +73,12 @@ struct DoubleBehaviorTests {
 
     @Test("the manifest reader counts reads for each path and fails for an unknown path")
     func manifestReaderCounts() throws {
-        let manifest = PackageManifest(products: [], targets: [])
+        let manifest = PackageManifest(products: [], targets: [], declaredDependencies: [])
         let reader = StubManifestReader(manifests: ["/p": manifest])
         _ = try reader.manifest(atPackagePath: "/p")
         _ = try reader.manifest(atPackagePath: "/p")
         #expect(reader.readCounts == ["/p": 2])
-        #expect(throws: DomainError.fileUnreadable(path: "/q", reason: "no manifest scripted")) {
+        #expect(throws: DomainError.fileNotFound(path: "/q")) {
             try reader.manifest(atPackagePath: "/q")
         }
         #expect(reader.readCounts["/q"] == 1)

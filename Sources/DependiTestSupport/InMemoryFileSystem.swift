@@ -75,9 +75,7 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
     public func realPath(of path: String) throws(DomainError) -> String {
         try state.withValue { state throws(DomainError) in
             let resolved = try Self.resolve(path, followFinal: true, nodes: state.nodes)
-            guard state.nodes[resolved] != nil else {
-                throw .fileUnreadable(path: path, reason: "no such file")
-            }
+            guard state.nodes[resolved] != nil else { throw .fileNotFound(path: path) }
             return resolved
         }
     }
@@ -90,7 +88,7 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             let path = try Self.resolve(realPath, followFinal: false, nodes: state.nodes)
             switch state.nodes[path] {
             case .file(let data): return data.prefix(limit + 1)
-            case nil: throw .fileUnreadable(path: realPath, reason: "no such file")
+            case nil: throw .fileNotFound(path: realPath)
             default: throw .notRegularFile(path: realPath)
             }
         }
@@ -113,7 +111,8 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
     public func topLevelNames(in directory: String) throws(DomainError) -> [String] {
         try state.withValue { state throws(DomainError) in
             let resolved = try Self.resolve(directory, followFinal: true, nodes: state.nodes)
-            guard case .directory? = state.nodes[resolved] else {
+            guard let node = state.nodes[resolved] else { throw .fileNotFound(path: directory) }
+            guard case .directory = node else {
                 throw .fileUnreadable(path: directory, reason: "not a folder")
             }
             let depth = Self.components(resolved).count

@@ -5,12 +5,12 @@ import Foundation
 public enum FileSystemBehavior {
     private static func kind(_ error: DomainError) -> String {
         switch error {
+        case .fileNotFound: return "fileNotFound"
         case .fileUnreadable: return "fileUnreadable"
         case .notRegularFile: return "notRegularFile"
         case .fileUnwritable: return "fileUnwritable"
         case .symlinkLoop: return "symlinkLoop"
-        case .processFailed: return "processFailed"
-        case .inputEnded: return "inputEnded"
+        default: return "other"
         }
     }
 
@@ -58,7 +58,7 @@ public enum FileSystemBehavior {
             check(
                 "a limit equal to the size returns the whole file",
                 (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: 10)) == bytes)
-            expectFailure("a missing file cannot be read", kind: "fileUnreadable") {
+            expectFailure("a missing file cannot be read", kind: "fileNotFound") {
                 _ = try reader.readRegularFile(at: realRoot + "/absent", upToBytes: 4)
             }
 
@@ -94,7 +94,7 @@ public enum FileSystemBehavior {
             expectFailure("a loop of links is reported", kind: "symlinkLoop") {
                 _ = try reader.realPath(of: root + "/loop-a")
             }
-            expectFailure("a missing path has no real path", kind: "fileUnreadable") {
+            expectFailure("a missing path has no real path", kind: "fileNotFound") {
                 _ = try reader.realPath(of: root + "/absent")
             }
             try arranger.addSymlink(
@@ -122,7 +122,7 @@ public enum FileSystemBehavior {
             expectFailure("listing a file fails", kind: "fileUnreadable") {
                 _ = try lister.topLevelNames(in: root + "/file.txt")
             }
-            expectFailure("listing a missing folder fails", kind: "fileUnreadable") {
+            expectFailure("listing a missing folder fails", kind: "fileNotFound") {
                 _ = try lister.topLevelNames(in: root + "/absent")
             }
 

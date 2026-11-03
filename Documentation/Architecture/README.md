@@ -10,3 +10,4 @@ One page for each subsystem. Each page describes how the subsystem works today.
 | [Entities](Entities.md) | Current |
 | [Domain interfaces](DomainInterfaces.md) | Current |
 | [Test doubles](TestDoubles.md) | Current |
+| [Domain logic](DomainLogic.md) | Current |
