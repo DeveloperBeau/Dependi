@@ -184,6 +184,12 @@
             "DependiCommandLine",
             null
           ]
+        },
+        {
+          "byName" : [
+            "DependiInit",
+            null
+          ]
         }
       ],
       "exclude" : [

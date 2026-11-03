@@ -8,6 +8,7 @@
 
 - `DependiApplication` parses the arguments, runs one command and returns the exit code. It takes the process runner and the console handles from outside.
 - `LazyManifestReader` creates the package graph reader when the first manifest is needed. A build that is skipped therefore starts no process.
+- `SourceRootFinder` walks up from the running program to find the Dependi source folder, if there is one. The wizard uses it to pin the commit.
 - `DependiVersion` holds the version text.
 - `main.swift` builds a `SystemProcessRunner` and calls the application with the real arguments and environment. It is the only place that touches the process arguments.
 
@@ -18,7 +19,7 @@
 | 0 | The command succeeded, or the build was skipped. |
 | 1 | A domain error. The message names the package or file. |
 | 64 | The command line is not valid. The usage text is printed. |
-| 70 | The command is not available in this build. |
+
 
 ## The toolchain
 

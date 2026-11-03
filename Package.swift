@@ -29,7 +29,7 @@ let package = Package(
                 "DependiEntities", "DependiDomain", "DependiFileSystem", "DependiEnvironment",
                 "DependiConsole", "DependiWorkspaceState", "DependiProjectFile",
                 "DependiPackageGraph",
-                "DependiSettingsBundle", "DependiGenerate", "DependiCommandLine",
+                "DependiSettingsBundle", "DependiGenerate", "DependiCommandLine", "DependiInit",
             ],
             swiftSettings: sharedSettings
         ),

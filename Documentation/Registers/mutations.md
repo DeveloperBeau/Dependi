@@ -16,7 +16,6 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | cli-required-flag | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `missingRequired` |
 | comp-clean-environment | 9b | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` |
 | comp-toolchain-from-xcrun | 9b | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` |
-| comp-unavailable-exit-code | 9b | `Sources/DependiComposition/DependiApplication.swift` | `initNotAvailable` |
 | comp-usage-exit-code | 9b | `Sources/DependiComposition/DependiApplication.swift` | `commandLineErrors` |
 | comp-version-text | 9b | `Sources/DependiComposition/DependiApplication.swift` | `versionAndHelp` |
 | config-commit-case | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badCommitsFail` |

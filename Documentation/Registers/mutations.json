@@ -1000,14 +1000,6 @@
     "test": "commandLineErrors"
   },
   {
-    "id": "comp-unavailable-exit-code",
-    "slice": "9b",
-    "file": "Sources/DependiComposition/DependiApplication.swift",
-    "search": "return Self.unavailableExitCode",
-    "replace": "return 0",
-    "test": "initNotAvailable"
-  },
-  {
     "id": "comp-version-text",
     "slice": "9b",
     "file": "Sources/DependiComposition/DependiApplication.swift",
