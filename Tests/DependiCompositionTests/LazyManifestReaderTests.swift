@@ -9,6 +9,8 @@ import Testing
 
 @Suite("Lazy manifest reader")
 struct LazyManifestReaderTests {
+    private static let now = Date(timeIntervalSince1970: 2_000_000)
+
     private func output(_ text: String, status: Int32 = 0) -> Result<ProcessOutput, DomainError> {
         .success(
             ProcessOutput(
@@ -30,7 +32,7 @@ struct LazyManifestReaderTests {
         let runner = FakeProcessRunner(results: results)
         let value = try LazyManifestReader.settings(
             environment: environment, configuration: configuration ?? self.configuration(),
-            process: runner)
+            now: Self.now, process: runner)
         return (value, runner.requests)
     }
 
@@ -40,7 +42,7 @@ struct LazyManifestReaderTests {
     func xcodeEnvironment() throws {
         let environment = [
             "XCODE_PRODUCT_BUILD_VERSION": "16A242d", "BUILD_DIR": "/dd/App-abc/Build/Products",
-            "HOME": "/Users/ci", "TMPDIR": "/var/folders/t/", "DEVELOPER_DIR": "/Apps/Xcode.app",
+            "HOME": "/ci/profile", "TMPDIR": "/var/folders/t/", "DEVELOPER_DIR": "/Apps/Xcode.app",
             "SDKROOT": "/leak", "OTHER_LDFLAGS": "-leak",
         ]
         let (value, requests) = try settings(
@@ -48,14 +50,15 @@ struct LazyManifestReaderTests {
         let expected = PackageGraphSettings(
             swiftExecutable: "/Apps/Xcode.app/usr/bin/swift", toolchainVersion: "16A242d",
             childEnvironment: [
-                "PATH": "/usr/bin:/bin", "TMPDIR": "/var/folders/t/", "HOME": "/Users/ci",
+                "PATH": "/usr/bin:/bin", "TMPDIR": "/var/folders/t/", "HOME": "/ci/profile",
                 "DEVELOPER_DIR": "/Apps/Xcode.app",
             ],
             scratchDirectory: "/dd/App-abc/Build/Products/dependi/scratch",
             localCacheDirectory: "/dd/App-abc/Build/Products/dependi/manifests",
-            remoteCacheDirectory: "/Users/ci/Library/Caches/dependi/manifests",
+            remoteCacheDirectory: "/ci/profile/Library/Caches/dependi/manifests",
             checkoutsDirectory: "/dd/App-abc/SourcePackages/checkouts",
-            processTimeoutSeconds: 60, maximumOutputBytes: 67_108_864)
+            processTimeoutSeconds: 60, maximumOutputBytes: 67_108_864,
+            staleTemporaryFilesBefore: Date(timeIntervalSince1970: 1_913_600))
         #expect(value == expected)
         #expect(requests.map(\.executable) == ["/usr/bin/xcrun"])
         #expect(requests.first?.arguments == ["--find", "swift"])
@@ -177,6 +180,7 @@ struct LazyManifestReaderTests {
         ])
         let reader = LazyManifestReader(
             environment: ["HOME": "/h", "TMPDIR": "/t"], configuration: configuration(process: 7),
+            now: { Self.now },
             process: runner, files: files, directories: files, writer: files)
         _ = try reader.manifest(atPackagePath: "/pkg")
         #expect(runner.requests.map(\.timeoutSeconds) == [7, 7, 7])
@@ -188,7 +192,8 @@ struct LazyManifestReaderTests {
         let runner = FakeProcessRunner(results: [])
         let files = InMemoryFileSystem()
         _ = LazyManifestReader(
-            environment: [:], configuration: configuration(), process: runner, files: files,
+            environment: [:], configuration: configuration(), now: { Self.now }, process: runner,
+            files: files,
             directories: files, writer: files)
         #expect(runner.requests.isEmpty)
     }

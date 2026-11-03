@@ -8,6 +8,7 @@ import Foundation
 final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
     private let environment: [String: String]
     private let configuration: ToolConfiguration
+    private let now: @Sendable () -> Date
     private let process: any ProcessRunning
     private let files: any FileReading
     private let directories: any DirectoryListing
@@ -17,11 +18,13 @@ final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
 
     init(
         environment: [String: String], configuration: ToolConfiguration,
+        now: @escaping @Sendable () -> Date,
         process: any ProcessRunning, files: any FileReading,
         directories: any DirectoryListing, writer: any FileWriting
     ) {
         self.environment = environment
         self.configuration = configuration
+        self.now = now
         self.process = process
         self.files = files
         self.directories = directories
@@ -38,7 +41,8 @@ final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
         if let reader { return reader }
         let created = PackageGraphReader(
             settings: try Self.settings(
-                environment: environment, configuration: configuration, process: process),
+                environment: environment, configuration: configuration, now: now(),
+                process: process),
             process: process,
             files: files, directories: directories, writer: writer)
         reader = created
@@ -53,7 +57,7 @@ final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
     }
 
     static func settings(
-        environment: [String: String], configuration: ToolConfiguration,
+        environment: [String: String], configuration: ToolConfiguration, now: Date,
         process: any ProcessRunning
     ) throws(DomainError) -> PackageGraphSettings {
         let child = cleanEnvironment(environment)
@@ -97,6 +101,7 @@ final class LazyManifestReader: PackageManifestReading, @unchecked Sendable {
             remoteCacheDirectory: home + "/Library/Caches/dependi/manifests",
             checkoutsDirectory: checkouts,
             processTimeoutSeconds: configuration.processTimeoutSeconds,
-            maximumOutputBytes: 64 * 1024 * 1024)
+            maximumOutputBytes: 64 * 1024 * 1024,
+            staleTemporaryFilesBefore: now.addingTimeInterval(-86_400))
     }
 }

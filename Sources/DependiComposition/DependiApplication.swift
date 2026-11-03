@@ -110,7 +110,8 @@ public struct DependiApplication {
             dependencySource: WorkspaceStateReader(files: disk, directories: disk),
             linkedProducts: ProjectFileReader(files: disk),
             manifests: LazyManifestReader(
-                environment: environment, configuration: settings, process: limited, files: disk,
+                environment: environment, configuration: settings, now: { Date() },
+                process: limited, files: disk,
                 directories: disk, writer: disk),
             writer: SettingsBundleWriter(
                 files: disk, directories: disk, writer: disk, slugger: OutputNameSlugger()),

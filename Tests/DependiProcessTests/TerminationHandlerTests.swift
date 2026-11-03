@@ -2,7 +2,7 @@ import Darwin
 import Foundation
 import Testing
 
-@testable import DependiComposition
+@testable import DependiProcess
 
 @Suite(.serialized)
 struct TerminationHandlerTests {
