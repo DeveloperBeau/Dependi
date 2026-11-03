@@ -12,3 +12,4 @@ One page for each subsystem. Each page describes how the subsystem works today.
 | [Test doubles](TestDoubles.md) | Current |
 | [Domain logic](DomainLogic.md) | Current |
 | [System access](SystemAccess.md) | Current |
+| [Process and console](ProcessAndConsole.md) | Current |

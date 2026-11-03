@@ -189,158 +189,6 @@
     },
     {
       "dependencies" : [
-        {
-          "byName" : [
-            "DependiDomain",
-            null
-          ]
-        }
-      ],
-      "exclude" : [
-
-      ],
-      "name" : "DependiFileSystem",
-      "packageAccess" : true,
-      "resources" : [
-
-      ],
-      "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "ExistentialAny"
-            }
-          },
-          "tool" : "swift"
-        }
-      ],
-      "type" : "regular"
-    },
-    {
-      "dependencies" : [
-        {
-          "byName" : [
-            "DependiFileSystem",
-            null
-          ]
-        },
-        {
-          "byName" : [
-            "DependiDomain",
-            null
-          ]
-        },
-        {
-          "byName" : [
-            "DependiEntities",
-            null
-          ]
-        },
-        {
-          "byName" : [
-            "DependiTestSupport",
-            null
-          ]
-        },
-        {
-          "byName" : [
-            "TestHelpers",
-            null
-          ]
-        }
-      ],
-      "exclude" : [
-
-      ],
-      "name" : "DependiFileSystemTests",
-      "packageAccess" : true,
-      "resources" : [
-
-      ],
-      "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "ExistentialAny"
-            }
-          },
-          "tool" : "swift"
-        }
-      ],
-      "type" : "test"
-    },
-    {
-      "dependencies" : [
-        {
-          "byName" : [
-            "DependiDomain",
-            null
-          ]
-        }
-      ],
-      "exclude" : [
-
-      ],
-      "name" : "DependiEnvironment",
-      "packageAccess" : true,
-      "resources" : [
-
-      ],
-      "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "ExistentialAny"
-            }
-          },
-          "tool" : "swift"
-        }
-      ],
-      "type" : "regular"
-    },
-    {
-      "dependencies" : [
-        {
-          "byName" : [
-            "DependiEnvironment",
-            null
-          ]
-        },
-        {
-          "byName" : [
-            "DependiDomain",
-            null
-          ]
-        },
-        {
-          "byName" : [
-            "TestHelpers",
-            null
-          ]
-        }
-      ],
-      "exclude" : [
-
-      ],
-      "name" : "DependiEnvironmentTests",
-      "packageAccess" : true,
-      "resources" : [
-
-      ],
-      "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "ExistentialAny"
-            }
-          },
-          "tool" : "swift"
-        }
-      ],
-      "type" : "test"
-    },
-    {
-      "dependencies" : [
 
       ],
       "exclude" : [
@@ -494,6 +342,298 @@
         "Fixtures"
       ],
       "name" : "ArchitectureTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiFileSystem",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiFileSystem",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiEntities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiTestSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiFileSystemTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiEnvironment",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiEnvironment",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiEnvironmentTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiProcess",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiProcess",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiProcessTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiConsole",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiConsole",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiConsoleTests",
       "packageAccess" : true,
       "resources" : [
 
