@@ -284,7 +284,7 @@
     "slice": "2b",
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "throw .productUnmatched(product: product.productName)",
-    "replace": "continue",
+    "replace": "return nil",
     "test": "unmatchedProduct"
   },
   {
@@ -627,8 +627,8 @@
     "id": "pf-deduplication",
     "slice": "6",
     "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
-    "search": "Set(collector.found)",
-    "replace": "collector.found",
+    "search": "Set(products).sorted {",
+    "replace": "products.sorted {",
     "test": "sharedProductIsDeduplicated"
   },
   {
@@ -1323,7 +1323,7 @@
     "id": "resolver-excluded-root-skipped",
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "identity = normalizer.identity(forLocation: name)",
-    "replace": "identity = normalizer.identity(forLocation: name); if excludes.contains(identity.value) { continue }",
+    "replace": "identity = normalizer.identity(forLocation: name); if excludes.contains(identity.value) { return nil }",
     "test": "excludedRootStillBringsItsDependencies",
     "slice": "review-fix"
   },
@@ -1418,8 +1418,8 @@
   {
     "id": "projectfile-other-products-subtract-app",
     "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
-    "search": ".subtracting(unique)",
-    "replace": "",
+    "search": "everything.found.filter { !ownProducts.contains($0) }",
+    "replace": "everything.found",
     "test": "appProductsAreNotOtherProducts",
     "slice": "review-fix"
   },
