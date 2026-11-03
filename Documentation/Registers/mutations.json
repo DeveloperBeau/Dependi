@@ -1278,5 +1278,37 @@
     "search": "try requirePlainFolder(folder, inBundle: bundlePath)",
     "replace": "_ = bundlePath",
     "test": "linkToAnOutsideFolderAsAcknowledgementsIsRefusedAndNothingIsWritten"
+  },
+  {
+    "id": "writer-hidden-tolerated",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "name.hasPrefix(\".\") || isTemporaryLeftover(name)",
+    "replace": "isTemporaryLeftover(name)",
+    "test": "hiddenFilesAreIgnoredAndKept"
+  },
+  {
+    "id": "writer-leftovers-swept",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "leftovers = present.filter(Self.isTemporaryLeftover)",
+    "replace": "leftovers = []",
+    "test": "temporaryLeftoversOfOurOwnWritesAreSwept"
+  },
+  {
+    "id": "writer-leftover-uuid-check",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "guard UUID(uuidString: String(name[range.upperBound...])) != nil else { return false }",
+    "replace": "guard UUID(uuidString: String(name[range.upperBound...])) == nil else { return false }",
+    "test": "realForeignFilesAreStillRefused"
+  },
+  {
+    "id": "writer-manifest-union",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "Data(Self.manifestText(previous.union(newNames)).utf8), to: manifestPath)",
+    "replace": "Data(Self.manifestText(newNames).utf8), to: manifestPath)",
+    "test": "aStopAfterAnyNumberOfChangesLosesNoFileAndTheNextRunRecovers"
   }
 ]

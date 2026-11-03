@@ -36,6 +36,12 @@
 - **Finding:** `createDirectory` and `realpath` both follow links, so nothing failed.
 - **Rule:** Compare the real path of each existing part with the path that was asked for. Refuse a link, a dangling link included.
 
+## Files that a crash or Finder leaves behind
+
+- **Trap:** A `.DS_Store` or the `.tmp-<UUID>` file of an interrupted atomic write made every later run fail with "a file that Dependi did not write is in the way". The temporary file would also ship in the app.
+- **Finding:** The unknown-file check treated every unlisted name alike.
+- **Rule:** Ignore hidden files. Remove temporary files that match `<pane>.plist.tmp-<UUID>` exactly. Keep refusing every other unlisted name.
+
 ## Mutation results
 
 The 7 entries owned by this slice are listed in `Documentation/Registers/mutations.md`. See the table there for the result of each.

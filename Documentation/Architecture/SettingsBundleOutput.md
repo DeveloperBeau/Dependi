@@ -26,10 +26,10 @@ The index and each child pane have `Title` and `StringsTable`. The `File` value 
 ## Data flow
 
 1. Compute the slug of each acknowledgement. Two equal slugs fail.
-2. Build every plist and encode it. Text that XML cannot hold, such as a NUL character, fails here.
+2. Build every plist and encode it once. The bytes are kept and written later. Text that XML cannot hold, such as a NUL character, fails here.
 3. If `Acknowledgements/` exists, it must resolve to `<real bundle>/Acknowledgements`. A link, even a dangling one, fails with `fileUnwritable`.
 4. Read the previous manifest. Names that are not plain `.plist` file names are ignored.
-5. List `Acknowledgements/`. A name that is neither in the previous manifest nor in the new set fails with `fileUnwritable`. Nothing has been written yet.
+5. List `Acknowledgements/`. A name that is neither in the previous manifest nor in the new set fails with `fileUnwritable`. Nothing has been written yet. Names that start with a dot, such as `.DS_Store`, are ignored. Temporary files from an interrupted write (`<name>.plist.tmp-<UUID>`) are removed after the folder is created.
 6. Create the folder. Write the manifest with the old and new names together, so a stop in the middle loses no file.
 7. Write each child pane, then the index. Each file is written only when its bytes differ. After a write the file is read back through `FileReading`, decoded and compared with the input.
 8. Remove the files that are in the previous manifest and not in the new set.

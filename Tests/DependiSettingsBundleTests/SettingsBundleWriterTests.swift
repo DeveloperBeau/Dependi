@@ -449,3 +449,126 @@ extension SettingsBundleWriterTests {
         #expect(fs.exists(at: "\(bundle)/Acknowledgements/\(slugOf(ack)).plist"))
     }
 }
+
+extension SettingsBundleWriterTests {
+    private var folder: String { "\(bundle)/Acknowledgements" }
+    private static let uuid = "0E4C1B6A-5D3F-4B7E-9A21-6C8D2F1E3A45"
+
+    // MARK: Files that are not ours
+
+    @Test func hiddenFilesAreIgnoredAndKept() throws {
+        let fs = try freshFileSystem()
+        try fs.createDirectory(at: folder)
+        try fs.addFile(at: "\(folder)/.DS_Store", contents: Data("junk".utf8))
+        let ack = makeAck("Kit")
+        try makeWriter(fs).write([ack], intoBundleAt: bundle)
+        #expect(try readBytes(fs, "\(folder)/.DS_Store") == Data("junk".utf8))
+        #expect(fs.exists(at: "\(folder)/\(slugOf(ack)).plist"))
+    }
+
+    @Test func temporaryLeftoversOfOurOwnWritesAreSwept() throws {
+        let fs = try freshFileSystem()
+        try fs.createDirectory(at: folder)
+        let leftovers = [
+            "kit.plist.tmp-\(Self.uuid)", ".dependi-manifest.tmp-\(Self.uuid)",
+        ]
+        for name in leftovers { try fs.addFile(at: "\(folder)/\(name)", contents: Data("x".utf8)) }
+        let ack = makeAck("Kit")
+        try makeWriter(fs).write([ack], intoBundleAt: bundle)
+        let expected = [".dependi-manifest", "\(slugOf(ack)).plist"].sorted()
+        #expect(try fs.topLevelNames(in: folder) == expected)
+    }
+
+    @Test(arguments: [
+        "kit.plist.tmp-not-a-uuid", "kit.txt.tmp-0E4C1B6A-5D3F-4B7E-9A21-6C8D2F1E3A45",
+        "README", "notes.plist",
+        "kit.plist.tmp-0E4C1B6A-5D3F-4B7E-9A21-6C8D2F1E3A45.bak",
+    ])
+    func realForeignFilesAreStillRefused(name: String) throws {
+        let fs = try freshFileSystem()
+        try fs.createDirectory(at: folder)
+        try fs.addFile(at: "\(folder)/\(name)", contents: Data("mine".utf8))
+        #expect(
+            throws: DomainError.fileUnwritable(
+                path: "\(folder)/\(name)",
+                reason: "a file that Dependi did not write is in the way")
+        ) {
+            try makeWriter(fs).write([makeAck("Kit")], intoBundleAt: bundle)
+        }
+        #expect(try readBytes(fs, "\(folder)/\(name)") == Data("mine".utf8))
+    }
+
+    // MARK: Manifest
+
+    @Test func manifestThatIsNotTextIsRefused() throws {
+        let fs = try freshFileSystem()
+        try fs.createDirectory(at: folder)
+        try fs.addFile(at: "\(folder)/.dependi-manifest", contents: Data([0xFF, 0xFE, 0x80, 0x41]))
+        #expect(
+            throws: DomainError.fileUnreadable(
+                path: "\(folder)/.dependi-manifest", reason: "the manifest is not text")
+        ) {
+            try makeWriter(fs).write([makeAck("Kit")], intoBundleAt: bundle)
+        }
+        #expect(try fs.topLevelNames(in: folder) == [".dependi-manifest"])
+    }
+
+    // MARK: A stop in the middle
+
+    @Test func aStopAfterAnyNumberOfChangesLosesNoFileAndTheNextRunRecovers() throws {
+        let first = [makeAck("Alpha"), makeAck("Beta")]
+        let second = [makeAck("Alpha", docs: [("LICENSE", "changed")]), makeAck("Gamma")]
+
+        func arrangedFileSystem() throws -> InMemoryFileSystem {
+            let fs = try freshFileSystem()
+            try makeWriter(fs).write(first, intoBundleAt: bundle)
+            return fs
+        }
+        // The number of changes a clean second run makes, counted on a spare file system.
+        let spare = try arrangedFileSystem()
+        let counter = FailingAfterWriter(spare, allowing: Int.max)
+        try makeWriter(spare, writes: counter).write(second, intoBundleAt: bundle)
+        let total = counter.attempts
+        #expect(total >= 6)
+
+        let expectedPlists = Set(second.map { slugOf($0) + ".plist" })
+        let oldPlists = Set(first.map { slugOf($0) + ".plist" })
+        for allowed in 0...total {
+            let fs = try arrangedFileSystem()
+            let failing = FailingAfterWriter(fs, allowing: allowed)
+            let attempt = Result {
+                try makeWriter(fs, writes: failing).write(second, intoBundleAt: bundle)
+            }
+            // The run fails exactly when it needed more changes than it was allowed.
+            #expect((try? attempt.get()) == nil || allowed >= total, "allowed \(allowed)")
+            if allowed < total { #expect(throws: DomainError.self) { try attempt.get() } }
+
+            // Every pane that is on disk is named in the manifest, so nothing is foreign.
+            let manifest = String(
+                decoding: try readBytes(fs, "\(folder)/.dependi-manifest"), as: UTF8.self)
+            let listed = Set(manifest.split(separator: "\n").map(String.init))
+            let onDisk = Set(try fs.topLevelNames(in: folder).filter { $0.hasSuffix(".plist") })
+            #expect(onDisk.isSubset(of: listed), "allowed \(allowed)")
+            // No old pane disappears before the new panes are in place.
+            if allowed < total - 2 { #expect(oldPlists.isSubset(of: onDisk), "allowed \(allowed)") }
+
+            // A second run with a working writer recovers every pane.
+            try makeWriter(fs).write(second, intoBundleAt: bundle)
+            #expect(
+                Set(try fs.topLevelNames(in: folder).filter { $0.hasSuffix(".plist") })
+                    == expectedPlists, "allowed \(allowed)")
+            for ack in second {
+                let child = try readPlist(fs, "\(folder)/\(slugOf(ack)).plist")
+                #expect(child["Title"] as? String == ack.displayName)
+            }
+            let index = try readPlist(fs, "\(bundle)/Acknowledgements.plist")
+            let titles = (index["PreferenceSpecifiers"] as? [[String: String]])?.map { $0["Title"] }
+            #expect(titles == ["Alpha", "Gamma"], "allowed \(allowed)")
+            let finalManifest = String(
+                decoding: try readBytes(fs, "\(folder)/.dependi-manifest"), as: UTF8.self)
+            #expect(
+                finalManifest == expectedPlists.sorted().map { $0 + "\n" }.joined(),
+                "allowed \(allowed)")
+        }
+    }
+}
