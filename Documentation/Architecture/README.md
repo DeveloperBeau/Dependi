@@ -7,3 +7,4 @@ One page for each subsystem. Each page describes how the subsystem works today.
 | [Repository checks](RepositoryChecks.md) | Current |
 | [Architecture test](ArchitectureTest.md) | Current |
 | [Mutation runner](MutationRunner.md) | Current |
+| [Entities](Entities.md) | Current |
