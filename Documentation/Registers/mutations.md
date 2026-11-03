@@ -8,6 +8,12 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | assembler-missing-license | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `missingLicense` |
 | assembler-slug-collision | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `slugCollision` |
 | assembler-sort | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `sortedWithoutCase` |
+| cli-dashed-value | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `missingValues` |
+| cli-dry-run-ignored | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `tableRowsAreAccepted` |
+| cli-duplicate-flag | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `duplicates` |
+| cli-equals-form | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `unknownFlags` |
+| cli-help-alias | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `tableRowsAreAccepted` |
+| cli-required-flag | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `missingRequired` |
 | config-commit-case | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badCommitsFail` |
 | config-default-gate | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `emptyObjectGivesDefaults` |
 | config-mistyped-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `mistypedKeyFails` |

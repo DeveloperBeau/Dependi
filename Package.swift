@@ -161,6 +161,12 @@ let package = Package(
             exclude: ["Fixtures"],
             swiftSettings: sharedSettings
         ),
+        .target(name: "DependiCommandLine", swiftSettings: sharedSettings),
+        .testTarget(
+            name: "DependiCommandLineTests",
+            dependencies: ["DependiCommandLine", "TestHelpers"],
+            swiftSettings: sharedSettings
+        ),
     ],
     swiftLanguageModes: [.v6]
 )

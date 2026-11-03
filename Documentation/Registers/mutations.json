@@ -830,5 +830,53 @@
     "search": "try verify(plist, at: path)",
     "replace": "_ = plist",
     "test": "readBackMismatchFailsWithFileUnwritable"
+  },
+  {
+    "id": "cli-required-flag",
+    "slice": "8b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "guard let projectPath else {",
+    "replace": "guard let projectPath = projectPath ?? Optional(\"\") else {",
+    "test": "missingRequired"
+  },
+  {
+    "id": "cli-duplicate-flag",
+    "slice": "8b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "if projectPath != nil {",
+    "replace": "if false {",
+    "test": "duplicates"
+  },
+  {
+    "id": "cli-equals-form",
+    "slice": "8b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "if token.hasPrefix(\"-\") {",
+    "replace": "if token.hasPrefix(\"--project=\") { projectPath = String(token.dropFirst(10)); index += 1; continue }\n                if token.hasPrefix(\"-\") {",
+    "test": "unknownFlags"
+  },
+  {
+    "id": "cli-dry-run-ignored",
+    "slice": "8b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "isDryRun = true",
+    "replace": "isDryRun = false",
+    "test": "tableRowsAreAccepted"
+  },
+  {
+    "id": "cli-dashed-value",
+    "slice": "8b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "!rest[valueIndex].hasPrefix(\"--\")",
+    "replace": "true",
+    "test": "missingValues"
+  },
+  {
+    "id": "cli-help-alias",
+    "slice": "8b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "case \"help\", \"--help\", \"-h\":",
+    "replace": "case \"help\", \"--help\":",
+    "test": "tableRowsAreAccepted"
   }
 ]

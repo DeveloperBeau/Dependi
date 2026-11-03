@@ -17,3 +17,4 @@ One page for each subsystem. Each page describes how the subsystem works today.
 | [Project file](ProjectFile.md) | Current |
 | [Transitive graph](TransitiveGraph.md) | Current |
 | [Settings bundle output](SettingsBundleOutput.md) | Current |
+| [Command line](CommandLine.md) | Current |
