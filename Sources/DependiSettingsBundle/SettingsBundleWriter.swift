@@ -62,6 +62,7 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
             ])
         }
         let newNames = Set(children.map(\.name))
+        try requirePlainFolder(folder, inBundle: bundlePath)
         let previous = try previousManifest(at: manifestPath)
         if files.exists(at: folder) {
             let present = try directories.topLevelNames(in: folder)
@@ -132,6 +133,25 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
 
     private static func join(_ base: String, _ name: String) -> String {
         base.hasSuffix("/") ? base + name : base + "/" + name
+    }
+
+    /// Refuses a link, even a dangling one, where the Acknowledgements folder belongs.
+    /// A link would send every write to a folder outside the bundle.
+    private func requirePlainFolder(_ folder: String, inBundle bundlePath: String)
+        throws(DomainError)
+    {
+        guard files.exists(at: folder) else { return }
+        let refusal = DomainError.fileUnwritable(
+            path: folder, reason: "it is a link, and Dependi does not write through links")
+        let resolvedFolder: String
+        let resolvedBundle: String
+        do {
+            resolvedFolder = try files.realPath(of: folder)
+            resolvedBundle = try files.realPath(of: bundlePath)
+        } catch {
+            throw refusal
+        }
+        guard resolvedFolder == Self.join(resolvedBundle, Self.folderName) else { throw refusal }
     }
 
     // MARK: Manifest

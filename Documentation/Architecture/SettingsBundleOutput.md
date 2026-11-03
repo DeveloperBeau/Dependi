@@ -27,12 +27,13 @@ The index and each child pane have `Title` and `StringsTable`. The `File` value 
 
 1. Compute the slug of each acknowledgement. Two equal slugs fail.
 2. Build every plist and encode it. Text that XML cannot hold, such as a NUL character, fails here.
-3. Read the previous manifest. Names that are not plain `.plist` file names are ignored.
-4. List `Acknowledgements/`. A name that is neither in the previous manifest nor in the new set fails with `fileUnwritable`. Nothing has been written yet.
-5. Create the folder. Write the manifest with the old and new names together, so a stop in the middle loses no file.
-6. Write each child pane, then the index. Each file is written only when its bytes differ. After a write the file is read back through `FileReading`, decoded and compared with the input.
-7. Remove the files that are in the previous manifest and not in the new set.
-8. Write the final manifest.
+3. If `Acknowledgements/` exists, it must resolve to `<real bundle>/Acknowledgements`. A link, even a dangling one, fails with `fileUnwritable`.
+4. Read the previous manifest. Names that are not plain `.plist` file names are ignored.
+5. List `Acknowledgements/`. A name that is neither in the previous manifest nor in the new set fails with `fileUnwritable`. Nothing has been written yet.
+6. Create the folder. Write the manifest with the old and new names together, so a stop in the middle loses no file.
+7. Write each child pane, then the index. Each file is written only when its bytes differ. After a write the file is read back through `FileReading`, decoded and compared with the input.
+8. Remove the files that are in the previous manifest and not in the new set.
+9. Write the final manifest.
 
 ## Output form
 

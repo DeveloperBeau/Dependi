@@ -42,7 +42,35 @@ struct OutputLocation {
             )
         }
         let realBuildDirectory = try files.realPath(of: targetBuildDirectory)
-        let productRoot = realBuildDirectory + "/" + resources
-        return productRoot + "/" + bundleName
+        let productRoot = Self.normalized(realBuildDirectory + "/" + resources)
+        let bundle = Self.normalized(productRoot + "/" + bundleName)
+        try requirePlain(productRoot, name: resources)
+        var walked = productRoot
+        for part in bundle.dropFirst(productRoot.count).split(separator: "/") {
+            walked += "/" + part
+            try requirePlain(walked, name: bundleName)
+        }
+        return bundle
+    }
+
+    /// Refuses a path that exists but does not resolve to itself. A link, even a dangling one,
+    /// would otherwise send the writes to a folder outside the product.
+    private func requirePlain(_ path: String, name: String) throws(DomainError) {
+        guard files.exists(at: path) else { return }
+        let resolved: String
+        do {
+            resolved = try files.realPath(of: path)
+        } catch {
+            throw .invalidOutputLocation(path: name, reason: "it is a link that leads nowhere")
+        }
+        guard resolved == path else {
+            throw .invalidOutputLocation(
+                path: name, reason: "it is, or passes through, a link that leaves the product")
+        }
+    }
+
+    /// Drops empty and `.` components, so that a plain path compares equal to its real path.
+    private static func normalized(_ path: String) -> String {
+        "/" + path.split(separator: "/").filter { $0 != "." }.joined(separator: "/")
     }
 }

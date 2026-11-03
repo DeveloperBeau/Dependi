@@ -1238,5 +1238,45 @@
     "search": "root + \"/.dependi/Root.plist.bak\"",
     "replace": "plistPath + \".bak\"",
     "test": "paneAppended"
+  },
+  {
+    "id": "out-link-resolved-compare",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "guard resolved == path else {",
+    "replace": "guard resolved == resolved else {",
+    "test": "linkOutsideIsRefused"
+  },
+  {
+    "id": "out-link-walk-components",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "try requirePlain(walked, name: bundleName)",
+    "replace": "try requirePlain(bundle, name: bundleName)",
+    "test": "middleLinkIsRefused"
+  },
+  {
+    "id": "out-link-dangling",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "guard files.exists(at: path) else { return }",
+    "replace": "guard files.exists(at: path), (try? files.realPath(of: path)) != nil else { return }",
+    "test": "danglingLinkIsRefused"
+  },
+  {
+    "id": "writer-link-folder-compare",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "guard resolvedFolder == Self.join(resolvedBundle, Self.folderName) else { throw refusal }",
+    "replace": "guard resolvedFolder == resolvedFolder, !resolvedBundle.isEmpty else { throw refusal }",
+    "test": "linkToAFolderInsideTheBundleIsRefused"
+  },
+  {
+    "id": "writer-link-folder-checked",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try requirePlainFolder(folder, inBundle: bundlePath)",
+    "replace": "_ = bundlePath",
+    "test": "linkToAnOutsideFolderAsAcknowledgementsIsRefusedAndNothingIsWritten"
   }
 ]

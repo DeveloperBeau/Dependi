@@ -30,6 +30,12 @@
 - **Finding:** Foundation writes the raw character and reads it back unchanged. The golden file holds one, and the text tests compare bytes.
 - **Rule:** Compare the text through the same decoder that the system uses. Keep the CRLF case in the tests.
 
+## A link where a folder belongs
+
+- **Trap:** A link at `Settings.bundle` or `Acknowledgements` sends the writes outside the product. A planted manifest in the target could then list files for the cleanup to delete. A check for `..` in the text does not see it.
+- **Finding:** `createDirectory` and `realpath` both follow links, so nothing failed.
+- **Rule:** Compare the real path of each existing part with the path that was asked for. Refuse a link, a dangling link included.
+
 ## Mutation results
 
 The 7 entries owned by this slice are listed in `Documentation/Registers/mutations.md`. See the table there for the result of each.

@@ -390,3 +390,62 @@ import TestHelpers
         }
     }
 }
+
+extension SettingsBundleWriterTests {
+    private func refusal(for folder: String) -> DomainError {
+        .fileUnwritable(
+            path: folder, reason: "it is a link, and Dependi does not write through links")
+    }
+
+    @Test func linkToAnOutsideFolderAsAcknowledgementsIsRefusedAndNothingIsWritten() throws {
+        let fs = try freshFileSystem()
+        try fs.addDirectory(at: "/outside")
+        try fs.addFile(at: "/outside/keep.txt", contents: Data("x".utf8))
+        try fs.addSymlink(at: "\(bundle)/Acknowledgements", pointingTo: "/outside")
+        let before = try allPaths(fs)
+        #expect(throws: refusal(for: "\(bundle)/Acknowledgements")) {
+            try makeWriter(fs).write([makeAck("Kit")], intoBundleAt: bundle)
+        }
+        #expect(try allPaths(fs) == before)
+        #expect(try fs.topLevelNames(in: "/outside") == ["keep.txt"])
+    }
+
+    @Test func outsideManifestBehindALinkNeverDeletesAnything() throws {
+        let fs = try freshFileSystem()
+        try fs.addDirectory(at: "/outside")
+        try fs.addFile(at: "/outside/.dependi-manifest", contents: Data("victim.plist\n".utf8))
+        try fs.addFile(at: "/outside/victim.plist", contents: Data("v".utf8))
+        try fs.addSymlink(at: "\(bundle)/Acknowledgements", pointingTo: "/outside")
+        #expect(throws: DomainError.self) {
+            try makeWriter(fs).write([], intoBundleAt: bundle)
+        }
+        #expect(fs.exists(at: "/outside/victim.plist"))
+    }
+
+    @Test func linkToAFolderInsideTheBundleIsRefused() throws {
+        let fs = try freshFileSystem()
+        try fs.addDirectory(at: "\(bundle)/Other")
+        try fs.addSymlink(at: "\(bundle)/Acknowledgements", pointingTo: "\(bundle)/Other")
+        #expect(throws: refusal(for: "\(bundle)/Acknowledgements")) {
+            try makeWriter(fs).write([makeAck("Kit")], intoBundleAt: bundle)
+        }
+        #expect(try fs.topLevelNames(in: "\(bundle)/Other") == [])
+    }
+
+    @Test func danglingLinkAsAcknowledgementsIsRefused() throws {
+        let fs = try freshFileSystem()
+        try fs.addSymlink(at: "\(bundle)/Acknowledgements", pointingTo: "/nowhere")
+        #expect(throws: refusal(for: "\(bundle)/Acknowledgements")) {
+            try makeWriter(fs).write([makeAck("Kit")], intoBundleAt: bundle)
+        }
+        #expect(!fs.exists(at: "/nowhere"))
+    }
+
+    @Test func plainExistingFolderIsStillWritten() throws {
+        let fs = try freshFileSystem()
+        try fs.addDirectory(at: "\(bundle)/Acknowledgements")
+        let ack = makeAck("Kit")
+        try makeWriter(fs).write([ack], intoBundleAt: bundle)
+        #expect(fs.exists(at: "\(bundle)/Acknowledgements/\(slugOf(ack)).plist"))
+    }
+}
