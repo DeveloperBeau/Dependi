@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import TestHelpers
 
 @Suite("Forbidden content in repository files")
 struct ForbiddenContentTests {
