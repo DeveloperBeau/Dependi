@@ -14,6 +14,11 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | cli-equals-form | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `unknownFlags` |
 | cli-help-alias | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `tableRowsAreAccepted` |
 | cli-required-flag | 8b | `Sources/DependiCommandLine/CommandLineParser.swift` | `missingRequired` |
+| comp-clean-environment | 9b | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` |
+| comp-toolchain-from-xcrun | 9b | `Sources/DependiComposition/LazyManifestReader.swift` | `processRequestsAreClean` |
+| comp-unavailable-exit-code | 9b | `Sources/DependiComposition/DependiApplication.swift` | `initNotAvailable` |
+| comp-usage-exit-code | 9b | `Sources/DependiComposition/DependiApplication.swift` | `commandLineErrors` |
+| comp-version-text | 9b | `Sources/DependiComposition/DependiApplication.swift` | `versionAndHelp` |
 | config-commit-case | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badCommitsFail` |
 | config-default-gate | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `emptyObjectGivesDefaults` |
 | config-mistyped-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `mistypedKeyFails` |
@@ -34,6 +39,8 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | double-limit-plus-one | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `doublePassesBehaviorSuite` |
 | double-link-hop-limit | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `loopsAndChains` |
 | double-readonly-component | 2a | `Sources/DependiTestSupport/InMemoryFileSystem.swift` | `readOnlyIsMatchedByComponent` |
+| error-payload-package | 9b | `Sources/DependiDomain/DomainError+Description.swift` | `messagesNamePayloads` |
+| error-sandbox-message | 9b | `Sources/DependiDomain/DomainError+Description.swift` | `sandboxMessageNamesTheFix` |
 | gate-archive-runs | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `archiveRuns` |
 | gate-case-sensitive | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `otherConfigurationsSkip` |
 | gate-config-error-archive | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `unreadableConfigurationOnArchiveFails` |
