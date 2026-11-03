@@ -31,6 +31,117 @@
   "targets" : [
     {
       "dependencies" : [
+        {
+          "byName" : [
+            "DependiEntities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiDomain",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiEntities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiTestSupport",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependiTestSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiDomain",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependiEntities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependiTestSupportTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
 
       ],
       "exclude" : [
