@@ -10,13 +10,25 @@ let package = Package(
     name: "Dependi",
     platforms: [.macOS(.v14)],
     targets: [
+        .target(
+            name: "TestHelpers",
+            path: "Tests/TestHelpers",
+            swiftSettings: sharedSettings
+        ),
         .testTarget(
             name: "RepositoryChecksTests",
+            dependencies: ["TestHelpers"],
             exclude: ["Fixtures"],
             swiftSettings: sharedSettings
         ),
         .testTarget(
+            name: "MutationRunnerTests",
+            dependencies: ["TestHelpers"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
             name: "ArchitectureTests",
+            dependencies: ["TestHelpers"],
             exclude: ["Fixtures"],
             swiftSettings: sharedSettings
         ),

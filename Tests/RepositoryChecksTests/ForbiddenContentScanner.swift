@@ -1,3 +1,4 @@
+import TestHelpers
 import Foundation
 
 /// Finds text in repository files that must never be committed.

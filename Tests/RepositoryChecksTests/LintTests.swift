@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import TestHelpers
 
 @Suite("Formatter and casing lint")
 struct LintTests {

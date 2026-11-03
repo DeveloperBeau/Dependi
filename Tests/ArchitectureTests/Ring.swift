@@ -28,6 +28,7 @@ enum RingRules {
         "DependiComposition": .composition,
         "dependi": .composition,
         "DependiTestSupport": .testSupport,
+        "TestHelpers": .testSupport,
     ]
 
     /// The rings that each ring may depend on. A module never depends on its own ring.

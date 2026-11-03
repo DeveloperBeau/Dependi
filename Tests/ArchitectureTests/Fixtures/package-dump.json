@@ -34,6 +34,36 @@
 
       ],
       "exclude" : [
+
+      ],
+      "name" : "TestHelpers",
+      "packageAccess" : true,
+      "path" : "Tests/TestHelpers",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
         "Fixtures"
       ],
       "name" : "RepositoryChecksTests",
@@ -55,7 +85,41 @@
     },
     {
       "dependencies" : [
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
 
+      ],
+      "name" : "MutationRunnerTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
       ],
       "exclude" : [
         "Fixtures"

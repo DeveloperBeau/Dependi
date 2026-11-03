@@ -1,19 +1,23 @@
 import Foundation
 
 /// The result of one finished child process.
-struct ChildProcessResult {
-    let status: Int32
-    let output: String
+public struct ChildProcessResult: Sendable {
+    /// The exit status of the process.
+    public let status: Int32
+    /// Everything the process wrote to standard output and standard error.
+    public let output: String
 }
 
 /// Runs one child process and fails with a named error when it exceeds its time limit.
-enum ChildProcess {
-    struct TimedOut: Error, CustomStringConvertible {
+public enum ChildProcess {
+    /// The error thrown when a process runs longer than its limit.
+    public struct TimedOut: Error, CustomStringConvertible {
         let command: String
-        var description: String { "child process timed out: \(command)" }
+        public var description: String { "child process timed out: \(command)" }
     }
 
-    static func run(
+    /// Runs a command through `env` and waits for it, up to the time limit.
+    public static func run(
         _ arguments: [String],
         workingDirectory: URL,
         timeoutSeconds: Double = 60
