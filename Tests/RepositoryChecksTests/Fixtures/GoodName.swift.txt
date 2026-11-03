@@ -1,0 +1,3 @@
+struct UppercaseType {
+    let valueOne = 1
+}
