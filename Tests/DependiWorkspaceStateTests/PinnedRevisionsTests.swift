@@ -116,6 +116,38 @@ struct PinnedRevisionsTests {
         #expect(try pins(fileSystem) == [PackageIdentity("ws"): "from-workspace"])
     }
 
+    @Test("with several workspaces the one named like the project wins")
+    func workspaceNamedLikeProjectWins() throws {
+        let fileSystem = try tree([
+            "Aaa.xcworkspace" + tail: resolved("a", "https://h/o/kit", "from-other"),
+            "App.xcworkspace" + tail: resolved("a", "https://h/o/kit", "from-app"),
+            "App.xcodeproj/project.pbxproj": "x",
+        ])
+        #expect(try pins(fileSystem) == [PackageIdentity("kit"): "from-app"])
+    }
+
+    @Test("with several unrelated workspaces a package pinned differently gets no pin")
+    func conflictingWorkspacesDropThePin() throws {
+        let both = """
+            {"pins":[{"identity":"a","kind":"remoteSourceControl","location":"https://h/o/same","state":{"revision":"r1"}},\
+            {"identity":"b","kind":"remoteSourceControl","location":"https://h/o/diff","state":{"revision":"REV"}}],"version":3}
+            """
+        let fileSystem = try tree([
+            "One.xcworkspace" + tail: both,
+            "Two.xcworkspace" + tail: both.replacingOccurrences(of: "REV", with: "other"),
+        ])
+        #expect(try pins(fileSystem) == [PackageIdentity("same"): "r1"])
+    }
+
+    @Test("a workspace without a file is not a candidate and the named one is not required")
+    func workspaceWithoutFileIsSkipped() throws {
+        let fileSystem = try tree([
+            "Aaa.xcworkspace/contents.xcworkspacedata": "x",
+            "Zzz.xcworkspace" + tail: resolved("a", "https://h/o/kit", "from-zzz"),
+        ])
+        #expect(try pins(fileSystem) == [PackageIdentity("kit"): "from-zzz"])
+    }
+
     @Test("a project file wins over the root file")
     func projectBeforeRoot() throws {
         let fileSystem = try tree([

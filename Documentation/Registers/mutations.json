@@ -1422,5 +1422,21 @@
     "replace": "",
     "test": "appProductsAreNotOtherProducts",
     "slice": "review-fix"
+  },
+  {
+    "id": "pins-named-workspace-preferred",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "if named.count == 1 { workspaces = named }",
+    "replace": "if false { workspaces = named }",
+    "test": "workspaceNamedLikeProjectWins",
+    "slice": "review-fix"
+  },
+  {
+    "id": "pins-conflict-dropped",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "where revisions.count == 1 {",
+    "replace": "where revisions.count >= 1 {",
+    "test": "conflictingWorkspacesDropThePin",
+    "slice": "review-fix"
   }
 ]

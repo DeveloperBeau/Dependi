@@ -36,6 +36,12 @@
 - **Finding:** One registry pin made every archive fail, even when no product linked it.
 - **Rule:** The revision is optional in the decoder. A registry pin is dropped and any other pin without a revision still fails.
 
+## More than one workspace can hold a Package.resolved
+
+- **Trap:** The first workspace by name won. A file of an unrelated workspace made a correct checkout look like a revision mismatch.
+- **Finding:** Two workspaces in one folder can pin one package to two revisions.
+- **Rule:** Prefer the workspace named like the project. Otherwise read every file and give no pin to a package that they disagree on.
+
 ## Mutation results
 
 The 9 entries owned by this slice are all killed. Each one names the test that fails. See `Documentation/Registers/mutations.md`.

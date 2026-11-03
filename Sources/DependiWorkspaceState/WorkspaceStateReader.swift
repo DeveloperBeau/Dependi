@@ -87,22 +87,53 @@ public struct WorkspaceStateReader: DependencySourceReading {
         return result
     }
 
-    /// Returns the revision of each pin of the first `Package.resolved` file that is found.
+    /// Returns the revision of each pin of the `Package.resolved` file that belongs to the project.
+    ///
+    /// Workspace files win over project files, and project files win over the root file. When
+    /// several workspaces have a file, the one named like an `.xcodeproj` in the folder wins.
+    /// When that does not decide, every file is read and a package pinned differently in them gets
+    /// no pin, so a file of another workspace never causes a false mismatch.
     public func pinnedRevisions(projectDirectory: String) throws(DomainError) -> [PackageIdentity:
         String]
     {
         let base = Self.trimmingTrailingSlashes(projectDirectory)
         let names = try directories.topLevelNames(in: projectDirectory)
         let tail = "/xcshareddata/swiftpm/Package.resolved"
-        var candidates: [String] = []
-        for name in names where name.hasSuffix(".xcworkspace") {
-            candidates.append(base + "/" + name + tail)
+        let projectNames = Set(
+            names.filter { $0.hasSuffix(".xcodeproj") }.map {
+                String($0.dropLast(".xcodeproj".count))
+            })
+        var workspaces = names.filter { $0.hasSuffix(".xcworkspace") }
+            .map { (name: $0, path: base + "/" + $0 + tail) }
+            .filter { files.exists(at: $0.path) }
+        if workspaces.count > 1 {
+            let named = workspaces.filter {
+                projectNames.contains(String($0.name.dropLast(".xcworkspace".count)))
+            }
+            if named.count == 1 { workspaces = named }
         }
-        for name in names where name.hasSuffix(".xcodeproj") {
-            candidates.append(base + "/" + name + "/project.xcworkspace" + tail)
+        let projects = names.filter { $0.hasSuffix(".xcodeproj") }
+            .map { base + "/" + $0 + "/project.xcworkspace" + tail }
+            .filter { files.exists(at: $0) }
+        let root = [base + "/Package.resolved"].filter { files.exists(at: $0) }
+        let tiers = [workspaces.map(\.path), projects, root]
+        guard let chosen = tiers.first(where: { !$0.isEmpty }) else { return [:] }
+        var seen: [PackageIdentity: Set<String>] = [:]
+        for path in chosen {
+            for (identity, revision) in try pinnedRevisions(inFile: path) {
+                seen[identity, default: []].insert(revision)
+            }
         }
-        candidates.append(base + "/Package.resolved")
-        guard let path = candidates.first(where: { files.exists(at: $0) }) else { return [:] }
+        var result: [PackageIdentity: String] = [:]
+        for (identity, revisions) in seen where revisions.count == 1 {
+            result[identity] = revisions.first
+        }
+        return result
+    }
+
+    private func pinnedRevisions(inFile path: String) throws(DomainError) -> [PackageIdentity:
+        String]
+    {
         let data = try readCapped(path)
         let pins = try PackageResolvedDocument.decode(data, path: path)
         var result: [PackageIdentity: String] = [:]
