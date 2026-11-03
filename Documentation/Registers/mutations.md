@@ -149,3 +149,12 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | workspace-subpath-absolute | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `absoluteSubpathIsRefused` |
 | workspace-subpath-empty | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `emptySubpathIsRefused` |
 | workspace-subpath-traversal | 5 | `Sources/DependiWorkspaceState/WorkspaceStateReader.swift` | `subpathTraversalIsRefused` |
+| wrapper-commit-recheck-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `movedCommitFailsClean` |
+| wrapper-commit-validation-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `badCommitsAreRejected` |
+| wrapper-env-clean-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `buildEnvironmentIsClean` |
+| wrapper-lock-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `concurrentRunsBuildOnce` |
+| wrapper-pre-gate-inverted | 10 | `Sources/DependiInit/WrapperScript.swift` | `debugBuildSkipsBeforeAnyCall` |
+| wrapper-repo-override-unconditional | 10 | `Sources/DependiInit/WrapperScript.swift` | `repoOverrideNeedsTestingFlag` |
+| wrapper-sha-check-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `cacheWithWrongShaIsRebuilt` |
+| wrapper-version-compare-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `versionMismatchUsesCache` |
+| wrapper-version-validation-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `badVersionsAreRejected` |

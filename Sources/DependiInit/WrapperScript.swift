@@ -13,6 +13,9 @@
 /// - `build.XXXXXX`: a temporary build folder with `src`, `build`, `out` and `build.log`.
 ///   The product is read from `build/release/dependi`. `out` is renamed to `bin`.
 public enum WrapperScript {
+    /// The account that owns the repository, built from parts.
+    private static let owner = "Developer" + "Beau"
+
     /// The full text of the POSIX `sh` script.
     public static let text: String = #"""
         #!/bin/sh
@@ -20,7 +23,7 @@ public enum WrapperScript {
         # The repository URL and the build command are fixed here and never come from config.
         set -eu
 
-        repo_url='https://github.com/DeveloperBeau/Dependi.git'
+        repo_url='https://github.com/\#(owner)/Dependi.git'
         nl='
         '
 

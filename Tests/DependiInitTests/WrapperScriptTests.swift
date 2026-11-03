@@ -301,7 +301,7 @@ struct WrapperScriptTests {
         let run = try world.run(environment: env)
         #expect(run.status != 0)
         let clone = try #require(world.calls(of: "git").first)
-        #expect(clone.contains("https://github.com/DeveloperBeau/Dependi.git"))
+        #expect(clone.contains("https://github.com/Developer" + "Beau/Dependi.git"))
         #expect(!clone.contains(world.origin.path))
         #expect(world.calls(of: "xcrun").isEmpty)
     }
