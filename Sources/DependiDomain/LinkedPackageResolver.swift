@@ -121,17 +121,28 @@ public struct LinkedPackageResolver: Sendable {
 
         // Follow the graph.
         var reached: Set<PackageIdentity> = []
+        var buildToolOnly: Set<PackageIdentity> = []
         var seen: Set<String> = []
         var stack = roots.map { Work.product($0.0, $0.1) }
         while let work = stack.popLast() {
             switch work {
             case .product(let identity, let name):
                 guard seen.insert("p:\(identity.value)/\(name)").inserted else { continue }
-                reached.insert(identity)
                 let read = try manifest(identity)
                 guard let product = read.products.first(where: { $0.name == name }) else {
                     throw .productUnmatched(product: "\(name) in package \(identity.value)")
                 }
+                // A product made only of macro and plugin targets does not ship without build tools.
+                if !includeBuildTools, !product.targetNames.isEmpty,
+                    product.targetNames.allSatisfy({ targetName in
+                        let kind = read.targets.first(where: { $0.name == targetName })?.kind
+                        return kind == .macro || kind == .plugin
+                    })
+                {
+                    buildToolOnly.insert(identity)
+                    continue
+                }
+                reached.insert(identity)
                 for targetName in product.targetNames {
                     stack.append(.target(identity, targetName))
                 }
@@ -176,8 +187,10 @@ public struct LinkedPackageResolver: Sendable {
         let linkedPackages = shipped.compactMap { packages[$0] }.sorted {
             $0.identity < $1.identity
         }
+        // A package that only a build tool product reaches is expected, so it is not reported.
         let unreached = remotePackages.filter {
-            !reached.contains($0.identity) && !excludes.contains($0.identity.value)
+            !reached.contains($0.identity) && !buildToolOnly.contains($0.identity)
+                && !excludes.contains($0.identity.value)
         }.sorted { $0.identity < $1.identity }
         return LinkResult(linked: linkedPackages, unreached: unreached)
     }

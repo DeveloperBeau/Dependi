@@ -48,7 +48,7 @@ Names are compared exactly. An empty list means archive only.
 3. A product with a package name maps to that package. A product without one is searched in the local packages first and then in the remote ones. More than one local match fails and lists them. The remote search reads manifests in identity order and stops at the first package that has the product, so it reads as few manifests as it can.
 4. The walk goes from product to targets to dependencies and keeps a visited set, so a cycle ends.
 5. A dependency for platforms that do not apply is ignored.
-6. A macro or plugin target is visited but its dependencies are not followed, unless build tools are included.
+6. A macro or plugin target is visited but its dependencies are not followed, unless build tools are included. A product made only of macro and plugin targets does not mark its package as reached unless build tools are included. Such a package is not reported as unreached either.
 7. A `byName` dependency is a target of the same package first, then a product of a declared dependency. A product dependency whose package name is not a package identity, such as a manifest name, is searched the same way.
 8. Each manifest is read once for a run.
 9. A product of an excluded package is still followed, so its dependencies ship. Only the excluded package itself is left out.

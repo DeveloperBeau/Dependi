@@ -1358,5 +1358,37 @@
     "replace": "remotePackages",
     "test": "remoteSearchStopsAtFirstMatch",
     "slice": "review-fix"
+  },
+  {
+    "id": "resolver-plugin-product-gate",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if !includeBuildTools, !product.targetNames.isEmpty,",
+    "replace": "if false, !product.targetNames.isEmpty,",
+    "test": "pluginProductIsNotShipped",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-plugin-product-kinds",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "return kind == .macro || kind == .plugin",
+    "replace": "return kind == .macro",
+    "test": "pluginProductIsNotShipped",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-mixed-product-all",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "product.targetNames.allSatisfy({ targetName in",
+    "replace": "product.targetNames.contains(where: { targetName in",
+    "test": "mixedProductShips",
+    "slice": "review-fix"
+  },
+  {
+    "id": "resolver-plugin-only-reported",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "!reached.contains($0.identity) && !buildToolOnly.contains($0.identity)",
+    "replace": "!reached.contains($0.identity)",
+    "test": "pluginProductIsNotShipped",
+    "slice": "review-fix"
   }
 ]

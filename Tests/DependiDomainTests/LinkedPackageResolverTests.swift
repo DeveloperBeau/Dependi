@@ -95,6 +95,56 @@ struct LinkedPackageResolverTests {
         #expect(names(result.unreached) == ["docc"])
     }
 
+    private func pluginPackageManifest() -> PackageManifest {
+        PackageManifest(
+            products: [
+                ManifestProduct(name: "Lint", targetNames: ["LintPlugin"]),
+                ManifestProduct(name: "Runtime", targetNames: ["Runtime"]),
+                ManifestProduct(name: "Mixed", targetNames: ["LintPlugin", "Runtime"]),
+            ],
+            targets: [
+                ManifestTarget(name: "LintPlugin", kind: .plugin, dependencies: []),
+                ManifestTarget(name: "Runtime", kind: .regular, dependencies: []),
+            ], declaredDependencies: [])
+    }
+
+    @Test("a package that only a plugin product reaches does not ship and is not reported")
+    func pluginProductIsNotShipped() throws {
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Lint", packageName: "tools")],
+            remote: [remote("tools")], manifests: ["/checkouts/tools": pluginPackageManifest()])
+        #expect(result.linked.isEmpty)
+        #expect(result.unreached.isEmpty)
+    }
+
+    @Test("a plugin product ships when build tools are included")
+    func pluginProductShipsWithBuildTools() throws {
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Lint", packageName: "tools")],
+            remote: [remote("tools")], manifests: ["/checkouts/tools": pluginPackageManifest()],
+            buildTools: true)
+        #expect(names(result.linked) == ["tools"])
+    }
+
+    @Test("a package ships when a library product of it is linked beside its plugin product")
+    func libraryBesidePluginShips() throws {
+        let (result, _) = try resolve(
+            linked: [
+                ProductReference(productName: "Lint", packageName: "tools"),
+                ProductReference(productName: "Runtime", packageName: "tools"),
+            ], remote: [remote("tools")],
+            manifests: ["/checkouts/tools": pluginPackageManifest()])
+        #expect(names(result.linked) == ["tools"])
+    }
+
+    @Test("a product of a plugin target and a library target still ships")
+    func mixedProductShips() throws {
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Mixed", packageName: "tools")],
+            remote: [remote("tools")], manifests: ["/checkouts/tools": pluginPackageManifest()])
+        #expect(names(result.linked) == ["tools"])
+    }
+
     @Test("a macro target's dependencies are followed only when build tools are included")
     func macroDependencies() throws {
         let macro = ManifestTarget(
