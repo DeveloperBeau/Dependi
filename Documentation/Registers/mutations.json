@@ -931,7 +931,7 @@
     "id": "gen-local-packages",
     "slice": "9a",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "where !knownPaths.contains(path) {",
+    "search": "where !knownPaths.contains(realPathOrSame(path)) {",
     "replace": "where false {",
     "test": "localPackageFromProject"
   },
