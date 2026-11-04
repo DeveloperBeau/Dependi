@@ -24,11 +24,35 @@
 - **Finding:** The stub `git` unsets `DEVELOPER_DIR` and `SDKROOT` before it calls the real `git`.
 - **Rule:** Only the build step gets the allowed variables. Other tools run with what the caller gave.
 
-## A mutation of the lock needs the second process to start early
+## A lock test needs a handshake, not a delay
 
-- **Trap:** Two runs that start one after another cannot show a missing lock.
-- **Finding:** The stub `xcrun` sleeps one second, so the second process arrives during the build.
-- **Rule:** Count the `xcrun` calls. One build means the lock and the second check work.
+- **Trap:** A stub that slept one second let the test pass when the second script started late, even with the lock removed.
+- **Finding:** The stub now holds the build until the test creates a file. The test proves the second script is in the wait loop by finding its `sleep` child, then releases the build.
+- **Rule:** Count the `xcrun` calls. One build means the lock and the second check work. Order the events with files, never with sleeps.
+
+## A bare directory lock cannot name its owner
+
+- **Trap:** A lock folder removed after ten minutes lets two waiters both reclaim it, and a slow build then removes a lock that another run took.
+- **Finding:** The lock is a symlink whose target is the owner's process id. It is made in one step. Release checks the target. A stale lock is renamed away before it is removed. A dead owner is reclaimed at once.
+- **Rule:** Record the owner in the lock itself, remove only your own lock, and reclaim by rename and check.
+
+## A version string alone does not pin a build
+
+- **Trap:** The project copy was accepted when `VERSION` equalled the config version. A new pinned commit with the same version kept running the old binary.
+- **Finding:** `init` now writes `<version>-<commit>` and the wrapper compares the same string.
+- **Rule:** Compare every part of the pin, not a label that people can leave unchanged.
+
+## A digest next to the file proves nothing about who wrote it
+
+- **Trap:** `dependi.sha256` is in the same folder as the binary. A writer plants both.
+- **Finding:** Only folder ownership and mode keep a planted pair out. The override of the cache folder was open in production, so any caller could point the script at a folder it controlled.
+- **Rule:** Treat the cache folder as the trust boundary. Make it private, refuse a folder that is not, and keep test overrides behind the test flag.
+
+## Git reads the caller's environment and the user's config
+
+- **Trap:** An inherited `GIT_DIR` from a git hook makes `git checkout` act on another repository. `insteadOf`, `core.hooksPath` and `init.templateDir` in the user config change a clone.
+- **Finding:** A test with a hostile `GIT_DIR`, a `.gitconfig` that redirects the origin and a decoy `shasum` first on `PATH` shows each effect.
+- **Rule:** Run git under `env -i` with a fixed `PATH`, an empty `HOME`, no system or global config, no hooks and no template. Fix `PATH` for the whole script.
 
 ## Mutation results
 

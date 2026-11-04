@@ -1,10 +1,10 @@
-import DependiPackageGraph
+@testable import DependiPackageGraph
 import DependiDomain
 import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Package graph process and cache")
+@Suite("Package graph process and cache", .timeLimit(.minutes(5)))
 struct PackageGraphProcessAndCacheTests {
     private let log = try! GraphTestSupport.fixture("swift-log")
 
@@ -135,6 +135,94 @@ struct PackageGraphProcessAndCacheTests {
         _ = try graph.manifest(atPackagePath: GraphTestSupport.packagePath)
         _ = try graph.manifest(atPackagePath: GraphTestSupport.packagePath)
         #expect(runner.requests.count == 2)
+    }
+
+    // MARK: Child output in the build log
+
+    @Test("control characters and escape sequences in child errors never reach the message")
+    func childErrorIsPrintable() throws {
+        let files = try GraphTestSupport.files()
+        let text = "\u{1B}[31merror\u{1B}[0m: bad\u{07}\r\nline two\ttab\u{7F}\u{85}end\0"
+        let failure = ProcessOutput(
+            exitStatus: 1, standardOutput: Data(), standardError: Data(text.utf8))
+        let runner = FakeProcessRunner(results: [.success(failure)])
+        #expect(
+            throws: DomainError.processFailed(
+                command: "swift package dump-package",
+                reason:
+                    "exit status 1 for the package at /checkouts/kit:  [31merror [0m: bad  \nline two\ttab  end "
+            )
+        ) { try reader(files, runner).manifest(atPackagePath: GraphTestSupport.packagePath) }
+    }
+
+    @Test("plain text, newlines, tabs and non-ASCII letters stay as they are")
+    func printableTextIsKept() {
+        let text = "error: caf\u{E9} \u{4E2D}\n\tat line 3"
+        #expect(PackageGraphReader.printable(Data(text.utf8)) == text)
+    }
+
+    @Test("bytes that are not UTF-8 become replacement characters and no control byte survives")
+    func invalidBytesAreReplaced() {
+        let result = PackageGraphReader.printable(Data([0x41, 0xFF, 0x1B, 0x42]))
+        #expect(result == "A\u{FFFD} B")
+    }
+
+    // MARK: Leftovers in the cache folder
+
+    private static let uuid = "0E4C1B6A-5D3F-4B7E-9A21-6C8D2F1E3A45"
+    private static let cache = "/cache/dependi/manifests"
+
+    @Test("an old temporary file in the cache folder is removed when the cache is written")
+    func staleTemporaryFilesAreSwept() throws {
+        let files = try GraphTestSupport.files()
+        try files.addDirectory(at: "/checkouts/other")
+        try files.addFile(at: "/checkouts/other/Package.swift", contents: Data("// o".utf8))
+        let graph = reader(files, runs(2))
+        _ = try graph.manifest(atPackagePath: "/checkouts/kit")
+        let old = "\(Self.cache)/abc.json.tmp-\(Self.uuid)"
+        let fresh = "\(Self.cache)/def.json.tmp-\(Self.uuid)"
+        let unknownAge = "\(Self.cache)/ghi.json.tmp-\(Self.uuid)"
+        let foreignOld = "\(Self.cache)/notes.txt"
+        let notUUID = "\(Self.cache)/jkl.json.tmp-123"
+        for path in [old, fresh, unknownAge, foreignOld, notUUID] {
+            try files.addFile(at: path, contents: Data("x".utf8))
+        }
+        let before = GraphTestSupport.cutoff
+        files.setModificationDate(before.addingTimeInterval(-1), at: old)
+        files.setModificationDate(before.addingTimeInterval(1), at: fresh)
+        files.setModificationDate(before.addingTimeInterval(-1), at: foreignOld)
+        files.setModificationDate(before.addingTimeInterval(-1), at: notUUID)
+        _ = try graph.manifest(atPackagePath: "/checkouts/other")
+        #expect(!files.exists(at: old))
+        #expect(files.exists(at: fresh))
+        #expect(files.exists(at: unknownAge))
+        #expect(files.exists(at: foreignOld))
+        #expect(files.exists(at: notUUID))
+    }
+
+    @Test("a cache hit does not touch the cache folder")
+    func cacheHitSweepsNothing() throws {
+        let files = try GraphTestSupport.files()
+        let graph = reader(files, runs(1))
+        _ = try graph.manifest(atPackagePath: "/checkouts/kit")
+        let old = "\(Self.cache)/abc.json.tmp-\(Self.uuid)"
+        try files.addFile(at: old, contents: Data("x".utf8))
+        files.setModificationDate(GraphTestSupport.cutoff.addingTimeInterval(-1), at: old)
+        _ = try graph.manifest(atPackagePath: "/checkouts/kit")
+        #expect(files.exists(at: old))
+    }
+
+    @Test("a cache that cannot be swept or written still returns the manifest")
+    func unwritableCacheStillReads() throws {
+        let files = try GraphTestSupport.files()
+        try files.addDirectory(at: Self.cache)
+        let old = "\(Self.cache)/abc.json.tmp-\(Self.uuid)"
+        try files.addFile(at: old, contents: Data("x".utf8))
+        files.setModificationDate(GraphTestSupport.cutoff.addingTimeInterval(-1), at: old)
+        files.markReadOnly("/cache")
+        let manifest = try reader(files, runs(1)).manifest(atPackagePath: "/checkouts/kit")
+        #expect(!manifest.products.isEmpty)
+        #expect(files.exists(at: old))
     }
 
     // MARK: Cache invalidation

@@ -41,6 +41,20 @@ struct MiniPackage {
             @Test func brokenBaseline() {
                 #expect(unusedValue() == 0)
             }
+
+            @Test func evenNumbersAreEvenToo() {
+                #expect(isEven(0))
+            }
+
+            @Test func sharedName() {
+                #expect(isEven(2))
+            }
+        }
+
+        @Suite struct MiniOtherTests {
+            @Test func sharedName() {
+                #expect(Bool(true))
+            }
         }
 
         """

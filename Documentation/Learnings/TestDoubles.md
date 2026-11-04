@@ -18,6 +18,12 @@
 - **Finding:** The architecture test flagged 23 witnesses on its first run over the doubles.
 - **Rule:** Each witness gets a one-line summary. Tooling is the only reliable way to keep this up.
 
+## A double must forget what the real file system forgets
+
+- **Trap:** The double kept the executable mark when a file was rewritten, moved or removed. The disk writes a new file and renames it, so the mark is gone.
+- **Finding:** The shared executable rules failed for the double until it dropped the mark on write, removal and replacement, and carried it on a move.
+- **Rule:** Put every state flag of a double under the shared behavior suite, so the double and the disk are held to one answer.
+
 ## Mutation results
 
 | Mutation | Test that failed |

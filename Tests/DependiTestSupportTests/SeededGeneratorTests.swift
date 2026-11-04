@@ -1,7 +1,7 @@
 import TestHelpers
 import Testing
 
-@Suite("Seeded generator")
+@Suite("Seeded generator", .timeLimit(.minutes(1)))
 struct SeededGeneratorTests {
     @Test("the default seed gives these first values, computed by hand with the SplitMix64 steps")
     func defaultSeedFirstValues() {

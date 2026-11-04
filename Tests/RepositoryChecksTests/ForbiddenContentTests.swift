@@ -2,7 +2,7 @@ import Foundation
 import Testing
 import TestHelpers
 
-@Suite("Forbidden content in repository files")
+@Suite("Forbidden content in repository files", .timeLimit(.minutes(5)))
 struct ForbiddenContentTests {
     private func makeTemporaryTree(files: [String: String]) throws -> URL {
         let root = FileManager.default.temporaryDirectory

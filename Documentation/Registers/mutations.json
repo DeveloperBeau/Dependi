@@ -5,7 +5,8 @@
     "file": "Sources/DependiEntities/ToolConfiguration.swift",
     "search": "throw EntityError.unknownConfigurationKey(first)",
     "replace": "_ = first",
-    "test": "unknownKeyFailsNamingTheKey"
+    "test": "unknownKeyFailsNamingTheKey",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "config-mistyped-key",
@@ -13,7 +14,8 @@
     "file": "Sources/DependiEntities/ToolConfiguration.swift",
     "search": "!Self.knownKeys.contains($0)",
     "replace": "$0 == \"\"",
-    "test": "mistypedKeyFails"
+    "test": "mistypedKeyFails",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "config-version-pattern",
@@ -21,7 +23,8 @@
     "file": "Sources/DependiEntities/ToolConfiguration.swift",
     "search": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
     "replace": "^[0-9.]+$",
-    "test": "badVersionsFail"
+    "test": "badVersionsFail",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "config-commit-case",
@@ -29,7 +32,8 @@
     "file": "Sources/DependiEntities/ToolConfiguration.swift",
     "search": "^[0-9a-f]{40}$",
     "replace": "^[0-9a-fA-F]{40}$",
-    "test": "badCommitsFail"
+    "test": "badCommitsFail",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "config-default-gate",
@@ -37,7 +41,8 @@
     "file": "Sources/DependiEntities/ToolConfiguration.swift",
     "search": "defaultGateConfigurations = [\"Release\"]",
     "replace": "defaultGateConfigurations = [String]()",
-    "test": "emptyObjectGivesDefaults"
+    "test": "emptyObjectGivesDefaults",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "license-name-separator",
@@ -45,7 +50,8 @@
     "file": "Sources/DependiEntities/LicenseDocument.swift",
     "search": "!hasSeparator, ",
     "replace": "",
-    "test": "unsafeNamesAreRejected"
+    "test": "unsafeNamesAreRejected",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "license-name-dot-names",
@@ -53,23 +59,26 @@
     "file": "Sources/DependiEntities/LicenseDocument.swift",
     "search": "fileName != \"..\", ",
     "replace": "",
-    "test": "unsafeNamesAreRejected"
+    "test": "unsafeNamesAreRejected",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-limit-plus-one",
     "slice": "2a",
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
-    "search": "data.prefix(limit + 1)",
-    "replace": "data.prefix(limit)",
-    "test": "doublePassesBehaviorSuite"
+    "search": "max(limit, 0) + 1 : limit",
+    "replace": "max(limit, 0) : limit",
+    "test": "doublePassesBehaviorSuite",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-link-hop-limit",
     "slice": "2a",
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
-    "search": "steps > 40",
-    "replace": "steps > 20",
-    "test": "loopsAndChains"
+    "search": "maximumLinkHops = 32",
+    "replace": "maximumLinkHops = 20",
+    "test": "loopsAndChains",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-readonly-component",
@@ -77,7 +86,8 @@
     "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
     "search": "path.hasPrefix(readOnly + \"/\")",
     "replace": "path.hasPrefix(readOnly)",
-    "test": "readOnlyIsMatchedByComponent"
+    "test": "readOnlyIsMatchedByComponent",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-archive-runs",
@@ -85,7 +95,8 @@
     "file": "Sources/DependiDomain/ReleaseGate.swift",
     "search": "if isArchive { return .run(reason: \"archive build\") }",
     "replace": "",
-    "test": "archiveRuns"
+    "test": "archiveRuns",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-debug-skips",
@@ -93,7 +104,8 @@
     "file": "Sources/DependiDomain/ReleaseGate.swift",
     "search": "            return .skip(\n                reason: \"configuration",
     "replace": "            return .run(\n                reason: \"configuration",
-    "test": "otherConfigurationsSkip"
+    "test": "otherConfigurationsSkip",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-config-error-archive",
@@ -101,7 +113,8 @@
     "file": "Sources/DependiDomain/ReleaseGate.swift",
     "search": "if isArchive { throw error }",
     "replace": "",
-    "test": "unreadableConfigurationOnArchiveFails"
+    "test": "unreadableConfigurationOnArchiveFails",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-config-error-build-skips",
@@ -109,7 +122,8 @@
     "file": "Sources/DependiDomain/ReleaseGate.swift",
     "search": "return .skip(reason: \"the configuration cannot be read: \\(error)\")",
     "replace": "throw error",
-    "test": "unreadableConfigurationOnBuildSkips"
+    "test": "unreadableConfigurationOnBuildSkips",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-missing-action",
@@ -117,7 +131,8 @@
     "file": "Sources/DependiDomain/ReleaseGate.swift",
     "search": "if insideXcode { throw .buildContextIncomplete(missing: [\"ACTION\"]) }",
     "replace": "",
-    "test": "missingAction"
+    "test": "ReleaseGateTests/missingAction()",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-case-sensitive",
@@ -125,7 +140,8 @@
     "file": "Sources/DependiDomain/ReleaseGate.swift",
     "search": "settings.gateConfigurations.contains(name)",
     "replace": "settings.gateConfigurations.contains { $0.lowercased() == name.lowercased() }",
-    "test": "otherConfigurationsSkip"
+    "test": "otherConfigurationsSkip",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "identity-git-strip",
@@ -133,7 +149,8 @@
     "file": "Sources/DependiDomain/PackageIdentityNormalizer.swift",
     "search": "if text.lowercased().hasSuffix(\".git\") { text.removeLast(4) }",
     "replace": "",
-    "test": "formsJoin"
+    "test": "formsJoin",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "identity-lowercase",
@@ -141,7 +158,8 @@
     "file": "Sources/DependiDomain/PackageIdentityNormalizer.swift",
     "search": "return text.lowercased()",
     "replace": "return text",
-    "test": "formsJoin"
+    "test": "formsJoin",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "locator-last-anchor",
@@ -149,7 +167,8 @@
     "file": "Sources/DependiDomain/SourcePackagesLocator.swift",
     "search": "anchor = index",
     "replace": "anchor = anchor ?? index",
-    "test": "earlierBuildFolderIsIgnored"
+    "test": "earlierBuildFolderIsIgnored",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "locator-anchor-next",
@@ -157,7 +176,8 @@
     "file": "Sources/DependiDomain/SourcePackagesLocator.swift",
     "search": "parts[index + 1] == \"Products\" || parts[index + 1] == \"Intermediates.noindex\"",
     "replace": "true",
-    "test": "schemeNamedBuild"
+    "test": "schemeNamedBuild",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "license-notice-pattern",
@@ -165,7 +185,8 @@
     "file": "Sources/DependiDomain/LicenseLocator.swift",
     "search": "|unlicense|notice|copyright)",
     "replace": "|unlicense|copyright)",
-    "test": "noticeNextToLicense"
+    "test": "noticeNextToLicense",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "license-order",
@@ -173,7 +194,8 @@
     "file": "Sources/DependiDomain/LicenseLocator.swift",
     "search": "return leftKey < rightKey",
     "replace": "return false",
-    "test": "foundInFixedOrder"
+    "test": "foundInFixedOrder",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "validator-containment",
@@ -181,7 +203,8 @@
     "file": "Sources/DependiDomain/LicenseFileValidator.swift",
     "search": "guard real == realRoot || real.hasPrefix(realRoot + \"/\") else {",
     "replace": "guard true else {",
-    "test": "outsideLinkRefused"
+    "test": "outsideLinkRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "validator-component",
@@ -189,7 +212,8 @@
     "file": "Sources/DependiDomain/LicenseFileValidator.swift",
     "search": "real.hasPrefix(realRoot + \"/\")",
     "replace": "real.hasPrefix(realRoot)",
-    "test": "similarSiblingRefused"
+    "test": "similarSiblingRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "validator-size",
@@ -197,15 +221,17 @@
     "file": "Sources/DependiDomain/LicenseFileValidator.swift",
     "search": "if data.count > maximumBytes {",
     "replace": "if data.count > maximumBytes + 1 {",
-    "test": "sizeBoundary"
+    "test": "sizeBoundary",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "validator-control",
     "slice": "2b",
     "file": "Sources/DependiDomain/LicenseFileValidator.swift",
-    "search": "if scalar != \"\\t\" && scalar != \"\\n\" && scalar != \"\\r\" {",
+    "search": "if scalar != \"\\t\" && scalar != \"\\n\" && scalar != \"\\r\" && scalar != \"\\u{0C}\" {",
     "replace": "if false {",
-    "test": "controlCharactersRefused"
+    "test": "controlCharactersRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "slugger-hash-input",
@@ -213,7 +239,8 @@
     "file": "Sources/DependiDomain/OutputNameSlugger.swift",
     "search": "Data(normalizedLocation.utf8)",
     "replace": "Data(identity.value.utf8)",
-    "test": "slugMatchesHandComputedHash"
+    "test": "slugMatchesHandComputedHash",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "slugger-sanitize",
@@ -221,7 +248,8 @@
     "file": "Sources/DependiDomain/OutputNameSlugger.swift",
     "search": "allowed.contains($0) ? $0 : \"-\"",
     "replace": "$0",
-    "test": "unsafeIdentityIsReduced"
+    "test": "unsafeIdentityIsReduced",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "assembler-duplicate-identity",
@@ -229,7 +257,8 @@
     "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
     "search": "if let first = identities[candidate.identity] {",
     "replace": "if let first = identities[candidate.identity], false {",
-    "test": "duplicateIdentity"
+    "test": "AcknowledgementAssemblerTests/duplicateIdentity()",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "assembler-slug-collision",
@@ -237,7 +266,8 @@
     "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
     "search": "if let first = slugs[slug] {",
     "replace": "if let first = slugs[slug], false {",
-    "test": "slugCollision"
+    "test": "slugCollision",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "assembler-missing-license",
@@ -245,7 +275,8 @@
     "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
     "search": "if candidate.documents.isEmpty { throw .licenseMissing(package: candidate.displayName) }",
     "replace": "",
-    "test": "missingLicense"
+    "test": "AcknowledgementAssemblerTests/missingLicense()",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "assembler-sort",
@@ -253,7 +284,8 @@
     "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
     "search": "return leftKey < rightKey",
     "replace": "return false",
-    "test": "sortedWithoutCase"
+    "test": "sortedWithoutCase",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "resolver-recursion",
@@ -261,7 +293,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "stack.append(.target(identity, targetName))",
     "replace": "_ = targetName",
-    "test": "transitive"
+    "test": "transitive",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "resolver-macro",
@@ -269,7 +302,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "&& !includeBuildTools {",
     "replace": "&& !includeBuildTools && false {",
-    "test": "macroDependencies"
+    "test": "LinkedPackageResolverTests/macroDependencies()",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "resolver-platform",
@@ -277,15 +311,17 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "platformNames.isDisjoint(with: dependency.platforms)",
     "replace": "false",
-    "test": "platformConditions"
+    "test": "platformConditions",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "resolver-unmatched-product",
     "slice": "2b",
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "throw .productUnmatched(product: product.productName)",
-    "replace": "continue",
-    "test": "unmatchedProduct"
+    "replace": "return nil",
+    "test": "LinkedPackageResolverTests/unmatchedProduct()",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "resolver-exclude-unmatched",
@@ -293,7 +329,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "throw .unmatchedExclude(exclude)",
     "replace": "continue",
-    "test": "excludeMatchesNothing"
+    "test": "excludeMatchesNothing",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "resolver-ambiguous",
@@ -301,7 +338,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "if matches.count > 1 {",
     "replace": "if matches.count > 99 {",
-    "test": "localProductAmbiguous"
+    "test": "localProductAmbiguous",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "resolver-identity-conflict",
@@ -309,7 +347,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "if let existing = packages[package.identity] {",
     "replace": "if let existing = packages[package.identity], false {",
-    "test": "duplicateIdentity"
+    "test": "LinkedPackageResolverTests/duplicateIdentity()",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "loader-size-cap",
@@ -317,7 +356,8 @@
     "file": "Sources/DependiDomain/ConfigurationLoader.swift",
     "search": "if data.count > Self.maximumBytes {",
     "replace": "if false {",
-    "test": "oversizeAndFolder"
+    "test": "oversizeAndFolder",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-nofollow",
@@ -325,7 +365,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "O_RDONLY | O_NOFOLLOW | O_NONBLOCK",
     "replace": "O_RDONLY | O_NONBLOCK",
-    "test": "lastComponentLinkIsRefused"
+    "test": "lastComponentLinkIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-regular-check",
@@ -333,7 +374,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "guard (info.st_mode & S_IFMT) == S_IFREG else",
     "replace": "guard (info.st_mode & S_IFMT) != 0 else",
-    "test": "folderIsRefused"
+    "test": "folderIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-limit-plus-one",
@@ -341,7 +383,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "max(limit, 0) + 1",
     "replace": "max(limit, 0)",
-    "test": "readStopsAfterLimitPlusOne"
+    "test": "readStopsAfterLimitPlusOne",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-not-found-mapping",
@@ -349,7 +392,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "case ENOENT, ENOTDIR: throw .fileNotFound(path: path)",
     "replace": "case ENOTDIR: throw .fileNotFound(path: path)",
-    "test": "missingPathHasNoRealPath"
+    "test": "missingPathHasNoRealPath",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-loop-mapping",
@@ -357,7 +401,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "case ELOOP: throw .symlinkLoop(path: path)",
     "replace": "case ELOOP: throw .fileNotFound(path: path)",
-    "test": "loopIsReported"
+    "test": "loopIsReported",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-exists-lstat",
@@ -365,7 +410,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "return lstat(path, &info) == 0",
     "replace": "return stat(path, &info) == 0",
-    "test": "danglingLinkExists"
+    "test": "danglingLinkExists",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-sorted-listing",
@@ -373,7 +419,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "return names.sorted()",
     "replace": "return names",
-    "test": "listingIsSorted"
+    "test": "listingIsSorted",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-move-replaces",
@@ -381,7 +428,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "try removeItem(at: destination)",
     "replace": "_ = destination",
-    "test": "moveReplacesDestination"
+    "test": "moveReplacesDestination",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-remove-link-only",
@@ -389,7 +437,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "if lstat(path, &info) != 0 {",
     "replace": "if stat(path, &info) != 0 {",
-    "test": "removingLinkKeepsTarget"
+    "test": "removingLinkKeepsTarget",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-write-atomic-rename",
@@ -397,7 +446,8 @@
     "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
     "search": "failure == nil && rename(temporary, path) != 0",
     "replace": "failure == nil && rename(temporary, temporary) != 0",
-    "test": "writeIsCleanAndReplaces"
+    "test": "writeIsCleanAndReplaces",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-pipe-drain",
@@ -405,7 +455,8 @@
     "file": "Sources/DependiProcess/StreamCollector.swift",
     "search": "while !signals.isStopped {",
     "replace": "while signals.isStopped {",
-    "test": "bigOutputOnBothStreamsArrivesWithExactBytesAndChecksum"
+    "test": "bigOutputOnBothStreamsArrivesWithExactBytesAndChecksum",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-group-kill",
@@ -413,7 +464,8 @@
     "file": "Sources/DependiProcess/ProcessTree.swift",
     "search": "static func kill(root: pid_t) {",
     "replace": "static func kill(root: pid_t) { _ = Darwin.kill(root, SIGKILL); return",
-    "test": "aGrandchildHoldingStandardOutputIsKilledOnTimeout"
+    "test": "aGrandchildHoldingStandardOutputIsKilledOnTimeout",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-descendant-kill",
@@ -421,7 +473,8 @@
     "file": "Sources/DependiProcess/ProcessTree.swift",
     "search": "let known = descendants(of: root)",
     "replace": "let known = [pid_t]()",
-    "test": "aDescendantThatLeftTheProcessGroupIsKilledOnTimeout"
+    "test": "aDescendantThatLeftTheProcessGroupIsKilledOnTimeout",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-clean-environment",
@@ -429,7 +482,8 @@
     "file": "Sources/DependiProcess/SystemProcessRunner.swift",
     "search": "request.environment.map",
     "replace": "ProcessInfo.processInfo.environment.map",
-    "test": "theChildEnvironmentIsExactlyTheRequestEnvironment"
+    "test": "theChildEnvironmentIsExactlyTheRequestEnvironment",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-output-cap",
@@ -437,7 +491,8 @@
     "file": "Sources/DependiProcess/StreamCollector.swift",
     "search": "buffer.count + count > limit",
     "replace": "buffer.count + count > limit * 1000",
-    "test": "outputOverTheCapFailsAndNamesTheLimit"
+    "test": "outputOverTheCapFailsAndNamesTheLimit",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-output-cap-edge",
@@ -445,15 +500,17 @@
     "file": "Sources/DependiProcess/StreamCollector.swift",
     "search": "buffer.count + count > limit",
     "replace": "buffer.count + count >= limit",
-    "test": "outputExactlyAtTheCapIsKept"
+    "test": "outputExactlyAtTheCapIsKept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-timeout-check",
     "slice": "4",
     "file": "Sources/DependiProcess/SystemProcessRunner.swift",
-    "search": "} else if DispatchTime.now() >= deadline {",
-    "replace": "} else if false {",
-    "test": "aSlowChildIsTimedOutQuickly"
+    "search": "if now >= deadline {",
+    "replace": "if false {",
+    "test": "aSlowChildIsTimedOutQuickly",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "console-attempt-bound-high",
@@ -461,7 +518,8 @@
     "file": "Sources/DependiConsole/StandardConsole.swift",
     "search": "maximumAttempts = 3",
     "replace": "maximumAttempts = 4",
-    "test": "threeInvalidLinesFailEvenWhenAValidLineFollows"
+    "test": "threeInvalidLinesFailEvenWhenAValidLineFollows",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "console-attempt-bound-low",
@@ -469,7 +527,8 @@
     "file": "Sources/DependiConsole/StandardConsole.swift",
     "search": "maximumAttempts = 3",
     "replace": "maximumAttempts = 2",
-    "test": "twoInvalidLinesThenAValidOneStillSucceeds"
+    "test": "twoInvalidLinesThenAValidOneStillSucceeds",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-containment-prefix",
@@ -477,7 +536,8 @@
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
     "search": "let prefix = rootReal.hasSuffix(\"/\") ? rootReal : rootReal + \"/\"",
     "replace": "let prefix = rootReal",
-    "test": "siblingWithSimilarNameIsRefused"
+    "test": "siblingWithSimilarNameIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-subpath-traversal",
@@ -485,7 +545,8 @@
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
     "search": ".contains(\"..\")",
     "replace": ".contains(\"...\")",
-    "test": "subpathTraversalIsRefused"
+    "test": "subpathTraversalIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-subpath-absolute",
@@ -493,7 +554,8 @@
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
     "search": "subpath.hasPrefix(\"/\")",
     "replace": "subpath.hasPrefix(\"//\")",
-    "test": "absoluteSubpathIsRefused"
+    "test": "absoluteSubpathIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-subpath-empty",
@@ -501,7 +563,8 @@
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
     "search": "if subpath.isEmpty {",
     "replace": "if subpath == \"\\u{0}\" {",
-    "test": "emptySubpathIsRefused"
+    "test": "emptySubpathIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-identity-from-location",
@@ -509,7 +572,8 @@
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
     "search": "normalizer.identity(forLocation: location)",
     "replace": "PackageIdentity(ref.identity ?? \"\")",
-    "test": "identityFromLocation"
+    "test": "identityFromLocation",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pins-identity-from-location",
@@ -517,15 +581,17 @@
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
     "search": "normalizer.identity(forLocation: pin.location)",
     "replace": "PackageIdentity(pin.identity)",
-    "test": "pinIdentityFromLocation"
+    "test": "pinIdentityFromLocation",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pins-workspace-before-project",
     "slice": "5",
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
-    "search": "candidates.first(where:",
-    "replace": "candidates.last(where:",
-    "test": "workspaceBeforeProject"
+    "search": "let tiers = [workspaces.map(\\.path), projects, root]",
+    "replace": "let tiers = [root, projects, workspaces.map(\\.path)]",
+    "test": "workspaceBeforeProject",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-kind-file-system",
@@ -533,7 +599,8 @@
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
     "search": "ref.kind == \"fileSystem\" ||",
     "replace": "ref.kind == \"fileSystemX\" ||",
-    "test": "localPackageIsLocal"
+    "test": "localPackageIsLocal",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-kind-remote",
@@ -541,7 +608,8 @@
     "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
     "search": "ref.kind == \"remoteSourceControl\"",
     "replace": "ref.kind == \"remoteSourceControlX\"",
-    "test": "realVersion7Remote"
+    "test": "realVersion7Remote",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-test-exclusion-unit",
@@ -549,7 +617,8 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "type.hasSuffix(\"unit-test\") ||",
     "replace": "false ||",
-    "test": "testOnlyProductsAreExcluded"
+    "test": "testOnlyProductsAreExcluded",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-test-exclusion-ui",
@@ -557,7 +626,8 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "|| type.hasSuffix(\"ui-testing\")",
     "replace": "|| false",
-    "test": "uiTestProductsAreExcludedToo"
+    "test": "uiTestProductsAreExcludedToo",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-embed-following",
@@ -565,7 +635,8 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "try followEmbeds(of: target, in: model)",
     "replace": "_ = 0",
-    "test": "embeddedFrameworkIsIncluded"
+    "test": "embeddedFrameworkIsIncluded",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-dependency-following",
@@ -573,7 +644,8 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "try followDependencies(of: target, in: model)",
     "replace": "_ = 0",
-    "test": "directTargetDependency"
+    "test": "directTargetDependency",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-proxy-following",
@@ -581,7 +653,8 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "let proxyID = dependency[\"targetProxy\"] as? String,",
     "replace": "let proxyID = dependency[\"targetProxy\"] as? String, proxyID.isEmpty,",
-    "test": "proxyDependencyInSameProject"
+    "test": "proxyDependencyInSameProject",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-same-project-portal",
@@ -589,7 +662,8 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "portal == nil || portal == model.projectID",
     "replace": "portal == nil",
-    "test": "proxyDependencyInSameProject"
+    "test": "proxyDependencyInSameProject",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-cross-project-following",
@@ -597,7 +671,8 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "let portal, let other",
     "replace": "let portal, portal.isEmpty, let other",
-    "test": "crossProjectReachable"
+    "test": "crossProjectReachable",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-local-without-package",
@@ -605,7 +680,8 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "dependency[\"package\"] as? String else { return nil }",
     "replace": "dependency[\"package\"] as? String else { throw .fileUnreadable(path: \"\", reason: \"\") }",
-    "test": "localPackageProducts"
+    "test": "localPackageProducts",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-local-package-reference",
@@ -613,7 +689,8 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "if model.object(id, isa: \"XCLocalSwiftPackageReference\") != nil { return nil }",
     "replace": "if id.isEmpty { return nil }",
-    "test": "localPackageProducts"
+    "test": "localPackageProducts",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-remote-name-normalization",
@@ -621,15 +698,17 @@
     "file": "Sources/DependiProjectFile/ProductCollector.swift",
     "search": "normalizer.identity(forLocation: url).value",
     "replace": "url",
-    "test": "sameProductNameTwoPackages"
+    "test": "sameProductNameTwoPackages",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-deduplication",
     "slice": "6",
     "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
-    "search": "Set(collector.found)",
-    "replace": "collector.found",
-    "test": "sharedProductIsDeduplicated"
+    "search": "Set(products).sorted {",
+    "replace": "products.sorted {",
+    "test": "sharedProductIsDeduplicated",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-base",
@@ -637,7 +716,8 @@
     "file": "Sources/DependiProjectFile/ProjectPathMath.swift",
     "search": "base + \"/\" + relative)",
     "replace": "relative)",
-    "test": "localPackageProducts"
+    "test": "localPackageProducts",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-parent",
@@ -645,7 +725,8 @@
     "file": "Sources/DependiProjectFile/ProjectPathMath.swift",
     "search": "if component == \"..\" {",
     "replace": "if component == \"...\" {",
-    "test": "localPackageProducts"
+    "test": "localPackageProducts",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-current",
@@ -653,7 +734,8 @@
     "file": "Sources/DependiProjectFile/ProjectPathMath.swift",
     "search": "if component == \".\" { continue }",
     "replace": "if component == \"..\" { continue }",
-    "test": "localPackageProducts"
+    "test": "localPackageProducts",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-unknown-target-list",
@@ -661,7 +743,8 @@
     "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
     "search": "targets.map(\\.name).sorted()",
     "replace": "[String]()",
-    "test": "unknownTarget"
+    "test": "unknownTarget",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-size-cap",
@@ -669,7 +752,8 @@
     "file": "Sources/DependiProjectFile/ProjectFileLoader.swift",
     "search": "data.count <= sizeLimit",
     "replace": "data.count <= sizeLimit * 2",
-    "test": "oversizeFile"
+    "test": "oversizeFile",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-catalyst",
@@ -677,7 +761,8 @@
     "file": "Sources/DependiProjectFile/SupportedPlatformDeriver.swift",
     "search": "values(\"SUPPORTS_MACCATALYST\").contains(\"yes\")",
     "replace": "values(\"SUPPORTS_MACCATALYST\").contains(\"no\")",
-    "test": "catalystDisabled"
+    "test": "catalystDisabled",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-sdk-auto",
@@ -685,7 +770,8 @@
     "file": "Sources/DependiProjectFile/SupportedPlatformDeriver.swift",
     "search": "where sdk != \"auto\"",
     "replace": "where sdk != \"automatic\"",
-    "test": "autoSDKRoot"
+    "test": "autoSDKRoot",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-project-fallback",
@@ -693,7 +779,8 @@
     "file": "Sources/DependiProjectFile/SupportedPlatformDeriver.swift",
     "search": "fromTarget.isEmpty ? tokens(key, in: projectSettings) : fromTarget",
     "replace": "fromTarget",
-    "test": "projectLevelFallback"
+    "test": "projectLevelFallback",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-key-versioned-manifests",
@@ -701,7 +788,8 @@
     "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
     "search": "^Package(@swift-",
     "replace": "^Package(@swiftx-",
-    "test": "versionedManifestInvalidates"
+    "test": "versionedManifestInvalidates",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-key-environment",
@@ -709,7 +797,8 @@
     "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
     "search": "environmentHash(),",
     "replace": "\"\",",
-    "test": "toolchainAndEnvironmentInvalidate"
+    "test": "toolchainAndEnvironmentInvalidate",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-key-toolchain",
@@ -717,7 +806,8 @@
     "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
     "search": "settings.toolchainVersion,",
     "replace": "\"\",",
-    "test": "toolchainAndEnvironmentInvalidate"
+    "test": "toolchainAndEnvironmentInvalidate",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-key-stored",
@@ -725,7 +815,8 @@
     "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
     "search": "entry.key == key",
     "replace": "true",
-    "test": "wrongKeyValidDumpIsAMiss"
+    "test": "wrongKeyValidDumpIsAMiss",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-remote-tier",
@@ -733,7 +824,8 @@
     "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
     "search": "return real.hasPrefix(root + \"/\")",
     "replace": "return false",
-    "test": "cacheTiers"
+    "test": "cacheTiers",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-exit-status",
@@ -741,7 +833,8 @@
     "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
     "search": "guard result.exitStatus == 0 else {",
     "replace": "guard true else {",
-    "test": "nonZeroExit"
+    "test": "nonZeroExit",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-scratch-path",
@@ -749,7 +842,8 @@
     "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
     "search": "\"--scratch-path\", scratch, ",
     "replace": "",
-    "test": "requestShape"
+    "test": "requestShape",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-stderr-snippet",
@@ -757,7 +851,8 @@
     "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
     "search": "standardError.prefix(300)",
     "replace": "standardError.prefix(0)",
-    "test": "nonZeroExit"
+    "test": "nonZeroExit",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-product-condition-index",
@@ -765,7 +860,8 @@
     "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
     "search": "values.count > 3 ? values[3] : nil",
     "replace": "values.count > 2 ? values[2] : nil",
-    "test": "syntheticPackage"
+    "test": "syntheticPackage",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-declared-lowercase",
@@ -773,7 +869,8 @@
     "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
     "search": "identities.append(identity.lowercased())",
     "replace": "identities.append(identity)",
-    "test": "unknownDependencyShapeIgnored"
+    "test": "unknownDependencyShapeIgnored",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "settings-cleanup-escapes-folder",
@@ -781,7 +878,8 @@
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
     "search": "!name.contains(\"/\")",
     "replace": "true",
-    "test": "manifestEntriesThatEscapeTheFolderAreNeverDeleted"
+    "test": "manifestEntriesThatEscapeTheFolderAreNeverDeleted",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "settings-cleanup-removes-kept",
@@ -789,15 +887,17 @@
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
     "search": "previous.subtracting(newNames).sorted()",
     "replace": "previous.sorted()",
-    "test": "removedPackageRemovesItsPlistAndManifestEntry"
+    "test": "removedPackageRemovesItsPlistAndManifestEntry",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "settings-unknown-file-refusal",
     "slice": "8",
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
-    "search": "where name != Self.manifestName",
-    "replace": "where false",
-    "test": "unknownFileInFolderFailsBeforeAnyWrite"
+    "search": "where !Self.isTolerated(name) && !previous.contains(name)",
+    "replace": "where false && !previous.contains(name)",
+    "test": "unknownFileInFolderFailsBeforeAnyWrite",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "settings-write-only-when-different",
@@ -805,7 +905,8 @@
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
     "search": "current == data {",
     "replace": "current == data, false {",
-    "test": "secondIdenticalRunWritesNothing"
+    "test": "secondIdenticalRunWritesNothing",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "settings-slug-replaced-by-raw-name",
@@ -813,7 +914,8 @@
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
     "search": "children.append((name: \"\\(slug).plist\"",
     "replace": "children.append((name: \"\\(acknowledgement.displayName).plist\"",
-    "test": "oddNamesStayInsideTheFolderAndAppearOnlyAsText"
+    "test": "oddNamesStayInsideTheFolderAndAppearOnlyAsText",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "settings-manifest-not-updated",
@@ -821,7 +923,8 @@
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
     "search": "Self.manifestText(newNames)",
     "replace": "Self.manifestText(previous.union(newNames))",
-    "test": "removedPackageRemovesItsPlistAndManifestEntry"
+    "test": "removedPackageRemovesItsPlistAndManifestEntry",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "settings-read-back-removed",
@@ -829,7 +932,8 @@
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
     "search": "try verify(plist, at: path)",
     "replace": "_ = plist",
-    "test": "readBackMismatchFailsWithFileUnwritable"
+    "test": "readBackMismatchFailsWithFileUnwritable",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-required-flag",
@@ -837,7 +941,8 @@
     "file": "Sources/DependiCommandLine/CommandLineParser.swift",
     "search": "guard let projectPath else {",
     "replace": "guard let projectPath = projectPath ?? Optional(\"\") else {",
-    "test": "missingRequired"
+    "test": "missingRequired",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-duplicate-flag",
@@ -845,7 +950,8 @@
     "file": "Sources/DependiCommandLine/CommandLineParser.swift",
     "search": "if projectPath != nil {",
     "replace": "if false {",
-    "test": "duplicates"
+    "test": "duplicates",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-equals-form",
@@ -853,7 +959,8 @@
     "file": "Sources/DependiCommandLine/CommandLineParser.swift",
     "search": "if token.hasPrefix(\"-\") {",
     "replace": "if token.hasPrefix(\"--project=\") { projectPath = String(token.dropFirst(10)); index += 1; continue }\n                if token.hasPrefix(\"-\") {",
-    "test": "unknownFlags"
+    "test": "unknownFlags",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-dry-run-ignored",
@@ -861,7 +968,8 @@
     "file": "Sources/DependiCommandLine/CommandLineParser.swift",
     "search": "isDryRun = true",
     "replace": "isDryRun = false",
-    "test": "tableRowsAreAccepted"
+    "test": "tableRowsAreAccepted",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-dashed-value",
@@ -869,7 +977,8 @@
     "file": "Sources/DependiCommandLine/CommandLineParser.swift",
     "search": "!rest[valueIndex].hasPrefix(\"--\")",
     "replace": "true",
-    "test": "missingValues"
+    "test": "missingValues",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-help-alias",
@@ -877,7 +986,8 @@
     "file": "Sources/DependiCommandLine/CommandLineParser.swift",
     "search": "case \"help\", \"--help\", \"-h\":",
     "replace": "case \"help\", \"--help\":",
-    "test": "tableRowsAreAccepted"
+    "test": "tableRowsAreAccepted",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-sandbox-check",
@@ -885,7 +995,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "if context.isScriptSandboxEnabled == true { throw .scriptSandboxEnabled }",
     "replace": "",
-    "test": "sandboxOnFails"
+    "test": "sandboxOnFails",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-revision-check",
@@ -893,7 +1004,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "wanted != actual",
     "replace": "false",
-    "test": "revisionMismatch"
+    "test": "revisionMismatch",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-unreached",
@@ -901,7 +1013,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "if !result.unreached.isEmpty && !settings.allowUnreached {",
     "replace": "if false {",
-    "test": "unreachedPackages"
+    "test": "unreachedPackages",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-permission-mapping",
@@ -909,7 +1022,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "reason.lowercased().contains(\"not permitted\")",
     "replace": "false",
-    "test": "permissionErrorMeansSandbox"
+    "test": "permissionErrorMeansSandbox",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-outside",
@@ -917,7 +1031,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "catch .licenseOutsideCheckout {",
     "replace": "catch .licenseMissing {",
-    "test": "manualEntryRefused"
+    "test": "manualEntryRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-absolute",
@@ -925,7 +1040,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "!path.hasPrefix(\"/\"), ",
     "replace": "",
-    "test": "manualEntryRefused"
+    "test": "manualEntryRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-local-packages",
@@ -933,7 +1049,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "where !knownPaths.contains(realPathOrSame(path)) {",
     "replace": "where false {",
-    "test": "localPackageFromProject"
+    "test": "localPackageFromProject",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-debug-skip",
@@ -941,7 +1058,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "if case .skip(let reason) = decision {",
     "replace": "if case .skip(let reason) = decision, reason.isEmpty {",
-    "test": "debugSkips"
+    "test": "GenerateFeatureTests/debugSkips()",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-platform-ios",
@@ -949,7 +1067,8 @@
     "file": "Sources/DependiGenerate/PlatformNames.swift",
     "search": "return [\"ios\"]",
     "replace": "return nil",
-    "test": "platformConditionUsed"
+    "test": "platformConditionUsed",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-output-relative",
@@ -957,7 +1076,8 @@
     "file": "Sources/DependiGenerate/OutputLocation.swift",
     "search": "&& !path.hasPrefix(\"/\")",
     "replace": "",
-    "test": "badOutputPath"
+    "test": "badOutputPath",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-output-dotdot",
@@ -965,7 +1085,8 @@
     "file": "Sources/DependiGenerate/OutputLocation.swift",
     "search": ".contains(\"..\")",
     "replace": ".contains(\"...\")",
-    "test": "badOutputPath"
+    "test": "badOutputPath",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-output-absolute-build",
@@ -973,7 +1094,8 @@
     "file": "Sources/DependiGenerate/OutputLocation.swift",
     "search": "guard targetBuildDirectory.hasPrefix(\"/\") else {",
     "replace": "guard true else {",
-    "test": "badProductLocation"
+    "test": "badProductLocation",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-sandbox-yes",
@@ -981,7 +1103,8 @@
     "file": "Sources/DependiGenerate/BuildContextReader.swift",
     "search": "$0 == \"YES\"",
     "replace": "$0 != \"NO\"",
-    "test": "sandboxValues"
+    "test": "sandboxValues",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-empty-variable",
@@ -989,15 +1112,17 @@
     "file": "Sources/DependiGenerate/BuildContextReader.swift",
     "search": ", !text.isEmpty",
     "replace": "",
-    "test": "missingAndEmptyAreNil"
+    "test": "missingAndEmptyAreNil",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "comp-usage-exit-code",
     "slice": "9b",
     "file": "Sources/DependiComposition/DependiApplication.swift",
-    "search": "return Self.usageExitCode",
-    "replace": "return 0",
-    "test": "commandLineErrors"
+    "search": "public static let usageExitCode: Int32 = 64",
+    "replace": "public static let usageExitCode: Int32 = 1",
+    "test": "commandLineErrors",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "comp-version-text",
@@ -1005,7 +1130,8 @@
     "file": "Sources/DependiComposition/DependiApplication.swift",
     "search": "\"dependi \\(DependiVersion.current)\"",
     "replace": "\"dependi\"",
-    "test": "versionAndHelp"
+    "test": "versionAndHelp",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "comp-clean-environment",
@@ -1013,7 +1139,8 @@
     "file": "Sources/DependiComposition/LazyManifestReader.swift",
     "search": "\"PATH\": \"/usr/bin:/bin\"",
     "replace": "\"PATH\": \"/usr/bin:/bin\", \"SDKROOT\": environment[\"SDKROOT\"] ?? \"\"",
-    "test": "processRequestsAreClean"
+    "test": "processRequestsAreClean",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "comp-toolchain-from-xcrun",
@@ -1021,7 +1148,8 @@
     "file": "Sources/DependiComposition/LazyManifestReader.swift",
     "search": "[\"--find\", \"swift\"]",
     "replace": "[\"--find\", \"swiftc\"]",
-    "test": "processRequestsAreClean"
+    "test": "processRequestsAreClean",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "error-sandbox-message",
@@ -1029,7 +1157,8 @@
     "file": "Sources/DependiDomain/DomainError+Description.swift",
     "search": "Set ENABLE_USER_SCRIPT_SANDBOXING to NO",
     "replace": "Change the setting",
-    "test": "sandboxMessageNamesTheFix"
+    "test": "sandboxMessageNamesTheFix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "error-payload-package",
@@ -1037,7 +1166,8 @@
     "file": "Sources/DependiDomain/DomainError+Description.swift",
     "search": "The package \\(package) has no license file.",
     "replace": "A package has no license file.",
-    "test": "messagesNamePayloads"
+    "test": "messagesNamePayloads",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-dry-run",
@@ -1045,7 +1175,8 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "if isDryRun {",
     "replace": "if false {",
-    "test": "dryRun"
+    "test": "dryRun",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-macos-refused",
@@ -1053,7 +1184,8 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "linked.supportedPlatforms.allSatisfy({ $0 == \"macosx\" })",
     "replace": "linked.supportedPlatforms.allSatisfy({ $0 == \"never\" })",
-    "test": "platforms"
+    "test": "platforms",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-local-excludes",
@@ -1061,7 +1193,8 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "$0.hasPrefix(location.root + \"/\")",
     "replace": "$0.hasPrefix(\"\")",
-    "test": "freshInstall"
+    "test": "freshInstall",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-format",
@@ -1069,7 +1202,8 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "^[0-9a-f]{40}$",
     "replace": "^.*$",
-    "test": "commitMissing"
+    "test": "commitFormatIsExact",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-backup",
@@ -1077,7 +1211,8 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "try writer.write(original, toPath: root + \"/.dependi/Root.plist.bak\")",
     "replace": "",
-    "test": "paneAppended"
+    "test": "paneAppended",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-clash-confirmation",
@@ -1085,7 +1220,8 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "if try prompts.askConfirmation(",
     "replace": "if try !prompts.askConfirmation(",
-    "test": "clashesNeedConfirmation"
+    "test": "clashesNeedConfirmation",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-run-script-executable",
@@ -1093,7 +1229,8 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "try executables.makeExecutable(at: root + \"/.dependi/run.sh\")",
     "replace": "",
-    "test": "freshInstall"
+    "test": "freshInstall",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-gitignore-duplicate",
@@ -1101,7 +1238,8 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "if lines.contains(rule) { return }",
     "replace": "",
-    "test": "gitignoreRules"
+    "test": "gitignoreRules",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-existing-config",
@@ -1109,7 +1247,8 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "output.writeLine(\"Dependi: kept the existing .dependi.json.\")\n            return",
     "replace": "output.writeLine(\"Dependi: kept the existing .dependi.json.\")",
-    "test": "existingConfigurationKept"
+    "test": "existingConfigurationKept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-old-entry",
@@ -1117,7 +1256,8 @@
     "file": "Sources/DependiInit/RootPlistEditor.swift",
     "search": "$0[\"File\"] as? String == oldPaneName",
     "replace": "$0[\"File\"] as? String == oldPaneName + \"x\"",
-    "test": "oldEntryRewritten"
+    "test": "oldEntryRewritten",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-binary-format",
@@ -1125,7 +1265,8 @@
     "file": "Sources/DependiInit/RootPlistEditor.swift",
     "search": "format == .binary ? .binary : .xml",
     "replace": "PropertyListSerialization.PropertyListFormat.xml",
-    "test": "binaryFormatKept"
+    "test": "binaryFormatKept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-workspace-sibling",
@@ -1133,7 +1274,8 @@
     "file": "Sources/DependiInit/ProjectLocator.swift",
     "search": "guard files.exists(at: sibling) else {",
     "replace": "guard true else {",
-    "test": "workspaceWithoutProject"
+    "test": "workspaceWithoutProject",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-dependi-itself",
@@ -1141,7 +1283,8 @@
     "file": "Sources/DependiInit/ProjectLocator.swift",
     "search": "?.contains(\"DependiDomain\")",
     "replace": "?.contains(\"NoSuchFolder\")",
-    "test": "dependiItself"
+    "test": "dependiItself",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-already-present",
@@ -1149,7 +1292,8 @@
     "file": "Sources/DependiInit/RootPlistEditor.swift",
     "search": "return (original, .unchanged)",
     "replace": "return (original, .added)",
-    "test": "secondRunChangesNothingNew"
+    "test": "secondRunChangesNothingNew",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-pre-gate-inverted",
@@ -1157,7 +1301,8 @@
     "file": "Sources/DependiInit/WrapperScript.swift",
     "search": "[ \"${ACTION:-}\" != install ] && ! in_gate",
     "replace": "[ \"${ACTION:-}\" != install ] && in_gate",
-    "test": "debugBuildSkipsBeforeAnyCall"
+    "test": "debugBuildSkipsBeforeAnyCall",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-version-validation-removed",
@@ -1165,7 +1310,8 @@
     "file": "Sources/DependiInit/WrapperScript.swift",
     "search": "'^[0-9]+\\.[0-9]+\\.[0-9]+$'",
     "replace": "'^.*$'",
-    "test": "badVersionsAreRejected"
+    "test": "badVersionsAreRejected",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-commit-validation-removed",
@@ -1173,15 +1319,17 @@
     "file": "Sources/DependiInit/WrapperScript.swift",
     "search": "'^[0-9a-f]{40}$'",
     "replace": "'^.*$'",
-    "test": "badCommitsAreRejected"
+    "test": "badCommitsAreRejected",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-version-compare-removed",
     "slice": "10",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "[ \"$installed\" = \"$version\" ]",
+    "search": "[ \"$installed\" = \"$version-$commit\" ]",
     "replace": "true",
-    "test": "versionMismatchUsesCache"
+    "test": "otherCommitIgnoresProjectCopy",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-sha-check-removed",
@@ -1189,7 +1337,8 @@
     "file": "Sources/DependiInit/WrapperScript.swift",
     "search": "[ -n \"$actual\" ] && [ \"$actual\" = \"$recorded\" ]",
     "replace": "true",
-    "test": "cacheWithWrongShaIsRebuilt"
+    "test": "cacheWithWrongShaIsRebuilt",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-commit-recheck-removed",
@@ -1197,15 +1346,17 @@
     "file": "Sources/DependiInit/WrapperScript.swift",
     "search": "[ \"$head\" != \"$commit\" ]",
     "replace": "false",
-    "test": "movedCommitFailsClean"
+    "test": "movedCommitFailsClean",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-removed",
     "slice": "10",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "mkdir \"$lock\" 2>/dev/null",
-    "replace": "true",
-    "test": "concurrentRunsBuildOnce"
+    "search": "while ! ln -s \"$token\" \"$lock\" 2>/dev/null; do",
+    "replace": "while ! true; do",
+    "test": "concurrentRunsBuildOnce",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-repo-override-unconditional",
@@ -1213,15 +1364,17 @@
     "file": "Sources/DependiInit/WrapperScript.swift",
     "search": "if testing && [ -n \"${DEPENDI_REPO_URL:-}\" ]",
     "replace": "if [ -n \"${DEPENDI_REPO_URL:-}\" ]",
-    "test": "repoOverrideNeedsTestingFlag"
+    "test": "repoOverrideNeedsTestingFlag",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-env-clean-removed",
     "slice": "10",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "env -i HOME=",
-    "replace": "env HOME=",
-    "test": "buildEnvironmentIsClean"
+    "search": "env -i HOME=\"$home\"",
+    "replace": "env HOME=\"$home\"",
+    "test": "buildEnvironmentIsClean",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-local-real-path",
@@ -1229,7 +1382,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "(try? files.realPath(of: path)) ?? path",
     "replace": "path",
-    "test": "localPackageWithTwoPaths"
+    "test": "localPackageWithTwoPaths",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-backup-outside-bundle",
@@ -1237,6 +1391,1006 @@
     "file": "Sources/DependiInit/InitFeature.swift",
     "search": "root + \"/.dependi/Root.plist.bak\"",
     "replace": "plistPath + \".bak\"",
-    "test": "paneAppended"
+    "test": "paneAppended",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "gen-output-empty",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "!path.isEmpty && !path.hasPrefix(\"/\")",
+    "replace": "!path.hasPrefix(\"/\")",
+    "test": "badOutputPath",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "gen-output-dots-in-name",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": ".contains(\"..\")",
+    "replace": ".contains(where: { $0.contains(\"..\") })",
+    "test": "dotsInsideANameAreAccepted",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "double-write-onto-folder",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "if case .directory? = state.nodes[target] {",
+    "replace": "if false, case .directory? = state.nodes[target] {",
+    "test": "writeOntoFolderFails",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "double-link-hop-limit-disk",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "maximumLinkHops = 32",
+    "replace": "maximumLinkHops = 40",
+    "test": "linkChainLimitMatchesDisk",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "double-read-limit-floor",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "max(limit, 0) + 1 : limit",
+    "replace": "max(limit, 1) + 1 : limit",
+    "test": "extremeReadLimits",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "double-read-limit-max",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "max(limit, 0) + 1 : limit",
+    "replace": "max(limit, 0) + 1 : 0",
+    "test": "extremeReadLimits",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "out-link-resolved-compare",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "guard resolved == path else {",
+    "replace": "guard resolved == resolved else {",
+    "test": "linkOutsideIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "out-link-walk-components",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "try requirePlain(walked, name: bundleName)",
+    "replace": "try requirePlain(bundle, name: bundleName)",
+    "test": "middleLinkIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "out-link-dangling",
+    "slice": "review-fix",
+    "file": "Sources/DependiGenerate/OutputLocation.swift",
+    "search": "guard files.exists(at: path) else { return }",
+    "replace": "guard files.exists(at: path), (try? files.realPath(of: path)) != nil else { return }",
+    "test": "danglingLinkIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "writer-link-folder-compare",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "guard resolvedFolder == Self.join(resolvedBundle, Self.folderName) else { throw refusal }",
+    "replace": "guard resolvedFolder == resolvedFolder, !resolvedBundle.isEmpty else { throw refusal }",
+    "test": "linkToAFolderInsideTheBundleIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "writer-link-folder-checked",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try requirePlainFolder(folder, inBundle: bundlePath)",
+    "replace": "_ = bundlePath",
+    "test": "linkToAnOutsideFolderAsAcknowledgementsIsRefusedAndNothingIsWritten",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "writer-hidden-tolerated",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "name.hasPrefix(\".\") || isTemporaryLeftover(name)",
+    "replace": "isTemporaryLeftover(name)",
+    "test": "hiddenFilesAreIgnoredAndKept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "writer-leftovers-swept",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "leftovers = present.filter(Self.isTemporaryLeftover)",
+    "replace": "leftovers = []",
+    "test": "temporaryLeftoversOfOurOwnWritesAreSwept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "writer-leftover-uuid-check",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "guard UUID(uuidString: String(name[range.upperBound...])) != nil else { return false }",
+    "replace": "guard UUID(uuidString: String(name[range.upperBound...])) == nil else { return false }",
+    "test": "realForeignFilesAreStillRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "writer-manifest-union",
+    "slice": "review-fix",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "Data(Self.manifestText(previous.union(newNames)).utf8), to: manifestPath)",
+    "replace": "Data(Self.manifestText(newNames).utf8), to: manifestPath)",
+    "test": "aStopAfterAnyNumberOfChangesLosesNoFileAndTheNextRunRecovers",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-reap-failure-as-success",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildWait.swift",
+    "search": "if errno != EINTR { return .failure(WaitFailure(code: errno)) }",
+    "replace": "if errno != EINTR { return .success(0) }",
+    "test": "aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-state-failure-as-exited",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildWait.swift",
+    "search": "if errno != EINTR { return .failed(errno) }",
+    "replace": "if errno != EINTR { return .exited }",
+    "test": "aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-look-reaps-child",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildWait.swift",
+    "search": "WEXITED | WNOHANG | WNOWAIT",
+    "replace": "WEXITED | WNOHANG",
+    "test": "aLookAtAnExitedChildDoesNotReapIt",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-child-not-tracked",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "children.started(pid)",
+    "replace": "_ = children",
+    "test": "theRunnerTellsTheTrackerAboutStartAndFinishAndNothingMore",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-finish-after-reap",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "_ = ChildWait.reap(pid)",
+    "replace": "_ = ChildWait.reap(pid); children.finished(pid)",
+    "test": "aTimedOutChildIsFinishedBeforeItIsReaped",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-parent-pipes-not-closed",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/SystemProcessRunner.swift",
+    "search": "parentEnds.forEach { close($0) }",
+    "replace": "_ = parentEnds",
+    "test": "timedOutRunsLeaveNoPipeDescriptorBehind",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-late-child-not-killed",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "if isTerminating { terminate(pid) }",
+    "replace": "if isTerminating && false { terminate(pid) }",
+    "test": "aChildThatStartsAfterTerminateAllIsKilledAtOnce",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-terminate-first-only",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "for pid in live { terminate(pid) }",
+    "replace": "for pid in live.prefix(1) { terminate(pid) }",
+    "test": "terminateAllKillsEveryLiveChildAndNoFinishedOne",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-finished-not-forgotten",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "lock.withLock { _ = live.remove(pid) }",
+    "replace": "lock.withLock { _ = live.count }",
+    "test": "terminateAllKillsEveryLiveChildAndNoFinishedOne",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "proc-real-child-terminated",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/ChildProcessRegistry.swift",
+    "search": "self.init(terminate: { ProcessTree.kill(root: $0) })",
+    "replace": "self.init(terminate: { _ in })",
+    "test": "terminateAllStopsARealRunningChildQuickly",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "comp-signal-number-forwarded",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/TerminationHandler.swift",
+    "search": "source.setEventHandler { handler(number) }",
+    "replace": "source.setEventHandler { handler(SIGUSR2) }",
+    "test": "eachWatchedSignalIsReportedUnderItsOwnNumber",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "comp-signal-default-ignored",
+    "slice": "review-fix",
+    "file": "Sources/DependiProcess/TerminationHandler.swift",
+    "search": "source.resume()",
+    "replace": "_ = source",
+    "test": "aWatchedSignalCallsTheHandlerWithItsNumber",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "cfg-limit-positive",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value > 0, value <= maximum else {",
+    "replace": "guard value >= 0, value <= maximum else {",
+    "test": "badProcessLimit",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "cfg-limit-maximum",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value > 0, value <= maximum else {",
+    "replace": "guard value > 0 else {",
+    "test": "badRunLimit",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "cfg-limit-edge-included",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/ConfigurationLoader.swift",
+    "search": "guard value > 0, value <= maximum else {",
+    "replace": "guard value > 0, value < maximum else {",
+    "test": "goodLimits",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "lazy-process-limit-dump",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "processTimeoutSeconds: configuration.processTimeoutSeconds,",
+    "replace": "processTimeoutSeconds: ToolConfiguration.defaultProcessTimeoutSeconds,",
+    "test": "processLimitIsUsed",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "lazy-swift-path-absolute",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "guard swift.hasPrefix(\"/\") else {",
+    "replace": "guard !swift.isEmpty else {",
+    "test": "relativeSwiftPath",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "lazy-version-unknown",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "?? \"unknown\"",
+    "replace": "?? \"\"",
+    "test": "unknownVersion",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "lazy-env-leak-cc",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home }",
+    "replace": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home; result[\"CC\"] = environment[\"CC\"] }",
+    "test": "processRequestsAreClean",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "lazy-env-drops-developer-dir",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "if let developer = environment[\"DEVELOPER_DIR\"] { result[\"DEVELOPER_DIR\"] = developer }",
+    "replace": "_ = environment[\"DEVELOPER_DIR\"]",
+    "test": "processRequestsAreClean",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "lazy-env-home-dropped",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home }",
+    "replace": "result[\"HOME\"] = environment[\"HOME\"] ?? \"/root\"",
+    "test": "absentVariablesStayAbsent",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "lazy-home-fallback",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "let home = environment[\"HOME\"] ?? child[\"TMPDIR\"] ?? \"/tmp\"",
+    "replace": "let home = environment[\"HOME\"] ?? \"/tmp\"",
+    "test": "foldersFallBackToTmpdir",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "lazy-build-dir-fallback",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "let buildBase = environment[\"BUILD_DIR\"] ?? child[\"TMPDIR\"] ?? \"/tmp\"",
+    "replace": "let buildBase = environment[\"BUILD_DIR\"] ?? \"/tmp\"",
+    "test": "foldersFallBackToTmpdir",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "dead-check-before-spawn",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DeadlineProcessRunner.swift",
+    "search": "guard remaining > 0 else {",
+    "replace": "guard remaining > -1_000_000 else {",
+    "test": "afterTheLimit",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "dead-clamp-child-time",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DeadlineProcessRunner.swift",
+    "search": "timeoutSeconds: min(request.timeoutSeconds, remaining),",
+    "replace": "timeoutSeconds: request.timeoutSeconds,",
+    "test": "childTimeIsClamped",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "dead-boundary-inclusive",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DeadlineProcessRunner.swift",
+    "search": "guard remaining > 0 else {",
+    "replace": "guard remaining >= 0 else {",
+    "test": "afterTheLimit",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "app-run-limit-wired",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "wrapping: process, limitSeconds: settings.runTimeoutSeconds,",
+    "replace": "wrapping: process, limitSeconds: ToolConfiguration.defaultRunTimeoutSeconds,",
+    "test": "runLimitShortensChildLimits",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "app-config-wired",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "environment: environment, configuration: settings, now: { Date() },",
+    "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), now: { Date() },",
+    "test": "configuredLimitsReachTheRequests",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "lazy-process-limit-xcrun",
+    "slice": "review-fix",
+    "file": "Sources/DependiComposition/LazyManifestReader.swift",
+    "search": "timeoutSeconds: configuration.processTimeoutSeconds,",
+    "replace": "timeoutSeconds: 60,",
+    "test": "processLimitIsUsed",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "graph-printable-controls",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "let isControl = value < 0x20 || value == 0x7F || (0x80...0x9F).contains(value)",
+    "replace": "let isControl = value < 0x20",
+    "test": "childErrorIsPrintable",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "graph-sweep-cutoff",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "changed < settings.staleTemporaryFilesBefore",
+    "replace": "changed > settings.staleTemporaryFilesBefore",
+    "test": "staleTemporaryFilesAreSwept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "graph-sweep-only-temporaries",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "for name in names where Self.isTemporaryCacheFile(name) {",
+    "replace": "for name in names {",
+    "test": "staleTemporaryFilesAreSwept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "graph-sweep-uuid-check",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "return UUID(uuidString: String(name[range.upperBound...])) != nil",
+    "replace": "return !name.isEmpty",
+    "test": "staleTemporaryFilesAreSwept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "graph-sweep-called",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "sweepStaleTemporaryFiles(in: directory)",
+    "replace": "_ = directory",
+    "test": "staleTemporaryFilesAreSwept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "domain-license-outside-names-file",
+    "slice": "review-fix",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": "throw .licenseOutsideCheckout(package: owner, file: fileName)",
+    "replace": "throw .licenseOutsideCheckout(package: owner, file: real)",
+    "test": "outsideLinkRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "disk-modification-date-no-follow",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem.swift",
+    "search": "guard lstat(path, &info) == 0 else { return nil }",
+    "replace": "guard stat(path, &info) == 0 else { return nil }",
+    "test": "modificationDateOfALinkIsTheLinksOwn",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "graph-printable-keeps-newline",
+    "slice": "review-fix",
+    "file": "Sources/DependiPackageGraph/PackageGraphReader.swift",
+    "search": "return isControl && scalar != \"\\n\" && scalar != \"\\t\" ? \" \" : Character(scalar)",
+    "replace": "return isControl ? \" \" : Character(scalar)",
+    "test": "printableTextIsKept",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-version-file-commit",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "let installed = commit.map { version + \"-\" + $0 } ?? version",
+    "replace": "let installed = version",
+    "test": "freshInstall",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-cache-override-unconditional",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if testing && [ -n \"${DEPENDI_CACHE_ROOT:-}\" ]; then",
+    "replace": "if [ -n \"${DEPENDI_CACHE_ROOT:-}\" ]; then",
+    "test": "cacheOverrideNeedsTestingFlag",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-cache-umask-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "(umask 077 && mkdir -p \"$cache_root\")",
+    "replace": "mkdir -p \"$cache_root\"",
+    "test": "newCacheFolderIsPrivate",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-cache-owner-check-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ ! -O \"$cache_root\" ]; then",
+    "replace": "false; then",
+    "test": "foreignCacheFolderIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-cache-symlink-check-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if [ -L \"$cache_root\" ] || [ ! -d \"$cache_root\" ]",
+    "replace": "if [ ! -d \"$cache_root\" ]",
+    "test": "symlinkCacheFolderIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-cache-writable-check-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "find \"$cache_root\" -maxdepth 0 \\( -perm -020 -o -perm -002 \\) 2>/dev/null",
+    "replace": "find \"$cache_root\" -maxdepth 0 -name nomatch 2>/dev/null",
+    "test": "writableCacheFolderIsRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-git-env-clean-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "env -i HOME=\"$tmp/githome\" ",
+    "replace": "env HOME=\"$tmp/githome\" ",
+    "test": "gitEnvironmentIsClean",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-git-hooks-enabled",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "-c core.hooksPath=/dev/null \"$@\"",
+    "replace": "\"$@\"",
+    "test": "gitEnvironmentIsClean",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-git-global-config-allowed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null ",
+    "replace": "GIT_CONFIG_NOSYSTEM=1 ",
+    "test": "gitEnvironmentIsClean",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-git-template-allowed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "clone --quiet --template= \"$repo_url\"",
+    "replace": "clone --quiet \"$repo_url\"",
+    "test": "missingBinaryBuildsAndRuns",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-path-pin-removed",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "PATH=/usr/bin:/bin\n        export PATH",
+    "replace": "export PATH",
+    "test": "callerPathIsIgnored",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-dead-owner-kept",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "kill -0 \"$holder\" 2>/dev/null || return 0",
+    "replace": "kill -0 \"$holder\" 2>/dev/null || true",
+    "test": "deadOwnerLockIsReclaimed",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-live-owner-stolen",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "kill -0 \"$holder\" 2>/dev/null || return 0",
+    "replace": "return 0",
+    "test": "liveOwnerLockIsRespected",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-age-ignored",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ -n \"$(find \"$lock\" -maxdepth 0 -mmin +30 2>/dev/null)\" ]",
+    "replace": "false",
+    "test": "oldLockWithLiveOwnerIsReclaimed",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-age-too-short",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "-maxdepth 0 -mmin +30 2>/dev/null",
+    "replace": "-maxdepth 0 -mmin +1 2>/dev/null",
+    "test": "recentLockWithLiveOwnerIsRespected",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-malformed-owner-kept",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "\"\" | *[!0-9]*) return 0 ;;",
+    "replace": "\"\") return 0 ;;",
+    "test": "malformedLockOwnerIsStale",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-release-unconditional",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if [ \"$owner\" = \"$token\" ]; then",
+    "replace": "if true; then",
+    "test": "releaseKeepsForeignLock",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-never-released",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "rm -f \"$lock\"",
+    "replace": "true",
+    "test": "releaseRemovesOwnLock",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-reclaim-skipped",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "            if lock_is_stale; then",
+    "replace": "            if false; then",
+    "test": "concurrentRunsOnDeadLockBuildOnce",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-binary-executable",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "try executables.makeExecutable(at: root + \"/.dependi/bin/dependi\")",
+    "replace": "",
+    "test": "freshInstall",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-commit-end-anchor",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"^[0-9a-f]{40}\"#",
+    "test": "commitFormatIsExact",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-commit-start-anchor",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"[0-9a-f]{40}$\"#",
+    "test": "commitFormatIsExact",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-commit-uppercase",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"^[0-9a-fA-F]{40}$\"#",
+    "test": "commitFormatIsExact",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-commit-length",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "#\"^[0-9a-f]{40}$\"#",
+    "replace": "#\"^[0-9a-f]{39,41}$\"#",
+    "test": "commitFormatIsExact",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "disk-executable-mode",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "if chmod(path, 0o755) != 0 {",
+    "replace": "if chmod(path, 0o644) != 0 {",
+    "test": "makeExecutableSetsMode",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "disk-executable-missing",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "if code == ENOENT || code == ENOTDIR {",
+    "replace": "if code == ENOTDIR {",
+    "test": "passesExecutableSuite",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "disk-executable-not-directory",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "if code == ENOENT || code == ENOTDIR {",
+    "replace": "if code == ENOENT {",
+    "test": "passesExecutableSuite",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "disk-executable-error-text",
+    "slice": "review-fix",
+    "file": "Sources/DependiFileSystem/DiskFileSystem+Executable.swift",
+    "search": "path: path, reason: \"chmod failed: \\(String(cString: strerror(code)))\")",
+    "replace": "path: path, reason: \"failed\")",
+    "test": "makeExecutableRefused",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "memory-write-keeps-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.remove(target)",
+    "replace": "_ = target",
+    "test": "doublePassesExecutableSuite",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "memory-remove-keeps-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.remove(key)",
+    "replace": "_ = key",
+    "test": "doublePassesExecutableSuite",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "memory-move-drops-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.formUnion(marked.map { to + $0.dropFirst(from.count) })",
+    "replace": "_ = marked",
+    "test": "doublePassesExecutableSuite",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "memory-move-keeps-destination-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.subtract(replaced)",
+    "replace": "_ = replaced",
+    "test": "doublePassesExecutableSuite",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "memory-move-keeps-source-mark",
+    "slice": "review-fix",
+    "file": "Sources/DependiTestSupport/InMemoryFileSystem.swift",
+    "search": "state.executablePaths.subtract(marked)",
+    "replace": "_ = marked",
+    "test": "doublePassesExecutableSuite",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-create-failure-ignored",
+    "slice": "review-fix",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "if [ ! -L \"$lock\" ] && [ ! -e \"$lock\" ]; then",
+    "replace": "if false; then",
+    "test": "unwritableCacheFolderFailsAtOnce",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "slugger-hash-width",
+    "file": "Sources/DependiDomain/OutputNameSlugger.swift",
+    "search": "digest.prefix(6)",
+    "replace": "digest.prefix(4)",
+    "test": "slugMatchesHandComputedHash",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-excludes-normalized",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "let excludes = Set(rawExcludes.map { normalizer.identity(forLocation: $0).value })",
+    "replace": "let excludes = rawExcludes",
+    "test": "excludeIsNormalized",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "validator-form-feed",
+    "file": "Sources/DependiDomain/LicenseFileValidator.swift",
+    "search": " && scalar != \"\\u{0C}\" {",
+    "replace": " {",
+    "test": "formFeedAccepted",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "locator-licenses-folder",
+    "file": "Sources/DependiDomain/LicenseLocator.swift",
+    "search": "|licenses)$\"#,",
+    "replace": ")$\"#,",
+    "test": "variantsAreFound",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "locator-hidden-skipped",
+    "file": "Sources/DependiDomain/LicenseLocator.swift",
+    "search": "guard !name.hasPrefix(\".\") else { return false }",
+    "replace": "guard true else { return false }",
+    "test": "licensesFolderFiles",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "generate-folder-skipped",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "guard name.lowercased() == \"licenses\" else { continue }",
+    "replace": "guard true else { continue }",
+    "test": "licenseFolderOnlyIsMissing",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "generate-nested-folder-skipped",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "where (try? directories.topLevelNames(in: path + \"/\" + innerName)) == nil {",
+    "replace": "where true {",
+    "test": "licenseLayouts",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "workspace-registry-skipped",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "if ref.kind == \"registry\" { continue }",
+    "replace": "if false { continue }",
+    "test": "registryPackageIsSkipped",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "pins-revisionless-skipped",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "guard let revision = pin.revision else { continue }",
+    "replace": "let revision = pin.revision ?? \"\"",
+    "test": "registryPinIsSkipped",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "pins-only-registry-may-lack-revision",
+    "file": "Sources/DependiWorkspaceState/PackageResolvedDocument.swift",
+    "search": "if kind == \"registry\" { return nil }",
+    "replace": "if true { return nil }",
+    "test": "sourceControlPinWithoutRevisionFails",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-excluded-root-skipped",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "identity = normalizer.identity(forLocation: name)",
+    "replace": "identity = normalizer.identity(forLocation: name); if excludes.contains(identity.value) { return nil }",
+    "test": "excludedRootStillBringsItsDependencies",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-package-name-fallback",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if packages[wanted] != nil { return wanted }",
+    "replace": "if packages[wanted] != nil { return wanted }; throw .productUnmatched(product: name)",
+    "test": "manifestNameInsteadOfIdentity",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-package-name-in-error",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "packageName.map { \"\\(name) in package \\($0)\" } ?? name)",
+    "replace": "name)",
+    "test": "wrongPackageNameStillFails",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-remote-search-no-early-exit",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "                    break",
+    "replace": "                    _ = 0",
+    "test": "remoteSearchStopsAtFirstMatch",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-remote-search-unsorted",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "remotePackages.sorted(by: { $0.identity < $1.identity })",
+    "replace": "remotePackages",
+    "test": "remoteSearchStopsAtFirstMatch",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-plugin-product-gate",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if !includeBuildTools, !product.targetNames.isEmpty,",
+    "replace": "if false, !product.targetNames.isEmpty,",
+    "test": "pluginProductIsNotShipped",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-plugin-product-kinds",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "return kind == .macro || kind == .plugin",
+    "replace": "return kind == .macro",
+    "test": "pluginProductIsNotShipped",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-mixed-product-all",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "product.targetNames.allSatisfy({ targetName in",
+    "replace": "product.targetNames.contains(where: { targetName in",
+    "test": "mixedProductShips",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-plugin-only-reported",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "!reached.contains($0.identity) && !buildToolOnly.contains($0.identity)",
+    "replace": "!reached.contains($0.identity)",
+    "test": "pluginProductIsNotShipped",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-other-targets-expected",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "&& !expected.contains($0.identity) && !excludes.contains($0.identity.value)",
+    "replace": "&& !excludes.contains($0.identity.value)",
+    "test": "otherTargetPackagesAreNotUnreached",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "resolver-other-targets-walk",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "expected.formUnion(walked.reached)",
+    "replace": "expected.insert(found.0)",
+    "test": "otherTargetPackagesAreNotUnreached",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "projectfile-tests-in-other-products",
+    "file": "Sources/DependiProjectFile/ProductCollector.swift",
+    "search": "includeTests || !Self.isTestTarget(target)",
+    "replace": "!Self.isTestTarget(target)",
+    "test": "testTargetProductsAreOtherProducts",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "projectfile-other-products-subtract-app",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "everything.found.filter { !ownProducts.contains($0) }",
+    "replace": "everything.found",
+    "test": "appProductsAreNotOtherProducts",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "pins-named-workspace-preferred",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "if named.count == 1 { workspaces = named }",
+    "replace": "if false { workspaces = named }",
+    "test": "workspaceNamedLikeProjectWins",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "pins-conflict-dropped",
+    "file": "Sources/DependiWorkspaceState/WorkspaceStateReader.swift",
+    "search": "where revisions.count == 1 {",
+    "replace": "where revisions.count >= 1 {",
+    "test": "conflictingWorkspacesDropThePin",
+    "slice": "review-fix",
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   }
 ]

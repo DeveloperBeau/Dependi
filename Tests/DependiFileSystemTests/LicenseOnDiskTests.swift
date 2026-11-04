@@ -4,7 +4,7 @@ import DependiFileSystem
 import Foundation
 import Testing
 
-@Suite("License validation on a real tree")
+@Suite("License validation on a real tree", .timeLimit(.minutes(5)))
 struct LicenseOnDiskTests {
     private let arranger = DiskTreeArranger()
     private let limit = 16
@@ -50,7 +50,7 @@ struct LicenseOnDiskTests {
                 at: temp.real + "/kit/LICENSE", pointingTo: "../outside/secret")
             #expect(
                 failure(outcome(folder: temp.real + "/kit", root: temp.real + "/kit"))
-                    == .licenseOutsideCheckout(package: "kit", path: temp.real + "/outside/secret"))
+                    == .licenseOutsideCheckout(package: "kit", file: "LICENSE"))
         }
     }
 
@@ -97,7 +97,7 @@ struct LicenseOnDiskTests {
             try arranger.addSymlink(at: temp.real + "/kit/sub", pointingTo: "../outside")
             #expect(
                 failure(outcome(folder: temp.real + "/kit/sub", root: temp.real + "/kit"))
-                    == .licenseOutsideCheckout(package: "kit", path: temp.real + "/outside/LICENSE")
+                    == .licenseOutsideCheckout(package: "kit", file: "LICENSE")
             )
         }
     }
@@ -110,7 +110,7 @@ struct LicenseOnDiskTests {
             #expect(
                 failure(outcome(folder: temp.real + "/kit-extra", root: temp.real + "/kit"))
                     == .licenseOutsideCheckout(
-                        package: "kit", path: temp.real + "/kit-extra/LICENSE")
+                        package: "kit", file: "LICENSE")
             )
         }
     }

@@ -106,11 +106,46 @@ public struct PackageGraphReader: PackageManifestReading {
             let data = try? JSONEncoder().encode(ManifestCacheEntry(key: key, dump: text))
         else { return }
         let directory = String(path[..<(path.lastIndex(of: "/") ?? path.endIndex)])
+        sweepStaleTemporaryFiles(in: directory)
+        // A cache that cannot be written only costs time on the next run, so it never fails a read.
         try? writer.createDirectory(at: directory)
         try? writer.write(data, toPath: path)
     }
 
+    /// Removes the `.tmp-<UUID>` files that an interrupted cache write left behind.
+    /// A file is removed only if it is old, so a write that is running now is never touched.
+    private func sweepStaleTemporaryFiles(in directory: String) {
+        guard files.exists(at: directory), let names = try? directories.topLevelNames(in: directory)
+        else { return }
+        for name in names where Self.isTemporaryCacheFile(name) {
+            let path = directory + "/" + name
+            guard let changed = files.modificationDate(of: path),
+                changed < settings.staleTemporaryFilesBefore
+            else { continue }
+            try? writer.removeItem(at: path)
+        }
+    }
+
+    private static func isTemporaryCacheFile(_ name: String) -> Bool {
+        guard let range = name.range(of: ".json.tmp-", options: .backwards),
+            range.lowerBound != name.startIndex
+        else { return false }
+        return UUID(uuidString: String(name[range.upperBound...])) != nil
+    }
+
     // MARK: Process
+
+    /// Turns child output into text for the build log. Control characters, such as escape
+    /// sequences, become spaces. Newline and tab stay.
+    static func printable(_ bytes: Data) -> String {
+        let text = String(decoding: bytes, as: UTF8.self)
+        let cleaned = text.unicodeScalars.map { scalar -> Character in
+            let value = scalar.value
+            let isControl = value < 0x20 || value == 0x7F || (0x80...0x9F).contains(value)
+            return isControl && scalar != "\n" && scalar != "\t" ? " " : Character(scalar)
+        }
+        return String(cleaned)
+    }
 
     private func runDumpPackage(in real: String) throws(DomainError) -> Data {
         let request = ProcessRequest(
@@ -120,7 +155,7 @@ public struct PackageGraphReader: PackageManifestReading {
             maximumOutputBytes: settings.maximumOutputBytes)
         let result = try process.run(request)
         guard result.exitStatus == 0 else {
-            let message = String(decoding: result.standardError.prefix(300), as: UTF8.self)
+            let message = Self.printable(result.standardError.prefix(300))
             throw .processFailed(
                 command: "swift package dump-package",
                 reason: "exit status \(result.exitStatus) for the package at \(real): \(message)")

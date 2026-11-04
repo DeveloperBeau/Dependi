@@ -2,7 +2,7 @@ import DependiDomain
 import DependiEntities
 import Testing
 
-@Suite("Acknowledgement assembler")
+@Suite("Acknowledgement assembler", .timeLimit(.minutes(1)))
 struct AcknowledgementAssemblerTests {
     private let assembler = AcknowledgementAssembler(slugger: OutputNameSlugger())
 
@@ -61,13 +61,14 @@ struct AcknowledgementAssemblerTests {
     }
 
     @Test(
-        "two packages whose output names collide are refused, using two locations found with equal hashes"
+        "two packages whose output names collide are refused, using two locations found with equal 48-bit hash prefixes"
     )
     func slugCollision() {
-        let one = item("Kit", identity: "kit", location: "collide/16750")
-        let two = item("Kit", identity: "Kit", location: "collide/33357")
-        #expect(throws: DomainError.slugCollision(first: "collide/16750", second: "collide/33357"))
-        {
+        let one = item("Kit", identity: "kit", location: "collide/606695")
+        let two = item("Kit", identity: "Kit", location: "collide/35466346")
+        #expect(
+            throws: DomainError.slugCollision(first: "collide/606695", second: "collide/35466346")
+        ) {
             try assembler.assemble([one, two])
         }
     }

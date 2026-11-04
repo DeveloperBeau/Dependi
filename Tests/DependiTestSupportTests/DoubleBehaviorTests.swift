@@ -4,7 +4,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Test doubles")
+@Suite("Test doubles", .timeLimit(.minutes(1)))
 struct DoubleBehaviorTests {
     private let request = ProcessRequest(
         executable: "/usr/bin/xcrun", arguments: ["swift", "--version"],
