@@ -61,7 +61,7 @@ final class InitWorld {
             process: runner,
             prompts: console, output: console, executablePath: "/bin/dependi",
             sourceRoot: sourceRoot,
-            wrapperText: Self.wrapper, version: "0.1.0")
+            wrapperText: Self.wrapper, version: "0.1.1")
     }
 
     func run(_ path: String = "/proj", dry: Bool = false) throws(DomainError) -> InitOutcome {

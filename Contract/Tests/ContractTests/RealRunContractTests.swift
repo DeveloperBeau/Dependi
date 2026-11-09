@@ -128,7 +128,7 @@ struct WrapperContractTests {
         defer { try? FileManager.default.removeItem(at: root) }
         try FileManager.default.createDirectory(
             at: root.appendingPathComponent("proj/.dependi"), withIntermediateDirectories: true)
-        try "{\"version\":\"0.1.0\",\"commit\":\"\(commit)\"}".write(
+        try "{\"version\":\"0.1.1\",\"commit\":\"\(commit)\"}".write(
             to: root.appendingPathComponent("proj/.dependi.json"), atomically: true, encoding: .utf8
         )
         let script = root.appendingPathComponent("proj/.dependi/run.sh")
@@ -155,7 +155,7 @@ struct WrapperContractTests {
         #expect(
             first.exitStatus == 0, "stderr: \(String(decoding: first.standardError, as: UTF8.self))"
         )
-        #expect(firstText == "dependi 0.1.0\n")
+        #expect(firstText == "dependi 0.1.1\n")
         let firstSeconds = Date().timeIntervalSince(started)
 
         let second = try ContractSupport.process.run(
@@ -164,7 +164,7 @@ struct WrapperContractTests {
                 environment: environment,
                 workingDirectory: root.path, timeoutSeconds: 120, maximumOutputBytes: 1_048_576))
         #expect(second.exitStatus == 0)
-        #expect(String(decoding: second.standardOutput, as: UTF8.self) == "dependi 0.1.0\n")
+        #expect(String(decoding: second.standardOutput, as: UTF8.self) == "dependi 0.1.1\n")
         #expect(Date().timeIntervalSince(started) - firstSeconds < 60, "the second run built again")
     }
 }
