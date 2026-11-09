@@ -3,6 +3,11 @@
 // global state so a signal handler can restore the file that is being mutated.
 import Foundation
 
+struct LastRun: Decodable {
+    let date: String
+    let outcome: String
+}
+
 struct Entry: Decodable {
     let id: String
     let slice: String
@@ -10,6 +15,18 @@ struct Entry: Decodable {
     let search: String
     let replace: String
     let test: String
+    /// The outcome the register expects: "killed" (the default) or "timeout".
+    let expected: String?
+    let lastRun: LastRun?
+
+    var expectedName: String { expected ?? "killed" }
+    var expectedOutcome: Outcome? {
+        switch expectedName {
+        case "killed": return .killed
+        case "timeout": return .killedByTimeout
+        default: return nil
+        }
+    }
 }
 
 enum Outcome: String {
@@ -28,8 +45,12 @@ struct CommandResult {
 var root = FileManager.default.currentDirectoryPath
 var registerPath = "Documentation/Registers/mutations.json"
 var timeoutSeconds = 300.0
+var buildTimeoutSeconds = 900.0
 var onlyID: String?
 var markdownPath: String?
+var shouldRecord = true
+/// The exact filter for each entry id, filled by `validate`.
+var filters: [String: String] = [:]
 var mutatedFile: String?
 var activeProcessID: Int32?
 
@@ -46,7 +67,9 @@ func parseArguments() {
         case "--root": root = value
         case "--register": registerPath = value
         case "--timeout": timeoutSeconds = Double(value) ?? timeoutSeconds
+        case "--build-timeout": buildTimeoutSeconds = Double(value) ?? buildTimeoutSeconds
         case "--only": onlyID = value
+        case "--record": shouldRecord = value != "no"
         case "--markdown": markdownPath = value
         default: fail("unknown flag \(flag)")
         }
@@ -151,12 +174,36 @@ func occurrences(of needle: String, in text: String) -> Int {
     return text.components(separatedBy: needle).count - 1
 }
 
+/// Returns the listed test ids that name the given test. A bare name matches the function only.
+func matchingTests(_ test: String, in listing: [String]) -> [String] {
+    listing.filter { line in
+        if test.contains("/") { return line == test || line.hasSuffix("." + test) }
+        guard let slash = line.lastIndex(of: "/") else { return false }
+        let name = line[line.index(after: slash)...]
+        return name == test || name.hasPrefix(test + "(")
+    }
+}
+
+/// Builds a filter that matches one listed test id and nothing else. The listed id ends in a
+/// closing parenthesis, so it cannot be the start of a longer name. The id swift-testing matches
+/// against carries a source location after it, which is why the pattern has no end anchor.
+func exactFilter(for listed: String) -> String {
+    "^" + NSRegularExpression.escapedPattern(for: listed)
+}
+
 func validate(_ entries: [Entry]) -> [String] {
     var problems: [String] = []
     var ids = Set<String>()
     let listing = run(["swift", "test", "list"], timeout: 600)
+    let listed = listing.output.split(separator: "\n").map {
+        String($0).trimmingCharacters(in: .whitespaces)
+    }
     for entry in entries {
         if !ids.insert(entry.id).inserted { problems.append("\(entry.id): duplicate id") }
+        if entry.expectedOutcome == nil {
+            problems.append(
+                "\(entry.id): expected must be killed or timeout, not \(entry.expectedName)")
+        }
         let relative = entry.file
         if relative.hasPrefix("/") || relative.contains("..") || !relative.hasPrefix("Sources/") {
             problems.append("\(entry.id): file must be a relative path under Sources/")
@@ -174,8 +221,15 @@ func validate(_ entries: [Entry]) -> [String] {
         if entry.search == entry.replace {
             problems.append("\(entry.id): replacement equals search")
         }
-        if !listing.output.contains(entry.test) {
+        let matches = matchingTests(entry.test, in: listed)
+        if matches.isEmpty {
             problems.append("\(entry.id): test id \(entry.test) does not resolve")
+        } else if matches.count > 1 {
+            problems.append(
+                "\(entry.id): test id \(entry.test) is ambiguous, it matches \(matches.joined(separator: ", "))"
+            )
+        } else {
+            filters[entry.id] = exactFilter(for: matches[0])
         }
     }
     return problems
@@ -187,11 +241,14 @@ func writeMarkdown(_ entries: [Entry], to path: String) {
         "",
         "This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown`. Do not edit it.",
         "",
-        "| Id | Slice | File | Test |",
-        "|---|---|---|---|",
+        "| Id | Slice | File | Test | Expected | Last run |",
+        "|---|---|---|---|---|---|",
     ]
     for entry in entries.sorted(by: { $0.id < $1.id }) {
-        lines.append("| \(entry.id) | \(entry.slice) | `\(entry.file)` | `\(entry.test)` |")
+        let last = entry.lastRun.map { "\($0.date) \($0.outcome)" } ?? "not run"
+        lines.append(
+            "| \(entry.id) | \(entry.slice) | `\(entry.file)` | `\(entry.test)` | \(entry.expectedName) | \(last) |"
+        )
     }
     let text = lines.joined(separator: "\n") + "\n"
     let url = URL(fileURLWithPath: path, relativeTo: URL(fileURLWithPath: root))
@@ -209,7 +266,9 @@ func requireCleanTree() {
 }
 
 func baseline(_ entry: Entry) -> Bool {
-    let result = run(["swift", "test", "--filter", entry.test], timeout: timeoutSeconds)
+    let result = run(
+        ["swift", "test", "--filter", filters[entry.id] ?? entry.test], timeout: buildTimeoutSeconds
+    )
     return result.status == 0 && !result.timedOut
 }
 
@@ -225,15 +284,87 @@ func mutate(_ entry: Entry) -> Outcome {
     do { try mutated.write(toFile: path, atomically: true, encoding: .utf8) } catch {
         return .invalid
     }
-    let build = run(["swift", "build", "--build-tests"], timeout: timeoutSeconds)
-    if build.status != 0 && !build.timedOut { return .invalid }
-    if build.timedOut { return .killedByTimeout }
+    let build = run(["swift", "build", "--build-tests"], timeout: buildTimeoutSeconds)
+    if build.status != 0 || build.timedOut { return .invalid }
     let test = run(
-        ["swift", "test", "--skip-build", "--filter", entry.test], timeout: timeoutSeconds)
+        ["swift", "test", "--skip-build", "--filter", filters[entry.id] ?? entry.test],
+        timeout: timeoutSeconds)
     if test.timedOut { return .killedByTimeout }
     if test.status == 0 { return .survived }
     let ranAndFailed = test.output.contains("✘ Test") || test.output.contains("error: -[")
     return ranAndFailed ? .killed : .invalid
+}
+
+/// Writes the outcome of each run into its register entry without touching the rest of the text.
+func recordRuns(_ results: [(id: String, outcome: Outcome)]) {
+    let url = URL(fileURLWithPath: registerPath, relativeTo: URL(fileURLWithPath: root))
+    guard var text = try? String(contentsOf: url, encoding: .utf8) else { return }
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.dateFormat = "yyyy-MM-dd"
+    let today = formatter.string(from: Date())
+    for result in results {
+        guard let range = objectRange(forID: result.id, in: text) else { continue }
+        var object = String(text[range])
+        if let old = object.range(
+            of: #",\s*"lastRun"\s*:\s*\{[^}]*\}"#, options: .regularExpression)
+        {
+            object.removeSubrange(old)
+        }
+        guard let close = object.lastIndex(of: "}") else { continue }
+        var body = object[..<close]
+        var trailing = ""
+        while let last = body.last, last.isWhitespace {
+            trailing = String(last) + trailing
+            body = body.dropLast()
+        }
+        let separator = object.contains("\n") ? "\n    " : ""
+        let field =
+            "\"lastRun\": {\"date\": \"\(today)\", \"outcome\": \"\(result.outcome.rawValue)\"}"
+        text.replaceSubrange(range, with: body + "," + separator + field + trailing + "}")
+    }
+    try? text.write(to: url, atomically: true, encoding: .utf8)
+}
+
+/// Finds the text range of the top-level object whose id is given.
+func objectRange(forID id: String, in text: String) -> Range<String.Index>? {
+    var depth = 0
+    var start: String.Index?
+    var inString = false
+    var escaped = false
+    var index = text.startIndex
+    while index < text.endIndex {
+        let character = text[index]
+        if inString {
+            if escaped {
+                escaped = false
+            } else if character == "\\" {
+                escaped = true
+            } else if character == "\"" {
+                inString = false
+            }
+        } else if character == "\"" {
+            inString = true
+        } else if character == "{" {
+            if depth == 1 { start = index }
+            depth += 1
+        } else if character == "}" {
+            depth -= 1
+            if depth == 1, let begin = start {
+                let range = begin..<text.index(after: index)
+                if let data = String(text[range]).data(using: .utf8),
+                    let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                    object["id"] as? String == id
+                {
+                    return range
+                }
+            }
+        } else if character == "[" {
+            if depth == 0 { depth = 1 }
+        }
+        index = text.index(after: index)
+    }
+    return nil
 }
 
 parseArguments()
@@ -274,10 +405,22 @@ for entry in entries.sorted(by: { $0.file < $1.file }) {
 }
 
 print("id | result | seconds")
+var unexpected = 0
 for (id, outcome, seconds) in rows {
     print("\(id) | \(outcome.rawValue) | \(String(format: "%.1f", seconds))")
+    if let entry = entries.first(where: { $0.id == id }), outcome != .survived, outcome != .invalid,
+        outcome != entry.expectedOutcome
+    {
+        unexpected += 1
+        print(
+            "UNEXPECTED \(id): the register expects \(entry.expectedName) and the run gave \(outcome.rawValue)"
+        )
+    }
 }
+if shouldRecord { recordRuns(rows.map { (id: $0.0, outcome: $0.1) }) }
 for id in baselineFailures { print("\(id) | BASELINE FAILED | 0.0") }
 print("total seconds: \(String(format: "%.1f", Date().timeIntervalSince(started)))")
-let bad = rows.filter { $0.1 == .survived || $0.1 == .invalid }.count + baselineFailures.count
+let bad =
+    rows.filter { $0.1 == .survived || $0.1 == .invalid }.count + unexpected
+    + baselineFailures.count
 exit(bad == 0 ? 0 : 1)

@@ -3,7 +3,7 @@ import DependiEntities
 import TestHelpers
 import Testing
 
-@Suite("Release gate")
+@Suite("Release gate", .timeLimit(.minutes(1)))
 struct ReleaseGateTests {
     private let gate = ReleaseGate()
 

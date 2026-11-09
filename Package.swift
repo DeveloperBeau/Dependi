@@ -9,7 +9,52 @@ let sharedSettings: [SwiftSetting] = [
 let package = Package(
     name: "Dependi",
     platforms: [.macOS(.v14)],
+    products: [
+        .library(
+            name: "DependiKit",
+            targets: [
+                "DependiEntities", "DependiDomain", "DependiFileSystem", "DependiProcess", "DependiPackageGraph",
+                "DependiComposition", "DependiInit",
+            ]),
+        .executable(name: "dependi", targets: ["dependi"]),
+    ],
     targets: [
+        .target(
+            name: "DependiInit",
+            dependencies: ["DependiEntities", "DependiDomain"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiInitTests",
+            dependencies: [
+                "DependiInit", "DependiDomain", "DependiEntities", "DependiTestSupport",
+                "TestHelpers",
+            ],
+            swiftSettings: sharedSettings
+        ),
+        .target(
+            name: "DependiComposition",
+            dependencies: [
+                "DependiEntities", "DependiDomain", "DependiFileSystem", "DependiEnvironment",
+                "DependiConsole", "DependiWorkspaceState", "DependiProjectFile",
+                "DependiPackageGraph",
+                "DependiSettingsBundle", "DependiGenerate", "DependiCommandLine", "DependiInit",
+            ],
+            swiftSettings: sharedSettings
+        ),
+        .executableTarget(
+            name: "dependi",
+            dependencies: ["DependiComposition", "DependiProcess"],
+            swiftSettings: sharedSettings
+        ),
+        .testTarget(
+            name: "DependiCompositionTests",
+            dependencies: [
+                "DependiComposition", "DependiDomain", "DependiEntities", "DependiTestSupport",
+                "TestHelpers",
+            ],
+            swiftSettings: sharedSettings
+        ),
         .target(
             name: "DependiDomain",
             dependencies: ["DependiEntities"],

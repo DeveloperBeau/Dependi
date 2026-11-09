@@ -59,7 +59,7 @@ Where a framework forces another form, follow that form and list it here with th
 - Follow each value that crosses a module boundary with an end-to-end test. The expected value is written by hand. A test never asserts on a value that the code under test produced.
 - Coverage is a floor. A test that cannot fail proves nothing.
 - Verify each rule by mutation. Break the code on purpose, confirm that a named test fails, restore it, and record the result. Mutation proves a test is connected.
-- Waits are bounded. A hang fails with a name.
+- Waits are bounded. A hang fails with a name. Every test suite declares a `.timeLimit`, and an architecture test checks it.
 - A flaky test is a defect. Find the cause. Do not rerun or skip it.
 - A test name says what the test proves.
 

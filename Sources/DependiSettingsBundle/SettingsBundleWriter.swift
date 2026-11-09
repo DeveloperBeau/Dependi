@@ -39,7 +39,7 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
         let manifestPath = Self.join(folder, Self.manifestName)
 
         // Plan everything before the first write.
-        var children: [(name: String, plist: [String: Any])] = []
+        var children: [(name: String, plist: [String: Any], data: Data)] = []
         var indexEntries: [[String: Any]] = []
         var seen: Set<String> = []
         for acknowledgement in acknowledgements {
@@ -51,10 +51,10 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
                     path: Self.join(folder, "\(slug).plist"), reason: "two packages share this name"
                 )
             }
-            children.append((name: "\(slug).plist", plist: Self.childPane(acknowledgement)))
+            let plist = Self.childPane(acknowledgement)
             // Encoding fails here, before any write, for text that XML cannot hold.
-            _ = try Self.encode(
-                children[children.count - 1].plist, path: Self.join(folder, "\(slug).plist"))
+            let data = try Self.encode(plist, path: Self.join(folder, "\(slug).plist"))
+            children.append((name: "\(slug).plist", plist: plist, data: data))
             indexEntries.append([
                 "Type": "PSChildPaneSpecifier",
                 "Title": acknowledgement.displayName,
@@ -62,16 +62,18 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
             ])
         }
         let newNames = Set(children.map(\.name))
+        var leftovers: [String] = []
+        try requirePlainFolder(folder, inBundle: bundlePath)
         let previous = try previousManifest(at: manifestPath)
         if files.exists(at: folder) {
             let present = try directories.topLevelNames(in: folder)
             for name in present
-            where name != Self.manifestName && !previous.contains(name) && !newNames.contains(name)
-            {
+            where !Self.isTolerated(name) && !previous.contains(name) && !newNames.contains(name) {
                 throw .fileUnwritable(
                     path: Self.join(folder, name),
                     reason: "a file that Dependi did not write is in the way")
             }
+            leftovers = present.filter(Self.isTemporaryLeftover)
         }
 
         let index: [String: Any] = [
@@ -79,16 +81,18 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
             "PreferenceSpecifiers": indexEntries,
         ]
 
-        _ = try Self.encode(index, path: indexPath)
+        let indexData = try Self.encode(index, path: indexPath)
 
         try writer.createDirectory(at: folder)
+        // A crash inside an atomic write can leave a temporary file. It would ship in the bundle.
+        for name in leftovers { try writer.removeItem(at: Self.join(folder, name)) }
         // The manifest lists old and new files first, so a stop in the middle loses no file.
         try writeIfDifferent(
             Data(Self.manifestText(previous.union(newNames)).utf8), to: manifestPath)
         for child in children {
-            try writePlist(child.plist, to: Self.join(folder, child.name))
+            try writePlist(child.plist, encodedAs: child.data, to: Self.join(folder, child.name))
         }
-        try writePlist(index, to: indexPath)
+        try writePlist(index, encodedAs: indexData, to: indexPath)
         for name in previous.subtracting(newNames).sorted()
         where files.exists(at: Self.join(folder, name)) {
             try writer.removeItem(at: Self.join(folder, name))
@@ -126,12 +130,46 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
         }
     }
 
+    /// Names that never block a run: the manifest, hidden files such as `.DS_Store`, and the
+    /// temporary files of an interrupted write.
+    private static func isTolerated(_ name: String) -> Bool {
+        name.hasPrefix(".") || isTemporaryLeftover(name)
+    }
+
+    /// Whether the name is a temporary file that an interrupted write of a pane or of the
+    /// manifest left behind.
+    private static func isTemporaryLeftover(_ name: String) -> Bool {
+        guard let range = name.range(of: ".tmp-", options: .backwards) else { return false }
+        let base = name[..<range.lowerBound]
+        guard UUID(uuidString: String(name[range.upperBound...])) != nil else { return false }
+        return base.hasSuffix(".plist") && base != ".plist" || base == manifestName
+    }
+
     private static func manifestText(_ names: Set<String>) -> String {
         names.sorted().map { $0 + "\n" }.joined()
     }
 
     private static func join(_ base: String, _ name: String) -> String {
         base.hasSuffix("/") ? base + name : base + "/" + name
+    }
+
+    /// Refuses a link, even a dangling one, where the Acknowledgements folder belongs.
+    /// A link would send every write to a folder outside the bundle.
+    private func requirePlainFolder(_ folder: String, inBundle bundlePath: String)
+        throws(DomainError)
+    {
+        guard files.exists(at: folder) else { return }
+        let refusal = DomainError.fileUnwritable(
+            path: folder, reason: "it is a link, and Dependi does not write through links")
+        let resolvedFolder: String
+        let resolvedBundle: String
+        do {
+            resolvedFolder = try files.realPath(of: folder)
+            resolvedBundle = try files.realPath(of: bundlePath)
+        } catch {
+            throw refusal
+        }
+        guard resolvedFolder == Self.join(resolvedBundle, Self.folderName) else { throw refusal }
     }
 
     // MARK: Manifest
@@ -156,8 +194,9 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
 
     // MARK: Writing
 
-    private func writePlist(_ plist: [String: Any], to path: String) throws(DomainError) {
-        let data = try Self.encode(plist, path: path)
+    private func writePlist(_ plist: [String: Any], encodedAs data: Data, to path: String)
+        throws(DomainError)
+    {
         guard try writeIfDifferent(data, to: path) else { return }
         try verify(plist, at: path)
     }

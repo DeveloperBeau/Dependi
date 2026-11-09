@@ -19,3 +19,7 @@ One page for each subsystem. Each page describes how the subsystem works today.
 | [Settings bundle output](SettingsBundleOutput.md) | Current |
 | [Command line](CommandLine.md) | Current |
 | [Generate flow](GenerateFlow.md) | Current |
+| [Composition](Composition.md) | Current |
+| [Wizard](Wizard.md) | Current |
+| [Wrapper](Wrapper.md) | Current |
+| [Build integration](BuildIntegration.md) | Current |

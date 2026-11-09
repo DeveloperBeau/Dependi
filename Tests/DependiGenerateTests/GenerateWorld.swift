@@ -70,6 +70,17 @@ final class GenerateWorld {
             supportedPlatforms: linked.supportedPlatforms)
     }
 
+    /// Records a product that a test target or a sibling target links.
+    func linkOther(_ productName: String, package: String?) {
+        linked = LinkedProductSet(
+            products: linked.products,
+            otherProducts: linked.otherProducts + [
+                ProductReference(productName: productName, packageName: package)
+            ],
+            localPackagePaths: linked.localPackagePaths,
+            supportedPlatforms: linked.supportedPlatforms)
+    }
+
     func makeFeature() -> GenerateFeature {
         writer = RecordingAcknowledgementWriter(failure: writerFailure)
         manifestReader = StubManifestReader(manifests: manifests)
