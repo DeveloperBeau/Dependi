@@ -29,6 +29,7 @@ enum ProcessTree {
     }
 
     /// Kills the process group and every descendant. A test helper can leave the group.
+    /// The caller must not have reaped `root`, because a reaped id can belong to another process.
     static func kill(root: pid_t) {
         for _ in 0..<2 {
             let known = descendants(of: root)

@@ -22,3 +22,4 @@ One page for each subsystem. Each page describes how the subsystem works today.
 | [Composition](Composition.md) | Current |
 | [Wizard](Wizard.md) | Current |
 | [Wrapper](Wrapper.md) | Current |
+| [Build integration](BuildIntegration.md) | Current |

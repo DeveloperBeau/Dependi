@@ -6,7 +6,7 @@ extension DiskFileSystem {
     public func makeExecutable(at path: String) throws(DomainError) {
         if chmod(path, 0o755) != 0 {
             let code = errno
-            if code == ENOENT { throw .fileNotFound(path: path) }
+            if code == ENOENT || code == ENOTDIR { throw .fileNotFound(path: path) }
             throw .fileUnwritable(
                 path: path, reason: "chmod failed: \(String(cString: strerror(code)))")
         }

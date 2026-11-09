@@ -1,6 +1,7 @@
 import DependiCommandLine
 import DependiConsole
 import DependiDomain
+import DependiEntities
 import DependiEnvironment
 import DependiFileSystem
 import DependiGenerate
@@ -78,15 +79,40 @@ public struct DependiApplication {
         }
     }
 
+    /// The configuration of the project, or the defaults if there is none. A broken file is
+    /// reported later by the generate feature, which reads the same file before any process runs.
+    private func configuration(environment: [String: String], files: DiskFileSystem)
+        -> ToolConfiguration
+    {
+        if let directory = environment["PROJECT_DIR"],
+            let loaded = try? ConfigurationLoader(files: files).load(projectDirectory: directory)
+        {
+            return loaded
+        }
+        return ToolConfiguration(
+            excludes: [], manualEntries: [],
+            gateConfigurations: ToolConfiguration.defaultGateConfigurations,
+            sourcePackagesPath: nil, outputPath: nil, includeBuildTools: false,
+            allowUnreached: false,
+            processTimeoutSeconds: ToolConfiguration.defaultProcessTimeoutSeconds,
+            runTimeoutSeconds: ToolConfiguration.defaultRunTimeoutSeconds, version: nil, commit: nil
+        )
+    }
+
     private func generate(environment: [String: String]) -> Int32 {
         let disk = DiskFileSystem()
+        let settings = configuration(environment: environment, files: disk)
+        let limited = DeadlineProcessRunner(
+            wrapping: process, limitSeconds: settings.runTimeoutSeconds,
+            now: { ProcessInfo.processInfo.systemUptime })
         let feature = GenerateFeature(
             environment: ProcessEnvironment(variables: environment), files: disk, directories: disk,
             dependencySource: WorkspaceStateReader(files: disk, directories: disk),
             linkedProducts: ProjectFileReader(files: disk),
             manifests: LazyManifestReader(
-                environment: environment, process: process, files: disk, directories: disk,
-                writer: disk),
+                environment: environment, configuration: settings, now: { Date() },
+                process: limited, files: disk,
+                directories: disk, writer: disk),
             writer: SettingsBundleWriter(
                 files: disk, directories: disk, writer: disk, slugger: OutputNameSlugger()),
             output: console)

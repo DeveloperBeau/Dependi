@@ -6,7 +6,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("Init feature")
+@Suite("Init feature", .timeLimit(.minutes(1)))
 struct InitFeatureTests {
     // MARK: A fresh install
 
@@ -34,7 +34,9 @@ struct InitFeatureTests {
 
         #expect(try world.text("/proj/.dependi/bin/dependi") == "BINARY")
         #expect(world.files.isExecutable(at: "/proj/.dependi/bin/dependi"))
-        #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.0\n")
+        #expect(
+            try world.text("/proj/.dependi/bin/VERSION")
+                == "0.1.0-" + String(repeating: "ab", count: 20) + "\n")
         #expect(try world.text("/proj/.dependi/run.sh") == InitWorld.wrapper)
         #expect(world.files.isExecutable(at: "/proj/.dependi/run.sh"))
         #expect(
@@ -86,9 +88,44 @@ struct InitFeatureTests {
             #expect(config.commit == nil, "scenario \(scenario)")
             #expect(config.version == "0.1.0")
             #expect(
+                try world.text("/proj/.dependi/bin/VERSION") == "0.1.0\n", "scenario \(scenario)")
+            #expect(
                 world.console.lines.contains { $0.contains("could not read the commit") },
                 "scenario \(scenario)")
             if scenario == 0 { #expect(world.runner.requests.isEmpty) }
+        }
+    }
+
+    @Test("only exactly 40 lowercase hex digits are taken as the commit")
+    func commitFormatIsExact() throws {
+        let hex = "0123456789abcdef0123456789abcdef01234567"
+        let rejected = [
+            hex + "0", String(hex.dropLast()), hex.uppercased(), "x" + hex, hex + "x",
+            hex + " junk", hex + "\n" + hex, "", "g" + String(hex.dropFirst()),
+        ]
+        for answer in rejected {
+            let world = try InitWorld()
+            world.gitResult = .success(
+                ProcessOutput(
+                    exitStatus: 0, standardOutput: Data((answer + "\n").utf8),
+                    standardError: Data()))
+            _ = try world.run()
+            let config = try JSONDecoder().decode(
+                ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
+            #expect(config.commit == nil, "answer \(answer.debugDescription)")
+            #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.0\n")
+        }
+        for answer in [hex, String(repeating: "0", count: 40), String(repeating: "f", count: 40)] {
+            let world = try InitWorld()
+            world.gitResult = .success(
+                ProcessOutput(
+                    exitStatus: 0, standardOutput: Data((answer + "\n").utf8),
+                    standardError: Data()))
+            _ = try world.run()
+            let config = try JSONDecoder().decode(
+                ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
+            #expect(config.commit == answer)
+            #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.0-" + answer + "\n")
         }
     }
 
@@ -116,6 +153,7 @@ struct InitFeatureTests {
         #expect(try world.run() == .installed)
         #expect(try world.data("/proj/.dependi.json") == config)
         #expect(try world.data("/proj/Settings.bundle/Root.plist") == plist)
+        #expect(!world.files.exists(at: "/proj/.dependi/Root.plist.bak"))
         #expect(!world.files.exists(at: "/proj/Settings.bundle/Root.plist.bak"))
         #expect(try world.text("/proj/.gitignore") == ".dependi/bin/\n")
         #expect(world.console.lines.contains("Dependi: kept the existing .dependi.json."))
@@ -160,7 +198,10 @@ struct InitFeatureTests {
         let specifiers = try world.specifiers("/proj/Settings.bundle/Root.plist")
         #expect(specifiers.map { $0["Title"] } == ["Sound", "About", "Acknowledgements"])
         #expect(specifiers.last?["File"] == "Acknowledgements")
-        #expect(try world.data("/proj/Settings.bundle/Root.plist.bak") == before)
+        #expect(try world.data("/proj/.dependi/Root.plist.bak") == before)
+        #expect(
+            !world.files.exists(at: "/proj/Settings.bundle/Root.plist.bak"),
+            "the backup would ship in the app")
         #expect(
             try world.plist("/proj/Settings.bundle/Root.plist")["StringsTable"] as? String == "Root"
         )

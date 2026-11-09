@@ -12,6 +12,12 @@
 - **Finding:** The wizard names each clashing file and asks. At the end of the input it stops with nothing removed.
 - **Rule:** Removal needs a confirmation for each file.
 
+## Nothing next to Root.plist may be a backup
+
+- **Trap:** The first version wrote `Root.plist.bak` inside `Settings.bundle`. A real archive showed it in the shipped app.
+- **Finding:** Xcode copies the whole bundle into the product.
+- **Rule:** Backups go to `.dependi/`. A test checks that the bundle holds no backup file.
+
 ## Match the exact old name
 
 - **Trap:** A loose match for the old LicensePlist pane could rewrite a pane the user wrote.

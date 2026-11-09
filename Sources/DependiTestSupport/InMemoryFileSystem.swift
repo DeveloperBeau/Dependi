@@ -17,9 +17,13 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
         var nodes: [String: Node] = ["/": .directory]
         var readOnlyPaths: Set<String> = []
         var executablePaths: Set<String> = []
+        var modified: [String: Date] = [:]
     }
 
     private let state = LockedBox(State())
+
+    /// The number of links one path may pass through. The real system reports a loop after 32.
+    private static let maximumLinkHops = 32
 
     /// Creates a file system that holds only the root folder.
     public init() {}
@@ -78,7 +82,7 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             let candidate = join(resolved + [name])
             if case .symlink(let target)? = nodes[candidate], followFinal || !pending.isEmpty {
                 steps += 1
-                if steps > 40 { throw .symlinkLoop(path: path) }
+                if steps > Self.maximumLinkHops { throw .symlinkLoop(path: path) }
                 let targetParts = components(
                     normalize(target.hasPrefix("/") ? target : join(resolved) + "/" + target))
                 resolved = []
@@ -108,7 +112,9 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
         try state.withValue { state throws(DomainError) in
             let path = try Self.resolve(realPath, followFinal: false, nodes: state.nodes)
             switch state.nodes[path] {
-            case .file(let data): return data.prefix(limit + 1)
+            case .file(let data):
+                let wanted = limit < Int.max ? max(limit, 0) + 1 : limit
+                return data.prefix(wanted)
             case nil: throw .fileNotFound(path: realPath)
             default: throw .notRegularFile(path: realPath)
             }
@@ -123,6 +129,21 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
                 return false
             }
             return state.nodes[resolved] != nil
+        }
+    }
+
+    /// Sets the modification date that `modificationDate(of:)` reports for a path.
+    public func setModificationDate(_ date: Date, at path: String) {
+        state.withValue { $0.modified[Self.normalize(path)] = date }
+    }
+
+    /// Implements `modificationDate` for `InMemoryFileSystem`.
+    public func modificationDate(of path: String) -> Date? {
+        state.withValue { state in
+            guard let resolved = try? Self.resolve(path, followFinal: false, nodes: state.nodes),
+                state.nodes[resolved] != nil
+            else { return nil }
+            return state.modified[resolved]
         }
     }
 
@@ -164,7 +185,12 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             guard case .directory? = state.nodes[parent] else {
                 throw .fileUnwritable(path: path, reason: "the folder does not exist")
             }
+            if case .directory? = state.nodes[target] {
+                throw .fileUnwritable(path: path, reason: "a folder is in the way")
+            }
             state.nodes[target] = .file(data)
+            // The real write replaces the file with a new one that has the default mode.
+            state.executablePaths.remove(target)
         }
     }
 
@@ -196,6 +222,7 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             }
             for key in state.nodes.keys where key == target || key.hasPrefix(target + "/") {
                 state.nodes[key] = nil
+                state.executablePaths.remove(key)
             }
         }
     }
@@ -217,11 +244,16 @@ public final class InMemoryFileSystem: FileReading, FileWriting, DirectoryListin
             for key in state.nodes.keys where key == to || key.hasPrefix(to + "/") {
                 state.nodes[key] = nil
             }
+            let replaced = state.executablePaths.filter { $0 == to || $0.hasPrefix(to + "/") }
+            state.executablePaths.subtract(replaced)
+            let marked = state.executablePaths.filter { $0 == from || $0.hasPrefix(from + "/") }
             for key in state.nodes.keys.sorted() where key == from || key.hasPrefix(from + "/") {
                 let moved = to + key.dropFirst(from.count)
                 state.nodes[moved] = state.nodes[key]
                 state.nodes[key] = nil
             }
+            state.executablePaths.subtract(marked)
+            state.executablePaths.formUnion(marked.map { to + $0.dropFirst(from.count) })
         }
     }
 

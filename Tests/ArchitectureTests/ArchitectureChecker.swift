@@ -104,7 +104,7 @@ enum ArchitectureChecker {
         return result
     }
 
-    /// Source text rules: one public type, doc comments, defaults, errors and forbidden text.
+    /// Source text rules: one public type, doc comments, defaults, global state, errors and forbidden text.
     static func checkSourceRules(sources: [SourceFile]) -> [ArchitectureViolation] {
         var result: [ArchitectureViolation] = []
         var errorEnumsByModule: [String: Int] = [:]
@@ -128,6 +128,12 @@ enum ArchitectureChecker {
                     .init(
                         rule: "collaboratorDefault", location: location,
                         detail: "a collaborator has a default value: \(parameter)"))
+            }
+            for declaration in SourceRules.hiddenGlobalState(in: file.text) {
+                result.append(
+                    .init(
+                        rule: "hiddenGlobalState", location: location,
+                        detail: "holds global state: \(declaration)"))
             }
             errorEnumsByModule[file.module, default: 0] += SourceRules.errorEnumCount(in: file.text)
             if file.module == "DependiDomain" {

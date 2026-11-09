@@ -18,6 +18,18 @@
 - **Finding:** `dump-package` writes nothing into a checkout when it has its own scratch folder. The recorded output of seven packages covers plugins, binaries, platform conditions, product packages and a 60 KB manifest.
 - **Rule:** Unit tests use recorded output with `$ROOT` in place of machine paths. Contract tests run the real tool.
 
+## Child output goes to the build log
+
+- **Trap:** The first 300 bytes of the standard error of `swift` were printed raw. A hostile package could add escape sequences or control bytes to the log.
+- **Finding:** The message was built from the bytes with no filter.
+- **Rule:** Replace control characters with spaces before the text reaches a message. Keep newline and tab.
+
+## Cache leftovers
+
+- **Trap:** An atomic write that is interrupted leaves a `.tmp-<UUID>` file in a cache that has no eviction.
+- **Finding:** The remote cache outlives every build folder, so the files stay for good.
+- **Rule:** Remove a temporary file that is older than one day when the cache is written. Never remove a file of unknown age or a name that does not match.
+
 ## Mutation results
 
 | Mutation | Test that failed |

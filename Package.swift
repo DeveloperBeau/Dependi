@@ -9,6 +9,15 @@ let sharedSettings: [SwiftSetting] = [
 let package = Package(
     name: "Dependi",
     platforms: [.macOS(.v14)],
+    products: [
+        .library(
+            name: "DependiKit",
+            targets: [
+                "DependiEntities", "DependiDomain", "DependiFileSystem", "DependiProcess", "DependiPackageGraph",
+                "DependiComposition", "DependiInit",
+            ]),
+        .executable(name: "dependi", targets: ["dependi"]),
+    ],
     targets: [
         .target(
             name: "DependiInit",

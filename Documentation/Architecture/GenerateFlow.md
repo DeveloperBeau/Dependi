@@ -23,7 +23,7 @@
 7. Read the resolved packages and the pinned revisions. A checkout at another revision than the pin fails.
 8. Read the linked products of the target.
 9. Add the local packages that the project file lists to the local packages from the workspace state.
-10. Resolve the linked packages. Excludes apply. A resolved package that nothing reaches fails unless `allowUnreached` is set.
+10. Resolve the linked packages. Excludes apply. A resolved package that nothing reaches fails unless `allowUnreached` is set. A package that a test target or another target of the project links, directly or through its dependencies, is expected and is not reported. So is a package that only a build tool product reaches. A package that nothing in the project links is still reported. A package that only another project of the workspace links is reported too, so set `allowUnreached` for such a workspace.
 11. For each linked package list the top level of its folder, pick the license files and validate each.
 12. Add the manual entries. Each license path must be relative and stay inside the project folder.
 13. Assemble. A package without a license, a duplicate identity and an output name clash fail here.
@@ -32,7 +32,7 @@
 
 ## Where the bundle goes
 
-The bundle is `TARGET_BUILD_DIR/UNLOCALIZED_RESOURCES_FOLDER_PATH/Settings.bundle`. For an iOS product that is `App.app/Settings.bundle`. For Mac Catalyst it is `App.app/Contents/Resources/Settings.bundle`. A configured `outputPath` replaces `Settings.bundle`. Every part must be relative and must not contain `..`. `TARGET_BUILD_DIR` must be absolute. The check runs before any write.
+The bundle is `TARGET_BUILD_DIR/UNLOCALIZED_RESOURCES_FOLDER_PATH/Settings.bundle`. For an iOS product that is `App.app/Settings.bundle`. For Mac Catalyst it is `App.app/Contents/Resources/Settings.bundle`. A configured `outputPath` replaces `Settings.bundle`. Every part must be relative and must not contain `..`. `TARGET_BUILD_DIR` must be absolute. Every existing part of the product folder and of the bundle path must resolve to itself. A link, even a dangling one, is refused with `invalidOutputLocation`, because it would send the writes elsewhere. The check runs before any write.
 
 ## Errors
 

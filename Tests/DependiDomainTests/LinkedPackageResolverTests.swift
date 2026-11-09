@@ -4,7 +4,7 @@ import DependiTestSupport
 import TestHelpers
 import Testing
 
-@Suite("Linked package resolver")
+@Suite("Linked package resolver", .timeLimit(.minutes(1)))
 struct LinkedPackageResolverTests {
     private let normalizer = PackageIdentityNormalizer()
 
@@ -44,13 +44,14 @@ struct LinkedPackageResolverTests {
         linked: [ProductReference], remote remotes: [ResolvedPackage],
         local locals: [ResolvedPackage] = [],
         manifests: [String: PackageManifest], excludes: Set<String> = [],
-        platforms: Set<String>? = nil,
+        otherLinked: [ProductReference] = [], platforms: Set<String>? = nil,
         buildTools: Bool = false
     ) throws(DomainError) -> (LinkResult, StubManifestReader) {
         let reader = StubManifestReader(manifests: manifests)
         let resolver = LinkedPackageResolver(manifests: reader, normalizer: normalizer)
         let result = try resolver.resolve(
-            linked: linked, remotePackages: remotes, localPackages: locals, excludes: excludes,
+            linked: linked, otherLinked: otherLinked, remotePackages: remotes,
+            localPackages: locals, excludes: excludes,
             platformNames: platforms, includeBuildTools: buildTools)
         return (result, reader)
     }
@@ -93,6 +94,91 @@ struct LinkedPackageResolverTests {
             remote: [remote("kit"), remote("docc")], manifests: manifests)
         #expect(names(result.linked) == ["kit"])
         #expect(names(result.unreached) == ["docc"])
+    }
+
+    private func pluginPackageManifest() -> PackageManifest {
+        PackageManifest(
+            products: [
+                ManifestProduct(name: "Lint", targetNames: ["LintPlugin"]),
+                ManifestProduct(name: "Runtime", targetNames: ["Runtime"]),
+                ManifestProduct(name: "Mixed", targetNames: ["LintPlugin", "Runtime"]),
+            ],
+            targets: [
+                ManifestTarget(name: "LintPlugin", kind: .plugin, dependencies: []),
+                ManifestTarget(name: "Runtime", kind: .regular, dependencies: []),
+            ], declaredDependencies: [])
+    }
+
+    @Test("a package that only a plugin product reaches does not ship and is not reported")
+    func pluginProductIsNotShipped() throws {
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Lint", packageName: "tools")],
+            remote: [remote("tools")], manifests: ["/checkouts/tools": pluginPackageManifest()])
+        #expect(result.linked.isEmpty)
+        #expect(result.unreached.isEmpty)
+    }
+
+    @Test("a plugin product ships when build tools are included")
+    func pluginProductShipsWithBuildTools() throws {
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Lint", packageName: "tools")],
+            remote: [remote("tools")], manifests: ["/checkouts/tools": pluginPackageManifest()],
+            buildTools: true)
+        #expect(names(result.linked) == ["tools"])
+    }
+
+    @Test("a package ships when a library product of it is linked beside its plugin product")
+    func libraryBesidePluginShips() throws {
+        let (result, _) = try resolve(
+            linked: [
+                ProductReference(productName: "Lint", packageName: "tools"),
+                ProductReference(productName: "Runtime", packageName: "tools"),
+            ], remote: [remote("tools")],
+            manifests: ["/checkouts/tools": pluginPackageManifest()])
+        #expect(names(result.linked) == ["tools"])
+    }
+
+    @Test("a product of a plugin target and a library target still ships")
+    func mixedProductShips() throws {
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Mixed", packageName: "tools")],
+            remote: [remote("tools")], manifests: ["/checkouts/tools": pluginPackageManifest()])
+        #expect(names(result.linked) == ["tools"])
+    }
+
+    @Test("packages that other targets link, and their dependencies, are not unreached")
+    func otherTargetPackagesAreNotUnreached() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(product: "Kit"),
+            "/checkouts/tester": simpleManifest(
+                product: "Tester", dependencies: [dependency(.product, "Dep", package: "dep")],
+                declared: ["dep"]),
+            "/checkouts/dep": simpleManifest(product: "Dep"),
+            "/checkouts/orphan": simpleManifest(product: "Orphan"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Kit", packageName: "kit")],
+            remote: [remote("kit"), remote("tester"), remote("dep"), remote("orphan")],
+            manifests: manifests,
+            otherLinked: [ProductReference(productName: "Tester", packageName: "tester")])
+        #expect(names(result.linked) == ["kit"])
+        #expect(names(result.unreached) == ["orphan"])
+    }
+
+    @Test("an other product that does not resolve is ignored and the others still count")
+    func brokenOtherProductIsIgnored() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(product: "Kit"),
+            "/checkouts/tester": simpleManifest(product: "Tester"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Kit", packageName: "kit")],
+            remote: [remote("kit"), remote("tester")], manifests: manifests,
+            otherLinked: [
+                ProductReference(productName: "Ghost", packageName: "ghost"),
+                ProductReference(productName: "Tester", packageName: "tester"),
+            ])
+        #expect(result.unreached.isEmpty)
     }
 
     @Test("a macro target's dependencies are followed only when build tools are included")
@@ -216,6 +302,39 @@ struct LinkedPackageResolverTests {
         #expect(names(result.linked) == ["helper-pkg", "kit"])
     }
 
+    @Test("a package name that is a manifest name and not an identity falls back to the product")
+    func manifestNameInsteadOfIdentity() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(
+                product: "Kit",
+                dependencies: [dependency(.product, "SwiftProtobuf", package: "SwiftProtobuf")],
+                declared: ["swift-protobuf", "other"]),
+            "/checkouts/swift-protobuf": simpleManifest(product: "SwiftProtobuf"),
+            "/checkouts/other": simpleManifest(product: "Other"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Kit", packageName: "kit")],
+            remote: [remote("kit"), remote("swift-protobuf"), remote("other")],
+            manifests: manifests)
+        #expect(names(result.linked) == ["kit", "swift-protobuf"])
+        #expect(names(result.unreached) == ["other"])
+    }
+
+    @Test("a wrong package name with no declared dependency that has the product still fails")
+    func wrongPackageNameStillFails() {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(
+                product: "Kit", dependencies: [dependency(.product, "Ghost", package: "Nowhere")],
+                declared: ["other"]),
+            "/checkouts/other": simpleManifest(product: "Other"),
+        ]
+        #expect(throws: DomainError.productUnmatched(product: "Ghost in package Nowhere")) {
+            try resolve(
+                linked: [ProductReference(productName: "Kit", packageName: "kit")],
+                remote: [remote("kit"), remote("other")], manifests: manifests)
+        }
+    }
+
     @Test("a name that two declared dependencies provide is ambiguous and names both")
     func byNameAmbiguous() {
         let manifests = [
@@ -261,6 +380,37 @@ struct LinkedPackageResolverTests {
                 linked: [ProductReference(productName: "Core", packageName: nil)], remote: [],
                 local: [local("one"), local("two")], manifests: manifests)
         }
+    }
+
+    @Test("a product with no package name stops at the first remote package that provides it")
+    func remoteSearchStopsAtFirstMatch() throws {
+        let manifests = [
+            "/checkouts/aaa": simpleManifest(product: "Other"),
+            "/checkouts/bbb": simpleManifest(product: "Wanted"),
+            "/checkouts/ccc": simpleManifest(product: "Wanted"),
+            "/checkouts/ddd": simpleManifest(product: "Extra"),
+        ]
+        let (result, reader) = try resolve(
+            linked: [ProductReference(productName: "Wanted", packageName: nil)],
+            remote: [remote("ddd"), remote("ccc"), remote("bbb"), remote("aaa")],
+            manifests: manifests)
+        #expect(names(result.linked) == ["bbb"])
+        #expect(reader.readCounts["/checkouts/bbb"] == 1)
+        #expect(reader.readCounts["/checkouts/ccc"] == nil)
+        #expect(reader.readCounts["/checkouts/ddd"] == nil)
+    }
+
+    @Test("a product with no package name reads no remote manifest when a local package has it")
+    func localMatchReadsNoRemote() throws {
+        let (result, reader) = try resolve(
+            linked: [ProductReference(productName: "Core", packageName: nil)],
+            remote: [remote("net")], local: [local("core")],
+            manifests: [
+                "/proj/Packages/core": simpleManifest(product: "Core"),
+                "/checkouts/net": simpleManifest(product: "Core"),
+            ])
+        #expect(names(result.linked) == ["core"])
+        #expect(reader.readCounts["/checkouts/net"] == nil)
     }
 
     @Test("a product that no package provides is unmatched and named")
@@ -342,6 +492,66 @@ struct LinkedPackageResolverTests {
             remote: [], manifests: [:],
             excludes: ["app-package"])
         #expect(result.linked.isEmpty)
+    }
+
+    @Test("the dependencies of an excluded package that a product links still ship")
+    func excludedRootStillBringsItsDependencies() throws {
+        let manifests = [
+            "/checkouts/own": simpleManifest(
+                product: "Own", dependencies: [dependency(.product, "Dep", package: "dep")],
+                declared: ["dep"]),
+            "/checkouts/dep": simpleManifest(product: "Dep"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Own", packageName: "own")],
+            remote: [remote("own"), remote("dep")], manifests: manifests, excludes: ["own"])
+        #expect(names(result.linked) == ["dep"])
+        #expect(result.unreached.isEmpty)
+    }
+
+    @Test("an excluded package that is not linked does not pull in its dependencies")
+    func excludedUnlinkedPackageBringsNothing() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(product: "Kit"),
+            "/checkouts/own": simpleManifest(
+                product: "Own", dependencies: [dependency(.product, "Dep", package: "dep")],
+                declared: ["dep"]),
+            "/checkouts/dep": simpleManifest(product: "Dep"),
+        ]
+        let (result, _) = try resolve(
+            linked: [ProductReference(productName: "Kit", packageName: "kit")],
+            remote: [remote("kit"), remote("own"), remote("dep")], manifests: manifests,
+            excludes: ["own"])
+        #expect(names(result.linked) == ["kit"])
+        #expect(names(result.unreached) == ["dep"])
+    }
+
+    @Test("an exclude matches whatever its case, and a location names its package")
+    func excludeIsNormalized() throws {
+        let manifests = [
+            "/checkouts/kit": simpleManifest(product: "Kit"),
+            "/checkouts/own": simpleManifest(product: "Own"),
+            "/checkouts/spare": simpleManifest(product: "Spare"),
+        ]
+        let (result, _) = try resolve(
+            linked: [
+                ProductReference(productName: "Kit", packageName: "kit"),
+                ProductReference(productName: "Own", packageName: "own"),
+            ],
+            remote: [remote("kit"), remote("own"), remote("spare")], manifests: manifests,
+            excludes: ["OWN", "https://github.com/org/Spare.git"])
+        #expect(names(result.linked) == ["kit"])
+        #expect(result.unreached.isEmpty)
+    }
+
+    @Test("a mixed-case exclude that matches nothing still fails and keeps the typed text")
+    func mixedCaseExcludeMatchesNothing() {
+        #expect(throws: DomainError.unmatchedExclude("Typo")) {
+            try resolve(
+                linked: [], remote: [remote("kit")],
+                manifests: ["/checkouts/kit": simpleManifest(product: "Kit")],
+                excludes: ["Typo"])
+        }
     }
 
     // MARK: Fuzz

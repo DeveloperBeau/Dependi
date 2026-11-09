@@ -4,7 +4,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("Process environment")
+@Suite("Process environment", .timeLimit(.minutes(1)))
 struct ProcessEnvironmentTests {
     @Test("a set variable returns its value")
     func setValue() {

@@ -79,9 +79,11 @@ public struct InitFeature: Sendable {
             report(location: location, bundle: bundle)
             return .reported
         }
-        try writeConfiguration(location: location, linked: linked)
-        try prepareSettingsBundle(at: bundle ?? location.root + "/Settings.bundle")
-        try installTool(in: location.root)
+        let commit = pinnedCommit()
+        try writeConfiguration(location: location, linked: linked, commit: commit)
+        try prepareSettingsBundle(
+            at: bundle ?? location.root + "/Settings.bundle", root: location.root)
+        try installTool(in: location.root, commit: commit)
         try updateIgnoreFile(in: location.root)
         printRunScript(root: location.root)
         return .installed
@@ -103,9 +105,9 @@ public struct InitFeature: Sendable {
 
     // MARK: Configuration
 
-    private func writeConfiguration(location: ProjectLocation, linked: LinkedProductSet)
-        throws(DomainError)
-    {
+    private func writeConfiguration(
+        location: ProjectLocation, linked: LinkedProductSet, commit: String?
+    ) throws(DomainError) {
         let path = location.root + "/.dependi.json"
         if files.exists(at: path) {
             output.writeLine("Dependi: kept the existing .dependi.json.")
@@ -114,7 +116,6 @@ public struct InitFeature: Sendable {
         let normalizer = PackageIdentityNormalizer()
         let excludes = linked.localPackagePaths.filter { $0.hasPrefix(location.root + "/") }
             .map { normalizer.identity(forLocation: $0).value }.sorted()
-        let commit = pinnedCommit()
         if commit == nil {
             output.writeLine(
                 "Dependi: could not read the commit of this Dependi checkout. Add \"commit\" to .dependi.json."
@@ -175,7 +176,7 @@ public struct InitFeature: Sendable {
         }
     }
 
-    private func prepareSettingsBundle(at bundle: String) throws(DomainError) {
+    private func prepareSettingsBundle(at bundle: String, root: String) throws(DomainError) {
         let plistPath = bundle + "/Root.plist"
         let original: Data? =
             files.exists(at: plistPath)
@@ -184,7 +185,10 @@ public struct InitFeature: Sendable {
         let edit = try RootPlistEditor.edited(original)
         if edit.change != .unchanged {
             try writer.createDirectory(at: bundle)
-            if let original { try writer.write(original, toPath: plistPath + ".bak") }
+            if let original {
+                try writer.createDirectory(at: root + "/.dependi")
+                try writer.write(original, toPath: root + "/.dependi/Root.plist.bak")
+            }
             try writer.write(edit.data, toPath: plistPath)
         }
         switch edit.change {
@@ -193,7 +197,7 @@ public struct InitFeature: Sendable {
         case .added: output.writeLine("Dependi: added the Acknowledgements pane to \(plistPath).")
         case .rewroteOldEntry:
             output.writeLine(
-                "Dependi: changed the old LicensePlist pane in \(plistPath) to Acknowledgements. The old file is saved as Root.plist.bak."
+                "Dependi: changed the old LicensePlist pane in \(plistPath) to Acknowledgements. The old file is saved as .dependi/Root.plist.bak, outside the bundle so it does not ship."
             )
         }
         if original == nil {
@@ -219,7 +223,7 @@ public struct InitFeature: Sendable {
 
     // MARK: Tool files
 
-    private func installTool(in root: String) throws(DomainError) {
+    private func installTool(in root: String, commit: String?) throws(DomainError) {
         try writer.createDirectory(at: root + "/.dependi/bin")
         let real = try files.realPath(of: executablePath)
         let binary = try files.readRegularFile(at: real, upToBytes: Self.maximumExecutableBytes)
@@ -229,7 +233,10 @@ public struct InitFeature: Sendable {
         }
         try writer.write(binary, toPath: root + "/.dependi/bin/dependi")
         try executables.makeExecutable(at: root + "/.dependi/bin/dependi")
-        try writer.write(Data((version + "\n").utf8), toPath: root + "/.dependi/bin/VERSION")
+        // The wrapper compares this line with the version and commit of the config. Without a
+        // known commit the line never matches, so the wrapper uses the cache or builds.
+        let installed = commit.map { version + "-" + $0 } ?? version
+        try writer.write(Data((installed + "\n").utf8), toPath: root + "/.dependi/bin/VERSION")
         try writer.write(Data(wrapperText.utf8), toPath: root + "/.dependi/run.sh")
         try executables.makeExecutable(at: root + "/.dependi/run.sh")
         let inputs = [

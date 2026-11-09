@@ -13,4 +13,13 @@ public protocol FileReading: Sendable {
 
     /// Returns whether anything exists at the path, without following a final link.
     func exists(at path: String) -> Bool
+
+    /// Returns when the item at the path was last changed, without following a final link.
+    /// It returns `nil` if the item does not exist or its age is not known.
+    func modificationDate(of path: String) -> Date?
+}
+
+extension FileReading {
+    /// A reader that cannot tell the age of a file reports that it does not know.
+    public func modificationDate(of path: String) -> Date? { nil }
 }
