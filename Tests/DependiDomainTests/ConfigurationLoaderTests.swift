@@ -4,7 +4,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Configuration loader")
+@Suite("Configuration loader", .timeLimit(.minutes(1)))
 struct ConfigurationLoaderTests {
     private func system(configuration: String?) throws -> InMemoryFileSystem {
         let files = InMemoryFileSystem()
@@ -106,5 +106,59 @@ struct ConfigurationLoaderTests {
         #expect(throws: DomainError.notRegularFile(path: "/proj/.dependi.json")) {
             try ConfigurationLoader(files: folder).load(projectDirectory: "/proj")
         }
+    }
+}
+
+extension ConfigurationLoaderTests {
+    private func load(_ text: String) throws(DomainError) -> ToolConfiguration {
+        let files: InMemoryFileSystem
+        do { files = try system(configuration: text) } catch { fatalError("\(error)") }
+        return try ConfigurationLoader(files: files).load(projectDirectory: "/proj")
+    }
+
+    @Test(
+        "a process time limit that is zero, negative, too large or not finite is corrupt",
+        arguments: ["0", "-1", "-0.5", "3600.5", "3601", "1e9"])
+    func badProcessLimit(value: String) {
+        let reason = "processTimeoutSeconds must be a number above 0 and at most 3600"
+        #expect(
+            throws: DomainError.configurationCorrupt(path: "/proj/.dependi.json", reason: reason)
+        ) {
+            try load(#"{"processTimeoutSeconds": \#(value)}"#)
+        }
+    }
+
+    @Test(
+        "a run time limit that is zero, negative or too large is corrupt",
+        arguments: ["0", "-1", "86400.5", "86401", "1e12"])
+    func badRunLimit(value: String) {
+        let reason = "runTimeoutSeconds must be a number above 0 and at most 86400"
+        #expect(
+            throws: DomainError.configurationCorrupt(path: "/proj/.dependi.json", reason: reason)
+        ) {
+            try load(#"{"runTimeoutSeconds": \#(value)}"#)
+        }
+    }
+
+    @Test(
+        "a time limit that is not a finite number is corrupt",
+        arguments: ["NaN", "Infinity", "-Infinity", "1e999", "-1e999", "\"60\"", "null5"])
+    func nonFiniteLimit(value: String) {
+        #expect(throws: DomainError.self) {
+            try load(#"{"processTimeoutSeconds": \#(value)}"#)
+        }
+    }
+
+    @Test("limits inside the range load, and the edges are included")
+    func goodLimits() throws {
+        let edge = try load(#"{"processTimeoutSeconds": 3600, "runTimeoutSeconds": 86400}"#)
+        #expect(edge.processTimeoutSeconds == 3600)
+        #expect(edge.runTimeoutSeconds == 86400)
+        let small = try load(#"{"processTimeoutSeconds": 0.25, "runTimeoutSeconds": 1}"#)
+        #expect(small.processTimeoutSeconds == 0.25)
+        #expect(small.runTimeoutSeconds == 1)
+        let absent = try load("{}")
+        #expect(absent.processTimeoutSeconds == 60)
+        #expect(absent.runTimeoutSeconds == 300)
     }
 }

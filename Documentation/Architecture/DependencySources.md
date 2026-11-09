@@ -25,7 +25,8 @@ The `DependiWorkspaceState` module reads what Xcode resolved for a project. It i
 | `remoteSourceControl` | `.remote`, folder `checkouts/<subpath>` |
 | `fileSystem`, `localSourceControl` | `.local`, folder from `location` |
 | state `edited` | `.local`, folder from `state.path` |
-| anything else, such as `registry` | Error that names the kind |
+| `registry` | Skipped. A product that links one finds no package and fails as unmatched |
+| anything else | Error that names the kind |
 
 A remote package needs `state.checkoutState`. Its version and revision come from there. A branch checkout has a revision and no version.
 
@@ -37,13 +38,21 @@ A remote package needs `state.checkoutState`. Its version and revision come from
 
 ## Pinned revisions
 
-The first file that exists wins, in this order.
+The files are tried in tiers. The first tier that has a file wins.
 
 1. `*.xcworkspace/xcshareddata/swiftpm/Package.resolved`
 2. `*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved`
 3. `Package.resolved` at the folder root
 
-Only the top level of the folder is listed. With no file the result is empty. Version 1 reads `object.pins[]` with `repositoryURL`. Other versions read `pins[]` with `location`. Each pin needs a revision. The key is the normalizer identity of the location. Two pins with one identity give `identityConflict`.
+Only the top level of the folder is listed. With no file the result is empty.
+
+When tier 1 holds more than one file, the workspace that has the name of an `.xcodeproj` in the folder wins. If that does not give exactly one, every file of the tier is read. A package that the files pin to different revisions gets no pin, so the revision check skips it. A package that they pin alike keeps its pin. The same merge applies when tier 2 holds more than one file. This way a file of another workspace never causes a false mismatch.
+
+Version 1 reads `object.pins[]` with `repositoryURL`. Other versions read `pins[]` with `location`. A pin needs a revision, except a registry pin, which has none and is skipped. The key is the normalizer identity of the location. Two pins with one identity in one file give `identityConflict`.
+
+## Trust model
+
+The reader returns each local package folder from `workspace-state.json` as a path. The package graph reader then runs `swift package dump-package` in that folder, which runs that folder's `Package.swift`. The same holds for each remote checkout. Dependi therefore runs the manifests of the packages the project already builds, with the rights of the build. It does not run anything from a package that the project does not build. A `workspace-state.json` that an attacker controls could point a local package at any folder, so the file must come from the project's own build folder, as it does in a normal archive.
 
 ## Errors
 

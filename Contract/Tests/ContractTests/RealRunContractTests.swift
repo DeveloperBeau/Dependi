@@ -4,7 +4,7 @@ import DependiInit
 import Foundation
 import Testing
 
-@Suite("A real run of the tool", .serialized)
+@Suite("A real run of the tool", .serialized, .timeLimit(.minutes(40)))
 struct RealRunContractTests {
     private let project = """
         // !$*UTF8*$!
@@ -110,7 +110,7 @@ struct RealRunContractTests {
     }
 }
 
-@Suite("The wrapper with the real build", .serialized)
+@Suite("The wrapper with the real build", .serialized, .timeLimit(.minutes(40)))
 struct WrapperContractTests {
     @Test("the wrapper clones the pinned commit, builds Dependi from source and runs it")
     func wrapperBuildsFromSource() throws {

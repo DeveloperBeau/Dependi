@@ -32,8 +32,8 @@ public enum DomainError: Error, Equatable, Sendable {
     case unmatchedExclude(String)
     /// A package has no license file and no manual entry.
     case licenseMissing(package: String)
-    /// A license file resolves to a place outside its package.
-    case licenseOutsideCheckout(package: String, path: String)
+    /// A license file resolves to a place outside its package. The case holds the name of the file, never where it leads.
+    case licenseOutsideCheckout(package: String, file: String)
     /// A license file is longer than the limit.
     case licenseTooLarge(package: String, file: String)
     /// A license file is not valid text.

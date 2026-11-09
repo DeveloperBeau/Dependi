@@ -1,7 +1,7 @@
 import DependiCommandLine
 import Testing
 
-@Suite("Command line parser")
+@Suite("Command line parser", .timeLimit(.minutes(1)))
 struct CommandLineParserTests {
     private let parser = CommandLineParser()
 

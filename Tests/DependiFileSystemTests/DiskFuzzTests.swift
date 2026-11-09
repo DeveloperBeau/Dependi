@@ -4,7 +4,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("Disk file system fuzz")
+@Suite("Disk file system fuzz", .timeLimit(.minutes(5)))
 struct DiskFuzzTests {
     private static let pieces = [
         "a", "b", "k", "z", "0", "7", " ", "-", "_", ".", "é", "ü", "日", "本", "ж", "😀",

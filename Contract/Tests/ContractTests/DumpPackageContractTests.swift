@@ -2,7 +2,7 @@ import DependiDomain
 import Foundation
 import Testing
 
-@Suite("dump-package with the real toolchain", .serialized)
+@Suite("dump-package with the real toolchain", .serialized, .timeLimit(.minutes(40)))
 struct DumpPackageContractTests {
     private let manifest = """
         // swift-tools-version: 6.0

@@ -2,7 +2,7 @@ import DependiEntities
 import TestHelpers
 import Testing
 
-@Suite("License document names")
+@Suite("License document names", .timeLimit(.minutes(1)))
 struct LicenseDocumentTests {
     @Test(
         "plain file names are accepted",

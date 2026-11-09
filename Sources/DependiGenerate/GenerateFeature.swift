@@ -118,7 +118,8 @@ public struct GenerateFeature: Sendable {
         }
         let resolver = LinkedPackageResolver(manifests: manifests, normalizer: normalizer)
         let result = try resolver.resolve(
-            linked: linked.products, remotePackages: resolved.filter { $0.kind == .remote },
+            linked: linked.products, otherLinked: linked.otherProducts,
+            remotePackages: resolved.filter { $0.kind == .remote },
             localPackages: locals, excludes: Set(settings.excludes),
             platformNames: PlatformNames.manifestNames(
                 platformName: context.platformName, supportedPlatforms: linked.supportedPlatforms),
@@ -136,6 +137,19 @@ public struct GenerateFeature: Sendable {
                 among: try directories.topLevelNames(in: package.checkoutPath))
             var documents: [LicenseDocument] = []
             for name in names {
+                let path = package.checkoutPath + "/" + name
+                // Only a folder can be listed. A folder named LICENSES gives its files, any other is skipped.
+                if let inside = try? directories.topLevelNames(in: path) {
+                    guard name.lowercased() == "licenses" else { continue }
+                    for innerName in locator.licenseFileNames(inLicensesFolder: inside)
+                    where (try? directories.topLevelNames(in: path + "/" + innerName)) == nil {
+                        documents.append(
+                            try validator.document(
+                                named: innerName, inFolder: path, root: package.checkoutPath,
+                                owner: package.identity.value))
+                    }
+                    continue
+                }
                 documents.append(
                     try validator.document(
                         named: name, inFolder: package.checkoutPath, root: package.checkoutPath,

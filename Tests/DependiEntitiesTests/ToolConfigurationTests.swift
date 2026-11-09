@@ -3,7 +3,7 @@ import Foundation
 import TestHelpers
 import Testing
 
-@Suite("Tool configuration decoding")
+@Suite("Tool configuration decoding", .timeLimit(.minutes(1)))
 struct ToolConfigurationTests {
     private func decode(_ json: String) throws -> ToolConfiguration {
         try JSONDecoder().decode(ToolConfiguration.self, from: Data(json.utf8))
@@ -144,10 +144,13 @@ struct ToolConfigurationTests {
             String(repeating: "a", count: 39), String(repeating: "a", count: 41),
             String(repeating: "A", count: 40), String(repeating: "g", count: 40), "",
             String(repeating: "a", count: 39) + ";", "main",
+            String(repeating: "a", count: 40) + "\n", String(repeating: "a", count: 40) + "\r\n",
         ])
     func badCommitsFail(commit: String) throws {
         #expect(throws: EntityError.invalidCommit(commit)) {
-            try decode("{\"commit\": \"\(commit)\"}")
+            let escaped = commit.replacingOccurrences(of: "\n", with: "\\n")
+                .replacingOccurrences(of: "\r", with: "\\r")
+            return try decode("{\"commit\": \"\(escaped)\"}")
         }
     }
 

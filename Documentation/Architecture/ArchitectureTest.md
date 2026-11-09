@@ -20,16 +20,19 @@ The architecture test fails when code breaks a ring rule or a source rule. A too
 4. Production code never imports `DependiTestSupport`.
 5. Every module and source folder is in the ring map.
 6. Every target uses Swift 6 mode and `ExistentialAny`.
-7. A file declares one top-level public type.
-8. Every public declaration has a doc comment.
-9. No initializer gives a collaborator a default value.
+7. A file declares one top-level public type. Indirect enums, public extensions and a second type on the same line count.
+8. Every public declaration has a `///` doc comment. A block comment does not count.
+9. No initializer or static function gives a parameter a default that builds an object. Allowed defaults are literals, `nil`, enumeration cases and a short list of value types.
 10. A module has at most one error enumeration. The domain uses typed throws only.
 11. Production source holds no sandbox bypass flag, shell call or fixed shell path.
+12. Production source holds no hidden global state: no stored `static var`, no `nonisolated(unsafe)` and no global `var`.
+
+Beside the source rules, a repository test checks that every `@Suite` in `Tests` and `Contract/Tests` declares a `.timeLimit`.
 
 ## Data flow
 
 1. `Scripts/refresh-package-dump.sh` records the manifest into `Tests/ArchitectureTests/Fixtures/package-dump.json`. It replaces the machine path with `$ROOT` and stores a hash of `Package.swift` next to it.
-2. The test compares that hash with `Package.swift`. A mismatch fails with the command to run.
+2. The test compares that hash with `Package.swift`. A mismatch fails with the command to run. Both files are committed, so the test alone cannot catch a hand edit of both. The gate runs the refresh script again and fails on `git diff --exit-code` of the fixtures.
 3. The test reads every Swift file under `Sources` and runs `ArchitectureChecker`.
 
 ## Why the dump is recorded
