@@ -43,7 +43,8 @@ enum ManifestJSONParser {
         }
         return PackageManifest(
             products: products, targets: targets,
-            declaredDependencies: declared(root["dependencies"]))
+            declaredDependencies: declared(root["dependencies"]),
+            localDependencyPaths: localPaths(root["dependencies"], packagePath: packagePath))
     }
 
     private static func fail(_ reason: String, _ path: String) -> DomainError {
@@ -73,6 +74,19 @@ enum ManifestJSONParser {
                 platforms: platforms(values.count > 3 ? values[3] : nil))
         }
         return nil
+    }
+
+    /// The folders of the `fileSystem` dependencies. A relative path is resolved against the package folder.
+    private static func localPaths(_ value: Any?, packagePath: String) -> [String] {
+        var paths: [String] = []
+        for entry in value as? [[String: Any]] ?? [] {
+            for details in entry["fileSystem"] as? [[String: Any]] ?? [] {
+                guard let path = details["path"] as? String, !path.isEmpty else { continue }
+                let absolute = path.hasPrefix("/") ? path : packagePath + "/" + path
+                paths.append(URL(fileURLWithPath: absolute).standardized.path)
+            }
+        }
+        return paths
     }
 
     private static func declared(_ value: Any?) -> [String] {

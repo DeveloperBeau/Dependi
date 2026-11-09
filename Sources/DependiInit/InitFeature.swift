@@ -80,7 +80,7 @@ public struct InitFeature: Sendable {
             return .reported
         }
         let commit = pinnedCommit()
-        try writeConfiguration(location: location, linked: linked, commit: commit)
+        try writeConfiguration(location: location, commit: commit)
         try prepareSettingsBundle(
             at: bundle ?? location.root + "/Settings.bundle", root: location.root)
         try installTool(in: location.root, commit: commit)
@@ -106,23 +106,21 @@ public struct InitFeature: Sendable {
     // MARK: Configuration
 
     private func writeConfiguration(
-        location: ProjectLocation, linked: LinkedProductSet, commit: String?
+        location: ProjectLocation, commit: String?
     ) throws(DomainError) {
         let path = location.root + "/.dependi.json"
         if files.exists(at: path) {
             output.writeLine("Dependi: kept the existing .dependi.json.")
             return
         }
-        let normalizer = PackageIdentityNormalizer()
-        let excludes = linked.localPackagePaths.filter { $0.hasPrefix(location.root + "/") }
-            .map { normalizer.identity(forLocation: $0).value }.sorted()
         if commit == nil {
             output.writeLine(
                 "Dependi: could not read the commit of this Dependi checkout. Add \"commit\" to .dependi.json."
             )
         }
         let settings = ToolConfiguration(
-            excludes: excludes, manualEntries: [],
+            // Generate skips a local package that has no license file, so no exclude is needed.
+            excludes: [], manualEntries: [],
             gateConfigurations: ToolConfiguration.defaultGateConfigurations,
             sourcePackagesPath: nil, outputPath: nil, includeBuildTools: false,
             allowUnreached: false,
@@ -136,7 +134,7 @@ public struct InitFeature: Sendable {
         }
         try writer.write(data + Data("\n".utf8), toPath: path)
         output.writeLine(
-            "Dependi: wrote .dependi.json. Local packages are excluded: \(excludes.isEmpty ? "none" : excludes.joined(separator: ", "))."
+            "Dependi: wrote .dependi.json."
         )
     }
 

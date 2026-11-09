@@ -18,7 +18,7 @@
 2. List the application targets. None is refused. Two or more ask which one.
 3. Read the platforms of the target. A macOS-only app is refused, because it has no Settings bundle.
 4. In a dry run, print the plan and stop.
-5. Write `.dependi.json` if there is none. It holds the version, the pinned commit and the local packages under the project folder as excludes. An existing file is never changed.
+5. Write `.dependi.json` if there is none. It holds the version and the pinned commit. It has no excludes, because generate skips a local package that has no license file. An existing file is never changed.
 6. Find a `Settings.bundle` in the project folder or one folder below it. Two ask which one. If there is none, create `Settings.bundle/Root.plist` and say that the bundle must be added to the target.
 7. Edit `Root.plist`:
    - If a pane with `File` equal to `Acknowledgements` exists, change nothing.

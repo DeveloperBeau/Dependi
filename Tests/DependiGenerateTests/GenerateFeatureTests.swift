@@ -326,9 +326,9 @@ struct GenerateFeatureTests {
         #expect(acknowledgements[1].documents.map(\.text) == ["apache text", "mit text"])
     }
 
-    @Test("a package whose only LICENSE is a folder fails as missing a license")
+    @Test("a package whose only LICENSE is a folder fails as missing a license in strict mode")
     func licenseFolderOnlyIsMissing() throws {
-        let world = try GenerateWorld()
+        let world = try GenerateWorld(configuration: #"{"requireLicenses":true}"#)
         let package = try world.addRemote("kit", license: nil)
         try world.files.addDirectory(at: package.checkoutPath + "/LICENSE")
         try world.files.addFile(
@@ -337,9 +337,9 @@ struct GenerateFeatureTests {
         #expect(throws: DomainError.licenseMissing(package: "kit")) { try world.run() }
     }
 
-    @Test("a package without a license file fails and names the package")
+    @Test("a package without a license file fails and names the package in strict mode")
     func missingLicense() throws {
-        let world = try GenerateWorld()
+        let world = try GenerateWorld(configuration: #"{"requireLicenses":true}"#)
         try world.addRemote("kit", license: nil)
         world.link("kit", package: "kit")
         #expect(throws: DomainError.licenseMissing(package: "kit")) { try world.run() }

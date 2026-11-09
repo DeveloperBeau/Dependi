@@ -231,9 +231,9 @@ struct EndToEndTests {
 
     // MARK: Failures
 
-    @Test("a package without a license fails the run, names the package and writes nothing")
+    @Test("in strict mode a package without a license fails the run, names it and writes nothing")
     func missingLicense() throws {
-        let world = try EndToEndWorld()
+        let world = try EndToEndWorld(configuration: #"{"requireLicenses":true}"#)
         try world.addRemote("alamofire", owner: "Alamofire", license: nil)
         let result = try world.run()
         #expect(result.code == 1)

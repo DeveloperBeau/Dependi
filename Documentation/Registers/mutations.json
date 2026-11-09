@@ -282,10 +282,9 @@
     "id": "assembler-sort",
     "slice": "2b",
     "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
-    "search": "return leftKey < rightKey",
+    "search": "return Self.precedes(leftKey, rightKey)",
     "replace": "return false",
-    "test": "sortedWithoutCase",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "test": "sortedWithoutCase"
   },
   {
     "id": "resolver-recursion",
@@ -1185,15 +1184,6 @@
     "search": "linked.supportedPlatforms.allSatisfy({ $0 == \"macosx\" })",
     "replace": "linked.supportedPlatforms.allSatisfy({ $0 == \"never\" })",
     "test": "platforms",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
-  },
-  {
-    "id": "init-local-excludes",
-    "slice": "10",
-    "file": "Sources/DependiInit/InitFeature.swift",
-    "search": "$0.hasPrefix(location.root + \"/\")",
-    "replace": "$0.hasPrefix(\"\")",
-    "test": "freshInstall",
     "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
@@ -2392,5 +2382,93 @@
     "test": "conflictingWorkspacesDropThePin",
     "slice": "review-fix",
     "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "assembler-code-point-order",
+    "slice": "local-follow",
+    "file": "Sources/DependiDomain/AcknowledgementAssembler.swift",
+    "search": "left.unicodeScalars.lazy.map(\\.value).lexicographicallyPrecedes(",
+    "replace": "right.unicodeScalars.lazy.map(\\.value).lexicographicallyPrecedes(",
+    "test": "rootListOrder"
+  },
+  {
+    "id": "local-follow-paths",
+    "slice": "local-follow",
+    "file": "Sources/DependiDomain/LocalPackageCollector.swift",
+    "search": ".localDependencyPaths",
+    "replace": ".localDependencyPaths.prefix(0)",
+    "test": "nestedLocalPackage"
+  },
+  {
+    "id": "local-cycle-guard",
+    "slice": "local-follow",
+    "file": "Sources/DependiDomain/LocalPackageCollector.swift",
+    "search": "guard seen.insert(real).inserted else { continue }",
+    "replace": "seen.insert(real)",
+    "test": "cycleAndDuplicate"
+  },
+  {
+    "id": "local-missing-path",
+    "slice": "local-follow",
+    "file": "Sources/DependiDomain/LocalPackageCollector.swift",
+    "search": "throw .fileNotFound(path: package.checkoutPath)",
+    "replace": "continue",
+    "test": "missingPath"
+  },
+  {
+    "id": "local-missing-start",
+    "slice": "local-follow",
+    "file": "Sources/DependiDomain/LocalPackageCollector.swift",
+    "search": "if isStart && !files.exists(at: package.checkoutPath) { continue }",
+    "replace": "if false { continue }",
+    "test": "missingStartIsKept"
+  },
+  {
+    "id": "parser-relative-local-path",
+    "slice": "local-follow",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "let absolute = path.hasPrefix(\"/\") ? path : packagePath + \"/\" + path",
+    "replace": "let absolute = path",
+    "test": "localDependencyPaths"
+  },
+  {
+    "id": "generate-follow-locals",
+    "slice": "local-follow",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": ".collect(from: locals)",
+    "replace": ".collect(from: [])",
+    "test": "nestedProductResolves"
+  },
+  {
+    "id": "generate-skip-local-quietly",
+    "slice": "local-follow",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "if package.kind == .local { continue }",
+    "replace": "if false { continue }",
+    "test": "localSkippedQuietly"
+  },
+  {
+    "id": "generate-require-licenses",
+    "slice": "local-follow",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "if settings.requireLicenses {",
+    "replace": "if false {",
+    "test": "strictFails"
+  },
+  {
+    "id": "generate-skip-line",
+    "slice": "local-follow",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "\"Dependi: skipped \\(package.identity.value): no license file\")",
+    "replace": "\"\")",
+    "test": "remoteSkipped"
+  },
+  {
+    "id": "config-require-licenses",
+    "slice": "local-follow",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "requireLicenses = try value(\"requireLicenses\", Bool.self) ?? false",
+    "replace": "requireLicenses = false",
+    "test": "strictFails"
   }
 ]

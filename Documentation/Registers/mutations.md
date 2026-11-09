@@ -6,10 +6,11 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 |---|---|---|---|---|---|
 | app-config-wired | review-fix | `Sources/DependiComposition/DependiApplication.swift` | `configuredLimitsReachTheRequests` | killed | 2026-11-04 KILLED |
 | app-run-limit-wired | review-fix | `Sources/DependiComposition/DependiApplication.swift` | `runLimitShortensChildLimits` | killed | 2026-11-04 KILLED |
+| assembler-code-point-order | local-follow | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `rootListOrder` | killed | not run |
 | assembler-duplicate-identity | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `AcknowledgementAssemblerTests/duplicateIdentity()` | killed | 2026-11-04 KILLED |
 | assembler-missing-license | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `AcknowledgementAssemblerTests/missingLicense()` | killed | 2026-11-04 KILLED |
 | assembler-slug-collision | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `slugCollision` | killed | 2026-11-04 KILLED |
-| assembler-sort | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `sortedWithoutCase` | killed | 2026-11-04 KILLED |
+| assembler-sort | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `sortedWithoutCase` | killed | not run |
 | cfg-limit-edge-included | review-fix | `Sources/DependiDomain/ConfigurationLoader.swift` | `goodLimits` | killed | 2026-11-04 KILLED |
 | cfg-limit-maximum | review-fix | `Sources/DependiDomain/ConfigurationLoader.swift` | `badRunLimit` | killed | 2026-11-04 KILLED |
 | cfg-limit-positive | review-fix | `Sources/DependiDomain/ConfigurationLoader.swift` | `badProcessLimit` | killed | 2026-11-04 KILLED |
@@ -28,6 +29,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | config-commit-case | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badCommitsFail` | killed | 2026-11-04 KILLED |
 | config-default-gate | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `emptyObjectGivesDefaults` | killed | 2026-11-04 KILLED |
 | config-mistyped-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `mistypedKeyFails` | killed | 2026-11-04 KILLED |
+| config-require-licenses | local-follow | `Sources/DependiEntities/ToolConfiguration.swift` | `strictFails` | killed | not run |
 | config-unknown-key | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `unknownKeyFailsNamingTheKey` | killed | 2026-11-04 KILLED |
 | config-version-pattern | 1 | `Sources/DependiEntities/ToolConfiguration.swift` | `badVersionsFail` | killed | 2026-11-04 KILLED |
 | console-attempt-bound-high | 4 | `Sources/DependiConsole/StandardConsole.swift` | `threeInvalidLinesFailEvenWhenAValidLineFollows` | killed | 2026-11-04 KILLED |
@@ -84,7 +86,11 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | gen-sandbox-yes | 9a | `Sources/DependiGenerate/BuildContextReader.swift` | `sandboxValues` | killed | 2026-11-04 KILLED |
 | gen-unreached | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `unreachedPackages` | killed | 2026-11-04 KILLED |
 | generate-folder-skipped | review-fix | `Sources/DependiGenerate/GenerateFeature.swift` | `licenseFolderOnlyIsMissing` | killed | 2026-11-04 KILLED |
+| generate-follow-locals | local-follow | `Sources/DependiGenerate/GenerateFeature.swift` | `nestedProductResolves` | killed | not run |
 | generate-nested-folder-skipped | review-fix | `Sources/DependiGenerate/GenerateFeature.swift` | `licenseLayouts` | killed | 2026-11-04 KILLED |
+| generate-require-licenses | local-follow | `Sources/DependiGenerate/GenerateFeature.swift` | `strictFails` | killed | not run |
+| generate-skip-line | local-follow | `Sources/DependiGenerate/GenerateFeature.swift` | `remoteSkipped` | killed | not run |
+| generate-skip-local-quietly | local-follow | `Sources/DependiGenerate/GenerateFeature.swift` | `localSkippedQuietly` | killed | not run |
 | graph-declared-lowercase | 7 | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `unknownDependencyShapeIgnored` | killed | 2026-11-04 KILLED |
 | graph-exit-status | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `nonZeroExit` | killed | 2026-11-04 KILLED |
 | graph-key-environment | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `toolchainAndEnvironmentInvalidate` | killed | 2026-11-04 KILLED |
@@ -118,7 +124,6 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | init-dry-run | 10 | `Sources/DependiInit/InitFeature.swift` | `dryRun` | killed | 2026-11-04 KILLED |
 | init-existing-config | 10 | `Sources/DependiInit/InitFeature.swift` | `existingConfigurationKept` | killed | 2026-11-04 KILLED |
 | init-gitignore-duplicate | 10 | `Sources/DependiInit/InitFeature.swift` | `gitignoreRules` | killed | 2026-11-04 KILLED |
-| init-local-excludes | 10 | `Sources/DependiInit/InitFeature.swift` | `freshInstall` | killed | 2026-11-04 KILLED |
 | init-macos-refused | 10 | `Sources/DependiInit/InitFeature.swift` | `platforms` | killed | 2026-11-04 KILLED |
 | init-old-entry | 10 | `Sources/DependiInit/RootPlistEditor.swift` | `oldEntryRewritten` | killed | 2026-11-04 KILLED |
 | init-run-script-executable | 10 | `Sources/DependiInit/InitFeature.swift` | `freshInstall` | killed | 2026-11-04 KILLED |
@@ -138,6 +143,10 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | license-notice-pattern | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `noticeNextToLicense` | killed | 2026-11-04 KILLED |
 | license-order | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `foundInFixedOrder` | killed | 2026-11-04 KILLED |
 | loader-size-cap | 2b | `Sources/DependiDomain/ConfigurationLoader.swift` | `oversizeAndFolder` | killed | 2026-11-04 KILLED |
+| local-cycle-guard | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `cycleAndDuplicate` | killed | not run |
+| local-follow-paths | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `nestedLocalPackage` | killed | not run |
+| local-missing-path | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `missingPath` | killed | not run |
+| local-missing-start | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `missingStartIsKept` | killed | not run |
 | locator-anchor-next | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `schemeNamedBuild` | killed | 2026-11-04 KILLED |
 | locator-hidden-skipped | review-fix | `Sources/DependiDomain/LicenseLocator.swift` | `licensesFolderFiles` | killed | 2026-11-04 KILLED |
 | locator-last-anchor | 2b | `Sources/DependiDomain/SourcePackagesLocator.swift` | `earlierBuildFolderIsIgnored` | killed | 2026-11-04 KILLED |
@@ -150,6 +159,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | out-link-dangling | review-fix | `Sources/DependiGenerate/OutputLocation.swift` | `danglingLinkIsRefused` | killed | 2026-11-04 KILLED |
 | out-link-resolved-compare | review-fix | `Sources/DependiGenerate/OutputLocation.swift` | `linkOutsideIsRefused` | killed | 2026-11-04 KILLED |
 | out-link-walk-components | review-fix | `Sources/DependiGenerate/OutputLocation.swift` | `middleLinkIsRefused` | killed | 2026-11-04 KILLED |
+| parser-relative-local-path | local-follow | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `localDependencyPaths` | killed | not run |
 | pf-catalyst | 6 | `Sources/DependiProjectFile/SupportedPlatformDeriver.swift` | `catalystDisabled` | killed | 2026-11-04 KILLED |
 | pf-cross-project-following | 6 | `Sources/DependiProjectFile/ProductCollector.swift` | `crossProjectReachable` | killed | 2026-11-04 KILLED |
 | pf-deduplication | 6 | `Sources/DependiProjectFile/ProjectFileReader.swift` | `sharedProductIsDeduplicated` | killed | 2026-11-04 KILLED |
