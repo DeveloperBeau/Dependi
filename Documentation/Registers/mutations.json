@@ -774,5 +774,61 @@
     "search": "identities.append(identity.lowercased())",
     "replace": "identities.append(identity)",
     "test": "unknownDependencyShapeIgnored"
+  },
+  {
+    "id": "settings-cleanup-escapes-folder",
+    "slice": "8",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "!name.contains(\"/\")",
+    "replace": "true",
+    "test": "manifestEntriesThatEscapeTheFolderAreNeverDeleted"
+  },
+  {
+    "id": "settings-cleanup-removes-kept",
+    "slice": "8",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "previous.subtracting(newNames).sorted()",
+    "replace": "previous.sorted()",
+    "test": "removedPackageRemovesItsPlistAndManifestEntry"
+  },
+  {
+    "id": "settings-unknown-file-refusal",
+    "slice": "8",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "where name != Self.manifestName",
+    "replace": "where false",
+    "test": "unknownFileInFolderFailsBeforeAnyWrite"
+  },
+  {
+    "id": "settings-write-only-when-different",
+    "slice": "8",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "current == data {",
+    "replace": "current == data, false {",
+    "test": "secondIdenticalRunWritesNothing"
+  },
+  {
+    "id": "settings-slug-replaced-by-raw-name",
+    "slice": "8",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "children.append((name: \"\\(slug).plist\"",
+    "replace": "children.append((name: \"\\(acknowledgement.displayName).plist\"",
+    "test": "oddNamesStayInsideTheFolderAndAppearOnlyAsText"
+  },
+  {
+    "id": "settings-manifest-not-updated",
+    "slice": "8",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "Self.manifestText(newNames)",
+    "replace": "Self.manifestText(previous.union(newNames))",
+    "test": "removedPackageRemovesItsPlistAndManifestEntry"
+  },
+  {
+    "id": "settings-read-back-removed",
+    "slice": "8",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try verify(plist, at: path)",
+    "replace": "_ = plist",
+    "test": "readBackMismatchFailsWithFileUnwritable"
   }
 ]

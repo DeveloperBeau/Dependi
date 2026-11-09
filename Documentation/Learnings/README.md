@@ -15,3 +15,4 @@ One page for each area. Each entry has three parts: the trap, the finding that p
 | [Dependency sources](DependencySources.md) | Workspace state and pinned revisions |
 | [Project file](ProjectFile.md) | Project file parsing, test targets and local packages |
 | [Transitive graph](TransitiveGraph.md) | Manifest reading and its cache |
+| [Settings bundle output](SettingsBundleOutput.md) | Panes, manifest and cleanup |
