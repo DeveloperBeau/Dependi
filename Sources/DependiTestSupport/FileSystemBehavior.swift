@@ -1,0 +1,291 @@
+import DependiDomain
+import Foundation
+
+/// One behavior suite for the file interfaces. The double and the real file system must both pass it.
+public enum FileSystemBehavior {
+    private static func kind(_ error: DomainError) -> String {
+        switch error {
+        case .fileNotFound: return "fileNotFound"
+        case .fileUnreadable: return "fileUnreadable"
+        case .notRegularFile: return "notRegularFile"
+        case .fileUnwritable: return "fileUnwritable"
+        case .symlinkLoop: return "symlinkLoop"
+        default: return "other"
+        }
+    }
+
+    /// Runs the suite inside `root`, which must be an empty folder that can be written.
+    /// It returns one sentence for each rule that failed. An empty list means success.
+    public static func problems(
+        root: String,
+        arranger: some FileTreeArranging,
+        reader: some FileReading,
+        lister: some DirectoryListing,
+        writer: some FileWriting
+    ) -> [String] {
+        var problems: [String] = []
+
+        func check(_ rule: String, _ condition: Bool) {
+            if !condition { problems.append(rule) }
+        }
+        func expectFailure(_ rule: String, kind expected: String, _ body: () throws -> Void) {
+            do {
+                try body()
+                problems.append("\(rule): expected \(expected) but nothing failed")
+            } catch let error as DomainError {
+                let actual = kind(error)
+                if actual != expected {
+                    problems.append("\(rule): expected \(expected) but got \(actual)")
+                }
+            } catch {
+                problems.append("\(rule): expected \(expected) but got \(error)")
+            }
+        }
+
+        do {
+            let realRoot = try reader.realPath(of: root)
+            let bytes = Data((0..<10).map { UInt8($0 + 65) })
+
+            // Regular files
+            try arranger.addFile(at: root + "/file.txt", contents: bytes)
+            check(
+                "a regular file is read in full",
+                (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: 20)) == bytes)
+            check(
+                "a limit below the size returns limit plus one bytes",
+                (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: 4))
+                    == bytes.prefix(5))
+            check(
+                "a limit equal to the size returns the whole file",
+                (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: 10)) == bytes)
+            check(
+                "a negative limit is treated as zero and returns one byte",
+                (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: -5))
+                    == bytes.prefix(1))
+            check(
+                "the largest limit returns the whole file without overflow",
+                (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: Int.max))
+                    == bytes)
+            expectFailure("a missing file cannot be read", kind: "fileNotFound") {
+                _ = try reader.readRegularFile(at: realRoot + "/absent", upToBytes: 4)
+            }
+
+            // Links, folders and pipes
+            try arranger.addSymlink(at: root + "/link", pointingTo: realRoot + "/file.txt")
+            expectFailure("a link in the last component is refused", kind: "notRegularFile") {
+                _ = try reader.readRegularFile(at: root + "/link", upToBytes: 4)
+            }
+            try arranger.addDirectory(at: root + "/folder")
+            expectFailure("a folder is refused", kind: "notRegularFile") {
+                _ = try reader.readRegularFile(at: realRoot + "/folder", upToBytes: 4)
+            }
+            try arranger.addNamedPipe(at: root + "/pipe")
+            expectFailure("a named pipe is refused", kind: "notRegularFile") {
+                _ = try reader.readRegularFile(at: realRoot + "/pipe", upToBytes: 4)
+            }
+
+            // Real paths
+            try arranger.addSymlink(at: root + "/chain-a", pointingTo: realRoot + "/chain-b")
+            try arranger.addSymlink(at: root + "/chain-b", pointingTo: realRoot + "/file.txt")
+            check(
+                "a chain of links resolves to the file",
+                (try? reader.realPath(of: root + "/chain-a")) == realRoot + "/file.txt")
+            try arranger.addDirectory(at: root + "/real-dir")
+            try arranger.addFile(at: root + "/real-dir/inner.txt", contents: bytes)
+            try arranger.addSymlink(at: root + "/dir-link", pointingTo: realRoot + "/real-dir")
+            check(
+                "a linked parent folder is resolved",
+                (try? reader.realPath(of: root + "/dir-link/inner.txt")) == realRoot
+                    + "/real-dir/inner.txt")
+            var previous = realRoot + "/file.txt"
+            for hop in 1...30 {
+                try arranger.addSymlink(at: root + "/hop30-\(hop)", pointingTo: previous)
+                previous = realRoot + "/hop30-\(hop)"
+            }
+            check(
+                "a chain of 30 links resolves to the file",
+                (try? reader.realPath(of: root + "/hop30-30")) == realRoot + "/file.txt")
+            previous = realRoot + "/file.txt"
+            for hop in 1...33 {
+                try arranger.addSymlink(at: root + "/hop33-\(hop)", pointingTo: previous)
+                previous = realRoot + "/hop33-\(hop)"
+            }
+            expectFailure("a chain of 33 links is reported as a loop", kind: "symlinkLoop") {
+                _ = try reader.realPath(of: root + "/hop33-33")
+            }
+            try arranger.addSymlink(at: root + "/loop-a", pointingTo: realRoot + "/loop-b")
+            try arranger.addSymlink(at: root + "/loop-b", pointingTo: realRoot + "/loop-a")
+            expectFailure("a loop of links is reported", kind: "symlinkLoop") {
+                _ = try reader.realPath(of: root + "/loop-a")
+            }
+            expectFailure("a missing path has no real path", kind: "fileNotFound") {
+                _ = try reader.realPath(of: root + "/absent")
+            }
+            try arranger.addSymlink(
+                at: root + "/escape", pointingTo: realRoot + "/../outside-target")
+            check(
+                "a link that leaves the root does not resolve inside the root",
+                (try? reader.realPath(of: root + "/escape")).map { !$0.hasPrefix(realRoot + "/") }
+                    ?? true)
+
+            // Existence
+            check("an existing file exists", reader.exists(at: root + "/file.txt"))
+            check("a missing path does not exist", !reader.exists(at: root + "/absent"))
+            try arranger.addSymlink(at: root + "/dangling", pointingTo: realRoot + "/absent")
+            check("a dangling link exists as a link", reader.exists(at: root + "/dangling"))
+
+            // Listing
+            try arranger.addDirectory(at: root + "/list")
+            try arranger.addFile(at: root + "/list/b", contents: bytes)
+            try arranger.addFile(at: root + "/list/a", contents: bytes)
+            try arranger.addDirectory(at: root + "/list/sub")
+            try arranger.addFile(at: root + "/list/sub/deep", contents: bytes)
+            check(
+                "listing returns sorted top-level names only",
+                (try? lister.topLevelNames(in: root + "/list")) == ["a", "b", "sub"])
+            expectFailure("listing a file fails", kind: "fileUnreadable") {
+                _ = try lister.topLevelNames(in: root + "/file.txt")
+            }
+            expectFailure("listing a missing folder fails", kind: "fileNotFound") {
+                _ = try lister.topLevelNames(in: root + "/absent")
+            }
+
+            // Writing
+            try writer.write(bytes, toPath: root + "/written")
+            check(
+                "a written file reads back",
+                (try? reader.readRegularFile(at: realRoot + "/written", upToBytes: 20)) == bytes)
+            let replacement = Data("new".utf8)
+            try writer.write(replacement, toPath: root + "/written")
+            check(
+                "a second write replaces the file",
+                (try? reader.readRegularFile(at: realRoot + "/written", upToBytes: 20))
+                    == replacement)
+            expectFailure("a write into a missing folder fails", kind: "fileUnwritable") {
+                try writer.write(bytes, toPath: root + "/no-folder/file")
+            }
+            try arranger.addDirectory(at: root + "/occupied")
+            try arranger.addFile(at: root + "/occupied/child", contents: bytes)
+            expectFailure("a write onto a folder fails", kind: "fileUnwritable") {
+                try writer.write(replacement, toPath: root + "/occupied")
+            }
+            check(
+                "a refused write leaves the folder and its contents",
+                (try? reader.readRegularFile(at: realRoot + "/occupied/child", upToBytes: 20))
+                    == bytes)
+            try writer.createDirectory(at: root + "/made/deeper/still")
+            check(
+                "nested folders are created",
+                (try? lister.topLevelNames(in: root + "/made/deeper")) == ["still"])
+            try writer.moveItem(at: root + "/written", to: root + "/moved")
+            check("a moved file is gone from its old path", !reader.exists(at: root + "/written"))
+            check(
+                "a moved file reads at its new path",
+                (try? reader.readRegularFile(at: realRoot + "/moved", upToBytes: 20)) == replacement
+            )
+            try writer.moveItem(at: root + "/moved", to: root + "/file.txt")
+            check(
+                "a move replaces the destination",
+                (try? reader.readRegularFile(at: realRoot + "/file.txt", upToBytes: 20))
+                    == replacement)
+            try writer.removeItem(at: root + "/list")
+            check(
+                "a removed folder and its contents are gone",
+                !reader.exists(at: root + "/list/sub/deep"))
+            expectFailure("removing a missing path fails", kind: "fileUnwritable") {
+                try writer.removeItem(at: root + "/absent")
+            }
+        } catch {
+            problems.append("the suite could not arrange its files: \(error)")
+        }
+        return problems
+    }
+
+    /// Runs the executable marking rules inside `root`, which must be an empty folder that can be
+    /// written. `isExecutable` answers for a real path. It returns one sentence for each rule that
+    /// failed. An empty list means success.
+    public static func executableProblems(
+        root: String,
+        reader: some FileReading,
+        writer: some FileWriting,
+        executables: some ExecutableMarking,
+        isExecutable: (String) -> Bool
+    ) -> [String] {
+        var problems: [String] = []
+
+        func check(_ rule: String, _ condition: Bool) {
+            if !condition { problems.append(rule) }
+        }
+        func expectFailure(_ rule: String, kind expected: String, _ body: () throws -> Void) {
+            do {
+                try body()
+                problems.append("\(rule): expected \(expected) but nothing failed")
+            } catch let error as DomainError {
+                let actual = kind(error)
+                if actual != expected {
+                    problems.append("\(rule): expected \(expected) but got \(actual)")
+                }
+            } catch {
+                problems.append("\(rule): expected \(expected) but got \(error)")
+            }
+        }
+
+        do {
+            let realRoot = try reader.realPath(of: root)
+            let bytes = Data("tool".utf8)
+
+            try writer.write(bytes, toPath: root + "/tool")
+            check("a new file is not executable", !isExecutable(realRoot + "/tool"))
+            try executables.makeExecutable(at: root + "/tool")
+            check("a marked file is executable", isExecutable(realRoot + "/tool"))
+            check(
+                "marking keeps the contents",
+                (try? reader.readRegularFile(at: realRoot + "/tool", upToBytes: 20)) == bytes)
+            try executables.makeExecutable(at: root + "/tool")
+            check("marking twice keeps the file executable", isExecutable(realRoot + "/tool"))
+
+            expectFailure("marking a missing file fails", kind: "fileNotFound") {
+                try executables.makeExecutable(at: root + "/absent")
+            }
+            expectFailure("marking below a regular file fails", kind: "fileNotFound") {
+                try executables.makeExecutable(at: root + "/tool/child")
+            }
+
+            try writer.write(bytes, toPath: root + "/plain")
+            try writer.write(bytes, toPath: root + "/target")
+            try executables.makeExecutable(at: root + "/target")
+            check(
+                "a neighbour of a marked file is not executable", !isExecutable(realRoot + "/plain")
+            )
+
+            // A write replaces the file through a new file, so the mark is gone.
+            try writer.write(Data("new".utf8), toPath: root + "/tool")
+            check("a rewritten file is not executable", !isExecutable(realRoot + "/tool"))
+
+            // A move carries the mark and replaces the destination's mark.
+            try writer.moveItem(at: root + "/target", to: root + "/moved")
+            check("a moved file is executable at its new path", isExecutable(realRoot + "/moved"))
+            check("a moved file is gone from its old path", !reader.exists(at: root + "/target"))
+            check(
+                "a moved file leaves no mark at its old path", !isExecutable(realRoot + "/target"))
+            try writer.write(bytes, toPath: root + "/target")
+            check(
+                "a new file at the old path is not executable", !isExecutable(realRoot + "/target"))
+            try executables.makeExecutable(at: root + "/target")
+            try writer.moveItem(at: root + "/plain", to: root + "/target")
+            check(
+                "a plain file moved over a marked file is not executable",
+                !isExecutable(realRoot + "/target"))
+
+            // A removed file leaves no mark behind.
+            try writer.removeItem(at: root + "/moved")
+            check("a removed file is not executable", !isExecutable(realRoot + "/moved"))
+            try writer.write(bytes, toPath: root + "/moved")
+            check(
+                "a file made after a removal is not executable", !isExecutable(realRoot + "/moved"))
+        } catch {
+            problems.append("the executable suite could not arrange its files: \(error)")
+        }
+        return problems
+    }
+}

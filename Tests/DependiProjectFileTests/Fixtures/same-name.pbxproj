@@ -1,0 +1,20 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		P0 = {isa = PBXProject; buildConfigurationList = PL; targets = (T1); packageReferences = (R1, R2); };
+		PL = {isa = XCConfigurationList; buildConfigurations = (PC); };
+		PC = {isa = XCBuildConfiguration; buildSettings = {SDKROOT = iphoneos;}; name = Release; };
+		R1 = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/Acme/Alpha.git"; };
+		R2 = {isa = XCRemoteSwiftPackageReference; repositoryURL = "git@github.com:Acme/Beta.git"; };
+		D1 = {isa = XCSwiftPackageProductDependency; package = R1; productName = Logging; };
+		D2 = {isa = XCSwiftPackageProductDependency; package = R2; productName = Logging; };
+		T1 = {isa = PBXNativeTarget; name = App; productType = "com.apple.product-type.application"; dependencies = (); packageProductDependencies = (D1, D2); buildPhases = (); buildConfigurationList = T1L; };
+		T1L = {isa = XCConfigurationList; buildConfigurations = (T1C); };
+		T1C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+	};
+	rootObject = P0;
+}

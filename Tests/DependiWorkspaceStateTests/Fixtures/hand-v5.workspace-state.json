@@ -1,0 +1,27 @@
+{
+  "object" : {
+    "artifacts" : [
+
+    ],
+    "dependencies" : [
+      {
+        "basedOn" : null,
+        "packageRef" : {
+          "identity" : "alpha-kit",
+          "kind" : "remoteSourceControl",
+          "location" : "https://github.com/Example/Alpha-Kit.git",
+          "name" : "AlphaKit"
+        },
+        "state" : {
+          "checkoutState" : {
+            "revision" : "1111111111111111111111111111111111111111",
+            "version" : "2.3.4"
+          },
+          "name" : "checkout"
+        },
+        "subpath" : "Alpha-Kit"
+      }
+    ]
+  },
+  "version" : 5
+}

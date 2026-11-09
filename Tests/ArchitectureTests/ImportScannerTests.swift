@@ -1,6 +1,7 @@
 import Testing
+import TestHelpers
 
-@Suite("Import scanner")
+@Suite("Import scanner", .timeLimit(.minutes(1)))
 struct ImportScannerTests {
     @Test("every import form names its module")
     func importFormsAreRecognised() {

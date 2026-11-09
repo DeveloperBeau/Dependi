@@ -1,0 +1,23 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		P0 = {isa = PBXProject; buildConfigurationList = PL; targets = (S1, S2); packageReferences = (R1, R2); };
+		PL = {isa = XCConfigurationList; buildConfigurations = (PC); };
+		PC = {isa = XCBuildConfiguration; buildSettings = {SDKROOT = iphoneos;}; name = Release; };
+		R1 = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/kean/Nuke.git"; };
+		R2 = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git"; };
+		D1 = {isa = XCSwiftPackageProductDependency; package = R1; productName = Nuke; };
+		D2 = {isa = XCSwiftPackageProductDependency; package = R2; productName = SnapshotTesting; };
+		S1 = {isa = PBXNativeTarget; name = Shared; productType = "com.apple.product-type.framework"; dependencies = (); packageProductDependencies = (D1); buildPhases = (); buildConfigurationList = S1L; };
+		S1L = {isa = XCConfigurationList; buildConfigurations = (S1C); };
+		S1C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+		S2 = {isa = PBXNativeTarget; name = SharedOnly; productType = "com.apple.product-type.framework"; dependencies = (); packageProductDependencies = (D2); buildPhases = (); buildConfigurationList = S2L; };
+		S2L = {isa = XCConfigurationList; buildConfigurations = (S2C); };
+		S2C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+	};
+	rootObject = P0;
+}

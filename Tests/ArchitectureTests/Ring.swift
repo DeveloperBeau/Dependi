@@ -28,15 +28,16 @@ enum RingRules {
         "DependiComposition": .composition,
         "dependi": .composition,
         "DependiTestSupport": .testSupport,
+        "TestHelpers": .testSupport,
     ]
 
-    /// The rings that each ring may depend on. A module never depends on its own ring.
+    /// The rings that each ring may depend on. A module never depends on its own ring, except the executable, which calls the composition library.
     static let allowedRings: [Ring: Set<Ring>] = [
         .entities: [],
         .domain: [.entities],
         .infrastructure: [.entities, .domain],
         .features: [.entities, .domain],
-        .composition: [.entities, .domain, .infrastructure, .features],
+        .composition: [.entities, .domain, .infrastructure, .features, .composition],
         .testSupport: [.entities, .domain],
     ]
 

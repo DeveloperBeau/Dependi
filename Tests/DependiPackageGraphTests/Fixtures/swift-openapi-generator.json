@@ -1,0 +1,673 @@
+{
+  "cLanguageStandard": null,
+  "cxxLanguageStandard": null,
+  "defaultLocalization": null,
+  "dependencies": [
+    {
+      "sourceControl": [
+        {
+          "identity": "swift-algorithms",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/apple/swift-algorithms"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.2.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "openapikit",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/mattpolzin/OpenAPIKit"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "6.1.0",
+                "upperBound": "7.0.0"
+              }
+            ]
+          },
+          "traits": []
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "yams",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/jpsim/Yams"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "4.0.0",
+                "upperBound": "7.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "swift-argument-parser",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/apple/swift-argument-parser"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.3.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "swift-openapi-runtime",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/apple/swift-openapi-runtime"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.13.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": []
+        }
+      ]
+    },
+    {
+      "sourceControl": [
+        {
+          "identity": "swift-http-types",
+          "location": {
+            "remote": [
+              {
+                "urlString": "https://github.com/apple/swift-http-types"
+              }
+            ]
+          },
+          "productFilter": null,
+          "requirement": {
+            "range": [
+              {
+                "lowerBound": "1.7.0",
+                "upperBound": "2.0.0"
+              }
+            ]
+          },
+          "traits": [
+            {
+              "name": "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name": "swift-openapi-generator",
+  "packageKind": {
+    "root": [
+      "$ROOT/Library/Developer/Xcode/DerivedData/Geoshare-geytyfpdmacyymdktjcjbybsrhmz/SourcePackages/checkouts/swift-openapi-generator"
+    ]
+  },
+  "pkgConfig": null,
+  "platforms": [
+    {
+      "options": [],
+      "platformName": "macos",
+      "version": "10.15"
+    },
+    {
+      "options": [],
+      "platformName": "ios",
+      "version": "13.0"
+    },
+    {
+      "options": [],
+      "platformName": "tvos",
+      "version": "13.0"
+    },
+    {
+      "options": [],
+      "platformName": "watchos",
+      "version": "6.0"
+    },
+    {
+      "options": [],
+      "platformName": "visionos",
+      "version": "1.0"
+    }
+  ],
+  "products": [
+    {
+      "name": "swift-openapi-generator",
+      "settings": [],
+      "targets": [
+        "swift-openapi-generator"
+      ],
+      "type": {
+        "executable": null
+      }
+    },
+    {
+      "name": "OpenAPIGenerator",
+      "settings": [],
+      "targets": [
+        "OpenAPIGenerator"
+      ],
+      "type": {
+        "plugin": null
+      }
+    },
+    {
+      "name": "OpenAPIGeneratorCommand",
+      "settings": [],
+      "targets": [
+        "OpenAPIGeneratorCommand"
+      ],
+      "type": {
+        "plugin": null
+      }
+    },
+    {
+      "name": "_OpenAPIGeneratorCore",
+      "settings": [],
+      "targets": [
+        "_OpenAPIGeneratorCore"
+      ],
+      "type": {
+        "library": [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers": null,
+  "swiftLanguageVersions": null,
+  "targets": [
+    {
+      "dependencies": [
+        {
+          "product": [
+            "OpenAPIKit",
+            "OpenAPIKit",
+            null,
+            null
+          ]
+        },
+        {
+          "product": [
+            "OpenAPIKit30",
+            "OpenAPIKit",
+            null,
+            null
+          ]
+        },
+        {
+          "product": [
+            "OpenAPIKitCompat",
+            "OpenAPIKit",
+            null,
+            null
+          ]
+        },
+        {
+          "product": [
+            "Algorithms",
+            "swift-algorithms",
+            null,
+            null
+          ]
+        },
+        {
+          "product": [
+            "Yams",
+            "Yams",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "_OpenAPIGeneratorCore",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "MemberImportVisibility"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ExistentialAny"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InternalImportsByDefault"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "regular"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "_OpenAPIGeneratorCore",
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "OpenAPIGeneratorCoreTests",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "MemberImportVisibility"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ExistentialAny"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InternalImportsByDefault"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "test"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "_OpenAPIGeneratorCore",
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "OpenAPIGeneratorReferenceTests",
+      "packageAccess": true,
+      "resources": [
+        {
+          "path": "Resources",
+          "rule": {
+            "copy": {}
+          }
+        }
+      ],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "MemberImportVisibility"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ExistentialAny"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InternalImportsByDefault"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "test"
+    },
+    {
+      "dependencies": [
+        {
+          "product": [
+            "OpenAPIRuntime",
+            "swift-openapi-runtime",
+            null,
+            null
+          ]
+        },
+        {
+          "product": [
+            "HTTPTypes",
+            "swift-http-types",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "PetstoreConsumerTestCore",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "MemberImportVisibility"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ExistentialAny"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InternalImportsByDefault"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "regular"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "PetstoreConsumerTestCore",
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "PetstoreConsumerTests",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "MemberImportVisibility"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ExistentialAny"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "test"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "_OpenAPIGeneratorCore",
+            null
+          ]
+        },
+        {
+          "target": [
+            "swift-openapi-generator",
+            {
+              "platformNames": [
+                "android",
+                "linux",
+                "macos",
+                "openbsd",
+                "wasi",
+                "freebsd"
+              ]
+            }
+          ]
+        },
+        {
+          "product": [
+            "ArgumentParser",
+            "swift-argument-parser",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "OpenAPIGeneratorTests",
+      "packageAccess": true,
+      "resources": [
+        {
+          "path": "Resources",
+          "rule": {
+            "copy": {}
+          }
+        }
+      ],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "MemberImportVisibility"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ExistentialAny"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InternalImportsByDefault"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "test"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "_OpenAPIGeneratorCore",
+            null
+          ]
+        },
+        {
+          "product": [
+            "ArgumentParser",
+            "swift-argument-parser",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "swift-openapi-generator",
+      "packageAccess": true,
+      "resources": [],
+      "settings": [
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "MemberImportVisibility"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "ExistentialAny"
+            }
+          },
+          "tool": "swift"
+        },
+        {
+          "kind": {
+            "enableUpcomingFeature": {
+              "_0": "InternalImportsByDefault"
+            }
+          },
+          "tool": "swift"
+        }
+      ],
+      "type": "executable"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "swift-openapi-generator",
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "OpenAPIGenerator",
+      "packageAccess": true,
+      "pluginCapability": {
+        "buildTool": null
+      },
+      "resources": [],
+      "settings": [],
+      "type": "plugin"
+    },
+    {
+      "dependencies": [
+        {
+          "byName": [
+            "swift-openapi-generator",
+            null
+          ]
+        }
+      ],
+      "exclude": [],
+      "name": "OpenAPIGeneratorCommand",
+      "packageAccess": true,
+      "pluginCapability": {
+        "command": [
+          {
+            "custom": {
+              "description": "Generate Swift code from an OpenAPI document.",
+              "verb": "generate-code-from-openapi"
+            }
+          },
+          [
+            {
+              "writeToPackageDirectory": {
+                "reason": "To write the generated Swift files back into the source directory of the package."
+              }
+            }
+          ]
+        ]
+      },
+      "resources": [],
+      "settings": [],
+      "type": "plugin"
+    }
+  ],
+  "toolsVersion": {
+    "_version": "6.2.0"
+  },
+  "traits": []
+}

@@ -1,0 +1,22 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		P0 = {isa = PBXProject; buildConfigurationList = PL; targets = (T1); packageReferences = (L1, L2, R1); };
+		PL = {isa = XCConfigurationList; buildConfigurations = (PC); };
+		PC = {isa = XCBuildConfiguration; buildSettings = {SDKROOT = iphoneos;}; name = Release; };
+		L1 = {isa = XCLocalSwiftPackageReference; relativePath = "../Packages/LocalKit"; };
+		L2 = {isa = XCLocalSwiftPackageReference; relativePath = "Packages/./Other"; };
+		R1 = {isa = XCRemoteSwiftPackageReference; repositoryURL = "https://github.com/Alamofire/Alamofire.git"; };
+		D1 = {isa = XCSwiftPackageProductDependency; productName = LocalKit; };
+		D2 = {isa = XCSwiftPackageProductDependency; package = L2; productName = OtherKit; };
+		D3 = {isa = XCSwiftPackageProductDependency; package = R1; productName = Alamofire; };
+		T1 = {isa = PBXNativeTarget; name = App; productType = "com.apple.product-type.application"; dependencies = (); packageProductDependencies = (D1, D2, D3); buildPhases = (); buildConfigurationList = T1L; };
+		T1L = {isa = XCConfigurationList; buildConfigurations = (T1C); };
+		T1C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+	};
+	rootObject = P0;
+}
