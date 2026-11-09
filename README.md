@@ -64,3 +64,7 @@ Every rule has an entry in the [mutation register](Documentation/Registers/mutat
 ## Requirements
 
 Built and tested with Xcode 27.2 (Swift 6.4) on macOS 27. The package declares macOS 14 as its minimum. Other Xcode versions are not tested yet.
+
+## License
+
+Dependi is released under the [Apache License 2.0](LICENSE).
