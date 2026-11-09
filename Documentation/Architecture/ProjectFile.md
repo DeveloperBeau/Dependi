@@ -21,14 +21,15 @@ The project file reader answers one question. Which package products does an app
 2. `PropertyListSerialization` parses the OpenStep text. Foundation on macOS accepts it. The model checks the root, the objects table and the project object.
 3. The reader looks up the named `PBXNativeTarget` among the targets of the project.
 4. The collector visits the target. For each visited target it takes the `packageProductDependencies`, then follows `dependencies`, then follows embed phases.
-5. The reader removes duplicates, sorts by product name and package name, and adds the local package paths and the platforms.
+5. A second walk visits every native target of the project, test targets included. Its products, minus the app's own, are the other products. A target of that walk that cannot be read is ignored.
+6. The reader removes duplicates, sorts by product name and package name, and adds the local package paths and the platforms.
 
 ## What the walk follows
 
 - A `PBXTargetDependency` with a `target`.
 - A `PBXTargetDependency` with a `targetProxy`. The proxy names the target in `remoteGlobalIDString`. A `containerPortal` that is the project itself stays in the model. Another portal must be a `PBXFileReference`. Its path is resolved against the folder that holds the `.xcodeproj`. The other project is loaded through the same file interface. When it cannot be loaded, the dependency is skipped and nothing fails.
 - A `PBXCopyFilesBuildPhase` whose build files point to the product of another native target. That covers frameworks, app extensions, watch apps and app clips.
-- Test targets are never visited. A product type that ends in `unit-test` or `ui-testing` is a test target.
+- Test targets are never visited for the app's own products. A product type that ends in `unit-test` or `ui-testing` is a test target.
 - Each target is visited once, so a cycle ends.
 
 ## Products

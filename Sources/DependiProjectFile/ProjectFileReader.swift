@@ -4,7 +4,7 @@ import Foundation
 
 /// Reads the package products that a target links from an Xcode project file.
 public struct ProjectFileReader: LinkedProductReading {
-    private let files: any FileReading
+    let files: any FileReading
 
     /// Creates a reader that reads project files through the given file interface.
     public init(files: any FileReading) {
@@ -26,19 +26,26 @@ public struct ProjectFileReader: LinkedProductReading {
                 path: model.path,
                 reason: "there is no target named \(targetName). Available targets: \(names)")
         }
-        var collector = ProductCollector(files: files)
+        var collector = ProductCollector(files: files, includeTests: false)
         try collector.visit(model, targetID: target.id)
-        let unique = Set(collector.found)
-        let products = unique.sorted {
-            ($0.productName, $0.packageName ?? "") < ($1.productName, $1.packageName ?? "")
-        }
+        let ownProducts = Set(collector.found)
+        // Every other target, test targets included. A broken one is ignored, because it does not ship.
+        var everything = ProductCollector(files: files, includeTests: true)
+        for other in targets { try? everything.visit(model, targetID: other.id) }
         return LinkedProductSet(
-            products: products,
+            products: Self.sorted(collector.found),
+            otherProducts: Self.sorted(everything.found.filter { !ownProducts.contains($0) }),
             localPackagePaths: try localPackagePaths(in: model),
             supportedPlatforms: try SupportedPlatformDeriver.platforms(of: object, in: model))
     }
 
-    private func fileLocation(_ path: String) -> String {
+    private static func sorted(_ products: [ProductReference]) -> [ProductReference] {
+        Set(products).sorted {
+            ($0.productName, $0.packageName ?? "") < ($1.productName, $1.packageName ?? "")
+        }
+    }
+
+    func fileLocation(_ path: String) -> String {
         let name = path.split(separator: "/", omittingEmptySubsequences: true).last
         return name == "project.pbxproj" ? path : path + "/project.pbxproj"
     }

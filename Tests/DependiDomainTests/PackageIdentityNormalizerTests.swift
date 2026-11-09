@@ -3,7 +3,7 @@ import DependiEntities
 import TestHelpers
 import Testing
 
-@Suite("Package identity normalizer")
+@Suite("Package identity normalizer", .timeLimit(.minutes(1)))
 struct PackageIdentityNormalizerTests {
     private let normalizer = PackageIdentityNormalizer()
 

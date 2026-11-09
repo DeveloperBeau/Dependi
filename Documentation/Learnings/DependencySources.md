@@ -28,7 +28,19 @@
 
 - **Trap:** Registry packages are stored in a different folder from source control checkouts.
 - **Finding:** No real file with a registry package was available on the machine that built this module.
-- **Rule:** Fail with the kind in the message. Do not guess a path.
+- **Rule:** Do not guess a path. Skip a registry package, because a package that nothing links must not fail the build. A linked one then fails as an unmatched product. Fail with the kind in the message for a kind that is not known.
+
+## A registry pin has no revision
+
+- **Trap:** A registry pin in `Package.resolved` holds a version and no revision. A required revision field failed the whole file.
+- **Finding:** One registry pin made every archive fail, even when no product linked it.
+- **Rule:** The revision is optional in the decoder. A registry pin is dropped and any other pin without a revision still fails.
+
+## More than one workspace can hold a Package.resolved
+
+- **Trap:** The first workspace by name won. A file of an unrelated workspace made a correct checkout look like a revision mismatch.
+- **Finding:** Two workspaces in one folder can pin one package to two revisions.
+- **Rule:** Prefer the workspace named like the project. Otherwise read every file and give no pin to a package that they disagree on.
 
 ## Mutation results
 

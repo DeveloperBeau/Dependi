@@ -2,7 +2,7 @@ import DependiEntities
 import Foundation
 import Testing
 
-@Suite("Entity values")
+@Suite("Entity values", .timeLimit(.minutes(1)))
 struct EntityValueTests {
     private func package(_ name: String, kind: PackageKind = .remote) -> ResolvedPackage {
         ResolvedPackage(

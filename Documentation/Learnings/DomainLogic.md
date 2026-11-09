@@ -20,8 +20,8 @@
 
 ## Two locations can share an output name
 
-- **Trap:** The output name keeps only eight hex characters of a hash, so collisions exist.
-- **Finding:** Two locations with equal prefixes were found offline and written into a test as constants.
+- **Trap:** The output name keeps only twelve hex characters (48 bits) of a hash, so collisions exist.
+- **Finding:** Two locations with equal 48-bit prefixes were found offline in about 60 million tries and written into a test as constants. A package author could do the same, so the name is a collision check and not a guarantee.
 - **Rule:** The assembler checks for a collision before anything is written.
 
 ## A path prefix test must compare components
