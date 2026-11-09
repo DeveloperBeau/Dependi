@@ -5,7 +5,7 @@ import DependiTestSupport
 import Foundation
 import Testing
 
-@Suite("Linked products from a project file")
+@Suite("Linked products from a project file", .timeLimit(.minutes(1)))
 struct LinkedProductsTests {
     @Test("an app with a direct remote package product returns it with the package identity")
     func directRemoteProduct() throws {
@@ -51,6 +51,26 @@ struct LinkedProductsTests {
     func testOnlyProductsAreExcluded() throws {
         let set = try FixtureWorld.read("test-only")
         #expect(set.products == [product("Alamofire", "alamofire")])
+    }
+
+    @Test("products of test targets are listed apart as products of other targets")
+    func testTargetProductsAreOtherProducts() throws {
+        let set = try FixtureWorld.read("test-only")
+        #expect(set.otherProducts == [product("Nimble", "quick"), product("Quick", "quick")])
+    }
+
+    @Test("products of a sibling target are other products of the app and the reverse")
+    func siblingTargetProductsAreOtherProducts() throws {
+        let first = try FixtureWorld.read("second-target")
+        #expect(first.otherProducts == [product("FirebaseAuth", "firebase-ios-sdk")])
+        let second = try FixtureWorld.read("second-target", target: "OtherApp")
+        #expect(second.otherProducts == [product("Alamofire", "alamofire")])
+    }
+
+    @Test("a product of the app is not listed as an other product")
+    func appProductsAreNotOtherProducts() throws {
+        let set = try FixtureWorld.read("direct-remote")
+        #expect(set.otherProducts.isEmpty)
     }
 
     @Test("a product of a ui test target is excluded")

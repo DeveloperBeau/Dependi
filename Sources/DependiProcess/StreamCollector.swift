@@ -6,6 +6,11 @@ final class RunSignals: @unchecked Sendable {
     private let lock = NSLock()
     private var overflowed = false
     private var stopped = false
+    private let onOverflow: @Sendable () -> Void
+
+    init(onOverflow: @escaping @Sendable () -> Void) {
+        self.onOverflow = onOverflow
+    }
 
     /// Whether a stream went over the byte limit.
     var hasOverflowed: Bool { lock.withLock { overflowed } }
@@ -13,7 +18,10 @@ final class RunSignals: @unchecked Sendable {
     var isStopped: Bool { lock.withLock { stopped } }
 
     /// Records that a stream went over the byte limit.
-    func markOverflow() { lock.withLock { overflowed = true } }
+    func markOverflow() {
+        lock.withLock { overflowed = true }
+        onOverflow()
+    }
     /// Tells the readers to stop.
     func stop() { lock.withLock { stopped = true } }
 }

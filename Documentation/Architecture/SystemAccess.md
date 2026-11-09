@@ -48,3 +48,4 @@ Two infrastructure modules reach the operating system for the domain. `DependiFi
 - `DiskOperationTests` and `DiskFailureTests` cover each rule and each failure, including a sparse one gigabyte file for the read bound.
 - `DiskFuzzTests` writes random names with unicode and spaces. The listing must equal the sorted set that was written.
 - `ProcessEnvironmentTests` covers set, missing and empty values, `current()` and random dictionaries.
+- `DiskBehaviorTests` also runs the executable marking rules, checks that the mode becomes `rwxr-xr-x` through a link and checks the error for a `chmod` that the system refuses. That test records a skip for the root user.

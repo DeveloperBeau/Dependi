@@ -3,7 +3,7 @@ import Darwin
 import Foundation
 
 /// The real file system. It holds no configuration. Every error keeps the text of the system error.
-public struct DiskFileSystem: FileReading, FileWriting, DirectoryListing {
+public struct DiskFileSystem: FileReading, FileWriting, DirectoryListing, ExecutableMarking {
     /// Creates a file system that works on the real disk.
     public init() {}
 
@@ -63,6 +63,14 @@ public struct DiskFileSystem: FileReading, FileWriting, DirectoryListing {
     public func exists(at path: String) -> Bool {
         var info = stat()
         return lstat(path, &info) == 0
+    }
+
+    /// Returns the modification time that `lstat` reports.
+    public func modificationDate(of path: String) -> Date? {
+        var info = stat()
+        guard lstat(path, &info) == 0 else { return nil }
+        let time = info.st_mtimespec
+        return Date(timeIntervalSince1970: Double(time.tv_sec) + Double(time.tv_nsec) / 1e9)
     }
 
     // MARK: DirectoryListing

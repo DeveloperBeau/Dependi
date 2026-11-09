@@ -1,7 +1,7 @@
 import DependiDomain
 import Testing
 
-@Suite("Supported platforms from a project file")
+@Suite("Supported platforms from a project file", .timeLimit(.minutes(1)))
 struct PlatformTests {
     @Test("a macOS only target returns only macosx")
     func macOSOnly() throws {

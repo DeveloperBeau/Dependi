@@ -30,6 +30,24 @@
 - **Finding:** The bound test with three invalid lines and a valid fourth line fails when the bound grows. The two-invalid test fails when it shrinks.
 - **Rule:** Each prompt reads at most three lines. A prompt reads one byte at a time under a lock, so no byte is lost between calls.
 
+## A reaped process id is not yours
+
+- **Trap:** The runner killed the group and the child after it had reaped the child. The id could belong to another process by then.
+- **Finding:** Found by reading the order of calls, not by a failure.
+- **Rule:** Look at the child with `waitid` and `WNOWAIT`. Kill while it is a zombie. Tell the tracker, then reap.
+
+## A failed wait is not exit 0
+
+- **Trap:** A `waitpid` error such as `ECHILD` ended the loop with status 0.
+- **Finding:** A process id that is not a child of the test process fails with `ECHILD`, so a test can cause it.
+- **Rule:** Report a failed wait as `processFailed`.
+
+## Children do not get the signals of the parent
+
+- **Trap:** Each child leads its own process group, so Ctrl-C or a cancelled build never reaches `swift package dump-package`. It ran on for up to the time limit.
+- **Finding:** The tool had no signal handling.
+- **Rule:** The runner reports each child to a registry. The executable kills the registry on SIGINT, SIGTERM and SIGHUP and exits with 128 plus the signal.
+
 ## Mutation results
 
 The nine entries owned by this slice are all killed. See `Documentation/Registers/mutations.md`.

@@ -11,7 +11,7 @@ import Testing
 // and SwiftPM wrote on this machine. Both carry the file's own `"version" : 7`. Paths are scrubbed
 // to `$ROOT`. The v5 and v6 files are written by hand from the SwiftPM history of this format.
 
-@Suite("Workspace state file")
+@Suite("Workspace state file", .timeLimit(.minutes(1)))
 struct WorkspaceStateReaderTests {
     private func reader(_ fileSystem: InMemoryFileSystem) -> WorkspaceStateReader {
         WorkspaceStateReader(files: fileSystem, directories: fileSystem)
@@ -181,10 +181,20 @@ struct WorkspaceStateReaderTests {
         #expect(packages.map(\.checkoutPath) == ["/work/Edits/kit"])
     }
 
-    @Test("a registry package is refused and the reason names the kind")
-    func registryPackageIsRefused() throws {
+    @Test("a registry package is skipped and the other packages are still read")
+    func registryPackageIsSkipped() throws {
         let body =
             "{\"packageRef\":{\"identity\":\"scope.kit\",\"kind\":\"registry\",\"location\":\"\"},\"state\":{\"name\":\"registryDownload\",\"version\":\"1.0.0\"},\"subpath\":\"scope/kit\"}"
+        let fileSystem = try Support.sourcePackagesTree(
+            state: Support.state(dependencies: [body, Support.remote()]), checkouts: ["kit"])
+        let packages = try resolve(fileSystem)
+        #expect(packages.map(\.identity) == [PackageIdentity("kit")])
+    }
+
+    @Test("a package of an unknown kind is still refused and the reason names the kind")
+    func unknownKindIsRefused() throws {
+        let body =
+            "{\"packageRef\":{\"identity\":\"kit\",\"kind\":\"mystery\",\"location\":\"\"},\"state\":{\"name\":\"x\"},\"subpath\":\"kit\"}"
         let fileSystem = try Support.sourcePackagesTree(
             state: Support.state(dependencies: [body]), checkouts: [])
         let error = #expect(throws: DomainError.self) { try resolve(fileSystem) }
@@ -192,7 +202,7 @@ struct WorkspaceStateReaderTests {
             Issue.record("wrong error \(String(describing: error))")
             return
         }
-        #expect(reason.contains("registry"))
+        #expect(reason.contains("mystery"))
     }
 
     @Test("a remote package with no checkout state fails")

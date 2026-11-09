@@ -27,8 +27,8 @@ extension DomainError: CustomStringConvertible {
                 "More than one package provides the product \(product): \(candidates.joined(separator: ", "))."
         case .unmatchedExclude(let name): return "The exclude \(name) matches no package."
         case .licenseMissing(let package): return "The package \(package) has no license file."
-        case .licenseOutsideCheckout(let package, let path):
-            return "A license file of \(package) resolves outside the package, to \(path)."
+        case .licenseOutsideCheckout(let package, let file):
+            return "The license file \(file) of \(package) resolves outside the package."
         case .licenseTooLarge(let package, let file):
             return "The license file \(file) of \(package) is too large."
         case .licenseEncoding(let package, let file):
@@ -51,6 +51,8 @@ extension DomainError: CustomStringConvertible {
                 "The user script sandbox is on, so Dependi cannot read the package checkouts. Set ENABLE_USER_SCRIPT_SANDBOXING to NO for the target that runs Dependi."
         case .invalidOutputLocation(let path, let reason):
             return "The output location \(path) is not allowed: \(reason)."
+        case .projectNotFound(let path): return "There is no Xcode project at \(path)."
+        case .initRefused(let reason): return "Cannot set up Dependi: \(reason)"
         }
     }
 }

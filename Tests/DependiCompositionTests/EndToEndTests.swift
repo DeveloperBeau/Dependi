@@ -1,13 +1,14 @@
 import DependiComposition
 import DependiDomain
+import DependiInit
 import Foundation
 import Testing
 
-@Suite("End to end")
+@Suite("End to end", .timeLimit(.minutes(5)))
 struct EndToEndTests {
     /// An app that links Alamofire, which depends on swift-log.
-    private func standardWorld() throws -> EndToEndWorld {
-        let world = try EndToEndWorld()
+    private func standardWorld(configuration: String = "{}") throws -> EndToEndWorld {
+        let world = try EndToEndWorld(configuration: configuration)
         try world.addRemote(
             "alamofire", owner: "Alamofire",
             manifest: EndToEndWorld.manifest(
@@ -34,10 +35,11 @@ struct EndToEndTests {
         let entries = try requireValue(index["PreferenceSpecifiers"] as? [[String: String]])
         #expect(
             entries.map { $0["File"] } == [
-                "Acknowledgements/alamofire-5f720a3f", "Acknowledgements/swift-log-8051385e",
+                "Acknowledgements/alamofire-5f720a3f84a5",
+                "Acknowledgements/swift-log-8051385eb569",
             ])
         #expect(entries.allSatisfy { $0["Type"] == "PSChildPaneSpecifier" })
-        let pane = try childPane(world, slug: "alamofire-5f720a3f")
+        let pane = try childPane(world, slug: "alamofire-5f720a3f84a5")
         let groups = try requireValue(pane["PreferenceSpecifiers"] as? [[String: String]])
         #expect(
             groups == [
@@ -46,13 +48,13 @@ struct EndToEndTests {
                     "FooterText": "license of alamofire",
                 ]
             ])
-        let logPane = try childPane(world, slug: "swift-log-8051385e")
+        let logPane = try childPane(world, slug: "swift-log-8051385eb569")
         #expect(
             (logPane["PreferenceSpecifiers"] as? [[String: String]])?.first?["FooterText"]
                 == "license of swift-log")
         #expect(
             world.files(in: "Acknowledgements") == [
-                ".dependi-manifest", "alamofire-5f720a3f.plist", "swift-log-8051385e.plist",
+                ".dependi-manifest", "alamofire-5f720a3f84a5.plist", "swift-log-8051385eb569.plist",
             ])
         #expect(result.output.contains("Dependi: wrote 2 acknowledgements"))
     }
@@ -60,13 +62,24 @@ struct EndToEndTests {
     @Test("the process requests use the clean environment and the resolved toolchain")
     func processRequestsAreClean() throws {
         let world = try standardWorld()
+        world.environment["OTHER_LDFLAGS"] = "-leak"
+        world.environment["CC"] = "/leak/cc"
+        world.environment["SWIFT_EXEC"] = "/leak/swiftc"
+        world.environment["SWIFT_DEBUG_INFORMATION_FORMAT"] = "dwarf"
+        world.environment["SDKROOT"] = "/leak/sdk"
+        world.environment["DEVELOPER_DIR"] = "/Apps/Xcode.app/Contents/Developer"
         _ = try world.run()
         let requests = world.runner.requests
         #expect(requests.first?.executable == "/usr/bin/xcrun")
         #expect(requests.first?.arguments == ["--find", "swift"])
+        let expected = [
+            "PATH": "/usr/bin:/bin", "TMPDIR": world.root.path + "/home",
+            "HOME": world.root.path + "/home",
+            "DEVELOPER_DIR": "/Apps/Xcode.app/Contents/Developer",
+        ]
+        #expect(requests.count == 3)
         for request in requests {
-            #expect(request.environment["SDKROOT"] == nil)
-            #expect(request.environment["PATH"] == "/usr/bin:/bin")
+            #expect(request.environment == expected)
             #expect(request.arguments.contains("--disable-sandbox") == false)
         }
         let dumps = requests.dropFirst()
@@ -75,6 +88,55 @@ struct EndToEndTests {
             dumps.allSatisfy {
                 $0.executable == "/toolchain/usr/bin/swift" && $0.arguments.last == "dump-package"
             })
+    }
+
+    @Test("a variable that is absent from the build environment is absent from the child")
+    func absentVariablesStayAbsent() throws {
+        let world = try standardWorld()
+        world.environment["HOME"] = nil
+        world.environment["TMPDIR"] = nil
+        _ = try world.run()
+        for request in world.runner.requests {
+            #expect(request.environment == ["PATH": "/usr/bin:/bin", "TMPDIR": "/tmp"])
+        }
+    }
+
+    @Test("the time limits of the configuration reach every child request")
+    func configuredLimitsReachTheRequests() throws {
+        let world = try EndToEndWorld(
+            configuration: #"{"processTimeoutSeconds": 11, "runTimeoutSeconds": 4000}"#)
+        try world.addRemote(
+            "alamofire", owner: "Alamofire",
+            manifest: EndToEndWorld.manifest(product: "Alamofire"))
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        let limits = world.runner.requests.map(\.timeoutSeconds)
+        #expect(limits.count == 2)
+        #expect(limits.allSatisfy { $0 == 11 })
+    }
+
+    @Test("the run limit shortens the limit of every child")
+    func runLimitShortensChildLimits() throws {
+        let world = try EndToEndWorld(
+            configuration: #"{"processTimeoutSeconds": 3000, "runTimeoutSeconds": 100}"#)
+        try world.addRemote(
+            "alamofire", owner: "Alamofire",
+            manifest: EndToEndWorld.manifest(product: "Alamofire"))
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        let limits = world.runner.requests.map(\.timeoutSeconds)
+        #expect(limits.count == 2)
+        #expect(limits.allSatisfy { $0 > 0 && $0 <= 100 })
+        #expect(limits.allSatisfy { $0 > 50 })
+    }
+
+    @Test("a limit that is not valid fails the run before any process starts")
+    func invalidLimitFailsEarly() throws {
+        let world = try standardWorld(configuration: #"{"processTimeoutSeconds": 0}"#)
+        let result = try world.run()
+        #expect(result.code == 1)
+        #expect(result.errors.contains("processTimeoutSeconds must be a number above 0"))
+        #expect(world.runner.requests.isEmpty)
     }
 
     @Test("a second run gives identical bytes and changes no modification time")
@@ -111,7 +173,7 @@ struct EndToEndTests {
     func droppedDependencyRemovesPane() throws {
         let world = try standardWorld()
         _ = try world.run()
-        #expect(world.files(in: "Acknowledgements").contains("swift-log-8051385e.plist"))
+        #expect(world.files(in: "Acknowledgements").contains("swift-log-8051385eb569.plist"))
         try world.removeRemote("swift-log")
         world.runner.dumps["alamofire"] = EndToEndWorld.manifest(product: "Alamofire")
         try "// changed manifest".write(
@@ -121,7 +183,7 @@ struct EndToEndTests {
         #expect(result.code == 0, "errors: \(result.errors)")
         #expect(
             world.files(in: "Acknowledgements") == [
-                ".dependi-manifest", "alamofire-5f720a3f.plist",
+                ".dependi-manifest", "alamofire-5f720a3f84a5.plist",
             ])
         #expect(try world.indexTitles() == ["alamofire"])
     }
@@ -306,7 +368,7 @@ struct EndToEndTests {
         let world = try EndToEndWorld()
         let version = try world.run(["--version"])
         #expect(version.code == 0)
-        #expect(version.output == "dependi \(DependiVersion.current)\n")
+        #expect(version.output == "dependi 0.1.0\n")
         let help = try world.run(["help"])
         #expect(help.code == 0)
         #expect(help.output.contains("generate"))
@@ -319,15 +381,77 @@ struct EndToEndTests {
     func commandLineErrors(arguments: [String]) throws {
         let world = try EndToEndWorld()
         let result = try world.run(arguments)
-        #expect(result.code == DependiApplication.usageExitCode)
+        #expect(result.code == 64)
         #expect(result.errors.contains("error:"))
         #expect(result.errors.contains("generate"))
     }
 
-    @Test("the init command is reported as not available yet")
-    func initNotAvailable() throws {
-        let world = try EndToEndWorld()
-        let result = try world.run(["init", "--project", "x"])
-        #expect(result.code == DependiApplication.unavailableExitCode)
+    // MARK: Init
+
+    private func initWorld() throws -> EndToEndWorld {
+        let world = try EndToEndWorld(configuration: nil)
+        try world.addRemote(
+            "alamofire", owner: "Alamofire",
+            manifest: EndToEndWorld.manifest(
+                product: "Alamofire", dependencies: ["Logging"], declared: ["swift-log"]))
+        try world.addRemote(
+            "swift-log", owner: "apple", manifest: EndToEndWorld.manifest(product: "Logging"))
+        try "BINARY".write(
+            toFile: world.root.path + "/dependi-bin", atomically: true, encoding: .utf8)
+        return world
+    }
+
+    @Test("init installs the files and the configuration it writes is read by generate")
+    func initThenGenerate() throws {
+        let world = try initWorld()
+        let installed = try world.run(["init", "--project", world.project])
+        #expect(installed.code == 0, "errors: \(installed.errors)")
+        #expect(FileManager.default.fileExists(atPath: world.project + "/.dependi.json"))
+        #expect(
+            try String(contentsOfFile: world.project + "/.dependi/run.sh", encoding: .utf8)
+                == WrapperScript.text)
+        #expect(
+            try String(contentsOfFile: world.project + "/.dependi/bin/dependi", encoding: .utf8)
+                == "BINARY")
+        #expect(
+            FileManager.default.isExecutableFile(atPath: world.project + "/.dependi/bin/dependi"))
+        #expect(FileManager.default.isExecutableFile(atPath: world.project + "/.dependi/run.sh"))
+        #expect(
+            try String(contentsOfFile: world.project + "/.dependi/bin/VERSION", encoding: .utf8)
+                == "0.1.0\n")
+        #expect(
+            try String(contentsOfFile: world.project + "/.gitignore", encoding: .utf8)
+                == ".dependi/bin/\n")
+        #expect(installed.output.contains("\"${SRCROOT}/.dependi/run.sh\" generate"))
+
+        let generated = try world.run(["generate"])
+        #expect(generated.code == 0, "errors: \(generated.errors)")
+        #expect(try world.indexTitles() == ["alamofire", "swift-log"])
+    }
+
+    @Test("a relative project path is resolved against the current folder")
+    func relativeInitPath() throws {
+        let world = try initWorld()
+        let result = try world.run(["init", "--project", "proj"])
+        #expect(result.code == 0, "errors: \(result.errors)")
+        #expect(FileManager.default.fileExists(atPath: world.project + "/.dependi.json"))
+    }
+
+    @Test("a dry run writes nothing")
+    func initDryRun() throws {
+        let world = try initWorld()
+        let result = try world.run(["init", "--project", world.project, "--dry-run"])
+        #expect(result.code == 0)
+        #expect(!FileManager.default.fileExists(atPath: world.project + "/.dependi.json"))
+        #expect(!FileManager.default.fileExists(atPath: world.project + "/.dependi"))
+        #expect(result.output.contains("Dry run. Nothing is changed."))
+    }
+
+    @Test("a project that does not exist fails with the path in the message")
+    func initMissingProject() throws {
+        let world = try initWorld()
+        let result = try world.run(["init", "--project", world.root.path + "/nowhere"])
+        #expect(result.code == 1)
+        #expect(result.errors.contains("There is no Xcode project at"))
     }
 }

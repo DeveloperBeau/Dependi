@@ -32,8 +32,8 @@ public enum DomainError: Error, Equatable, Sendable {
     case unmatchedExclude(String)
     /// A package has no license file and no manual entry.
     case licenseMissing(package: String)
-    /// A license file resolves to a place outside its package.
-    case licenseOutsideCheckout(package: String, path: String)
+    /// A license file resolves to a place outside its package. The case holds the name of the file, never where it leads.
+    case licenseOutsideCheckout(package: String, file: String)
     /// A license file is longer than the limit.
     case licenseTooLarge(package: String, file: String)
     /// A license file is not valid text.
@@ -52,4 +52,8 @@ public enum DomainError: Error, Equatable, Sendable {
     case scriptSandboxEnabled
     /// A path for the output is empty, not absolute where it must be, or leaves its folder.
     case invalidOutputLocation(path: String, reason: String)
+    /// There is no project at the path given to the init command.
+    case projectNotFound(path: String)
+    /// The init command cannot continue, and the text says why.
+    case initRefused(reason: String)
 }

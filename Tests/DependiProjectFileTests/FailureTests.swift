@@ -5,7 +5,7 @@ import Foundation
 import Testing
 import TestHelpers
 
-@Suite("Project file failures")
+@Suite("Project file failures", .timeLimit(.minutes(1)))
 struct FailureTests {
     private func reason(of error: DomainError) -> String {
         if case .fileUnreadable(_, let reason) = error { return reason }

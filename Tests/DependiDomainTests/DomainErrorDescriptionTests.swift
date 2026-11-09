@@ -1,7 +1,7 @@
 import DependiDomain
 import Testing
 
-@Suite("Domain error messages")
+@Suite("Domain error messages", .timeLimit(.minutes(1)))
 struct DomainErrorDescriptionTests {
     @Test("a message names the package, file or command it is about")
     func messagesNamePayloads() {
@@ -53,7 +53,7 @@ struct DomainErrorDescriptionTests {
             ),
             (.unmatchedExclude("E14"), ["E14"]),
             (.licenseMissing(package: "K15"), ["K15"]),
-            (.licenseOutsideCheckout(package: "K16", path: "P16"), ["K16", "P16"]),
+            (.licenseOutsideCheckout(package: "K16", file: "F16"), ["K16", "F16"]),
             (.licenseTooLarge(package: "K17", file: "F17"), ["K17", "F17"]),
             (.licenseEncoding(package: "K18", file: "F18"), ["K18", "F18"]),
             (.licenseControlCharacter(package: "K19", file: "F19"), ["K19", "F19"]),
@@ -66,6 +66,8 @@ struct DomainErrorDescriptionTests {
             (.packagesUnreached(["U23", "V23"]), ["U23", "V23"]),
             (.scriptSandboxEnabled, []),
             (.invalidOutputLocation(path: "P24", reason: "R24"), ["P24", "R24"]),
+            (.projectNotFound(path: "P25"), ["P25"]),
+            (.initRefused(reason: "R26"), ["R26"]),
         ]
         for (error, texts) in cases {
             #expect(!error.description.isEmpty)
@@ -73,5 +75,15 @@ struct DomainErrorDescriptionTests {
                 #expect(error.description.contains(text), "\(error) lacks \(text)")
             }
         }
+    }
+}
+
+@Suite("Outside-checkout message", .timeLimit(.minutes(1)))
+struct OutsideCheckoutMessageTests {
+    @Test("the message names the package and the file and nothing about where the link leads")
+    func messageHoldsNoTarget() {
+        let error = DomainError.licenseOutsideCheckout(package: "kit", file: "NOTICE")
+        #expect(
+            error.description == "The license file NOTICE of kit resolves outside the package.")
     }
 }
