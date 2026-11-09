@@ -42,6 +42,12 @@
 - **Finding:** The unit test and ui test targets link different products, so each exclusion has its own failing test.
 - **Rule:** Give every excluded item a name that nothing else uses.
 
+## Test-only packages are not unreached packages
+
+- **Trap:** Test targets are skipped, so a package that only a test target links looked like a package nothing links. Every archive failed.
+- **Finding:** The resolved list holds every package of the workspace, and the app's product list holds only the shipped ones.
+- **Rule:** Collect the products of all other targets as well, and treat their packages as expected. A package that nothing links is still reported.
+
 ## Mutation results
 
 The 19 entries owned by this slice are all killed. Each one names the test that fails. See `Documentation/Registers/mutations.md`.

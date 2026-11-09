@@ -1,7 +1,7 @@
 import DependiInit
 import Testing
 
-@Suite("Init outcome")
+@Suite("Init outcome", .timeLimit(.minutes(1)))
 struct InitOutcomeTests {
     @Test("outcomes compare by case and by reason")
     func outcomesCompare() {

@@ -4,14 +4,27 @@ import Foundation
 
 /// Runs child processes with `posix_spawn`. Each child leads its own process group, so a time-out kills all of it.
 public struct SystemProcessRunner: ProcessRunning {
-    /// Creates a runner.
-    public init() {}
+    private static let pollInterval: DispatchTimeInterval = .milliseconds(50)
+    private static let longestTimeoutSeconds = 604_800.0
+    private let children: any ChildProcessTracking
+
+    /// Creates a runner that reports each live child to `children`.
+    public init(children: any ChildProcessTracking) {
+        self.children = children
+    }
 
     /// Runs a process to the end. It fails on a spawn error, a time-out or output over the limit.
     public func run(_ request: ProcessRequest) throws(DomainError) -> ProcessOutput {
         let command = ([request.executable] + request.arguments).joined(separator: " ")
         func failure(_ reason: String) -> DomainError {
             .processFailed(command: command, reason: reason)
+        }
+
+        // NaN fails every comparison, so it is refused here too.
+        guard request.timeoutSeconds > 0,
+            request.timeoutSeconds <= Self.longestTimeoutSeconds
+        else {
+            throw failure("the time limit must be a number above 0 and at most one week")
         }
 
         var outPipe: [Int32] = [0, 0]
@@ -32,8 +45,16 @@ public struct SystemProcessRunner: ProcessRunning {
             throw failure("cannot start: \(String(cString: strerror(spawned.code)))")
         }
         let pid = spawned.pid
+        children.started(pid)
 
-        let signals = RunSignals()
+        // The exit event wakes the wait at once. The overflow flag wakes it too.
+        // The timed wait is a safety net, because it re-reads the child state.
+        let wake = DispatchSemaphore(value: 0)
+        let signals = RunSignals(onOverflow: { wake.signal() })
+        let watcher = DispatchSource.makeProcessSource(
+            identifier: pid, eventMask: .exit, queue: .global())
+        watcher.setEventHandler { wake.signal() }
+        watcher.resume()
         let collectors = [
             StreamCollector(limit: request.maximumOutputBytes, signals: signals),
             StreamCollector(limit: request.maximumOutputBytes, signals: signals),
@@ -43,56 +64,65 @@ public struct SystemProcessRunner: ProcessRunning {
             DispatchQueue.global().async(group: readers) { collector.drain(descriptor) }
         }
         defer {
+            watcher.cancel()
             signals.stop()
             readers.wait()
-            for descriptor in parentEnds { close(descriptor) }
+            parentEnds.forEach { close($0) }
         }
 
         let deadline = DispatchTime.now() + request.timeoutSeconds
-        var status: Int32 = 0
+        let timedOut = failure("timed out after \(Self.describe(request.timeoutSeconds)) seconds")
+        let overLimit = failure("output is over the limit of \(request.maximumOutputBytes) bytes")
         var exited = false
         while !exited {
             if signals.hasOverflowed { break }
-            var waitStatus: Int32 = 0
-            let result = waitpid(pid, &waitStatus, WNOHANG)
-            if result == pid {
-                status = waitStatus
+            switch ChildWait.state(of: pid) {
+            case .exited:
                 exited = true
-            } else if result < 0 && errno != EINTR {
-                exited = true
-            } else if DispatchTime.now() >= deadline {
-                abort(pid, exited: false)
-                throw failure("timed out after \(Self.describe(request.timeoutSeconds)) seconds")
-            } else {
-                usleep(2_000)
+            case .failed(let code):
+                // Something else reaped the child, so its id is not ours to signal.
+                children.finished(pid)
+                throw failure("cannot wait for the process: \(String(cString: strerror(code)))")
+            case .running:
+                let now = DispatchTime.now()
+                if now >= deadline {
+                    abort(pid)
+                    throw timedOut
+                }
+                _ = wake.wait(timeout: min(deadline, now + Self.pollInterval))
             }
         }
         if signals.hasOverflowed {
-            abort(pid, exited: exited)
-            throw failure("output is over the limit of \(request.maximumOutputBytes) bytes")
+            abort(pid)
+            throw overLimit
         }
         if readers.wait(timeout: deadline) == .timedOut {
-            abort(pid, exited: true)
-            throw failure("timed out after \(Self.describe(request.timeoutSeconds)) seconds")
+            abort(pid)
+            throw timedOut
         }
         if signals.hasOverflowed {
-            abort(pid, exited: true)
-            throw failure("output is over the limit of \(request.maximumOutputBytes) bytes")
+            abort(pid)
+            throw overLimit
         }
-        return ProcessOutput(
-            exitStatus: Self.exitStatus(fromWaitStatus: status),
-            standardOutput: collectors[0].data,
-            standardError: collectors[1].data
-        )
+        children.finished(pid)
+        switch ChildWait.reap(pid) {
+        case .success(let status):
+            return ProcessOutput(
+                exitStatus: Self.exitStatus(fromWaitStatus: status),
+                standardOutput: collectors[0].data,
+                standardError: collectors[1].data
+            )
+        case .failure(let failed):
+            throw failure("cannot wait for the process: \(String(cString: strerror(failed.code)))")
+        }
     }
 
-    /// Kills the whole tree and reaps the child if it is still unreaped.
-    private func abort(_ pid: pid_t, exited: Bool) {
+    /// Kills the whole tree, then reaps the child. The child is still unreaped here, so its
+    /// id cannot belong to another process.
+    private func abort(_ pid: pid_t) {
         ProcessTree.kill(root: pid)
-        if !exited {
-            var ignored: Int32 = 0
-            while waitpid(pid, &ignored, 0) < 0 && errno == EINTR {}
-        }
+        children.finished(pid)
+        _ = ChildWait.reap(pid)
     }
 
     private static func describe(_ seconds: Double) -> String {

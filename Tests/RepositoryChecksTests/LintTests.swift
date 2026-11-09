@@ -2,7 +2,7 @@ import Foundation
 import Testing
 import TestHelpers
 
-@Suite("Formatter and casing lint")
+@Suite("Formatter and casing lint", .timeLimit(.minutes(5)))
 struct LintTests {
     private let configuration = RepositoryRoot.url.appendingPathComponent(".swift-format")
 

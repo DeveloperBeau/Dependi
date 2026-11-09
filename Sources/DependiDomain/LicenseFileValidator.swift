@@ -22,13 +22,13 @@ public struct LicenseFileValidator: Sendable {
         let real = try files.realPath(of: folder + "/" + fileName)
         let realRoot = try files.realPath(of: root)
         guard real == realRoot || real.hasPrefix(realRoot + "/") else {
-            throw .licenseOutsideCheckout(package: owner, path: real)
+            throw .licenseOutsideCheckout(package: owner, file: fileName)
         }
         let data = try files.readRegularFile(at: real, upToBytes: maximumBytes)
         if data.count > maximumBytes { throw .licenseTooLarge(package: owner, file: fileName) }
         let text = try decode(data, owner: owner, fileName: fileName)
         for scalar in text.unicodeScalars where scalar.value < 0x20 {
-            if scalar != "\t" && scalar != "\n" && scalar != "\r" {
+            if scalar != "\t" && scalar != "\n" && scalar != "\r" && scalar != "\u{0C}" {
                 throw .licenseControlCharacter(package: owner, file: fileName)
             }
         }

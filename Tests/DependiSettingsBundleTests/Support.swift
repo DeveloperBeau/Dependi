@@ -93,3 +93,39 @@ struct AlteringReader: FileReading {
     }
     func exists(at path: String) -> Bool { inner.exists(at: path) }
 }
+
+/// Passes the first `allowed` changes to the file system and fails every later one.
+final class FailingAfterWriter: FileWriting, @unchecked Sendable {
+    let inner: InMemoryFileSystem
+    private let allowed: Int
+    private let box = LockedBox<Int>(0)
+    init(_ inner: InMemoryFileSystem, allowing allowed: Int) {
+        self.inner = inner
+        self.allowed = allowed
+    }
+    /// How many changes were attempted, failed ones included.
+    var attempts: Int { box.withValue { $0 } }
+    private func gate(_ path: String) throws(DomainError) {
+        let count = box.withValue { value -> Int in
+            value += 1
+            return value
+        }
+        if count > allowed { throw .fileUnwritable(path: path, reason: "stopped") }
+    }
+    func write(_ data: Data, toPath path: String) throws(DomainError) {
+        try gate(path)
+        try inner.write(data, toPath: path)
+    }
+    func createDirectory(at path: String) throws(DomainError) {
+        try gate(path)
+        try inner.createDirectory(at: path)
+    }
+    func removeItem(at path: String) throws(DomainError) {
+        try gate(path)
+        try inner.removeItem(at: path)
+    }
+    func moveItem(at source: String, to destination: String) throws(DomainError) {
+        try gate(source)
+        try inner.moveItem(at: source, to: destination)
+    }
+}

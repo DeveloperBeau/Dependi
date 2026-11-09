@@ -1,3 +1,5 @@
+import Foundation
+
 /// Where and how the package graph reader runs and caches.
 public struct PackageGraphSettings: Equatable, Sendable {
     /// The absolute path of the `swift` program, found once with `xcrun --find swift`.
@@ -18,6 +20,8 @@ public struct PackageGraphSettings: Equatable, Sendable {
     public let processTimeoutSeconds: Double
     /// The most bytes kept from each output stream.
     public let maximumOutputBytes: Int
+    /// Temporary cache files last changed before this moment are leftovers of a crash and are removed.
+    public let staleTemporaryFilesBefore: Date
 
     /// Creates settings.
     public init(
@@ -29,7 +33,8 @@ public struct PackageGraphSettings: Equatable, Sendable {
         remoteCacheDirectory: String,
         checkoutsDirectory: String?,
         processTimeoutSeconds: Double,
-        maximumOutputBytes: Int
+        maximumOutputBytes: Int,
+        staleTemporaryFilesBefore: Date
     ) {
         self.swiftExecutable = swiftExecutable
         self.toolchainVersion = toolchainVersion
@@ -40,5 +45,6 @@ public struct PackageGraphSettings: Equatable, Sendable {
         self.checkoutsDirectory = checkoutsDirectory
         self.processTimeoutSeconds = processTimeoutSeconds
         self.maximumOutputBytes = maximumOutputBytes
+        self.staleTemporaryFilesBefore = staleTemporaryFilesBefore
     }
 }
