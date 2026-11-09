@@ -18,7 +18,7 @@ struct InitFeatureTests {
 
         let config = try JSONDecoder().decode(
             ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
-        #expect(config.excludes == ["core"])
+        #expect(config.excludes == [])
         #expect(config.version == "0.1.0")
         #expect(config.commit == InitWorld.commit)
         #expect(config.gateConfigurations == ["Release"])

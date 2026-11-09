@@ -22,11 +22,11 @@
 6. Find `SourcePackages`.
 7. Read the resolved packages and the pinned revisions. A checkout at another revision than the pin fails.
 8. Read the linked products of the target.
-9. Add the local packages that the project file lists to the local packages from the workspace state.
+9. Add the local packages that the project file lists to the local packages from the workspace state. Then follow the `.package(path:)` dependencies of each local package manifest, so that a local package that only another local package names is found too. Two spellings of one folder count as one package, so a cycle ends. A folder that a manifest names and that does not exist fails with `fileNotFound`.
 10. Resolve the linked packages. Excludes apply. A resolved package that nothing reaches fails unless `allowUnreached` is set. A package that a test target or another target of the project links, directly or through its dependencies, is expected and is not reported. So is a package that only a build tool product reaches. A package that nothing in the project links is still reported. A package that only another project of the workspace links is reported too, so set `allowUnreached` for such a workspace.
-11. For each linked package list the top level of its folder, pick the license files and validate each.
+11. For each linked package list the top level of its folder, pick the license files and validate each. A package with no license file is skipped. A local package is skipped with no message. A remote package is skipped with the line `Dependi: skipped <identity>: no license file` on the error output. If `requireLicenses` is set, a remote package with no license file fails with `licenseMissing`.
 12. Add the manual entries. Each license path must be relative and stay inside the project folder.
-13. Assemble. A package without a license, a duplicate identity and an output name clash fail here.
+13. Assemble. A duplicate identity and an output name clash fail here. The packages and the manual entries make one list. The sort key is the lowercased name, then the identity, then the output name. The comparison uses Unicode code points, so the order does not depend on the locale or on the order of the input.
 14. Work out the bundle path and write.
 15. Log the number written.
 

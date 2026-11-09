@@ -44,8 +44,10 @@ The program in `.dependi/bin` is not committed. The script builds the pinned com
 ```
 swift build -c release --package-path <Dependi clone> --product dependi
 mkdir -p .dependi/bin && cp <Dependi clone>/.build/release/dependi .dependi/bin/dependi
-echo <version> > .dependi/bin/VERSION
+echo <version>-<commit> > .dependi/bin/VERSION
 ```
+
+Use the same `version` and `commit` values that `.dependi.json` holds. The script compares the `VERSION` file with `<version>-<commit>`. If the two are different, the script builds the program again.
 
 ## Upgrading
 
@@ -58,9 +60,10 @@ echo <version> > .dependi/bin/VERSION
 
 | Key | Meaning |
 |---|---|
-| `excludes` | Package names to leave out. The wizard excludes your own local packages. |
+| `excludes` | Package identities to leave out. An exclude that matches no package is an error. Local packages with no license file are skipped without an exclude. |
 | `manualEntries` | Code that has no package, each with a `name` and a `licensePath` inside the project. |
 | `gateConfigurations` | Configurations that run besides an archive. The default is `Release`. |
+| `requireLicenses` | Fail when a remote package has no license file. The default is off: such a package is skipped and named on the error output. |
 | `allowUnreached` | Allow resolved packages that no target of your project links. |
 | `includeBuildTools` | Include the dependencies of macro and plugin targets. |
 | `sourcePackagesPath` | Where `SourcePackages` is, if it is not next to the build folder. |

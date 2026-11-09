@@ -161,6 +161,24 @@ struct PackageGraphParsingTests {
         #expect(result.declaredDependencies == ["scope.name"])
     }
 
+    @Test("local dependency folders are read, and a relative one is resolved against the package")
+    func localDependencyPaths() throws {
+        let json = """
+            {"products":[],"targets":[],
+             "dependencies":[
+               {"fileSystem":[{"identity":"shared","path":"../shared"}]},
+               {"fileSystem":[{"identity":"core","path":"/work/core/"}]},
+               {"sourceControl":[{"identity":"remote-kit","location":{"remote":[{"urlString":"https://example.com/remote-kit"}]}}]},
+               {"fileSystem":[{"identity":"empty","path":""}]}]}
+            """
+        let files = try GraphTestSupport.files()
+        let runner = FakeProcessRunner(results: [GraphTestSupport.success(Data(json.utf8))])
+        let result = try GraphTestSupport.reader(files: files, runner: runner).manifest(
+            atPackagePath: GraphTestSupport.packagePath)
+        #expect(result.localDependencyPaths == ["/checkouts/shared", "/work/core"])
+        #expect(result.declaredDependencies == ["shared", "core", "remote-kit", "empty"])
+    }
+
     @Test("an output of about five megabytes parses")
     func fiveMegabyteOutput() throws {
         var targets: [String] = []

@@ -27,11 +27,20 @@ public struct AcknowledgementAssembler: Sendable {
             }
             slugs[slug] = candidate.normalizedLocation
         }
+        // Plain code point order, so the result does not depend on the locale or on Unicode collation.
         return candidates.sorted { left, right in
-            let leftKey = (left.displayName.lowercased(), left.identity.value, slug(left))
-            let rightKey = (right.displayName.lowercased(), right.identity.value, slug(right))
-            return leftKey < rightKey
+            let leftKeys = [left.displayName.lowercased(), left.identity.value, slug(left)]
+            let rightKeys = [right.displayName.lowercased(), right.identity.value, slug(right)]
+            for (leftKey, rightKey) in zip(leftKeys, rightKeys) where leftKey != rightKey {
+                return Self.precedes(leftKey, rightKey)
+            }
+            return Self.precedes(left.displayName, right.displayName)
         }
+    }
+
+    private static func precedes(_ left: String, _ right: String) -> Bool {
+        left.unicodeScalars.lazy.map(\.value).lexicographicallyPrecedes(
+            right.unicodeScalars.lazy.map(\.value))
     }
 
     private func slug(_ item: Acknowledgement) -> String {

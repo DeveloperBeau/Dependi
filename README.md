@@ -20,7 +20,10 @@ Debug builds skip. An archive always runs.
 
 ## What it checks
 
-- Every package that the app links has a license file, or the build fails and names the package.
+- A remote package that the app links and that has no license file is skipped, and the build log names it. Set `requireLicenses` in `.dependi.json` to make this a failure.
+- Local packages, also the local packages that other local packages name with `.package(path:)`, are followed to find the remote packages that they use. A local package with no license file is left out of the output.
+- Manual entries add a name and a license text file from the project for code that has no package.
+- The Acknowledgements pane lists packages and manual entries in one list, sorted by name without case, then by identity. The order does not depend on the locale or on the order of the input.
 - License files are regular files inside their package, within 1 MB, valid text and free of control characters.
 - A checkout is at the revision that `Package.resolved` pins.
 - Resolved packages that the app does not link fail the build unless you allow them.

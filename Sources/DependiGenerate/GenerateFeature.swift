@@ -116,6 +116,10 @@ public struct GenerateFeature: Sendable {
                     revision: nil,
                     checkoutPath: path))
         }
+        locals = try LocalPackageCollector(
+            manifests: manifests, files: files, normalizer: normalizer
+        )
+        .collect(from: locals)
         let resolver = LinkedPackageResolver(manifests: manifests, normalizer: normalizer)
         let result = try resolver.resolve(
             linked: linked.products, otherLinked: linked.otherProducts,
@@ -154,6 +158,17 @@ public struct GenerateFeature: Sendable {
                     try validator.document(
                         named: name, inFolder: package.checkoutPath, root: package.checkoutPath,
                         owner: package.identity.value))
+            }
+            // A package with no license file is skipped. A local package is skipped quietly,
+            // because it is the project's own code. A remote package is named on the error output.
+            if documents.isEmpty {
+                if package.kind == .local { continue }
+                if settings.requireLicenses {
+                    throw .licenseMissing(package: package.identity.value)
+                }
+                output.writeErrorLine(
+                    "Dependi: skipped \(package.identity.value): no license file")
+                continue
             }
             items.append(
                 Acknowledgement(
