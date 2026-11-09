@@ -1,0 +1,3 @@
+struct lowercaseType {
+    let Value_one = 1
+}
