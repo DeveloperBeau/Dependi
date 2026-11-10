@@ -48,6 +48,42 @@
 - **Finding:** The pass rule counted every outcome except survived and invalid.
 - **Rule:** A kill by time-out passes only when the entry says `"expected": "timeout"`. Any other outcome that differs from the expectation fails the run.
 
+## Two builds for each entry made the register slow
+
+- **Trap:** The runner ran the baseline of each entry on clean code and then built the mutant. The baseline rebuilt the file that the previous entry restored. Each entry paid for two builds and two test runs, one entry at a time.
+- **Finding:** A register of 276 entries took more than 80 minutes. The tests themselves ran in seconds.
+- **Rule:** The runner runs each distinct baseline once before the first mutation. Each entry has one build. Workers in their own copies run file groups at the same time.
+
+## A cold fixture package made the runner tests slow
+
+- **Trap:** Each runner test made a new package in a new folder, so each test built the package from nothing.
+- **Finding:** The runner suite took about 13 minutes of a gate on a busy machine. Most of that time was cold builds of a package with one file.
+- **Rule:** The runner tests share one fixture package that keeps its build folder. Each test resets the package to its fixture commit first.
+
+## Real builds in runner tests cost minutes
+
+- **Trap:** Each runner test built and ran a real package, even when it only checked the order of entries or a flag.
+- **Finding:** After the fixture package kept its build folder, the runner suite still took more than 5 minutes of the gate on a busy machine.
+- **Rule:** Runner tests use a `swift` double on `PATH`. Three tests run the real toolchain, and only when the runner changes.
+
+## A process can start a child during the kill
+
+- **Trap:** The runner read the process table and then killed what it found. A test helper that started a child between the two left that child running.
+- **Finding:** Both interrupt tests found a looping child after the run once the tests became fast.
+- **Rule:** The runner stops each process first, scans again until it finds no new child, and then kills them all.
+
+## A shutdown can race a worker
+
+- **Trap:** With more than one worker, an interrupt removed the copies while a worker wrote its restore. The write put a file back, and the worker then exited with another code.
+- **Finding:** The parallel interrupt test failed about one time in five once the double made it fast.
+- **Rule:** The first shutdown wins. Workers write into a copy only under a lock that the shutdown takes and keeps.
+
+## A lock held across a command can hang the shutdown
+
+- **Trap:** A worker held the copy lock while it ran `git ls-files`. After the shutdown started, a command waits for ever, so the worker kept the lock and the shutdown waited for it.
+- **Finding:** A review found the cycle. A test now holds each copy open and interrupts during the copy. It passed in 20 runs of 20.
+- **Rule:** The runner lists the files before the workers start. No lock is held across a command, and a copy stops when the shutdown starts.
+
 ## Mutation results for the runner
 
 | Mutation | Test that failed |

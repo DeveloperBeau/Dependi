@@ -15,9 +15,10 @@ enum RunnerBinary {
         return output
     }()
 
-    /// Runs the compiled runner against a package and a register text.
+    /// Runs the compiled runner against a package and a register text. A `swift` double, when
+    /// given, answers every `swift` call. Without one, the runner calls the real toolchain.
     static func run(
-        on package: MiniPackage, register: String, extra: [String] = [],
+        on package: MiniPackage, double: SwiftDouble?, register: String, extra: [String] = [],
         timeoutSeconds: Double = 600
     ) throws -> ChildProcessResult {
         let registerURL = FileManager.default.temporaryDirectory
@@ -25,22 +26,32 @@ enum RunnerBinary {
         try register.write(to: registerURL, atomically: true, encoding: .utf8)
         defer { try? FileManager.default.removeItem(at: registerURL) }
         return try ChildProcess.run(
-            [url.path, "--root", package.root.path, "--register", registerURL.path] + extra,
+            setting(double) + [
+                url.path, "--root", package.root.path, "--register", registerURL.path,
+            ]
+                + extra,
             workingDirectory: package.root, timeoutSeconds: timeoutSeconds)
+    }
+
+    private static func setting(_ double: SwiftDouble?) -> [String] {
+        double.map { [$0.pathSetting] } ?? []
     }
 }
 
 extension RunnerBinary {
     /// Runs the compiled runner and returns the register text as the run left it.
     static func runReadingRegister(
-        on package: MiniPackage, register: String, extra: [String] = []
+        on package: MiniPackage, double: SwiftDouble?, register: String, extra: [String] = []
     ) throws -> (result: ChildProcessResult, register: String) {
         let registerURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("register-\(UUID().uuidString).json")
         try register.write(to: registerURL, atomically: true, encoding: .utf8)
         defer { try? FileManager.default.removeItem(at: registerURL) }
         let result = try ChildProcess.run(
-            [url.path, "--root", package.root.path, "--register", registerURL.path] + extra,
+            setting(double) + [
+                url.path, "--root", package.root.path, "--register", registerURL.path,
+            ]
+                + extra,
             workingDirectory: package.root, timeoutSeconds: 600)
         return (result, try String(contentsOf: registerURL, encoding: .utf8))
     }
@@ -57,6 +68,10 @@ enum Register {
             {"id":"\(id)","slice":"test","file":"\(file)","search":"\(search)","replace":"\(replace)","test":"\(test)"\(expectation)}
             """
     }
+
+    /// The test time limit for a register with a looping mutant. The `swift` double answers at
+    /// once, so a short limit cannot cut a test that would pass.
+    static let loopTimeout = "3"
 
     static func list(_ entries: [String]) -> String { "[" + entries.joined(separator: ",") + "]" }
 

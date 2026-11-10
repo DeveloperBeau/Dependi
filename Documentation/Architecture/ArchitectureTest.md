@@ -41,8 +41,8 @@ Beside the source rules, a repository test checks that every `@Suite` in `Tests`
 
 ## Gate
 
-`Scripts/gate.sh` runs lint, a build, the tests and a build of each module on its own. `Scripts/build-each-target.sh` gives each module its own scratch path and a time limit.
+`Scripts/gate.sh` runs lint, the package dump check, a build and the tests. It runs `Scripts/runner-check.sh` only when the mutation runner changed. Rule 3 finds a module that imports a sibling it does not declare. A shared build folder can hide that error from the compiler, so the gate does not build each module on its own.
 
 ## Tests
 
-Every rule has a planted violation and a clean case. Import forms are fuzzed with a seeded generator. Decoys in comments and strings must never count as imports.
+Every rule has a planted violation and a clean case. The undeclared import rule also has these cases: an import in a comment or a string, a `@testable` import, an import inside `#if canImport`, a module that imports itself and a sibling that the module declares only as a product. Import forms are fuzzed with a seeded generator. Decoys in comments and strings must never count as imports.

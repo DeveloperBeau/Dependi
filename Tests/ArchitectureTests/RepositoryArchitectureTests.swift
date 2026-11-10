@@ -84,27 +84,30 @@ struct RepositoryArchitectureTests {
         #expect(missing.isEmpty, "suites without .timeLimit: \(missing)")
     }
 
-    @Test("the gate script runs lint, tests and the per-module build")
+    @Test("the gate script runs lint, the package dump check, the tests and the runner check")
     func gateScriptCoversEveryCheck() throws {
         let gate = try String(
             contentsOf: root.appendingPathComponent("Scripts/gate.sh"), encoding: .utf8)
         for step in [
             "Scripts/lint.sh", "Scripts/refresh-package-dump.sh",
             "git diff --exit-code -- Tests/ArchitectureTests/Fixtures", "swift test",
-            "Scripts/build-each-target.sh",
+            "Scripts/runner-check.sh",
+            "Scripts/mutate.swift Scripts/runner-check.sh Package.swift Tests/MutationRunnerTests)",
+            #"git merge-base HEAD "${GATE_BASE:-origin/main}""#, #"[ -z "$base" ] ||"#,
         ] {
             #expect(gate.contains(step), "the gate does not run \(step)")
         }
     }
 
-    @Test(
-        "the per-module build script builds each module with its own scratch path and a time limit")
-    func moduleBuildScriptIsolatesEachModule() throws {
+    @Test("the runner check script turns on the end-to-end runner tests")
+    func runnerCheckScriptEnablesEndToEndTests() throws {
         let script = try String(
-            contentsOf: root.appendingPathComponent("Scripts/build-each-target.sh"), encoding: .utf8
-        )
-        #expect(script.contains("--target"))
-        #expect(script.contains("--scratch-path"))
-        #expect(script.contains("alarm"))
+            contentsOf: root.appendingPathComponent("Scripts/runner-check.sh"), encoding: .utf8)
+        #expect(script.contains("DEPENDI_RUNNER_CHECK=1"))
+        #expect(script.contains("--filter MutationRunnerEndToEndTests"))
+        let suite = try String(
+            contentsOf: root.appendingPathComponent(
+                "Tests/MutationRunnerTests/MutationRunnerEndToEndTests.swift"), encoding: .utf8)
+        #expect(suite.contains(#"environment["DEPENDI_RUNNER_CHECK"] == "1""#))
     }
 }
