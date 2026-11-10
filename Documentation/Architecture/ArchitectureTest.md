@@ -41,7 +41,7 @@ Beside the source rules, a repository test checks that every `@Suite` in `Tests`
 
 ## Gate
 
-`Scripts/gate.sh` runs lint, a build, the tests and a build of each module on its own. `Scripts/build-each-target.sh` gives each module its own scratch path and a time limit.
+`Scripts/gate.sh` runs lint, the package dump check, a build and the tests. Rule 3 finds a module that imports a sibling it does not declare. A shared build folder can hide that error from the compiler, so the gate does not build each module on its own.
 
 ## Tests
 

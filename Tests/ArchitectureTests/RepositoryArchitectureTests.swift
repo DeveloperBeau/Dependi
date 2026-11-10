@@ -84,27 +84,15 @@ struct RepositoryArchitectureTests {
         #expect(missing.isEmpty, "suites without .timeLimit: \(missing)")
     }
 
-    @Test("the gate script runs lint, tests and the per-module build")
+    @Test("the gate script runs lint, the package dump check and the tests")
     func gateScriptCoversEveryCheck() throws {
         let gate = try String(
             contentsOf: root.appendingPathComponent("Scripts/gate.sh"), encoding: .utf8)
         for step in [
             "Scripts/lint.sh", "Scripts/refresh-package-dump.sh",
             "git diff --exit-code -- Tests/ArchitectureTests/Fixtures", "swift test",
-            "Scripts/build-each-target.sh",
         ] {
             #expect(gate.contains(step), "the gate does not run \(step)")
         }
-    }
-
-    @Test(
-        "the per-module build script builds each module with its own scratch path and a time limit")
-    func moduleBuildScriptIsolatesEachModule() throws {
-        let script = try String(
-            contentsOf: root.appendingPathComponent("Scripts/build-each-target.sh"), encoding: .utf8
-        )
-        #expect(script.contains("--target"))
-        #expect(script.contains("--scratch-path"))
-        #expect(script.contains("alarm"))
     }
 }
