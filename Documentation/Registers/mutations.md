@@ -143,7 +143,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | license-notice-pattern | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `noticeNextToLicense` | killed | 2026-11-04 KILLED |
 | license-order | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `foundInFixedOrder` | killed | 2026-11-04 KILLED |
 | loader-size-cap | 2b | `Sources/DependiDomain/ConfigurationLoader.swift` | `oversizeAndFolder` | killed | 2026-11-04 KILLED |
-| local-cycle-guard | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `cycleAndDuplicate` | killed | not run |
+| local-cycle-guard | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `sharedDependencyIsListedOnce` | killed | not run |
 | local-follow-paths | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `nestedLocalPackage` | killed | not run |
 | local-missing-path | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `missingPath` | killed | not run |
 | local-missing-start | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `missingStartIsKept` | killed | not run |

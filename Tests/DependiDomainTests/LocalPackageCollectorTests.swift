@@ -44,6 +44,21 @@ struct LocalPackageCollectorTests {
         #expect(found == ["/proj/App", "/proj/Shared", "/proj/Core"])
     }
 
+    @Test("a package that two packages reach, with no cycle, is listed once")
+    func sharedDependencyIsListedOnce() throws {
+        for path in ["/proj/A", "/proj/B", "/proj/C"] { try files.addDirectory(at: path) }
+        let manifests = [
+            "/proj/A": manifest(["/proj/C"]),
+            "/proj/B": manifest(["/proj/C"]),
+            "/proj/C": manifest([]),
+        ]
+        #expect(
+            try collect(["/proj/A", "/proj/B"], manifests: manifests)
+                == ["/proj/A", "/proj/B", "/proj/C"])
+        #expect(
+            try collect(["/proj/A", "/proj/A"], manifests: manifests) == ["/proj/A", "/proj/C"])
+    }
+
     @Test("a cycle ends, and a package reached twice is listed once")
     func cycleAndDuplicate() throws {
         for path in ["/proj/A", "/proj/B", "/proj/C"] { try files.addDirectory(at: path) }

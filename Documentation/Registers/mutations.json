@@ -2405,7 +2405,7 @@
     "file": "Sources/DependiDomain/LocalPackageCollector.swift",
     "search": "guard seen.insert(real).inserted else { continue }",
     "replace": "seen.insert(real)",
-    "test": "cycleAndDuplicate"
+    "test": "sharedDependencyIsListedOnce"
   },
   {
     "id": "local-missing-path",
