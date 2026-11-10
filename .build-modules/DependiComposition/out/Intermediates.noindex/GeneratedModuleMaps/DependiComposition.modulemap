@@ -1,0 +1,4 @@
+module DependiComposition {
+header "DependiComposition-Swift.h"
+export *
+}

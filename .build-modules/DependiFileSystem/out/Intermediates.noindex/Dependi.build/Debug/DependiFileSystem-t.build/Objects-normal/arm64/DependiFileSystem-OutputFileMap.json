@@ -1,0 +1,29 @@
+{
+  "" : {
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DependiFileSystem-primary.dia",
+    "emit-module-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DependiFileSystem-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DependiFileSystem-primary-emit-module.dia",
+    "pch" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DependiFileSystem-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DependiFileSystem-primary.swiftdeps"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiFileSystem/DiskFileSystem+Executable.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem+Executable.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem+Executable.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem+Executable.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem+Executable.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem+Executable.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem+Executable.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem+Executable.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem+Executable~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiFileSystem/DiskFileSystem.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiFileSystem/out/Intermediates.noindex/Dependi.build/Debug/DependiFileSystem-t.build/Objects-normal/arm64/DiskFileSystem~partial.swiftmodule"
+  }
+}

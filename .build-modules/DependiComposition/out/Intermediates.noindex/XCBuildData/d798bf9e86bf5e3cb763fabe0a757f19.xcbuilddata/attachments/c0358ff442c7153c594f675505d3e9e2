@@ -1,0 +1,4 @@
+module DependiInit {
+header "DependiInit-Swift.h"
+export *
+}

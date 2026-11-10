@@ -1,0 +1,49 @@
+{
+  "" : {
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DependiWorkspaceState-primary.dia",
+    "emit-module-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DependiWorkspaceState-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DependiWorkspaceState-primary-emit-module.dia",
+    "pch" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DependiWorkspaceState-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DependiWorkspaceState-primary.swiftdeps"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiWorkspaceState/DecodingDescription.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DecodingDescription.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DecodingDescription.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DecodingDescription.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DecodingDescription.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DecodingDescription.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DecodingDescription.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DecodingDescription.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/DecodingDescription~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiWorkspaceState/PackageResolvedDocument.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/PackageResolvedDocument.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/PackageResolvedDocument.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/PackageResolvedDocument.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/PackageResolvedDocument.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/PackageResolvedDocument.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/PackageResolvedDocument.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/PackageResolvedDocument.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/PackageResolvedDocument~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiWorkspaceState/WorkspaceStateDocument.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateDocument.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateDocument.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateDocument.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateDocument.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateDocument.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateDocument.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateDocument.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateDocument~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiWorkspaceState/WorkspaceStateReader.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateReader.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateReader.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateReader.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateReader.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateReader.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateReader.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateReader.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiWorkspaceState/out/Intermediates.noindex/Dependi.build/Debug/DependiWorkspaceState-t.build/Objects-normal/arm64/WorkspaceStateReader~partial.swiftmodule"
+  }
+}

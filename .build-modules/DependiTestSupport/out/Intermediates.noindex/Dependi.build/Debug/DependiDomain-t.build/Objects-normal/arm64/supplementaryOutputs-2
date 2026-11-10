@@ -1,0 +1,23 @@
+{
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ConfigurationLoader.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.dia",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.swiftdeps"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/DependencySourceReading.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.dia",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.swiftdeps"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/DirectoryListing.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.dia",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.swiftdeps"
+  }
+}

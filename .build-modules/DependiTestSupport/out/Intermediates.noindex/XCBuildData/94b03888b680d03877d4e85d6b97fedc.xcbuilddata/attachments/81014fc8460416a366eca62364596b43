@@ -1,0 +1,12 @@
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FakeConsole.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FakeEnvironment.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FakeProcessRunner.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FileSystemBehavior.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FileTreeArranging.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/InMemoryFileSystem.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/LockedBox.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/RecordingAcknowledgementWriter.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/StubApplicationTargets.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/StubDependencySource.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/StubLinkedProducts.swift
+/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/StubManifestReader.swift

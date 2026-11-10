@@ -1,0 +1,4 @@
+module DependiSettingsBundle {
+header "DependiSettingsBundle-Swift.h"
+export *
+}

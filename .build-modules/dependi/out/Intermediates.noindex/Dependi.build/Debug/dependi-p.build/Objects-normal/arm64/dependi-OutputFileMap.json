@@ -1,0 +1,19 @@
+{
+  "" : {
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/dependi-primary.dia",
+    "emit-module-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/dependi-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/dependi-primary-emit-module.dia",
+    "pch" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/dependi-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/dependi-primary.swiftdeps"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/dependi/main.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/main.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/main.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/main.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/main.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/main.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/main.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/main.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/dependi/out/Intermediates.noindex/Dependi.build/Debug/dependi-p.build/Objects-normal/arm64/main~partial.swiftmodule"
+  }
+}
