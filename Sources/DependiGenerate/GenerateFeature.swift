@@ -61,11 +61,6 @@ public struct GenerateFeature: Sendable {
         return .wrote(count: acknowledgements.count)
     }
 
-    /// The real path of a folder, so that two spellings of one folder compare equal.
-    private func realPathOrSame(_ path: String) -> String {
-        (try? files.realPath(of: path)) ?? path
-    }
-
     private func loadConfiguration(_ context: BuildContext) -> Result<
         ToolConfiguration, DomainError
     > {
@@ -107,8 +102,8 @@ public struct GenerateFeature: Sendable {
             projectFilePath: projectFile, targetName: targetName)
 
         var locals = resolved.filter { $0.kind == .local }
-        let knownPaths = Set(locals.map { realPathOrSame($0.checkoutPath) })
-        for path in linked.localPackagePaths where !knownPaths.contains(realPathOrSame(path)) {
+        // The collector drops a second spelling of a folder. Resolved packages come first, so they win.
+        for path in linked.localPackagePaths {
             locals.append(
                 ResolvedPackage(
                     identity: normalizer.identity(forLocation: path), kind: .local,

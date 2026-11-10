@@ -71,7 +71,6 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | gen-debug-skip | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `GenerateFeatureTests/debugSkips()` | killed | 2026-11-04 KILLED |
 | gen-empty-variable | 9a | `Sources/DependiGenerate/BuildContextReader.swift` | `missingAndEmptyAreNil` | killed | 2026-11-04 KILLED |
 | gen-local-packages | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageFromProject` | killed | 2026-11-04 KILLED |
-| gen-local-real-path | 11 | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageWithTwoPaths` | killed | 2026-11-04 KILLED |
 | gen-manual-absolute | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` | killed | 2026-11-04 KILLED |
 | gen-manual-outside | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` | killed | 2026-11-04 KILLED |
 | gen-output-absolute-build | 9a | `Sources/DependiGenerate/OutputLocation.swift` | `badProductLocation` | killed | 2026-11-04 KILLED |
