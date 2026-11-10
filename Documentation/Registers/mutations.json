@@ -1049,7 +1049,7 @@
     "search": "for path in linked.localPackagePaths {",
     "replace": "for path in linked.localPackagePaths where false {",
     "test": "localPackageFromProject",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-10", "outcome": "KILLED"}
   },
   {
     "id": "gen-debug-skip",
