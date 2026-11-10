@@ -70,8 +70,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | gate-missing-action | 2b | `Sources/DependiDomain/ReleaseGate.swift` | `ReleaseGateTests/missingAction()` | killed | 2026-11-04 KILLED |
 | gen-debug-skip | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `GenerateFeatureTests/debugSkips()` | killed | 2026-11-04 KILLED |
 | gen-empty-variable | 9a | `Sources/DependiGenerate/BuildContextReader.swift` | `missingAndEmptyAreNil` | killed | 2026-11-04 KILLED |
-| gen-local-packages | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageFromProject` | killed | 2026-11-04 KILLED |
-| gen-local-real-path | 11 | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageWithTwoPaths` | killed | 2026-11-04 KILLED |
+| gen-local-packages | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `localPackageFromProject` | killed | 2026-11-10 KILLED |
 | gen-manual-absolute | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` | killed | 2026-11-04 KILLED |
 | gen-manual-outside | 9a | `Sources/DependiGenerate/GenerateFeature.swift` | `manualEntryRefused` | killed | 2026-11-04 KILLED |
 | gen-output-absolute-build | 9a | `Sources/DependiGenerate/OutputLocation.swift` | `badProductLocation` | killed | 2026-11-04 KILLED |
@@ -143,7 +142,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | license-notice-pattern | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `noticeNextToLicense` | killed | 2026-11-04 KILLED |
 | license-order | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `foundInFixedOrder` | killed | 2026-11-04 KILLED |
 | loader-size-cap | 2b | `Sources/DependiDomain/ConfigurationLoader.swift` | `oversizeAndFolder` | killed | 2026-11-04 KILLED |
-| local-cycle-guard | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `cycleAndDuplicate` | killed | not run |
+| local-cycle-guard | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `sharedDependencyIsListedOnce` | killed | 2026-11-10 KILLED |
 | local-follow-paths | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `nestedLocalPackage` | killed | not run |
 | local-missing-path | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `missingPath` | killed | not run |
 | local-missing-start | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `missingStartIsKept` | killed | not run |

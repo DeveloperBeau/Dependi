@@ -1046,10 +1046,10 @@
     "id": "gen-local-packages",
     "slice": "9a",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "where !knownPaths.contains(realPathOrSame(path)) {",
-    "replace": "where false {",
+    "search": "for path in linked.localPackagePaths {",
+    "replace": "for path in linked.localPackagePaths where false {",
     "test": "localPackageFromProject",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-10", "outcome": "KILLED"}
   },
   {
     "id": "gen-debug-skip",
@@ -1364,15 +1364,6 @@
     "search": "env -i HOME=\"$home\"",
     "replace": "env HOME=\"$home\"",
     "test": "buildEnvironmentIsClean",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
-  },
-  {
-    "id": "gen-local-real-path",
-    "slice": "11",
-    "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "(try? files.realPath(of: path)) ?? path",
-    "replace": "path",
-    "test": "localPackageWithTwoPaths",
     "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
@@ -2405,7 +2396,8 @@
     "file": "Sources/DependiDomain/LocalPackageCollector.swift",
     "search": "guard seen.insert(real).inserted else { continue }",
     "replace": "seen.insert(real)",
-    "test": "cycleAndDuplicate"
+    "test": "sharedDependencyIsListedOnce",
+    "lastRun": {"date": "2026-11-10", "outcome": "KILLED"}
   },
   {
     "id": "local-missing-path",

@@ -368,7 +368,7 @@ struct EndToEndTests {
         let world = try EndToEndWorld()
         let version = try world.run(["--version"])
         #expect(version.code == 0)
-        #expect(version.output == "dependi 0.1.0\n")
+        #expect(version.output == "dependi 0.1.1\n")
         let help = try world.run(["help"])
         #expect(help.code == 0)
         #expect(help.output.contains("generate"))
@@ -418,7 +418,7 @@ struct EndToEndTests {
         #expect(FileManager.default.isExecutableFile(atPath: world.project + "/.dependi/run.sh"))
         #expect(
             try String(contentsOfFile: world.project + "/.dependi/bin/VERSION", encoding: .utf8)
-                == "0.1.0\n")
+                == "0.1.1\n")
         #expect(
             try String(contentsOfFile: world.project + "/.gitignore", encoding: .utf8)
                 == ".dependi/bin/\n")

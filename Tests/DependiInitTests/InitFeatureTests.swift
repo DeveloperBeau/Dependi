@@ -19,7 +19,7 @@ struct InitFeatureTests {
         let config = try JSONDecoder().decode(
             ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
         #expect(config.excludes == [])
-        #expect(config.version == "0.1.0")
+        #expect(config.version == "0.1.1")
         #expect(config.commit == InitWorld.commit)
         #expect(config.gateConfigurations == ["Release"])
 
@@ -36,7 +36,7 @@ struct InitFeatureTests {
         #expect(world.files.isExecutable(at: "/proj/.dependi/bin/dependi"))
         #expect(
             try world.text("/proj/.dependi/bin/VERSION")
-                == "0.1.0-" + String(repeating: "ab", count: 20) + "\n")
+                == "0.1.1-" + String(repeating: "ab", count: 20) + "\n")
         #expect(try world.text("/proj/.dependi/run.sh") == InitWorld.wrapper)
         #expect(world.files.isExecutable(at: "/proj/.dependi/run.sh"))
         #expect(
@@ -86,9 +86,9 @@ struct InitFeatureTests {
             let config = try JSONDecoder().decode(
                 ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
             #expect(config.commit == nil, "scenario \(scenario)")
-            #expect(config.version == "0.1.0")
+            #expect(config.version == "0.1.1")
             #expect(
-                try world.text("/proj/.dependi/bin/VERSION") == "0.1.0\n", "scenario \(scenario)")
+                try world.text("/proj/.dependi/bin/VERSION") == "0.1.1\n", "scenario \(scenario)")
             #expect(
                 world.console.lines.contains { $0.contains("could not read the commit") },
                 "scenario \(scenario)")
@@ -113,7 +113,7 @@ struct InitFeatureTests {
             let config = try JSONDecoder().decode(
                 ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
             #expect(config.commit == nil, "answer \(answer.debugDescription)")
-            #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.0\n")
+            #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.1\n")
         }
         for answer in [hex, String(repeating: "0", count: 40), String(repeating: "f", count: 40)] {
             let world = try InitWorld()
@@ -125,7 +125,7 @@ struct InitFeatureTests {
             let config = try JSONDecoder().decode(
                 ToolConfiguration.self, from: try world.data("/proj/.dependi.json"))
             #expect(config.commit == answer)
-            #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.0-" + answer + "\n")
+            #expect(try world.text("/proj/.dependi/bin/VERSION") == "0.1.1-" + answer + "\n")
         }
     }
 
