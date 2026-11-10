@@ -687,4 +687,71 @@ struct MutationRunnerTests {
         #expect(Set(inCopies.map(\.folder)).count == 2)
         #expect(inCopies.allSatisfy { $0.folder.contains("mutate-worker-") })
     }
+
+    /// Commits four small files and returns one entry for each, so four workers start.
+    private static func commitFourFiles(in package: MiniPackage) throws -> [String] {
+        let folder = package.root.appendingPathComponent("Sources/Mini/Generated")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        for index in 0..<4 {
+            try "let generated\(index) = 0\n".write(
+                to: folder.appendingPathComponent("Generated\(index).swift"), atomically: true,
+                encoding: .utf8)
+        }
+        try package.commitAll(message: "four files")
+        return (0..<4).map { index in
+            Register.entry(
+                id: "generated-\(index)", search: "generated\(index) = 0",
+                replace: "generated\(index) = 1",
+                file: "Sources/Mini/Generated/Generated\(index).swift")
+        }
+    }
+
+    @Test("an interrupt while workers copy or wait for a copy exits 130 and leaves no copy")
+    func interruptDuringCopyLeavesNoCopy() throws {
+        let package = try MiniPackage.create()
+        let double = try SwiftDouble.make()
+        defer { double.remove() }
+        let entries = try Self.commitFourFiles(in: package)
+        let before = try MiniPackage.workerFolders()
+        let registerURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("register-\(UUID().uuidString).json")
+        try Register.list(entries).write(to: registerURL, atomically: true, encoding: .utf8)
+        defer { try? FileManager.default.removeItem(at: registerURL) }
+        let process = Process()
+        process.executableURL = RunnerBinary.url
+        process.arguments = [
+            "--root", package.root.path, "--register", registerURL.path, "--timeout", "60",
+            "--workers", "4", "--record", "no",
+        ]
+        process.currentDirectoryURL = package.root
+        // Each copy waits 30 seconds while it holds the copy lock, so the interrupt comes while
+        // one worker copies and the others wait for the lock.
+        var environment = double.environment
+        environment["MUTATE_COPY_DELAY_FOR_TESTS"] = "30"
+        process.environment = environment
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+        try process.run()
+        let deadline = Date().addingTimeInterval(120)
+        var sawCopy = false
+        while Date() < deadline, process.isRunning, !sawCopy {
+            sawCopy = !(try MiniPackage.workerFolders().subtracting(before).isEmpty)
+            if !sawCopy { Thread.sleep(forTimeInterval: 0.01) }
+        }
+        #expect(sawCopy, "no worker started a copy")
+        let builds = try double.calls().filter { $0.arguments == "build --build-tests" }
+        #expect(builds.isEmpty, "a worker finished its copy before the interrupt")
+        kill(process.processIdentifier, SIGINT)
+        let exitDeadline = Date().addingTimeInterval(60)
+        while process.isRunning, Date() < exitDeadline { Thread.sleep(forTimeInterval: 0.1) }
+        #expect(!process.isRunning, "the runner hung after the interrupt")
+        if process.isRunning {
+            kill(process.processIdentifier, SIGKILL)
+        } else {
+            #expect(process.terminationReason == .exit && process.terminationStatus == 130)
+        }
+        #expect(try MiniPackage.workerFolders().subtracting(before).isEmpty)
+        #expect(try package.gitStatus().isEmpty)
+    }
+
 }

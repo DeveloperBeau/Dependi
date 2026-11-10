@@ -42,7 +42,7 @@ A survivor, an invalid mutant, an unexpected outcome or a baseline failure makes
 
 ## Interrupts
 
-SIGINT and SIGTERM stop every child process, restore the file that is mutated in the package folder, remove every worker copy and exit with 130. The first shutdown wins. After it starts, no worker starts a command or writes into a copy, so a removed copy does not come back.
+SIGINT and SIGTERM stop every child process, restore the file that is mutated in the package folder, remove every worker copy and exit with 130. The first shutdown wins. After it starts, no worker starts a command or writes into a copy, so a removed copy does not come back. The runner lists the tracked files once, before the workers start. A worker never runs a command while it holds the copy lock, and a copy stops at once when the shutdown starts. A failed copy or any other failure removes every copy that exists.
 
 ## Processes
 
@@ -56,6 +56,6 @@ Use the test function name, for example `interruptRestoresFile`, when it is uniq
 
 The tests use a small package in its own git repository under `.build/mutation-runner-fixture`. Each test resets the package to its fixture commit. The package keeps its build folder.
 
-`MutationRunnerTests` runs the real runner with a `swift` double first on `PATH`. The double records each call and answers from rules that copy the fixture package: a test fails or hangs when a source file matches a pattern, and a build fails on a broken line. These tests check each outcome, each register error, a dirty tree, malformed registers, both interrupts, the plan, the workers, the calls for each entry, the baseline count, the changed-file filter and the generated page. They need no build and take seconds.
+`MutationRunnerTests` runs the real runner with a `swift` double first on `PATH`. The double records each call and answers from rules that copy the fixture package: a test fails or hangs when a source file matches a pattern, and a build fails on a broken line. These tests check each outcome, each register error, a dirty tree, malformed registers, both interrupts, the plan, the workers, the calls for each entry, the baseline count, the changed-file filter and the generated page. They need no build and take seconds. The variable `MUTATE_COPY_DELAY_FOR_TESTS` holds each worker copy open for the given seconds, so a test can interrupt the runner during a copy. `SwiftDoubleFixtureTests` checks that each rule of the double matches the fixture only after the mutation that it models, and that the listing is the fixture's test list.
 
-`MutationRunnerEndToEndTests` runs the real toolchain: one run in place with each outcome, one run with two workers and one interrupt during a real test. The default test run skips them. `Scripts/runner-check.sh` runs them. `Scripts/gate.sh` runs that script when `Scripts/mutate.swift` or `Tests/MutationRunnerTests` differ from the merge base with `origin/main`, or when there is no merge base. Set `GATE_BASE` to use another base.
+`MutationRunnerEndToEndTests` runs the real toolchain: one run in place with each outcome, one run with two workers, one interrupt during a real test and one real time-out. The default test run skips them. `Scripts/runner-check.sh` runs them. `Scripts/gate.sh` runs that script when `Scripts/mutate.swift`, `Scripts/runner-check.sh`, `Package.swift` or `Tests/MutationRunnerTests` differ from the merge base with `origin/main`, or when there is no merge base. Set `GATE_BASE` to use another base.

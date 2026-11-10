@@ -91,7 +91,9 @@ struct RepositoryArchitectureTests {
         for step in [
             "Scripts/lint.sh", "Scripts/refresh-package-dump.sh",
             "git diff --exit-code -- Tests/ArchitectureTests/Fixtures", "swift test",
-            "Scripts/runner-check.sh", "Scripts/mutate.swift Tests/MutationRunnerTests",
+            "Scripts/runner-check.sh",
+            "Scripts/mutate.swift Scripts/runner-check.sh Package.swift Tests/MutationRunnerTests)",
+            #"git merge-base HEAD "${GATE_BASE:-origin/main}""#, #"[ -z "$base" ] ||"#,
         ] {
             #expect(gate.contains(step), "the gate does not run \(step)")
         }

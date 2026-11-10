@@ -79,4 +79,18 @@ struct MutationRunnerEndToEndTests {
         #expect(try package.gitStatus().isEmpty)
         #expect(try MiniPackage.processes(mentioning: package.root.path).isEmpty)
     }
+
+    @Test("a real looping test is killed by time-out, the tree is restored and no process stays")
+    func realLoopIsKilledByTimeout() throws {
+        let package = try MiniPackage.create()
+        let result = try RunnerBinary.run(
+            on: package, double: nil, register: Register.list([Register.loopingExpectingTimeout]),
+            extra: ["--timeout", "20", "--record", "no", "--workers", "1"])
+        #expect(result.status == 0, "output: \(result.output)")
+        #expect(result.output.contains("loop | KILLED (TIMEOUT) |"))
+        #expect(!result.output.contains("UNEXPECTED"))
+        #expect(try package.sourceText() == MiniPackage.sourceText)
+        #expect(try package.gitStatus().isEmpty)
+        #expect(try MiniPackage.processes(mentioning: package.root.path).isEmpty)
+    }
 }

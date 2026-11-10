@@ -78,8 +78,13 @@ func defaultWorkerCount() -> Int {
     return max(1, Int(cores) / 2)
 }
 
+/// Prints the message, removes the worker copies that exist and exits.
 func fail(_ message: String, code: Int32 = 2) -> Never {
     FileHandle.standardError.write(Data((message + "\n").utf8))
+    stateLock.lock()
+    let folders = workerFolders
+    stateLock.unlock()
+    for folder in folders { try? FileManager.default.removeItem(atPath: folder) }
     exit(code)
 }
 
@@ -374,18 +379,30 @@ struct Workspace {
     let isCopy: Bool
 }
 
-func makeCopy(index: Int) -> Workspace {
+/// Copies the tracked files into a new worker folder. It calls no command, because a command can
+/// wait for ever once the shutdown starts, and this function holds `copyLock`. A copy error
+/// returns an error and the caller stops the run outside the lock.
+func makeCopy(index: Int, files: [String]) -> Result<Workspace, CopyError> {
     copyLock.lock()
     defer { copyLock.unlock() }
+    if isStopping() { return .failure(.stopped) }
     let folder = (NSTemporaryDirectory() as NSString).appendingPathComponent(
         "mutate-worker-\(UUID().uuidString)-\(index)")
     stateLock.lock()
     workerFolders.append(folder)
     stateLock.unlock()
-    let listing = git(["ls-files", "-z"])
-    if listing.status != 0 { fail("cannot list the tracked files") }
     let manager = FileManager.default
-    for relative in listing.output.split(separator: "\0").map(String.init) {
+    // The runner tests set this to hold a copy open, so an interrupt always comes during a copy.
+    if let delay = ProcessInfo.processInfo.environment["MUTATE_COPY_DELAY_FOR_TESTS"]
+        .flatMap(Double.init)
+    {
+        try? manager.createDirectory(atPath: folder, withIntermediateDirectories: true)
+        let end = Date().addingTimeInterval(delay)
+        while Date() < end, !isStopping() { Thread.sleep(forTimeInterval: 0.05) }
+    }
+    for relative in files {
+        // A copy stops at once when the shutdown starts, so the shutdown never waits for it.
+        if isStopping() { return .failure(.stopped) }
         let source = (root as NSString).appendingPathComponent(relative)
         let target = (folder as NSString).appendingPathComponent(relative)
         do {
@@ -393,9 +410,31 @@ func makeCopy(index: Int) -> Workspace {
                 atPath: (target as NSString).deletingLastPathComponent,
                 withIntermediateDirectories: true)
             try manager.copyItem(atPath: source, toPath: target)
-        } catch { fail("cannot copy \(relative) for a worker: \(error)") }
+        } catch {
+            return .failure(.unreadable("cannot copy \(relative) for a worker: \(error)"))
+        }
     }
-    return Workspace(folder: folder, isCopy: true)
+    return .success(Workspace(folder: folder, isCopy: true))
+}
+
+enum CopyError: Error {
+    /// The shutdown started, so the copy stopped.
+    case stopped
+    /// A file could not be copied.
+    case unreadable(String)
+}
+
+func isStopping() -> Bool {
+    stateLock.lock()
+    defer { stateLock.unlock() }
+    return isShuttingDown
+}
+
+/// Lists the tracked files once, before any worker starts.
+func trackedFiles() -> [String] {
+    let listing = git(["ls-files", "-z"])
+    if listing.status != 0 { fail("cannot list the tracked files") }
+    return listing.output.split(separator: "\0").map(String.init)
 }
 
 /// Applies one mutation, builds, runs the named test and restores the file. The build is the only
@@ -590,12 +629,23 @@ for group in groups {
 var results: [String: (Outcome, Double)] = [:]
 let workers = DispatchGroup()
 let startedWorkers = min(workerCount, queue.count)
+let filesToCopy = startedWorkers > 1 ? trackedFiles() : []
 for index in 0..<startedWorkers {
     workers.enter()
     Thread.detachNewThread {
         defer { workers.leave() }
-        let workspace =
-            workerCount == 1 ? Workspace(folder: root, isCopy: false) : makeCopy(index: index)
+        var workspace = Workspace(folder: root, isCopy: false)
+        if startedWorkers > 1 {
+            switch makeCopy(index: index, files: filesToCopy) {
+            case .success(let copy): workspace = copy
+            case .failure(.stopped):
+                // The shutdown owns the exit. This worker only waits for it.
+                while true { sleep(60) }
+            case .failure(.unreadable(let message)):
+                FileHandle.standardError.write(Data((message + "\n").utf8))
+                shutDown(code: 2)
+            }
+        }
         while true {
             stateLock.lock()
             let next = queue.isEmpty ? nil : queue.removeFirst()
