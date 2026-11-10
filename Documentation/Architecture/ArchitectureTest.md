@@ -45,4 +45,4 @@ Beside the source rules, a repository test checks that every `@Suite` in `Tests`
 
 ## Tests
 
-Every rule has a planted violation and a clean case. Import forms are fuzzed with a seeded generator. Decoys in comments and strings must never count as imports.
+Every rule has a planted violation and a clean case. The undeclared import rule also has these cases: an import in a comment or a string, a `@testable` import, an import inside `#if canImport`, a module that imports itself and a sibling that the module declares only as a product. Import forms are fuzzed with a seeded generator. Decoys in comments and strings must never count as imports.

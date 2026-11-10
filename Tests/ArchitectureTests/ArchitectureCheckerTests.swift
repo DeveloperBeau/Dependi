@@ -177,6 +177,85 @@ struct ArchitectureCheckerTests {
         #expect(ArchitectureChecker.checkImports(dump: domainDump, sources: [source]).isEmpty)
     }
 
+    // MARK: Undeclared sibling imports
+
+    private let compositionDump = Planted.dump([
+        Planted.target("DependiComposition", dependsOn: ["DependiDomain"]),
+        Planted.target("DependiProcess", dependsOn: ["DependiEntities", "DependiDomain"]),
+    ])
+
+    @Test("an undeclared sibling import fails naming the module and the import")
+    func undeclaredSiblingImportFailsNamingModuleAndImport() {
+        let source = Planted.file(
+            "DependiComposition", "import DependiDomain\nimport DependiProcess", name: "App.swift")
+        let found = ArchitectureChecker.checkImports(dump: compositionDump, sources: [source])
+        #expect(Planted.rules(found) == ["undeclaredImport"])
+        #expect(found.first?.location == "DependiComposition/App.swift")
+        #expect(found.first?.detail == "imports DependiProcess without declaring it")
+    }
+
+    @Test("an import of a declared sibling module passes")
+    func declaredSiblingImportPasses() {
+        let dump = Planted.dump([
+            Planted.target("DependiComposition", dependsOn: ["DependiDomain", "DependiProcess"])
+        ])
+        let source = Planted.file(
+            "DependiComposition", "import DependiDomain\nimport DependiProcess")
+        #expect(ArchitectureChecker.checkImports(dump: dump, sources: [source]).isEmpty)
+    }
+
+    @Test("a sibling import inside a comment or a string is not an undeclared import")
+    func siblingImportInCommentOrStringIsIgnored() {
+        let text = """
+            // import DependiProcess
+            /* import DependiProcess */
+            let note = "import DependiProcess"
+            let block = \"\"\"
+            import DependiProcess
+            \"\"\"
+            """
+        let source = Planted.file("DependiComposition", text)
+        #expect(
+            ArchitectureChecker.checkImports(dump: compositionDump, sources: [source]).isEmpty)
+    }
+
+    @Test("a testable import of an undeclared sibling is an undeclared import")
+    func testableSiblingImportFails() {
+        let source = Planted.file("DependiComposition", "@testable import DependiProcess")
+        let found = ArchitectureChecker.checkImports(dump: compositionDump, sources: [source])
+        #expect(Planted.rules(found) == ["undeclaredImport"])
+    }
+
+    @Test("a conditional import of an undeclared sibling is an undeclared import")
+    func conditionalSiblingImportFails() {
+        let text = "#if canImport(DependiProcess)\nimport DependiProcess\n#endif"
+        let found = ArchitectureChecker.checkImports(
+            dump: compositionDump, sources: [Planted.file("DependiComposition", text)])
+        #expect(Planted.rules(found) == ["undeclaredImport"])
+        #expect(found.first?.detail == "imports DependiProcess without declaring it")
+    }
+
+    @Test("a module that imports itself is a violation")
+    func selfImportFails() {
+        let source = Planted.file("DependiComposition", "import DependiComposition")
+        let found = ArchitectureChecker.checkImports(dump: compositionDump, sources: [source])
+        #expect(Planted.rules(found) == ["undeclaredImport"])
+        #expect(found.first?.detail == "imports DependiComposition without declaring it")
+    }
+
+    @Test("a product dependency does not declare a sibling target of the same name")
+    func productOnlyDependencyDoesNotDeclareASibling() {
+        let dump = Planted.dump([
+            Planted.target("DependiComposition", products: ["DependiProcess"])
+        ])
+        let imported = ArchitectureChecker.checkImports(
+            dump: dump, sources: [Planted.file("DependiComposition", "import DependiProcess")])
+        #expect(Planted.rules(imported) == ["undeclaredImport"])
+        let notImported = ArchitectureChecker.checkImports(
+            dump: dump, sources: [Planted.file("DependiComposition", "import Foundation")])
+        #expect(notImported.isEmpty)
+    }
+
     // MARK: Source rules
 
     @Test("two top-level public types in one file are a violation")

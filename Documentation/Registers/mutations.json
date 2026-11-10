@@ -2470,5 +2470,53 @@
     "search": "requireLicenses = try value(\"requireLicenses\", Bool.self) ?? false",
     "replace": "requireLicenses = false",
     "test": "strictFails"
+  },
+  {
+    "id": "arch-undeclared-import",
+    "slice": "gate-speed",
+    "file": "Tests/ArchitectureTests/ArchitectureChecker.swift",
+    "search": "} else if declared[file.module]?.contains(imported) != true {",
+    "replace": "} else if false {",
+    "test": "undeclaredSiblingImportFailsNamingModuleAndImport"
+  },
+  {
+    "id": "arch-product-not-declared",
+    "slice": "gate-speed",
+    "file": "Tests/ArchitectureTests/ArchitectureChecker.swift",
+    "search": "($0.name, Set($0.dependencyNames))",
+    "replace": "($0.name, Set($0.dependencyNames + $0.externalProductNames))",
+    "test": "productOnlyDependencyDoesNotDeclareASibling"
+  },
+  {
+    "id": "arch-self-import",
+    "slice": "gate-speed",
+    "file": "Tests/ArchitectureTests/ArchitectureChecker.swift",
+    "search": "for imported in Set(ImportScanner.importedModules(in: file.text)).sorted() {",
+    "replace": "for imported in Set(ImportScanner.importedModules(in: file.text)).sorted() where imported != file.module {",
+    "test": "selfImportFails"
+  },
+  {
+    "id": "arch-import-decoys",
+    "slice": "gate-speed",
+    "file": "Tests/ArchitectureTests/ImportScanner.swift",
+    "search": "let code = SwiftSourceLexer.codeOnly(source)",
+    "replace": "let code = source",
+    "test": "siblingImportInCommentOrStringIsIgnored"
+  },
+  {
+    "id": "arch-testable-import",
+    "slice": "gate-speed",
+    "file": "Tests/ArchitectureTests/ImportScanner.swift",
+    "search": "#\"^\\s*(?:@\\w+(?:\\([^)]*\\))?\\s+)*(?:",
+    "replace": "#\"^\\s*(?:",
+    "test": "testableSiblingImportFails"
+  },
+  {
+    "id": "arch-undeclared-detail",
+    "slice": "gate-speed",
+    "file": "Tests/ArchitectureTests/ArchitectureChecker.swift",
+    "search": "detail: \"imports \\(imported) without declaring it\"",
+    "replace": "detail: \"imports a module without declaring it\"",
+    "test": "conditionalSiblingImportFails"
   }
 ]

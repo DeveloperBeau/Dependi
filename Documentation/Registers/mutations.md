@@ -6,6 +6,12 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 |---|---|---|---|---|---|
 | app-config-wired | review-fix | `Sources/DependiComposition/DependiApplication.swift` | `configuredLimitsReachTheRequests` | killed | 2026-11-04 KILLED |
 | app-run-limit-wired | review-fix | `Sources/DependiComposition/DependiApplication.swift` | `runLimitShortensChildLimits` | killed | 2026-11-04 KILLED |
+| arch-import-decoys | gate-speed | `Tests/ArchitectureTests/ImportScanner.swift` | `siblingImportInCommentOrStringIsIgnored` | killed | not run |
+| arch-product-not-declared | gate-speed | `Tests/ArchitectureTests/ArchitectureChecker.swift` | `productOnlyDependencyDoesNotDeclareASibling` | killed | not run |
+| arch-self-import | gate-speed | `Tests/ArchitectureTests/ArchitectureChecker.swift` | `selfImportFails` | killed | not run |
+| arch-testable-import | gate-speed | `Tests/ArchitectureTests/ImportScanner.swift` | `testableSiblingImportFails` | killed | not run |
+| arch-undeclared-detail | gate-speed | `Tests/ArchitectureTests/ArchitectureChecker.swift` | `conditionalSiblingImportFails` | killed | not run |
+| arch-undeclared-import | gate-speed | `Tests/ArchitectureTests/ArchitectureChecker.swift` | `undeclaredSiblingImportFailsNamingModuleAndImport` | killed | not run |
 | assembler-code-point-order | local-follow | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `rootListOrder` | killed | not run |
 | assembler-duplicate-identity | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `AcknowledgementAssemblerTests/duplicateIdentity()` | killed | 2026-11-04 KILLED |
 | assembler-missing-license | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `AcknowledgementAssemblerTests/missingLicense()` | killed | 2026-11-04 KILLED |
