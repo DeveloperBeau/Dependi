@@ -42,7 +42,7 @@ A survivor, an invalid mutant, an unexpected outcome or a baseline failure makes
 
 ## Interrupts
 
-SIGINT and SIGTERM stop every child process, restore the file that is mutated in the package folder, remove every worker copy and exit with 130.
+SIGINT and SIGTERM stop every child process, restore the file that is mutated in the package folder, remove every worker copy and exit with 130. The first shutdown wins. After it starts, no worker starts a command or writes into a copy, so a removed copy does not come back.
 
 ## Processes
 
@@ -54,4 +54,8 @@ Use the test function name, for example `interruptRestoresFile`, when it is uniq
 
 ## Tests
 
-`MutationRunnerTests` uses a small package in its own git repository under `.build/mutation-runner-fixture`. Each test resets the package to its fixture commit. The package keeps its build folder, so each build in a test is incremental. The tests run the real runner and check each outcome, each register error, a dirty tree, malformed registers, an interrupt, the plan, the workers, the baseline count, the changed-file filter and the generated page.
+The tests use a small package in its own git repository under `.build/mutation-runner-fixture`. Each test resets the package to its fixture commit. The package keeps its build folder.
+
+`MutationRunnerTests` runs the real runner with a `swift` double first on `PATH`. The double records each call and answers from rules that copy the fixture package: a test fails or hangs when a source file matches a pattern, and a build fails on a broken line. These tests check each outcome, each register error, a dirty tree, malformed registers, both interrupts, the plan, the workers, the calls for each entry, the baseline count, the changed-file filter and the generated page. They need no build and take seconds.
+
+`MutationRunnerEndToEndTests` runs the real toolchain: one run in place with each outcome, one run with two workers and one interrupt during a real test. The default test run skips them. `Scripts/runner-check.sh` runs them. `Scripts/gate.sh` runs that script when `Scripts/mutate.swift` or `Tests/MutationRunnerTests` differ from the merge base with `origin/main`, or when there is no merge base. Set `GATE_BASE` to use another base.

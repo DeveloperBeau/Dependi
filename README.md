@@ -56,7 +56,7 @@ Read [standards.md](standards.md) first. The pages in [Documentation/Architectur
 
 | Task | Command |
 |---|---|
-| Full gate: lint, package dump check, build, tests | `sh Scripts/gate.sh` |
+| Full gate: lint, package dump check, build, tests, and the runner check when the runner changed | `sh Scripts/gate.sh` |
 | Lint only | `sh Scripts/lint.sh` |
 | Refresh the recorded package dump after a change to `Package.swift` | `sh Scripts/refresh-package-dump.sh` |
 | Contract tests with the real toolchain and a real archive | `sh Scripts/contract.sh` |

@@ -60,6 +60,18 @@
 - **Finding:** The runner suite took about 13 minutes of a gate on a busy machine. Most of that time was cold builds of a package with one file.
 - **Rule:** The runner tests share one fixture package that keeps its build folder. Each test resets the package to its fixture commit first.
 
+## Real builds in runner tests cost minutes
+
+- **Trap:** Each runner test built and ran a real package, even when it only checked the order of entries or a flag.
+- **Finding:** After the fixture package kept its build folder, the runner suite still took more than 5 minutes of the gate on a busy machine.
+- **Rule:** Runner tests use a `swift` double on `PATH`. Three tests run the real toolchain, and only when the runner changes.
+
+## A shutdown can race a worker
+
+- **Trap:** With more than one worker, an interrupt removed the copies while a worker wrote its restore. The write put a file back, and the worker then exited with another code.
+- **Finding:** The parallel interrupt test failed about one time in five once the double made it fast.
+- **Rule:** The first shutdown wins. Workers write into a copy only under a lock that the shutdown takes and keeps.
+
 ## Mutation results for the runner
 
 | Mutation | Test that failed |

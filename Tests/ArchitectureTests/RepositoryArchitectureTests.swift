@@ -84,15 +84,28 @@ struct RepositoryArchitectureTests {
         #expect(missing.isEmpty, "suites without .timeLimit: \(missing)")
     }
 
-    @Test("the gate script runs lint, the package dump check and the tests")
+    @Test("the gate script runs lint, the package dump check, the tests and the runner check")
     func gateScriptCoversEveryCheck() throws {
         let gate = try String(
             contentsOf: root.appendingPathComponent("Scripts/gate.sh"), encoding: .utf8)
         for step in [
             "Scripts/lint.sh", "Scripts/refresh-package-dump.sh",
             "git diff --exit-code -- Tests/ArchitectureTests/Fixtures", "swift test",
+            "Scripts/runner-check.sh", "Scripts/mutate.swift Tests/MutationRunnerTests",
         ] {
             #expect(gate.contains(step), "the gate does not run \(step)")
         }
+    }
+
+    @Test("the runner check script turns on the end-to-end runner tests")
+    func runnerCheckScriptEnablesEndToEndTests() throws {
+        let script = try String(
+            contentsOf: root.appendingPathComponent("Scripts/runner-check.sh"), encoding: .utf8)
+        #expect(script.contains("DEPENDI_RUNNER_CHECK=1"))
+        #expect(script.contains("--filter MutationRunnerEndToEndTests"))
+        let suite = try String(
+            contentsOf: root.appendingPathComponent(
+                "Tests/MutationRunnerTests/MutationRunnerEndToEndTests.swift"), encoding: .utf8)
+        #expect(suite.contains(#"environment["DEPENDI_RUNNER_CHECK"] == "1""#))
     }
 }

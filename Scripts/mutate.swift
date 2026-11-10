@@ -60,6 +60,12 @@ var mutatedFile: String?
 let stateLock = NSLock()
 var activeProcessIDs: Set<Int32> = []
 var workerFolders: [String] = []
+var isShuttingDown = false
+/// The shutdown itself runs `git` to restore a file, so only that thread may start a command.
+var shutdownThread: Thread?
+/// Held while a worker writes into its copy. The shutdown takes it and never gives it back, so no
+/// write can put a file back into a copy after the shutdown removes it.
+let copyLock = NSLock()
 
 /// Half the performance cores, and at least one. Each worker runs its own compiler, so a full
 /// count would starve the machine.
@@ -152,9 +158,16 @@ func run(_ arguments: [String], timeout: Double, in folder: String = root) -> Co
     process.standardError = sink
     let finished = DispatchSemaphore(value: 0)
     process.terminationHandler = { _ in finished.signal() }
-    do { try process.run() } catch { fail("cannot start \(arguments[0]): \(error)") }
-    let processID = process.processIdentifier
     stateLock.lock()
+    if isShuttingDown && Thread.current != shutdownThread {
+        stateLock.unlock()
+        while true { sleep(60) }
+    }
+    do { try process.run() } catch {
+        stateLock.unlock()
+        fail("cannot start \(arguments[0]): \(error)")
+    }
+    let processID = process.processIdentifier
     activeProcessIDs.insert(processID)
     stateLock.unlock()
     defer {
@@ -179,15 +192,31 @@ func restore(_ file: String) {
 }
 
 /// Stops every child, restores the file mutated in place, removes the worker copies and exits.
+/// The first caller wins. A worker whose copy the shutdown removed must not exit with another code.
 func shutDown(code: Int32) -> Never {
     stateLock.lock()
+    if isShuttingDown {
+        stateLock.unlock()
+        while true { sleep(60) }
+    }
+    isShuttingDown = true
+    shutdownThread = Thread.current
     let processIDs = activeProcessIDs
     let file = mutatedFile
     let folders = workerFolders
     stateLock.unlock()
     for pid in processIDs { killTree(pid) }
     if let file { restore(file) }
-    for folder in folders { try? FileManager.default.removeItem(atPath: folder) }
+    copyLock.lock()
+    stateLock.lock()
+    let allFolders = Set(folders + workerFolders)
+    stateLock.unlock()
+    for folder in allFolders { try? FileManager.default.removeItem(atPath: folder) }
+    // A worker can start a command between the first kill and the flag check in `run`.
+    stateLock.lock()
+    let lateProcessIDs = activeProcessIDs.subtracting(processIDs)
+    stateLock.unlock()
+    for pid in lateProcessIDs { killTree(pid) }
     exit(code)
 }
 
@@ -341,6 +370,8 @@ struct Workspace {
 }
 
 func makeCopy(index: Int) -> Workspace {
+    copyLock.lock()
+    defer { copyLock.unlock() }
     let folder = (NSTemporaryDirectory() as NSString).appendingPathComponent(
         "mutate-worker-\(UUID().uuidString)-\(index)")
     stateLock.lock()
@@ -375,7 +406,9 @@ func mutate(_ entry: Entry, in workspace: Workspace) -> Outcome {
     }
     defer {
         if workspace.isCopy {
+            copyLock.lock()
             try? original.write(toFile: path, atomically: true, encoding: .utf8)
+            copyLock.unlock()
             if (try? String(contentsOfFile: path, encoding: .utf8)) != original {
                 FileHandle.standardError.write(
                     Data("cannot restore \(entry.file) in a copy\n".utf8))
@@ -388,9 +421,10 @@ func mutate(_ entry: Entry, in workspace: Workspace) -> Outcome {
             stateLock.unlock()
         }
     }
-    do { try mutated.write(toFile: path, atomically: true, encoding: .utf8) } catch {
-        return .invalid
-    }
+    if workspace.isCopy { copyLock.lock() }
+    let isWritten = (try? mutated.write(toFile: path, atomically: true, encoding: .utf8)) != nil
+    if workspace.isCopy { copyLock.unlock() }
+    if !isWritten { return .invalid }
     let build = run(
         ["swift", "build", "--build-tests"], timeout: buildTimeoutSeconds, in: workspace.folder)
     if build.status != 0 || build.timedOut { return .invalid }
@@ -579,7 +613,11 @@ for index in 0..<startedWorkers {
                 }
             }
         }
-        if workspace.isCopy { try? FileManager.default.removeItem(atPath: workspace.folder) }
+        if workspace.isCopy {
+            copyLock.lock()
+            try? FileManager.default.removeItem(atPath: workspace.folder)
+            copyLock.unlock()
+        }
     }
 }
 workers.wait()
