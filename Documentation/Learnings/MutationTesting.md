@@ -66,6 +66,12 @@
 - **Finding:** After the fixture package kept its build folder, the runner suite still took more than 5 minutes of the gate on a busy machine.
 - **Rule:** Runner tests use a `swift` double on `PATH`. Three tests run the real toolchain, and only when the runner changes.
 
+## A process can start a child during the kill
+
+- **Trap:** The runner read the process table and then killed what it found. A test helper that started a child between the two left that child running.
+- **Finding:** Both interrupt tests found a looping child after the run once the tests became fast.
+- **Rule:** The runner stops each process first, scans again until it finds no new child, and then kills them all.
+
 ## A shutdown can race a worker
 
 - **Trap:** With more than one worker, an interrupt removed the copies while a worker wrote its restore. The write put a file back, and the worker then exited with another code.

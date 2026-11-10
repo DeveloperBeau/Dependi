@@ -127,19 +127,24 @@ func processTable() -> [(pid: Int32, parent: Int32)] {
 }
 
 /// Kills a process, its process group and every descendant. Test helpers can leave the group.
+/// Each found process is stopped first, so it cannot start a child after the scan. The scan
+/// repeats until it finds no new process, and only then are all of them killed.
 func killTree(_ root: Int32) {
-    let table = processTable()
-    var found: [Int32] = []
-    var queue = [root]
-    while let next = queue.popLast() {
-        for entry in table where entry.parent == next && !found.contains(entry.pid) {
+    kill(-root, SIGSTOP)
+    kill(root, SIGSTOP)
+    var found: [Int32] = [root]
+    var isGrowing = true
+    while isGrowing {
+        isGrowing = false
+        let table = processTable()
+        for entry in table where found.contains(entry.parent) && !found.contains(entry.pid) {
+            kill(entry.pid, SIGSTOP)
             found.append(entry.pid)
-            queue.append(entry.pid)
+            isGrowing = true
         }
     }
     kill(-root, SIGKILL)
     for pid in found { kill(pid, SIGKILL) }
-    kill(root, SIGKILL)
 }
 
 /// Runs a command in its own process group and kills the whole group on timeout.
