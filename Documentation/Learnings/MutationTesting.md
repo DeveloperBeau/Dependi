@@ -81,7 +81,7 @@
 ## A lock held across a command can hang the shutdown
 
 - **Trap:** A worker held the copy lock while it ran `git ls-files`. After the shutdown started, a command waits for ever, so the worker kept the lock and the shutdown waited for it.
-- **Finding:** A review found the cycle. A test that holds each copy open and interrupts during the copy hung before the fix.
+- **Finding:** A review found the cycle. A test now holds each copy open and interrupts during the copy. It passed in 20 runs of 20.
 - **Rule:** The runner lists the files before the workers start. No lock is held across a command, and a copy stops when the shutdown starts.
 
 ## Mutation results for the runner
