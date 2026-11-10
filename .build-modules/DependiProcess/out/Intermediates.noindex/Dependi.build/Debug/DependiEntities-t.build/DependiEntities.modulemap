@@ -1,0 +1,4 @@
+module DependiEntities {
+header "DependiEntities-Swift.h"
+export *
+}

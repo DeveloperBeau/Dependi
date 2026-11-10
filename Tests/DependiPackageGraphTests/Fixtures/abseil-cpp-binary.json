@@ -6,7 +6,7 @@
   "name": "abseil",
   "packageKind": {
     "root": [
-      "$ROOT/Library/Developer/Xcode/DerivedData/Geoshare-geytyfpdmacyymdktjcjbybsrhmz/SourcePackages/checkouts/abseil-cpp-binary"
+      "$ROOT/Library/Developer/Xcode/DerivedData/App-geytyfpdmacyymdktjcjbybsrhmz/SourcePackages/checkouts/abseil-cpp-binary"
     ]
   },
   "pkgConfig": null,

@@ -1,0 +1,129 @@
+{
+  "" : {
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/DependiTestSupport-primary.dia",
+    "emit-module-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/DependiTestSupport-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/DependiTestSupport-primary-emit-module.dia",
+    "pch" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/DependiTestSupport-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/DependiTestSupport-primary.swiftdeps"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FakeConsole.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeConsole.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeConsole.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeConsole.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeConsole.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeConsole.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeConsole.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeConsole.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeConsole~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FakeEnvironment.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeEnvironment.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeEnvironment.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeEnvironment.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeEnvironment.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeEnvironment.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeEnvironment.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeEnvironment.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeEnvironment~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FakeProcessRunner.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeProcessRunner.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeProcessRunner.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeProcessRunner.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeProcessRunner.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeProcessRunner.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeProcessRunner.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeProcessRunner.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FakeProcessRunner~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FileSystemBehavior.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileSystemBehavior.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileSystemBehavior.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileSystemBehavior.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileSystemBehavior.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileSystemBehavior.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileSystemBehavior.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileSystemBehavior.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileSystemBehavior~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/FileTreeArranging.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileTreeArranging.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileTreeArranging.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileTreeArranging.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileTreeArranging.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileTreeArranging.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileTreeArranging.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileTreeArranging.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/FileTreeArranging~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/InMemoryFileSystem.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/InMemoryFileSystem.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/InMemoryFileSystem.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/InMemoryFileSystem.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/InMemoryFileSystem.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/InMemoryFileSystem.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/InMemoryFileSystem.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/InMemoryFileSystem.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/InMemoryFileSystem~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/LockedBox.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/LockedBox.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/LockedBox.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/LockedBox.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/LockedBox.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/LockedBox.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/LockedBox.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/LockedBox.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/LockedBox~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/RecordingAcknowledgementWriter.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/RecordingAcknowledgementWriter.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/RecordingAcknowledgementWriter.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/RecordingAcknowledgementWriter.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/RecordingAcknowledgementWriter.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/RecordingAcknowledgementWriter.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/RecordingAcknowledgementWriter.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/RecordingAcknowledgementWriter.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/RecordingAcknowledgementWriter~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/StubApplicationTargets.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubApplicationTargets.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubApplicationTargets.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubApplicationTargets.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubApplicationTargets.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubApplicationTargets.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubApplicationTargets.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubApplicationTargets.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubApplicationTargets~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/StubDependencySource.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubDependencySource.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubDependencySource.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubDependencySource.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubDependencySource.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubDependencySource.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubDependencySource.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubDependencySource.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubDependencySource~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/StubLinkedProducts.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubLinkedProducts.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubLinkedProducts.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubLinkedProducts.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubLinkedProducts.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubLinkedProducts.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubLinkedProducts.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubLinkedProducts.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubLinkedProducts~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiTestSupport/StubManifestReader.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubManifestReader.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubManifestReader.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubManifestReader.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubManifestReader.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubManifestReader.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubManifestReader.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubManifestReader.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiTestSupport/out/Intermediates.noindex/Dependi.build/Debug/DependiTestSupport-t.build/Objects-normal/arm64/StubManifestReader~partial.swiftmodule"
+  }
+}

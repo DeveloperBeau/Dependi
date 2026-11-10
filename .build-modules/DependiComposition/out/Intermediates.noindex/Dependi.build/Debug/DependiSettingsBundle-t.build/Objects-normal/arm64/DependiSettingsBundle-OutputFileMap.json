@@ -1,0 +1,19 @@
+{
+  "" : {
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/DependiSettingsBundle-primary.dia",
+    "emit-module-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/DependiSettingsBundle-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/DependiSettingsBundle-primary-emit-module.dia",
+    "pch" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/DependiSettingsBundle-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/DependiSettingsBundle-primary.swiftdeps"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiSettingsBundle/SettingsBundleWriter.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/SettingsBundleWriter.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/SettingsBundleWriter.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/SettingsBundleWriter.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/SettingsBundleWriter.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/SettingsBundleWriter.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/SettingsBundleWriter.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/SettingsBundleWriter.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiSettingsBundle-t.build/Objects-normal/arm64/SettingsBundleWriter~partial.swiftmodule"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "" : {
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/DependiProcess-primary.dia",
+    "emit-module-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/DependiProcess-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/DependiProcess-primary-emit-module.dia",
+    "pch" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/DependiProcess-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/DependiProcess-primary.swiftdeps"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiProcess/ChildProcessRegistry.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessRegistry.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessRegistry.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessRegistry.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessRegistry.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessRegistry.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessRegistry.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessRegistry.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessRegistry~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiProcess/ChildProcessTracking.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessTracking.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessTracking.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessTracking.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessTracking.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessTracking.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessTracking.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessTracking.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildProcessTracking~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiProcess/ChildWait.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildWait.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildWait.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildWait.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildWait.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildWait.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildWait.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildWait.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ChildWait~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiProcess/ProcessTree.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ProcessTree.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ProcessTree.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ProcessTree.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ProcessTree.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ProcessTree.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ProcessTree.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ProcessTree.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/ProcessTree~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiProcess/StreamCollector.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/StreamCollector.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/StreamCollector.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/StreamCollector.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/StreamCollector.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/StreamCollector.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/StreamCollector.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/StreamCollector.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/StreamCollector~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiProcess/SystemProcessRunner.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/SystemProcessRunner.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/SystemProcessRunner.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/SystemProcessRunner.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/SystemProcessRunner.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/SystemProcessRunner.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/SystemProcessRunner.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/SystemProcessRunner.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/SystemProcessRunner~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiProcess/TerminationHandler.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/TerminationHandler.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/TerminationHandler.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/TerminationHandler.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/TerminationHandler.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/TerminationHandler.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/TerminationHandler.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/TerminationHandler.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiProcess/out/Intermediates.noindex/Dependi.build/Debug/DependiProcess-t.build/Objects-normal/arm64/TerminationHandler~partial.swiftmodule"
+  }
+}

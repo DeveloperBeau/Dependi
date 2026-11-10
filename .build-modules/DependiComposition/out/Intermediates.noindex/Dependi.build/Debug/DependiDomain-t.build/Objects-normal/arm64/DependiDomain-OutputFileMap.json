@@ -1,0 +1,359 @@
+{
+  "" : {
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependiDomain-primary.dia",
+    "emit-module-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependiDomain-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependiDomain-primary-emit-module.dia",
+    "pch" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependiDomain-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependiDomain-primary.swiftdeps"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/AcknowledgementAssembler.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementAssembler.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementAssembler.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementAssembler.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementAssembler.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementAssembler.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementAssembler.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementAssembler.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementAssembler~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/AcknowledgementWriting.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementWriting.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementWriting.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementWriting.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementWriting.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementWriting.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementWriting.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementWriting.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/AcknowledgementWriting~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ApplicationTargetListing.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ApplicationTargetListing.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ApplicationTargetListing.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ApplicationTargetListing.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ApplicationTargetListing.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ApplicationTargetListing.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ApplicationTargetListing.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ApplicationTargetListing.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ApplicationTargetListing~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ConfigurationLoader.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ConfigurationLoader~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/DependencySourceReading.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DependencySourceReading~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/DirectoryListing.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DirectoryListing~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/DomainError+Description.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError+Description.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError+Description.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError+Description.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError+Description.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError+Description.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError+Description.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError+Description.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError+Description~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/DomainError.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/DomainError~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/EnvironmentReading.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/EnvironmentReading.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/EnvironmentReading.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/EnvironmentReading.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/EnvironmentReading.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/EnvironmentReading.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/EnvironmentReading.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/EnvironmentReading.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/EnvironmentReading~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ExecutableMarking.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ExecutableMarking.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ExecutableMarking.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ExecutableMarking.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ExecutableMarking.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ExecutableMarking.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ExecutableMarking.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ExecutableMarking.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ExecutableMarking~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/FileReading.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileReading.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileReading.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileReading.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileReading.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileReading.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileReading.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileReading.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileReading~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/FileWriting.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileWriting.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileWriting.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileWriting.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileWriting.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileWriting.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileWriting.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileWriting.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/FileWriting~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/GateDecision.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/GateDecision.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/GateDecision.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/GateDecision.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/GateDecision.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/GateDecision.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/GateDecision.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/GateDecision.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/GateDecision~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/LicenseFileValidator.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseFileValidator.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseFileValidator.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseFileValidator.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseFileValidator.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseFileValidator.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseFileValidator.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseFileValidator.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseFileValidator~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/LicenseLocator.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseLocator.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseLocator.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseLocator.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseLocator.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseLocator.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseLocator.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseLocator.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LicenseLocator~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/LinkResult.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkResult.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkResult.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkResult.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkResult.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkResult.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkResult.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkResult.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkResult~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/LinkedPackageResolver.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedPackageResolver.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedPackageResolver.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedPackageResolver.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedPackageResolver.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedPackageResolver.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedPackageResolver.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedPackageResolver.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedPackageResolver~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/LinkedProductReading.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductReading.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductReading.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductReading.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductReading.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductReading.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductReading.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductReading.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductReading~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/LinkedProductSet.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductSet.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductSet.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductSet.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductSet.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductSet.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductSet.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductSet.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LinkedProductSet~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/LocalPackageCollector.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LocalPackageCollector.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LocalPackageCollector.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LocalPackageCollector.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LocalPackageCollector.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LocalPackageCollector.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LocalPackageCollector.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LocalPackageCollector.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/LocalPackageCollector~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ManifestDependency.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestDependency.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestDependency.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestDependency.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestDependency.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestDependency.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestDependency.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestDependency.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestDependency~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ManifestProduct.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestProduct.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestProduct.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestProduct.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestProduct.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestProduct.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestProduct.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestProduct.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestProduct~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ManifestTarget.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestTarget.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestTarget.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestTarget.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestTarget.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestTarget.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestTarget.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestTarget.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ManifestTarget~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/OutputNameSlugger.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputNameSlugger.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputNameSlugger.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputNameSlugger.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputNameSlugger.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputNameSlugger.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputNameSlugger.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputNameSlugger.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputNameSlugger~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/OutputWriting.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputWriting.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputWriting.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputWriting.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputWriting.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputWriting.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputWriting.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputWriting.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/OutputWriting~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/PackageIdentityNormalizer.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageIdentityNormalizer.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageIdentityNormalizer.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageIdentityNormalizer.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageIdentityNormalizer.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageIdentityNormalizer.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageIdentityNormalizer.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageIdentityNormalizer.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageIdentityNormalizer~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/PackageManifest.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifest.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifest.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifest.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifest.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifest.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifest.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifest.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifest~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/PackageManifestReading.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifestReading.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifestReading.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifestReading.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifestReading.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifestReading.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifestReading.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifestReading.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/PackageManifestReading~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ProcessOutput.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessOutput.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessOutput.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessOutput.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessOutput.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessOutput.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessOutput.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessOutput.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessOutput~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ProcessRequest.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRequest.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRequest.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRequest.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRequest.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRequest.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRequest.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRequest.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRequest~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ProcessRunning.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRunning.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRunning.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRunning.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRunning.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRunning.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRunning.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRunning.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ProcessRunning~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/Prompting.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/Prompting.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/Prompting.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/Prompting.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/Prompting.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/Prompting.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/Prompting.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/Prompting.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/Prompting~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/ReleaseGate.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ReleaseGate.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ReleaseGate.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ReleaseGate.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ReleaseGate.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ReleaseGate.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ReleaseGate.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ReleaseGate.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/ReleaseGate~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/SourcePackagesLocator.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/SourcePackagesLocator.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/SourcePackagesLocator.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/SourcePackagesLocator.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/SourcePackagesLocator.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/SourcePackagesLocator.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/SourcePackagesLocator.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/SourcePackagesLocator.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/SourcePackagesLocator~partial.swiftmodule"
+  },
+  "/Users/beau/Developer/Personal/AppleDev/Dependi/Sources/DependiDomain/TargetKind.swift" : {
+    "const-values" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/TargetKind.swiftconstvalues",
+    "dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/TargetKind.d",
+    "diagnostics" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/TargetKind.dia",
+    "index-unit-output-path" : "/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/TargetKind.o",
+    "llvm-bc" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/TargetKind.bc",
+    "object" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/TargetKind.o",
+    "swift-dependencies" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/TargetKind.swiftdeps",
+    "swiftmodule" : "/Users/beau/Developer/Personal/AppleDev/Dependi/.build-modules/DependiComposition/out/Intermediates.noindex/Dependi.build/Debug/DependiDomain-t.build/Objects-normal/arm64/TargetKind~partial.swiftmodule"
+  }
+}

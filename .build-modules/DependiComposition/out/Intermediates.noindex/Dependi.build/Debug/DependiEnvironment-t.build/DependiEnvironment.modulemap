@@ -1,0 +1,4 @@
+module DependiEnvironment {
+header "DependiEnvironment-Swift.h"
+export *
+}

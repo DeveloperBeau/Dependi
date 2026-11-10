@@ -1,0 +1,4 @@
+module DependiCommandLine {
+header "DependiCommandLine-Swift.h"
+export *
+}

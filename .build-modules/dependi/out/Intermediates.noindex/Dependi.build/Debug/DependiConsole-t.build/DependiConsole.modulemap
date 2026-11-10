@@ -1,0 +1,4 @@
+module DependiConsole {
+header "DependiConsole-Swift.h"
+export *
+}
