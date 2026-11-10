@@ -48,6 +48,18 @@
 - **Finding:** The pass rule counted every outcome except survived and invalid.
 - **Rule:** A kill by time-out passes only when the entry says `"expected": "timeout"`. Any other outcome that differs from the expectation fails the run.
 
+## Two builds for each entry made the register slow
+
+- **Trap:** The runner ran the baseline of each entry on clean code and then built the mutant. The baseline rebuilt the file that the previous entry restored. Each entry paid for two builds and two test runs, one entry at a time.
+- **Finding:** A register of 276 entries took more than 80 minutes. The tests themselves ran in seconds.
+- **Rule:** The runner runs each distinct baseline once before the first mutation. Each entry has one build. Workers in their own copies run file groups at the same time.
+
+## A cold fixture package made the runner tests slow
+
+- **Trap:** Each runner test made a new package in a new folder, so each test built the package from nothing.
+- **Finding:** The runner suite took about 13 minutes of a gate on a busy machine. Most of that time was cold builds of a package with one file.
+- **Rule:** The runner tests share one fixture package that keeps its build folder. Each test resets the package to its fixture commit first.
+
 ## Mutation results for the runner
 
 | Mutation | Test that failed |

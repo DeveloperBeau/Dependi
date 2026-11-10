@@ -49,10 +49,28 @@ var buildTimeoutSeconds = 900.0
 var onlyID: String?
 var markdownPath: String?
 var shouldRecord = true
+var changedSince: String?
+var workerCount = defaultWorkerCount()
+var shouldOnlyPlan = false
 /// The exact filter for each entry id, filled by `validate`.
 var filters: [String: String] = [:]
+/// The file that is mutated in place in the package folder. Only a run with one worker sets it.
 var mutatedFile: String?
-var activeProcessID: Int32?
+/// Processes, worker copies and in-place state are shared with the signal handler, under this lock.
+let stateLock = NSLock()
+var activeProcessIDs: Set<Int32> = []
+var workerFolders: [String] = []
+
+/// Half the performance cores, and at least one. Each worker runs its own compiler, so a full
+/// count would starve the machine.
+func defaultWorkerCount() -> Int {
+    var cores: Int32 = 0
+    var size = MemoryLayout<Int32>.size
+    if sysctlbyname("hw.perflevel0.physicalcpu", &cores, &size, nil, 0) != 0 || cores <= 0 {
+        cores = Int32(ProcessInfo.processInfo.activeProcessorCount)
+    }
+    return max(1, Int(cores) / 2)
+}
 
 func fail(_ message: String, code: Int32 = 2) -> Never {
     FileHandle.standardError.write(Data((message + "\n").utf8))
@@ -71,6 +89,13 @@ func parseArguments() {
         case "--only": onlyID = value
         case "--record": shouldRecord = value != "no"
         case "--markdown": markdownPath = value
+        case "--changed-since": changedSince = value
+        case "--plan": shouldOnlyPlan = value != "no"
+        case "--workers":
+            guard let count = Int(value), count >= 1, count <= 64 else {
+                fail("--workers needs a whole number from 1 to 64, not \(value)")
+            }
+            workerCount = count
         default: fail("unknown flag \(flag)")
         }
     }
@@ -112,7 +137,7 @@ func killTree(_ root: Int32) {
 }
 
 /// Runs a command in its own process group and kills the whole group on timeout.
-func run(_ arguments: [String], timeout: Double) -> CommandResult {
+func run(_ arguments: [String], timeout: Double, in folder: String = root) -> CommandResult {
     let outputURL = FileManager.default.temporaryDirectory
         .appendingPathComponent("mutate-\(UUID().uuidString).txt")
     FileManager.default.createFile(atPath: outputURL.path, contents: nil)
@@ -122,14 +147,21 @@ func run(_ arguments: [String], timeout: Double) -> CommandResult {
     let process = Process()
     process.executableURL = URL(fileURLWithPath: "/usr/bin/perl")
     process.arguments = ["-e", "setpgrp(0,0); exec @ARGV or die $!;", "--"] + arguments
-    process.currentDirectoryURL = URL(fileURLWithPath: root)
+    process.currentDirectoryURL = URL(fileURLWithPath: folder)
     process.standardOutput = sink
     process.standardError = sink
     let finished = DispatchSemaphore(value: 0)
     process.terminationHandler = { _ in finished.signal() }
     do { try process.run() } catch { fail("cannot start \(arguments[0]): \(error)") }
-    activeProcessID = process.processIdentifier
-    defer { activeProcessID = nil }
+    let processID = process.processIdentifier
+    stateLock.lock()
+    activeProcessIDs.insert(processID)
+    stateLock.unlock()
+    defer {
+        stateLock.lock()
+        activeProcessIDs.remove(processID)
+        stateLock.unlock()
+    }
     var timedOut = false
     if finished.wait(timeout: .now() + timeout) == .timedOut {
         timedOut = true
@@ -146,15 +178,24 @@ func restore(_ file: String) {
     _ = git(["checkout", "--", file])
 }
 
+/// Stops every child, restores the file mutated in place, removes the worker copies and exits.
+func shutDown(code: Int32) -> Never {
+    stateLock.lock()
+    let processIDs = activeProcessIDs
+    let file = mutatedFile
+    let folders = workerFolders
+    stateLock.unlock()
+    for pid in processIDs { killTree(pid) }
+    if let file { restore(file) }
+    for folder in folders { try? FileManager.default.removeItem(atPath: folder) }
+    exit(code)
+}
+
 func installSignalHandlers() {
     for signalNumber in [SIGINT, SIGTERM] {
         signal(signalNumber, SIG_IGN)
         let source = DispatchSource.makeSignalSource(signal: signalNumber, queue: .global())
-        source.setEventHandler {
-            if let pid = activeProcessID { killTree(pid) }
-            if let file = mutatedFile { restore(file) }
-            exit(130)
-        }
+        source.setEventHandler { shutDown(code: 130) }
         source.resume()
         signalSources.append(source)
     }
@@ -191,6 +232,15 @@ func exactFilter(for listed: String) -> String {
     "^" + NSRegularExpression.escapedPattern(for: listed)
 }
 
+/// A mutation may change production code, or the checker code of the architecture test, which has
+/// no other home. A test file is never mutated.
+func isMutableFile(_ relative: String) -> Bool {
+    if relative.hasPrefix("/") || relative.contains("..") { return false }
+    if relative.hasPrefix("Sources/") { return true }
+    return relative.hasPrefix("Tests/ArchitectureTests/") && !relative.hasSuffix("Tests.swift")
+        && relative.hasSuffix(".swift")
+}
+
 func validate(_ entries: [Entry]) -> [String] {
     var problems: [String] = []
     var ids = Set<String>()
@@ -205,8 +255,10 @@ func validate(_ entries: [Entry]) -> [String] {
                 "\(entry.id): expected must be killed or timeout, not \(entry.expectedName)")
         }
         let relative = entry.file
-        if relative.hasPrefix("/") || relative.contains("..") || !relative.hasPrefix("Sources/") {
-            problems.append("\(entry.id): file must be a relative path under Sources/")
+        if !isMutableFile(relative) {
+            problems.append(
+                "\(entry.id): file must be a relative path under Sources/ or an architecture checker file under Tests/ArchitectureTests/"
+            )
             continue
         }
         let path = (root as NSString).appendingPathComponent(relative)
@@ -265,34 +317,111 @@ func requireCleanTree() {
     }
 }
 
-func baseline(_ entry: Entry) -> Bool {
-    let result = run(
-        ["swift", "test", "--filter", filters[entry.id] ?? entry.test], timeout: buildTimeoutSeconds
-    )
-    return result.status == 0 && !result.timedOut
+/// Runs each distinct filter once on clean code. `swift test list` in `validate` built the tests,
+/// so no baseline builds again.
+func baselines(for entries: [Entry]) -> (passed: Set<String>, runs: Int) {
+    var passed: Set<String> = []
+    var seen: Set<String> = []
+    for entry in entries {
+        let filter = filters[entry.id] ?? entry.test
+        guard seen.insert(filter).inserted else { continue }
+        let result = run(
+            ["swift", "test", "--skip-build", "--filter", filter], timeout: buildTimeoutSeconds)
+        if result.status == 0 && !result.timedOut { passed.insert(filter) }
+    }
+    return (passed, seen.count)
 }
 
-func mutate(_ entry: Entry) -> Outcome {
-    let path = (root as NSString).appendingPathComponent(entry.file)
+/// One folder where mutants are built and run. A run with one worker mutates the package folder
+/// itself. A run with more workers gives each worker a copy of the tracked files, so the package
+/// folder is never mutated and each copy has its own build folder.
+struct Workspace {
+    let folder: String
+    let isCopy: Bool
+}
+
+func makeCopy(index: Int) -> Workspace {
+    let folder = (NSTemporaryDirectory() as NSString).appendingPathComponent(
+        "mutate-worker-\(UUID().uuidString)-\(index)")
+    stateLock.lock()
+    workerFolders.append(folder)
+    stateLock.unlock()
+    let listing = git(["ls-files", "-z"])
+    if listing.status != 0 { fail("cannot list the tracked files") }
+    let manager = FileManager.default
+    for relative in listing.output.split(separator: "\0").map(String.init) {
+        let source = (root as NSString).appendingPathComponent(relative)
+        let target = (folder as NSString).appendingPathComponent(relative)
+        do {
+            try manager.createDirectory(
+                atPath: (target as NSString).deletingLastPathComponent,
+                withIntermediateDirectories: true)
+            try manager.copyItem(atPath: source, toPath: target)
+        } catch { fail("cannot copy \(relative) for a worker: \(error)") }
+    }
+    return Workspace(folder: folder, isCopy: true)
+}
+
+/// Applies one mutation, builds, runs the named test and restores the file. The build is the only
+/// build for this entry: the next entry's build also picks up this restore.
+func mutate(_ entry: Entry, in workspace: Workspace) -> Outcome {
+    let path = (workspace.folder as NSString).appendingPathComponent(entry.file)
     guard let original = try? String(contentsOfFile: path, encoding: .utf8) else { return .invalid }
     let mutated = original.replacingOccurrences(of: entry.search, with: entry.replace)
-    mutatedFile = entry.file
+    if !workspace.isCopy {
+        stateLock.lock()
+        mutatedFile = entry.file
+        stateLock.unlock()
+    }
     defer {
-        restore(entry.file)
-        mutatedFile = nil
+        if workspace.isCopy {
+            try? original.write(toFile: path, atomically: true, encoding: .utf8)
+            if (try? String(contentsOfFile: path, encoding: .utf8)) != original {
+                FileHandle.standardError.write(
+                    Data("cannot restore \(entry.file) in a copy\n".utf8))
+                shutDown(code: 3)
+            }
+        } else {
+            restore(entry.file)
+            stateLock.lock()
+            mutatedFile = nil
+            stateLock.unlock()
+        }
     }
     do { try mutated.write(toFile: path, atomically: true, encoding: .utf8) } catch {
         return .invalid
     }
-    let build = run(["swift", "build", "--build-tests"], timeout: buildTimeoutSeconds)
+    let build = run(
+        ["swift", "build", "--build-tests"], timeout: buildTimeoutSeconds, in: workspace.folder)
     if build.status != 0 || build.timedOut { return .invalid }
     let test = run(
         ["swift", "test", "--skip-build", "--filter", filters[entry.id] ?? entry.test],
-        timeout: timeoutSeconds)
+        timeout: timeoutSeconds, in: workspace.folder)
     if test.timedOut { return .killedByTimeout }
     if test.status == 0 { return .survived }
     let ranAndFailed = test.output.contains("✘ Test") || test.output.contains("error: -[")
     return ranAndFailed ? .killed : .invalid
+}
+
+/// Groups entries by file, in file order, and keeps register order inside a file. A worker takes
+/// a whole group, so its builds stay incremental in one module.
+func groupsByFile(_ entries: [Entry]) -> [[Entry]] {
+    var order: [String] = []
+    var byFile: [String: [Entry]] = [:]
+    for entry in entries {
+        if byFile[entry.file] == nil { order.append(entry.file) }
+        byFile[entry.file, default: []].append(entry)
+    }
+    return order.sorted().compactMap { byFile[$0] }
+}
+
+/// The files that differ between a git ref and the working tree.
+func filesChanged(since ref: String) -> Set<String> {
+    let check = git(["rev-parse", "--verify", "--quiet", ref + "^{commit}"])
+    if check.status != 0 { fail("--changed-since: \(ref) is not a commit") }
+    let diff = git(["diff", "--name-only", ref, "--"])
+    if diff.status != 0 { fail("--changed-since: git diff failed\n\(diff.output)") }
+    return Set(diff.output.split(separator: "\n").map(String.init))
 }
 
 /// Writes the outcome of each run into its register entry without touching the rest of the text.
@@ -374,10 +503,32 @@ if let markdownPath {
     writeMarkdown(allEntries, to: markdownPath)
     exit(0)
 }
-let entries = allEntries.filter { onlyID == nil || $0.id == onlyID }
+var entries = allEntries.filter { onlyID == nil || $0.id == onlyID }
+if entries.isEmpty, onlyID != nil { fail("no register entry has that id") }
+if let changedSince {
+    let changed = filesChanged(since: changedSince)
+    entries = entries.filter { changed.contains($0.file) }
+    if entries.isEmpty {
+        print("no register entry has a file that changed since \(changedSince), nothing to run")
+        exit(0)
+    }
+}
 if entries.isEmpty {
-    if onlyID != nil { fail("no register entry has that id") }
     print("the register is empty, nothing to run")
+    exit(0)
+}
+let groups = groupsByFile(entries)
+workerCount = min(workerCount, groups.count)
+if shouldOnlyPlan {
+    print("workers: \(workerCount)")
+    for group in groups {
+        print("GROUP \(group[0].file): \(group.map(\.id).joined(separator: ", "))")
+    }
+    var seenTests: [String] = []
+    for entry in groups.joined() where !seenTests.contains(entry.test) {
+        seenTests.append(entry.test)
+    }
+    for test in seenTests { print("BASELINE \(test)") }
     exit(0)
 }
 requireCleanTree()
@@ -388,20 +539,52 @@ if !problems.isEmpty {
     exit(2)
 }
 
-var rows: [(String, Outcome, Double)] = []
-var baselineFailures: [String] = []
 let started = Date()
-for entry in entries.sorted(by: { $0.file < $1.file }) {
-    if !baseline(entry) {
-        baselineFailures.append(entry.id)
-        continue
+let baseline = baselines(for: entries)
+var baselineFailures: [String] = []
+var queue: [[Entry]] = []
+for group in groups {
+    let runnable = group.filter { baseline.passed.contains(filters[$0.id] ?? $0.test) }
+    baselineFailures += group.filter { !runnable.map(\.id).contains($0.id) }.map(\.id)
+    if !runnable.isEmpty { queue.append(runnable) }
+}
+var results: [String: (Outcome, Double)] = [:]
+let workers = DispatchGroup()
+let startedWorkers = min(workerCount, queue.count)
+for index in 0..<startedWorkers {
+    workers.enter()
+    Thread.detachNewThread {
+        defer { workers.leave() }
+        let workspace =
+            workerCount == 1 ? Workspace(folder: root, isCopy: false) : makeCopy(index: index)
+        while true {
+            stateLock.lock()
+            let next = queue.isEmpty ? nil : queue.removeFirst()
+            stateLock.unlock()
+            guard let group = next else { break }
+            for entry in group {
+                let begin = Date()
+                let outcome = mutate(entry, in: workspace)
+                stateLock.lock()
+                results[entry.id] = (outcome, Date().timeIntervalSince(begin))
+                stateLock.unlock()
+                if !workspace.isCopy {
+                    let clean = git(["status", "--porcelain"]).output.trimmingCharacters(
+                        in: .whitespacesAndNewlines)
+                    if !clean.isEmpty {
+                        FileHandle.standardError.write(
+                            Data("the tree is not clean after \(entry.id):\n\(clean)\n".utf8))
+                        shutDown(code: 3)
+                    }
+                }
+            }
+        }
+        if workspace.isCopy { try? FileManager.default.removeItem(atPath: workspace.folder) }
     }
-    let begin = Date()
-    let outcome = mutate(entry)
-    rows.append((entry.id, outcome, Date().timeIntervalSince(begin)))
-    let clean = git(["status", "--porcelain"]).output.trimmingCharacters(
-        in: .whitespacesAndNewlines)
-    if !clean.isEmpty { fail("the tree is not clean after \(entry.id):\n\(clean)", code: 3) }
+}
+workers.wait()
+let rows = groups.joined().compactMap { entry in
+    results[entry.id].map { (entry.id, $0.0, $0.1) }
 }
 
 print("id | result | seconds")
@@ -419,6 +602,8 @@ for (id, outcome, seconds) in rows {
 }
 if shouldRecord { recordRuns(rows.map { (id: $0.0, outcome: $0.1) }) }
 for id in baselineFailures { print("\(id) | BASELINE FAILED | 0.0") }
+print("baseline runs: \(baseline.runs)")
+print("workers: \(workerCount)")
 print("total seconds: \(String(format: "%.1f", Date().timeIntervalSince(started)))")
 let bad =
     rows.filter { $0.1 == .survived || $0.1 == .invalid }.count + unexpected

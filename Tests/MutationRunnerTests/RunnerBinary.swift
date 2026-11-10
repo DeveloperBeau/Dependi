@@ -58,6 +58,10 @@ enum Register {
             """
     }
 
+    /// The test time limit for a register with a looping mutant. Builds have their own limit, so
+    /// this only needs to cover one run of a small test.
+    static let loopTimeout = "20"
+
     static func list(_ entries: [String]) -> String { "[" + entries.joined(separator: ",") + "]" }
 
     static let killed = entry(
