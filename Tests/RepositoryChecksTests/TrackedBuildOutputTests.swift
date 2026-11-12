@@ -124,9 +124,9 @@ struct TrackedBuildOutputTests {
     func newlineSplitMissesQuotedScratchFile() throws {
         let root = try makeScratchIndex()
         defer { try? FileManager.default.removeItem(at: root) }
-        let plain = try ChildProcess.run(
-            ["git", "-c", "core.quotePath=true", "ls-files", "--cached"],
-            workingDirectory: root
+        let plain = try runCleanGit(
+            ["-c", "core.quotePath=true", "ls-files", "--cached"],
+            at: root
         )
         #expect(plain.status == 0, "git ls-files failed: \(plain.output)")
         let lines = plain.output.split(separator: "\n", omittingEmptySubsequences: true).map(
@@ -185,14 +185,28 @@ struct TrackedBuildOutputTests {
         try Data("q".utf8).write(to: build.appendingPathComponent("a\"b.o"))
         try Data("u".utf8).write(to: build.appendingPathComponent("ü.o"))
         try Data("k".utf8).write(to: sources.appendingPathComponent("Keep.swift"))
-        let ready = try ChildProcess.run(["git", "init", "-q"], workingDirectory: root)
+        let ready = try runCleanGit(["init", "-q"], at: root)
         try #require(ready.status == 0, "git init failed: \(ready.output)")
-        let added = try ChildProcess.run(
-            ["git", "add", "--", ".build/a\"b.o", ".build/ü.o", "Sources/Keep.swift"],
-            workingDirectory: root
+        // -f adds the scratch files even when a global excludes file ignores .build.
+        let added = try runCleanGit(
+            ["add", "-f", "--", ".build/a\"b.o", ".build/ü.o", "Sources/Keep.swift"],
+            at: root
         )
         try #require(added.status == 0, "git add failed: \(added.output)")
         return root
+    }
+
+    /// Runs git with no global or system config, so the machine's excludes file cannot change the index.
+    private func runCleanGit(_ arguments: [String], at root: URL) throws -> ChildProcessResult {
+        try ChildProcess.run(
+            [
+                "GIT_CONFIG_GLOBAL=/dev/null",
+                "GIT_CONFIG_NOSYSTEM=1",
+                "GIT_CONFIG_COUNT=0",
+                "git",
+            ] + arguments,
+            workingDirectory: root
+        )
     }
 
     /// The scratch folder the test expects, computed without the code under test.

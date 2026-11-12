@@ -32,3 +32,9 @@ The check lives in the test target, so the mutation runner does not cover it. Bo
 |---|---|
 | `.build-modules` removed from the scratch folder set | `a planted scratch path is build output` |
 | `-z` removed from the index listing | `a scratch file with a quote or a non-ascii name is build output` |
+
+## A test repository still reads the developer's git config
+
+- **Trap:** A new repository still reads the global excludes file. A Swift setup often ignores `.build` there.
+- **Finding:** With that excludes file, `git add -- .build/...` exited 1 and said the paths are ignored. Both index tests failed. `git add -f`, with global and system config cleared, exited 0, and the same tests passed.
+- **Rule:** A test that builds an index forces the add and does not read global or system git config.
