@@ -1,4 +1,0 @@
-module DependiProcess {
-header "DependiProcess-Swift.h"
-export *
-}

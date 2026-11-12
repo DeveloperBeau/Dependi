@@ -1,4 +1,0 @@
-module DependiGenerate {
-header "DependiGenerate-Swift.h"
-export *
-}
