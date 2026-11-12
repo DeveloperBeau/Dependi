@@ -1,4 +1,0 @@
-module DependiPackageGraph {
-header "DependiPackageGraph-Swift.h"
-export *
-}

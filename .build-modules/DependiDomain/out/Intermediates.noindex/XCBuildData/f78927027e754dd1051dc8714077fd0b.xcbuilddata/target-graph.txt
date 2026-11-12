@@ -1,4 +1,0 @@
-Target dependency graph (2 targets)
-Target 'DependiDomain' in project 'Dependi'
-➜ Explicit dependency on target 'DependiEntities' in project 'Dependi'
-Target 'DependiEntities' in project 'Dependi' (no dependencies)
