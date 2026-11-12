@@ -35,6 +35,6 @@ The check lives in the test target, so the mutation runner does not cover it. Bo
 
 ## A test repository still reads the developer's git config
 
-- **Trap:** A new repository still reads the global excludes file. A Swift setup often ignores `.build` there.
-- **Finding:** With that excludes file, `git add -- .build/...` exited 1 and said the paths are ignored. Both index tests failed. `git add -f`, with global and system config cleared, exited 0, and the same tests passed.
-- **Rule:** A test that builds an index forces the add and does not read global or system git config.
+- **Trap:** `git add -f` gets past an excludes file, and `git ls-files -z` does not quote names. A global attributes file can still attach a required clean filter, and that filter runs during add.
+- **Finding:** These global settings left the `add -f` and `ls-files -z` paths unchanged: `core.excludesFile`, `core.quotePath`, `core.ignoreCase`, `core.sparseCheckout`, `index.sparse`, `init.defaultBranch`, `core.hooksPath`, `safe.directory`, `user.useConfigOnly`, `core.precomposeUnicode`, `core.protectNTFS`, `core.protectHFS`, `core.fsmonitor`, `alias.add`, `alias.ls-files`, `core.worktree`, `core.autocrlf`, `i18n.logOutputEncoding` and `core.bare`. A required clean filter on every file made `git add -f` exit 1. Clearing global and system config made that add exit 0. Removing the clearing assignments made `a global clean filter does not hide scratch paths` fail.
+- **Rule:** The temporary index forces the add and clears global and system config. `-f` and `-z` do not cover a clean filter.

@@ -106,6 +106,52 @@ struct TrackedBuildOutputTests {
         }
     }
 
+    @Test("a global clean filter does not hide scratch paths")
+    func globalCleanFilterDoesNotHideScratchPaths() throws {
+        let configDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("filter-config-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: configDirectory) }
+        try FileManager.default.createDirectory(
+            at: configDirectory, withIntermediateDirectories: true)
+        let attributes = configDirectory.appendingPathComponent("attributes")
+        let gitconfig = configDirectory.appendingPathComponent("gitconfig")
+        try "* filter=broken\n".write(to: attributes, atomically: true, encoding: .utf8)
+        let configText = """
+            [core]
+            \tattributesFile = \(attributes.path)
+            [filter "broken"]
+            \tclean = false
+            \trequired = true
+            """
+        try configText.write(to: gitconfig, atomically: true, encoding: .utf8)
+
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("filter-index-\(UUID().uuidString)", isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let build = root.appendingPathComponent(".build", isDirectory: true)
+        let modules = root.appendingPathComponent(".build-modules", isDirectory: true)
+        try FileManager.default.createDirectory(at: build, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: modules, withIntermediateDirectories: true)
+        try Data("b".utf8).write(to: build.appendingPathComponent("file.o"))
+        try Data("m".utf8).write(to: modules.appendingPathComponent("cache.o"))
+        let ready = try runCleanGit(["init", "-q"], at: root, globalConfig: gitconfig)
+        try #require(ready.status == 0, "git init failed: \(ready.output)")
+        let added = try runCleanGit(
+            ["add", "-f", "--", ".build/file.o", ".build-modules/cache.o"],
+            at: root,
+            globalConfig: gitconfig
+        )
+        try #require(added.status == 0, "git add failed: \(added.output)")
+        let listed = try TrackedBuildOutput.listTrackedPaths(root: root)
+        #expect(listed.contains(".build/file.o"))
+        #expect(listed.contains(".build-modules/cache.o"))
+        let found = TrackedBuildOutput.violations(in: listed)
+        #expect(found.contains(.init(relativePath: ".build/file.o", directoryName: ".build")))
+        #expect(
+            found.contains(
+                .init(relativePath: ".build-modules/cache.o", directoryName: ".build-modules")))
+    }
+
     @Test("a scratch file with a quote or a non-ascii name is build output")
     func quotedScratchFileIsBuildOutput() throws {
         let root = try makeScratchIndex()
@@ -196,17 +242,23 @@ struct TrackedBuildOutputTests {
         return root
     }
 
-    /// Runs git with no global or system config, so the machine's excludes file cannot change the index.
-    private func runCleanGit(_ arguments: [String], at root: URL) throws -> ChildProcessResult {
-        try ChildProcess.run(
-            [
-                "GIT_CONFIG_GLOBAL=/dev/null",
-                "GIT_CONFIG_NOSYSTEM=1",
-                "GIT_CONFIG_COUNT=0",
-                "git",
-            ] + arguments,
-            workingDirectory: root
-        )
+    /// Runs git with no global or system config.
+    /// `globalConfig` is applied first. The clearing assignments come last, so they win.
+    /// A required clean filter in that file makes `git add -f` fail when the clearing assignments are removed.
+    private func runCleanGit(
+        _ arguments: [String],
+        at root: URL,
+        globalConfig: URL? = nil
+    ) throws -> ChildProcessResult {
+        var prefix = [
+            "GIT_CONFIG_NOSYSTEM=1",
+            "GIT_CONFIG_COUNT=0",
+            "GIT_CONFIG_GLOBAL=/dev/null",
+        ]
+        if let globalConfig {
+            prefix.insert("GIT_CONFIG_GLOBAL=\(globalConfig.path)", at: 0)
+        }
+        return try ChildProcess.run(prefix + ["git"] + arguments, workingDirectory: root)
     }
 
     /// The scratch folder the test expects, computed without the code under test.
