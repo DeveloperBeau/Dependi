@@ -39,13 +39,14 @@ enum TrackedBuildOutput {
     }
 
     /// Lists the paths recorded in the git index at `root`.
+    /// `-z` keeps each path whole. A newline listing quotes a special name, and that quoted text hides the folder.
     static func listTrackedPaths(root: URL) throws -> [String] {
         let result = try ChildProcess.run(
-            ["git", "ls-files", "--cached"],
+            ["git", "ls-files", "-z", "--cached"],
             workingDirectory: root
         )
         guard result.status == 0 else { throw ListingFailed(output: result.output) }
-        return result.output.split(separator: "\n", omittingEmptySubsequences: true).map(
+        return result.output.split(separator: "\0", omittingEmptySubsequences: true).map(
             String.init)
     }
 }

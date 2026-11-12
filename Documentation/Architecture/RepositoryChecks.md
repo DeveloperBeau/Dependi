@@ -16,7 +16,7 @@ These checks guard rules that review should not have to catch.
 1. The test finds the repository root from its own file path.
 2. The forbidden-content check asks git for the files that are not ignored.
 3. It scans each file, or runs the lint script.
-4. The build-output check lists the git index. A path that was added despite the ignore rule is still listed. The check does not open the files.
+4. The build-output check lists the git index with a NUL between paths. A path that was added despite the ignore rule is still listed. The check does not open the files.
 
 ## Edge cases
 
@@ -25,6 +25,7 @@ These checks guard rules that review should not have to catch.
 - Planted bad code is stored as `.swift.txt` so it is not compiled or linted.
 - A name that only contains the scratch text is kept. `not.build` and `.build-modules-backup` are not scratch folders.
 - When a path has more than one scratch folder, the check reports the first component.
+- A newline listing quotes a name that contains a quote or a non-ASCII byte. The quoted text no longer has the scratch folder as its own component. The NUL list keeps the real path.
 
 ## Tests
 

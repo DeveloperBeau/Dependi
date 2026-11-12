@@ -20,6 +20,8 @@ struct TrackedBuildOutputTests {
             ("Contract/.build/checkouts/pkg", ".build"),
             (".build-modules", ".build-modules"),
             (".build", ".build"),
+            (".build/a\"b.o", ".build"),
+            (".build/ü.o", ".build"),
         ]
         for (path, folder) in planted {
             let found = TrackedBuildOutput.violations(in: [path])
@@ -104,6 +106,37 @@ struct TrackedBuildOutputTests {
         }
     }
 
+    @Test("a scratch file with a quote or a non-ascii name is build output")
+    func quotedScratchFileIsBuildOutput() throws {
+        let root = try makeScratchIndex()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let listed = try TrackedBuildOutput.listTrackedPaths(root: root)
+        #expect(listed.contains(".build/a\"b.o"))
+        #expect(listed.contains(".build/ü.o"))
+        #expect(listed.contains("Sources/Keep.swift"))
+        let found = TrackedBuildOutput.violations(in: listed)
+        #expect(found.contains(.init(relativePath: ".build/a\"b.o", directoryName: ".build")))
+        #expect(found.contains(.init(relativePath: ".build/ü.o", directoryName: ".build")))
+        #expect(found.count == 2)
+    }
+
+    @Test("a newline split of a quoted index line misses that scratch file")
+    func newlineSplitMissesQuotedScratchFile() throws {
+        let root = try makeScratchIndex()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let plain = try ChildProcess.run(
+            ["git", "-c", "core.quotePath=true", "ls-files", "--cached"],
+            workingDirectory: root
+        )
+        #expect(plain.status == 0, "git ls-files failed: \(plain.output)")
+        let lines = plain.output.split(separator: "\n", omittingEmptySubsequences: true).map(
+            String.init)
+        #expect(lines.contains("\".build/a\\\"b.o\""))
+        #expect(lines.contains("\".build/\\303\\274.o\""))
+        let missed = TrackedBuildOutput.violations(in: lines)
+        #expect(missed.isEmpty, "newline split still saw a scratch folder: \(missed)")
+    }
+
     @Test("a folder that is not a git repository fails the path listing")
     func listingFailsOutsideARepository() {
         #expect(throws: TrackedBuildOutput.ListingFailed.self) {
@@ -114,11 +147,11 @@ struct TrackedBuildOutputTests {
     @Test("the repository index tracks no scratch folder")
     func repositoryTracksNoScratchFolder() throws {
         let direct = try ChildProcess.run(
-            ["git", "ls-files", "--cached"],
+            ["git", "ls-files", "-z", "--cached"],
             workingDirectory: RepositoryRoot.url
         )
         #expect(direct.status == 0, "git ls-files failed: \(direct.output)")
-        let expected = direct.output.split(separator: "\n", omittingEmptySubsequences: true).map(
+        let expected = direct.output.split(separator: "\0", omittingEmptySubsequences: true).map(
             String.init)
         let listed = try TrackedBuildOutput.listTrackedPaths(root: RepositoryRoot.url)
         #expect(listed == expected)
@@ -139,6 +172,27 @@ struct TrackedBuildOutputTests {
             parts[index] = folder
         }
         return parts.joined(separator: "/")
+    }
+
+    /// A fresh index with two scratch files git would quote, and one ordinary source file.
+    private func makeScratchIndex() throws -> URL {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("scratch-index-\(UUID().uuidString)", isDirectory: true)
+        let build = root.appendingPathComponent(".build", isDirectory: true)
+        let sources = root.appendingPathComponent("Sources", isDirectory: true)
+        try FileManager.default.createDirectory(at: build, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: sources, withIntermediateDirectories: true)
+        try Data("q".utf8).write(to: build.appendingPathComponent("a\"b.o"))
+        try Data("u".utf8).write(to: build.appendingPathComponent("ü.o"))
+        try Data("k".utf8).write(to: sources.appendingPathComponent("Keep.swift"))
+        let ready = try ChildProcess.run(["git", "init", "-q"], workingDirectory: root)
+        try #require(ready.status == 0, "git init failed: \(ready.output)")
+        let added = try ChildProcess.run(
+            ["git", "add", "--", ".build/a\"b.o", ".build/ü.o", "Sources/Keep.swift"],
+            workingDirectory: root
+        )
+        try #require(added.status == 0, "git add failed: \(added.output)")
+        return root
     }
 
     /// The scratch folder the test expects, computed without the code under test.
