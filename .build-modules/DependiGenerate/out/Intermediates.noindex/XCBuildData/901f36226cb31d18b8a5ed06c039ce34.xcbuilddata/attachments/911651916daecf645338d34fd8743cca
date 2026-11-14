@@ -1,4 +1,0 @@
-module DependiDomain {
-header "DependiDomain-Swift.h"
-export *
-}

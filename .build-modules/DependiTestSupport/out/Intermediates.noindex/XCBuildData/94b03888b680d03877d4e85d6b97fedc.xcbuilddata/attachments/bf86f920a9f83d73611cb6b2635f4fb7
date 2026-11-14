@@ -1,4 +1,0 @@
-module DependiTestSupport {
-header "DependiTestSupport-Swift.h"
-export *
-}

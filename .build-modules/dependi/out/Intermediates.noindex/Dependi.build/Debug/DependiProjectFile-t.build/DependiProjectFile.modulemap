@@ -1,4 +1,0 @@
-module DependiProjectFile {
-header "DependiProjectFile-Swift.h"
-export *
-}

@@ -1,7 +1,0 @@
-Target dependency graph (3 targets)
-Target 'DependiTestSupport' in project 'Dependi'
-➜ Explicit dependency on target 'DependiEntities' in project 'Dependi'
-➜ Explicit dependency on target 'DependiDomain' in project 'Dependi'
-Target 'DependiDomain' in project 'Dependi'
-➜ Explicit dependency on target 'DependiEntities' in project 'Dependi'
-Target 'DependiEntities' in project 'Dependi' (no dependencies)

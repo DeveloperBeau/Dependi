@@ -1,4 +1,0 @@
-module DependiWorkspaceState {
-header "DependiWorkspaceState-Swift.h"
-export *
-}

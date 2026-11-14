@@ -1,4 +1,0 @@
-module DependiFileSystem {
-header "DependiFileSystem-Swift.h"
-export *
-}
