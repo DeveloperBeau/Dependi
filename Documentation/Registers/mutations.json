@@ -2563,7 +2563,7 @@
     "search": "            default:\n                return nil",
     "replace": "            default:\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
     "test": "sdkReferenceIsIgnored",
-    "lastRun": {"date": "2026-11-16", "outcome": "SURVIVED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-source-root",
@@ -2581,6 +2581,6 @@
     "search": "ProjectPathMath.standardize(parts.joined(separator: \"/\"))",
     "replace": "nil",
     "test": "sourceRootAndAbsoluteReferences",
-    "lastRun": {"date": "2026-11-16", "outcome": "SURVIVED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   }
 ]
