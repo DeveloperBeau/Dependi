@@ -338,6 +338,42 @@ struct EndToEndTests {
         #expect(try world.indexTitles() == ["core"])
     }
 
+    /// The IceCubes shape: a folder reference for the package and a product with no package key.
+    private static let legacyLocalProject = EndToEndWorld.alamofireProject
+        .replacingOccurrences(
+            of: "P0 = {isa = PBXProject; buildConfigurationList = PL;",
+            with: "P0 = {isa = PBXProject; mainGroup = G0; buildConfigurationList = PL;"
+        )
+        .replacingOccurrences(
+            of:
+                "R1 = {isa = XCRemoteSwiftPackageReference; repositoryURL = \"https://github.com/Alamofire/Alamofire.git\"; };",
+            with:
+                "G0 = {isa = PBXGroup; children = (F1); sourceTree = \"<group>\"; };\n\t\tF1 = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = Packages/Core; sourceTree = \"<group>\"; };"
+        )
+        .replacingOccurrences(
+            of:
+                "D1 = {isa = XCSwiftPackageProductDependency; package = R1; productName = Alamofire; };",
+            with: "D1 = {isa = XCSwiftPackageProductDependency; productName = Core; };"
+        )
+        .replacingOccurrences(of: "packageReferences = (R1); ", with: "")
+
+    @Test("a package that an older project records as a folder reference is written")
+    func legacyLocalPackage() throws {
+        let world = try EndToEndWorld(projectFile: Self.legacyLocalProject)
+        try world.addLocal("Core", manifest: EndToEndWorld.manifest(product: "Core"))
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        #expect(try world.indexTitles() == ["core"])
+    }
+
+    @Test("a folder reference with no manifest fails and the error names the product")
+    func legacyLocalPackageWithoutManifest() throws {
+        let world = try EndToEndWorld(projectFile: Self.legacyLocalProject)
+        let result = try world.run()
+        #expect(result.code != 0)
+        #expect(result.errors.contains("Core"), "errors: \(result.errors)")
+    }
+
     @Test("only the products of the named target are written")
     func twoTargets() throws {
         let twoTargets = EndToEndWorld.alamofireProject

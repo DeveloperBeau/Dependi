@@ -143,6 +143,14 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | lazy-process-limit-xcrun | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `processLimitIsUsed` | killed | 2026-11-04 KILLED |
 | lazy-swift-path-absolute | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `relativeSwiftPath` | killed | 2026-11-04 KILLED |
 | lazy-version-unknown | review-fix | `Sources/DependiComposition/LazyManifestReader.swift` | `unknownVersion` | killed | 2026-11-04 KILLED |
+| legacy-local-absolute | legacy-local | `Sources/DependiProjectFile/LegacyLocalPackages.swift` | `sourceRootAndAbsoluteReferences` | killed | not run |
+| legacy-local-group-order | legacy-local | `Sources/DependiProjectFile/LegacyLocalPackages.swift` | `legacyFolderReferencesAreLocalPackages` | killed | not run |
+| legacy-local-kind-folder | legacy-local | `Sources/DependiProjectFile/LegacyLocalPackages.swift` | `legacyFolderReferencesAreLocalPackages` | killed | not run |
+| legacy-local-kind-wrapper | legacy-local | `Sources/DependiProjectFile/LegacyLocalPackages.swift` | `legacyFolderReferencesAreLocalPackages` | killed | not run |
+| legacy-local-manifest-check | legacy-local | `Sources/DependiProjectFile/LegacyLocalPackages.swift` | `foldersWithoutManifestAreIgnored` | killed | not run |
+| legacy-local-sdk-source-tree | legacy-local | `Sources/DependiProjectFile/LegacyLocalPackages.swift` | `sdkReferenceIsIgnored` | killed | not run |
+| legacy-local-source-root | legacy-local | `Sources/DependiProjectFile/LegacyLocalPackages.swift` | `sourceRootAndAbsoluteReferences` | killed | not run |
+| legacy-local-wired | legacy-local | `Sources/DependiProjectFile/ProjectFileReader.swift` | `legacyFolderReferencesAreLocalPackages` | killed | not run |
 | license-name-dot-names | 1 | `Sources/DependiEntities/LicenseDocument.swift` | `unsafeNamesAreRejected` | killed | 2026-11-04 KILLED |
 | license-name-separator | 1 | `Sources/DependiEntities/LicenseDocument.swift` | `unsafeNamesAreRejected` | killed | 2026-11-04 KILLED |
 | license-notice-pattern | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `noticeNextToLicense` | killed | 2026-11-04 KILLED |

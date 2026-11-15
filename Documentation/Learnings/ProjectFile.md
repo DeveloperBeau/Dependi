@@ -48,6 +48,12 @@
 - **Finding:** The resolved list holds every package of the workspace, and the app's product list holds only the shipped ones.
 - **Rule:** Collect the products of all other targets as well, and treat their packages as expected. A package that nothing links is still reported.
 
+## An older project has no local package object
+
+- **Trap:** Projects from older Xcode versions record a local package as a folder file reference. They have no `XCLocalSwiftPackageReference`. Their product dependencies have no `package` key. The reader found no local package, so the build failed with `No package provides the product`.
+- **Finding:** A real project of this shape (13 local packages, 32 product dependencies) failed on the first product. `dependi init --dry-run` listed the products and gave no warning.
+- **Rule:** A folder file reference of type `wrapper` or `folder` that holds a `Package.swift` is a local package. Resolve its path through the group chain and the source tree. A product that still has no package fails and names the product.
+
 ## Mutation results
 
-The 19 entries owned by this slice are all killed. Each one names the test that fails. See `Documentation/Registers/mutations.md`.
+The 19 entries owned by this slice, and the 8 entries of the legacy local package change, are all killed. Each one names the test that fails. See `Documentation/Registers/mutations.md`.
