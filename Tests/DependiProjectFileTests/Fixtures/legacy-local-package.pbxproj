@@ -1,0 +1,29 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		P0 = {isa = PBXProject; buildConfigurationList = PL; mainGroup = G0; targets = (T1); };
+		PL = {isa = XCConfigurationList; buildConfigurations = (PC); };
+		PC = {isa = XCBuildConfiguration; buildSettings = {SDKROOT = iphoneos;}; name = Release; };
+		G0 = {isa = PBXGroup; children = (F1, F2, F3, F4, F5, G1, G2); sourceTree = "<group>"; };
+		G1 = {isa = PBXGroup; children = (F6); path = Vendor; sourceTree = "<group>"; };
+		G2 = {isa = PBXGroup; children = (F7); name = Frameworks; sourceTree = "<group>"; };
+		F1 = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Account; path = Packages/Account; sourceTree = "<group>"; };
+		F2 = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AppAccount; path = Packages/AppAccount; sourceTree = "<group>"; };
+		F3 = {isa = PBXFileReference; lastKnownFileType = folder; path = Packages/Docs; sourceTree = "<group>"; };
+		F4 = {isa = PBXFileReference; lastKnownFileType = folder; path = Packages/Missing; sourceTree = "<group>"; };
+		F5 = {isa = PBXFileReference; lastKnownFileType = text; path = Packages/Account/Package.swift; sourceTree = "<group>"; };
+		F6 = {isa = PBXFileReference; lastKnownFileType = folder; path = Kit; sourceTree = "<group>"; };
+		F7 = {isa = PBXFileReference; lastKnownFileType = wrapper; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		D1 = {isa = XCSwiftPackageProductDependency; productName = Account; };
+		D2 = {isa = XCSwiftPackageProductDependency; productName = AppAccount; };
+		D3 = {isa = XCSwiftPackageProductDependency; productName = Kit; };
+		T1 = {isa = PBXNativeTarget; name = App; productType = "com.apple.product-type.application"; dependencies = (); packageProductDependencies = (D1, D2, D3); buildPhases = (); buildConfigurationList = T1L; };
+		T1L = {isa = XCConfigurationList; buildConfigurations = (T1C); };
+		T1C = {isa = XCBuildConfiguration; buildSettings = {}; name = Release; };
+	};
+	rootObject = P0;
+}

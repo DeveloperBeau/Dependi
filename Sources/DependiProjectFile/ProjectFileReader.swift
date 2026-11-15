@@ -62,6 +62,7 @@ public struct ProjectFileReader: LinkedProductReading {
             }
             result.insert(ProjectPathMath.resolve(relative, against: model.folder))
         }
+        result.formUnion(LegacyLocalPackages(files: files).paths(in: model))
         return result.sorted()
     }
 }

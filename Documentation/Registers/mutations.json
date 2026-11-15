@@ -707,7 +707,7 @@
     "search": "Set(products).sorted {",
     "replace": "products.sorted {",
     "test": "sharedProductIsDeduplicated",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-base",
@@ -743,7 +743,7 @@
     "search": "targets.map(\\.name).sorted()",
     "replace": "[String]()",
     "test": "unknownTarget",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "pf-size-cap",
@@ -2354,7 +2354,7 @@
     "replace": "everything.found",
     "test": "appProductsAreNotOtherProducts",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "pins-named-workspace-preferred",
@@ -2510,5 +2510,77 @@
     "search": "detail: \"imports \\(imported) without declaring it\"",
     "replace": "detail: \"imports a module without declaring it\"",
     "test": "conditionalSiblingImportFails"
+  },
+  {
+    "id": "legacy-local-wired",
+    "slice": "legacy-local",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "result.formUnion(LegacyLocalPackages(files: files).paths(in: model))",
+    "replace": "_ = LegacyLocalPackages(files: files)",
+    "test": "legacyFolderReferencesAreLocalPackages",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
+  },
+  {
+    "id": "legacy-local-kind-folder",
+    "slice": "legacy-local",
+    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "search": "[\"wrapper\", \"folder\"]",
+    "replace": "[\"wrapper\"]",
+    "test": "legacyFolderReferencesAreLocalPackages",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
+  },
+  {
+    "id": "legacy-local-kind-wrapper",
+    "slice": "legacy-local",
+    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "search": "[\"wrapper\", \"folder\"]",
+    "replace": "[\"folder\"]",
+    "test": "legacyFolderReferencesAreLocalPackages",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
+  },
+  {
+    "id": "legacy-local-manifest-check",
+    "slice": "legacy-local",
+    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "search": "files.exists(at: folder + \"/Package.swift\")",
+    "replace": "true",
+    "test": "foldersWithoutManifestAreIgnored",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
+  },
+  {
+    "id": "legacy-local-group-order",
+    "slice": "legacy-local",
+    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "search": "parts.insert(path, at: 0)",
+    "replace": "parts.append(path)",
+    "test": "legacyFolderReferencesAreLocalPackages",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
+  },
+  {
+    "id": "legacy-local-sdk-source-tree",
+    "slice": "legacy-local",
+    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "search": "            default:\n                return nil",
+    "replace": "            default:\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
+    "test": "sdkReferenceIsIgnored",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
+  },
+  {
+    "id": "legacy-local-source-root",
+    "slice": "legacy-local",
+    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "search": "case \"SOURCE_ROOT\":\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
+    "replace": "case \"SOURCE_ROOT\":\n                return nil",
+    "test": "sourceRootAndAbsoluteReferences",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
+  },
+  {
+    "id": "legacy-local-absolute",
+    "slice": "legacy-local",
+    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "search": "ProjectPathMath.standardize(parts.joined(separator: \"/\"))",
+    "replace": "nil",
+    "test": "sourceRootAndAbsoluteReferences",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   }
 ]
