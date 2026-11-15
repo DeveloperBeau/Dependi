@@ -50,7 +50,7 @@ struct LegacyLocalPackages {
             if !path.isEmpty { parts.insert(path, at: 0) }
             switch tree {
             case "<absolute>":
-                return ProjectPathMath.resolve(parts.joined(separator: "/"), against: "/")
+                return ProjectPathMath.standardize(parts.joined(separator: "/"))
             case "SOURCE_ROOT":
                 return ProjectPathMath.resolve(parts.joined(separator: "/"), against: model.folder)
             case "<group>":

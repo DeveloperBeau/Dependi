@@ -17,7 +17,7 @@
 		F4 = {isa = PBXFileReference; lastKnownFileType = folder; path = Packages/Missing; sourceTree = "<group>"; };
 		F5 = {isa = PBXFileReference; lastKnownFileType = text; path = Packages/Account/Package.swift; sourceTree = "<group>"; };
 		F6 = {isa = PBXFileReference; lastKnownFileType = folder; path = Kit; sourceTree = "<group>"; };
-		F7 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		F7 = {isa = PBXFileReference; lastKnownFileType = wrapper; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		D1 = {isa = XCSwiftPackageProductDependency; productName = Account; };
 		D2 = {isa = XCSwiftPackageProductDependency; productName = AppAccount; };
 		D3 = {isa = XCSwiftPackageProductDependency; productName = Kit; };
