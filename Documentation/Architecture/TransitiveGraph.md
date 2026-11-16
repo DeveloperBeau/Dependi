@@ -30,7 +30,8 @@
 - Output that is not a manifest fails and names the package.
 - A dependency of an unknown shape is skipped. The rest is kept.
 - Platform conditions are lowercase names such as `ios` and `macos`.
+- Trait conditions keep the names from the manifest. The reader also keeps the trait table of the package and the traits that the package asks of each dependency. A dependency with no `traits` key has no entry. An empty `traits` list is kept as an empty entry.
 
 ## Tests
 
-Recorded real output from five real packages and two small generated ones is parsed against hand-written expectations. The request is checked argument by argument. The cache is checked for hits, both tiers, each reason to invalidate and each way an entry can be damaged. Truncated and corrupted output is fuzzed.
+A small hand-written dump in the shape of SQLite.swift is parsed for trait conditions, the trait table and the trait requests. Recorded real output from five real packages and two small generated ones is parsed against hand-written expectations. The request is checked argument by argument. The cache is checked for hits, both tiers, each reason to invalidate and each way an entry can be damaged. Truncated and corrupted output is fuzzed.

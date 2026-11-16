@@ -30,6 +30,14 @@
 - **Finding:** A link into the sibling folder passed the string prefix check in a mutant and failed the component check.
 - **Rule:** Compare with a trailing slash. A test uses a sibling with a similar name.
 
+## A trait condition decides whether a dependency exists
+
+- **Trap:** The resolver followed every product that a target names, so a dependency that SwiftPM leaves out was still followed. SQLite.swift 0.16 gates `CSQLite` and `SQLCipher` behind traits that are off on Apple platforms. Those packages are not in `Package.resolved`, so the build failed with `No package provides the product SQLiteSwiftCSQLite`.
+- **Finding:** `swift package dump-package` writes the conditions as `traits` beside `platformNames`, writes the trait table with `enabledTraits`, and writes the traits that a package asks of each dependency. An empty `traits` list on a dependency is different from no list.
+- **Rule:** Follow a conditional dependency only when one of its traits is on. Take the default traits, add what dependents ask for, and expand traits that enable traits. Repeat the walk until the requests stop growing, because a reached package can ask for a new trait.
+
 ## Mutation results
 
 The 31 entries owned by this slice are all killed. Each one names the test that fails. See `Documentation/Registers/mutations.md`.
+
+The 10 entries of the `swiftpm-traits` slice are all killed too. They cover the trait gate, the default traits, the conditional request, the missing trait list, the repeat of the walk, the trait expansion and the three reads of the trait data in the manifest reader.

@@ -1,0 +1,27 @@
+{
+  "name": "SQLite.swift",
+  "products": [{"name": "SQLite", "targets": ["SQLite"], "type": {"library": ["automatic"]}}],
+  "targets": [
+    {
+      "name": "SQLite",
+      "type": "regular",
+      "dependencies": [
+        {"product": ["SQLiteSwiftCSQLite", "CSQLite", null, {"platformNames": [], "traits": ["SQLiteSwiftCSQLite"]}]},
+        {"product": ["SQLCipher", "SQLCipher.swift", null, {"platformNames": ["ios", "macos"], "traits": ["SQLCipher"]}]},
+        {"byName": ["Helper", {"platformNames": [], "traits": ["FTS5"]}]},
+        {"target": ["Shared", null]}
+      ]
+    }
+  ],
+  "traits": [
+    {"description": "FTS5", "enabledTraits": [], "name": "FTS5"},
+    {"description": "Cipher", "enabledTraits": ["FTS5"], "name": "SQLCipher"},
+    {"description": "The default traits of this package.", "enabledTraits": ["SystemSQLite"], "name": "default"}
+  ],
+  "dependencies": [
+    {"sourceControl": [{"identity": "csqlite", "location": {"remote": [{"urlString": "https://example.com/CSQLite"}]}, "requirement": {"range": [{"lowerBound": "3.50.4", "upperBound": "4.0.0"}]}, "traits": [{"condition": {"traits": ["FTS5"]}, "name": "FTS5"}]}]},
+    {"sourceControl": [{"identity": "sqlcipher.swift", "location": {"remote": [{"urlString": "https://example.com/SQLCipher.swift"}]}, "requirement": {"range": [{"lowerBound": "4.11.0", "upperBound": "5.0.0"}]}, "traits": [{"name": "default"}]}]},
+    {"sourceControl": [{"identity": "off", "location": {"remote": [{"urlString": "https://example.com/off"}]}, "requirement": {"range": [{"lowerBound": "1.0.0", "upperBound": "2.0.0"}]}, "traits": []}]},
+    {"sourceControl": [{"identity": "plain", "location": {"remote": [{"urlString": "https://example.com/plain"}]}, "requirement": {"range": [{"lowerBound": "1.0.0", "upperBound": "2.0.0"}]}}]}
+  ]
+}
