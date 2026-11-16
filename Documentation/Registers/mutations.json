@@ -2600,6 +2600,6 @@
     "search": "let raw = first[\"traits\"] as? [[String: Any]]",
     "replace": "let raw = first[\"traits\"] as? [[String: Any]], !raw.isEmpty",
     "test": "traitsManifest",
-    "lastRun": {"date": "2026-11-16", "outcome": "INVALID"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   }
 ]

@@ -39,3 +39,5 @@
 ## Mutation results
 
 The 31 entries owned by this slice are all killed. Each one names the test that fails. See `Documentation/Registers/mutations.md`.
+
+The 10 entries of the `swiftpm-traits` slice are all killed too. They cover the trait gate, the default traits, the conditional request, the missing trait list, the repeat of the walk, the trait expansion and the three reads of the trait data in the manifest reader.
