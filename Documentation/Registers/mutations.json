@@ -2561,8 +2561,8 @@
     "id": "trait-no-repeat",
     "slice": "swiftpm-traits",
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
-    "search": "if next == requested { return result }",
-    "replace": "return result",
+    "search": "isSettled = next == requested",
+    "replace": "isSettled = true",
     "test": "requestFromAReachedDependentSettles",
     "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },

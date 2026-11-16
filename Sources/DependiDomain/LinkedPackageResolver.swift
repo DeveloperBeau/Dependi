@@ -212,8 +212,10 @@ public struct LinkedPackageResolver: Sendable {
             for package in localPackages { seeds[package.identity] = ["default"] }
             for (identity, _) in roots { seeds[identity] = ["default"] }
             var requested = seeds
-            while true {
-                let result = try walk(roots, requested: requested)
+            var result = (reached: Set<PackageIdentity>(), buildToolOnly: Set<PackageIdentity>())
+            var isSettled = false
+            repeat {
+                result = try walk(roots, requested: requested)
                 var next = seeds
                 for identity in result.reached {
                     let read = try manifest(identity)
@@ -231,9 +233,10 @@ public struct LinkedPackageResolver: Sendable {
                         }
                     }
                 }
-                if next == requested { return result }
+                isSettled = next == requested
                 requested = next
-            }
+            } while !isSettled
+            return result
         }
 
         var roots: [(PackageIdentity, String)] = []

@@ -80,6 +80,25 @@ struct PackageGraphParsingTests {
         #expect(try manifest("traits") == expected)
     }
 
+    @Test("trait data of an odd shape is skipped or read as empty and the rest is kept")
+    func oddTraitData() throws {
+        let json = """
+            {"products":[],"targets":[{"name":"A","type":"regular","dependencies":[
+            {"byName":["B"]},{"target":["C"]},{"product":["D","d"]}]}],
+            "traits":[{"enabledTraits":["X"]},{"name":"Y"}],
+            "dependencies":[{"sourceControl":[{"identity":"d","traits":[{"condition":{"traits":["Y"]}},{"name":"Z"}]}]}]}
+            """
+        let files = try GraphTestSupport.files()
+        let runner = FakeProcessRunner(results: [GraphTestSupport.success(Data(json.utf8))])
+        let parsed = try GraphTestSupport.reader(files: files, runner: runner).manifest(
+            atPackagePath: GraphTestSupport.packagePath)
+        #expect(parsed.targets.first?.dependencies.map(\.name) == ["B", "C", "D"])
+        #expect(parsed.targets.first?.dependencies.allSatisfy { $0.traits.isEmpty } == true)
+        #expect(parsed.traitDefinitions == ["Y": []])
+        #expect(
+            parsed.traitRequests == ["d": [ManifestTraitRequest(name: "Z", conditionTraits: [])]])
+    }
+
     @Test("a manifest with no traits parses with no trait data")
     func noTraits() throws {
         let parsed = try manifest("swift-log")
