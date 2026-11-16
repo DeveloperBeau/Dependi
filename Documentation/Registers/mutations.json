@@ -2510,5 +2510,85 @@
     "search": "detail: \"imports \\(imported) without declaring it\"",
     "replace": "detail: \"imports a module without declaring it\"",
     "test": "conditionalSiblingImportFails"
+  },
+  {
+    "id": "trait-gate-ignored",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "enabledTraits.isDisjoint(with: dependency.traits)",
+    "replace": "false",
+    "test": "offTraitDependencyIsNotFollowed"
+  },
+  {
+    "id": "trait-gate-inverted",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if !dependency.traits.isEmpty,",
+    "replace": "if dependency.traits.isEmpty,",
+    "test": "defaultTraitFollows"
+  },
+  {
+    "id": "trait-root-default-missing",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "for (identity, _) in roots { seeds[identity] = [\"default\"] }",
+    "replace": "_ = roots",
+    "test": "defaultTraitFollows"
+  },
+  {
+    "id": "trait-ask-condition-ignored",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "|| !enabledTraits.isDisjoint(with: ask.conditionTraits)",
+    "replace": "|| true",
+    "test": "conditionalRequest"
+  },
+  {
+    "id": "trait-no-list-no-default",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "?? [ManifestTraitRequest(name: \"default\", conditionTraits: [])]",
+    "replace": "?? []",
+    "test": "noTraitListMeansDefaults"
+  },
+  {
+    "id": "trait-no-repeat",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if next == requested { return result }",
+    "replace": "return result",
+    "test": "requestFromAReachedDependentSettles"
+  },
+  {
+    "id": "trait-expansion-shallow",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/TraitExpansion.swift",
+    "search": "pending.append(contentsOf: definitions[name] ?? [])",
+    "replace": "_ = definitions",
+    "test": "traitEnabledByTrait"
+  },
+  {
+    "id": "trait-condition-unread",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "return condition[\"traits\"] as? [String] ?? []",
+    "replace": "return []",
+    "test": "traitsManifest"
+  },
+  {
+    "id": "trait-table-unread",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "definitions[name] = entry[\"enabledTraits\"] as? [String] ?? []",
+    "replace": "definitions[name] = []",
+    "test": "traitsManifest"
+  },
+  {
+    "id": "trait-empty-list-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "let raw = first[\"traits\"] as? [[String: Any]]",
+    "replace": "let raw = (first[\"traits\"] as? [[String: Any]]).flatMap { $0.isEmpty ? nil : $0 }",
+    "test": "traitsManifest"
   }
 ]
