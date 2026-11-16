@@ -293,7 +293,7 @@
     "search": "stack.append(.target(identity, targetName))",
     "replace": "_ = targetName",
     "test": "transitive",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-macro",
@@ -302,7 +302,7 @@
     "search": "&& !includeBuildTools {",
     "replace": "&& !includeBuildTools && false {",
     "test": "LinkedPackageResolverTests/macroDependencies()",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-platform",
@@ -311,7 +311,7 @@
     "search": "platformNames.isDisjoint(with: dependency.platforms)",
     "replace": "false",
     "test": "platformConditions",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-unmatched-product",
@@ -320,7 +320,7 @@
     "search": "throw .productUnmatched(product: product.productName)",
     "replace": "return nil",
     "test": "LinkedPackageResolverTests/unmatchedProduct()",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-exclude-unmatched",
@@ -329,7 +329,7 @@
     "search": "throw .unmatchedExclude(exclude)",
     "replace": "continue",
     "test": "excludeMatchesNothing",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-ambiguous",
@@ -338,7 +338,7 @@
     "search": "if matches.count > 1 {",
     "replace": "if matches.count > 99 {",
     "test": "localProductAmbiguous",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-identity-conflict",
@@ -347,7 +347,7 @@
     "search": "if let existing = packages[package.identity] {",
     "replace": "if let existing = packages[package.identity], false {",
     "test": "LinkedPackageResolverTests/duplicateIdentity()",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "loader-size-cap",
@@ -860,7 +860,7 @@
     "search": "values.count > 3 ? values[3] : nil",
     "replace": "values.count > 2 ? values[2] : nil",
     "test": "syntheticPackage",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "graph-declared-lowercase",
@@ -869,7 +869,7 @@
     "search": "identities.append(identity.lowercased())",
     "replace": "identities.append(identity)",
     "test": "unknownDependencyShapeIgnored",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "settings-cleanup-escapes-folder",
@@ -2165,7 +2165,7 @@
     "replace": "let excludes = rawExcludes",
     "test": "excludeIsNormalized",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "validator-form-feed",
@@ -2246,7 +2246,7 @@
     "replace": "identity = normalizer.identity(forLocation: name); if excludes.contains(identity.value) { return nil }",
     "test": "excludedRootStillBringsItsDependencies",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-package-name-fallback",
@@ -2255,7 +2255,7 @@
     "replace": "if packages[wanted] != nil { return wanted }; throw .productUnmatched(product: name)",
     "test": "manifestNameInsteadOfIdentity",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-package-name-in-error",
@@ -2264,7 +2264,7 @@
     "replace": "name)",
     "test": "wrongPackageNameStillFails",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-remote-search-no-early-exit",
@@ -2273,7 +2273,7 @@
     "replace": "                    _ = 0",
     "test": "remoteSearchStopsAtFirstMatch",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-remote-search-unsorted",
@@ -2282,7 +2282,7 @@
     "replace": "remotePackages",
     "test": "remoteSearchStopsAtFirstMatch",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-plugin-product-gate",
@@ -2291,7 +2291,7 @@
     "replace": "if false, !product.targetNames.isEmpty,",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-plugin-product-kinds",
@@ -2300,7 +2300,7 @@
     "replace": "return kind == .macro",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-mixed-product-all",
@@ -2309,7 +2309,7 @@
     "replace": "product.targetNames.contains(where: { targetName in",
     "test": "mixedProductShips",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-plugin-only-reported",
@@ -2318,7 +2318,7 @@
     "replace": "!reached.contains($0.identity)",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-other-targets-expected",
@@ -2327,7 +2327,7 @@
     "replace": "&& !excludes.contains($0.identity.value)",
     "test": "otherTargetPackagesAreNotUnreached",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "resolver-other-targets-walk",
@@ -2336,7 +2336,7 @@
     "replace": "expected.insert(found.0)",
     "test": "otherTargetPackagesAreNotUnreached",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "projectfile-tests-in-other-products",
@@ -2421,7 +2421,8 @@
     "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
     "search": "let absolute = path.hasPrefix(\"/\") ? path : packagePath + \"/\" + path",
     "replace": "let absolute = path",
-    "test": "localDependencyPaths"
+    "test": "localDependencyPaths",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "generate-follow-locals",
@@ -2517,7 +2518,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "enabledTraits.isDisjoint(with: dependency.traits)",
     "replace": "false",
-    "test": "offTraitDependencyIsNotFollowed"
+    "test": "offTraitDependencyIsNotFollowed",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "trait-gate-inverted",
@@ -2525,7 +2527,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "if !dependency.traits.isEmpty,",
     "replace": "if dependency.traits.isEmpty,",
-    "test": "defaultTraitFollows"
+    "test": "defaultTraitFollows",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "trait-root-default-missing",
@@ -2533,7 +2536,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "for (identity, _) in roots { seeds[identity] = [\"default\"] }",
     "replace": "_ = roots",
-    "test": "defaultTraitFollows"
+    "test": "defaultTraitFollows",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "trait-ask-condition-ignored",
@@ -2541,7 +2545,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "|| !enabledTraits.isDisjoint(with: ask.conditionTraits)",
     "replace": "|| true",
-    "test": "conditionalRequest"
+    "test": "conditionalRequest",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "trait-no-list-no-default",
@@ -2549,7 +2554,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "?? [ManifestTraitRequest(name: \"default\", conditionTraits: [])]",
     "replace": "?? []",
-    "test": "noTraitListMeansDefaults"
+    "test": "noTraitListMeansDefaults",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "trait-no-repeat",
@@ -2557,7 +2563,8 @@
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
     "search": "if next == requested { return result }",
     "replace": "return result",
-    "test": "requestFromAReachedDependentSettles"
+    "test": "requestFromAReachedDependentSettles",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "trait-expansion-shallow",
@@ -2565,7 +2572,8 @@
     "file": "Sources/DependiDomain/TraitExpansion.swift",
     "search": "pending.append(contentsOf: definitions[name] ?? [])",
     "replace": "_ = definitions",
-    "test": "traitEnabledByTrait"
+    "test": "traitEnabledByTrait",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "trait-condition-unread",
@@ -2573,7 +2581,8 @@
     "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
     "search": "return condition[\"traits\"] as? [String] ?? []",
     "replace": "return []",
-    "test": "traitsManifest"
+    "test": "traitsManifest",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "trait-table-unread",
@@ -2581,14 +2590,16 @@
     "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
     "search": "definitions[name] = entry[\"enabledTraits\"] as? [String] ?? []",
     "replace": "definitions[name] = []",
-    "test": "traitsManifest"
+    "test": "traitsManifest",
+    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
   },
   {
     "id": "trait-empty-list-dropped",
     "slice": "swiftpm-traits",
     "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
     "search": "let raw = first[\"traits\"] as? [[String: Any]]",
-    "replace": "let raw = (first[\"traits\"] as? [[String: Any]]).flatMap { $0.isEmpty ? nil : $0 }",
-    "test": "traitsManifest"
+    "replace": "let raw = first[\"traits\"] as? [[String: Any]], !raw.isEmpty",
+    "test": "traitsManifest",
+    "lastRun": {"date": "2026-11-16", "outcome": "INVALID"}
   }
 ]
