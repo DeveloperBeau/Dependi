@@ -220,6 +220,61 @@ struct PackageGraphParsingTests {
         #expect(result.declaredDependencies == ["scope.name"])
     }
 
+    private func parse(_ json: String) throws -> PackageManifest {
+        let files = try GraphTestSupport.files()
+        let runner = FakeProcessRunner(results: [GraphTestSupport.success(Data(json.utf8))])
+        return try GraphTestSupport.reader(files: files, runner: runner).manifest(
+            atPackagePath: GraphTestSupport.packagePath)
+    }
+
+    @Test("a manifest with no dependencies key parses and asks for no dependency traits")
+    func missingDependenciesKeyGivesNoTraitRequests() throws {
+        let parsed = try parse(
+            """
+            {"products":[{"name":"P","targets":["T"]}],
+             "targets":[{"name":"T","type":"regular","dependencies":[{"byName":["B",null]}]}],
+             "traits":[{"name":"Y","enabledTraits":["X"]}]}
+            """)
+        #expect(parsed.products == [ManifestProduct(name: "P", targetNames: ["T"])])
+        #expect(parsed.targets.first?.dependencies == [dependency(.byName, "B")])
+        #expect(parsed.traitDefinitions == ["Y": ["X"]])
+        #expect(parsed.traitRequests.isEmpty)
+        #expect(parsed.declaredDependencies.isEmpty)
+    }
+
+    @Test("a dependencies value that is not a list of objects parses and asks for no traits")
+    func nonArrayDependenciesGivesNoTraitRequests() throws {
+        for value in ["\"none\"", "{\"sourceControl\":[]}", "[\"a\",\"b\"]"] {
+            let parsed = try parse(
+                """
+                {"products":[{"name":"P","targets":["T"]}],
+                 "targets":[{"name":"T","type":"regular","dependencies":[{"byName":["B",null]}]}],
+                 "traits":[{"name":"Y","enabledTraits":["X"]}],
+                 "dependencies":\(value)}
+                """)
+            #expect(parsed.targets.first?.dependencies == [dependency(.byName, "B")])
+            #expect(parsed.traitDefinitions == ["Y": ["X"]])
+            #expect(parsed.traitRequests.isEmpty)
+        }
+    }
+
+    @Test("a product dependency whose package slot is not a string is kept with no package name")
+    func nonStringProductPackageIsKeptWithoutPackageName() throws {
+        let parsed = try parse(
+            """
+            {"products":[{"name":"P","targets":["T"]}],
+             "targets":[{"name":"T","type":"regular","dependencies":[
+               {"product":["D",null]},{"product":["E",7]},{"product":["F","pkg"]},{"product":["G"]}]}],
+             "dependencies":[]}
+            """)
+        #expect(parsed.products == [ManifestProduct(name: "P", targetNames: ["T"])])
+        #expect(
+            parsed.targets.first?.dependencies == [
+                dependency(.product, "D"), dependency(.product, "E"),
+                dependency(.product, "F", package: "pkg"), dependency(.product, "G"),
+            ])
+    }
+
     @Test("local dependency folders are read, and a relative one is resolved against the package")
     func localDependencyPaths() throws {
         let json = """
