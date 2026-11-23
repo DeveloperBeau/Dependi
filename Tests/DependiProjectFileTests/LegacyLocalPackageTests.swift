@@ -98,6 +98,82 @@ struct LegacyLocalPackageTests {
             ])
     }
 
+    /// Rewrites the legacy fixture with each replacement applied and stores it as the project file.
+    private func writeFixture(
+        _ world: FixtureWorld, replacing changes: [(String, String)]
+    ) throws {
+        var text = String(decoding: FixtureWorld.fixture("legacy-local-package"), as: UTF8.self)
+        for (target, replacement) in changes {
+            #expect(text.contains(target))
+            text = text.replacingOccurrences(of: target, with: replacement)
+        }
+        try world.files.addFile(
+            at: "/work/App/App.xcodeproj/project.pbxproj", contents: Data(text.utf8))
+    }
+
+    private static let groupG1 =
+        "G1 = {isa = PBXGroup; children = (F6); path = Vendor; sourceTree = \"<group>\"; };"
+    private static let accountPaths: Set<String> = [
+        "/work/App/Packages/Account", "/work/App/Packages/AppAccount",
+    ]
+
+    @Test("a group with no children key has no members, so a package listed under it is not found")
+    func groupWithoutChildrenKeyHasNoMembers() throws {
+        let (world, reader) = try legacyWorld()
+        try writeFixture(
+            world,
+            replacing: [
+                (
+                    Self.groupG1,
+                    "G1 = {isa = PBXGroup; path = Vendor; sourceTree = \"<group>\"; };"
+                )
+            ])
+        #expect(Set(try read(reader).localPackagePaths) == Self.accountPaths)
+    }
+
+    @Test("a group whose children value is a string, not a list, has no members")
+    func groupWithStringChildrenHasNoMembers() throws {
+        let (world, reader) = try legacyWorld()
+        try writeFixture(
+            world,
+            replacing: [
+                (
+                    Self.groupG1,
+                    "G1 = {isa = PBXGroup; children = \"F6\"; path = Vendor; sourceTree = \"<group>\"; };"
+                )
+            ])
+        #expect(Set(try read(reader).localPackagePaths) == Self.accountPaths)
+    }
+
+    @Test("a folder reference with no source tree is read as group relative")
+    func referenceWithoutSourceTreeIsGroupRelative() throws {
+        let (world, reader) = try legacyWorld()
+        try writeFixture(
+            world,
+            replacing: [
+                (
+                    "name = Account; path = Packages/Account; sourceTree = \"<group>\"; };",
+                    "name = Account; path = Packages/Account; };"
+                )
+            ])
+        let paths = try read(reader).localPackagePaths
+        #expect(paths.contains("/work/App/Packages/Account"))
+        #expect(paths.count == 3)
+    }
+
+    @Test("a group in the chain with no source tree is read as group relative")
+    func groupWithoutSourceTreeIsGroupRelative() throws {
+        let (world, reader) = try legacyWorld()
+        try writeFixture(
+            world,
+            replacing: [
+                (Self.groupG1, "G1 = {isa = PBXGroup; children = (F6); path = Vendor; };")
+            ])
+        let paths = try read(reader).localPackagePaths
+        #expect(paths.contains("/work/App/Vendor/Kit"))
+        #expect(paths.count == 3)
+    }
+
     @Test(
         "a source root reference and an absolute reference resolve from the project folder and from the root"
     )
