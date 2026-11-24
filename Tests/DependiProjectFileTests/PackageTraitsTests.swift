@@ -40,7 +40,9 @@ struct PackageTraitsTests {
         let expected: [String: Set<String>] = [
             sqlite: ["FTS5", "SQLiteSwiftCSQLite"],
             alamofire: [],
-            kingfisher: ["Animated", "default"],
+            nuke: ["default"],
+            kingfisher: ["Animated"],
+            "https://github.com/onevcat/Kingfisher": ["default"],
             "/work/App/Packages/Core": ["Extra", "Logging"],
         ]
         #expect(set.packageTraits == expected)
@@ -63,20 +65,32 @@ struct PackageTraitsTests {
     func emptyTraitListIsKept() throws {
         let set = try FixtureWorld.read("package-traits")
         #expect(set.packageTraits[alamofire] == [])
-        #expect(set.packageTraits[nuke] == nil)
+        #expect(set.packageTraits[nuke] == ["default"])
     }
 
-    @Test("a second reference with no trait list adds the default traits")
-    func unlistedReferenceAddsDefault() throws {
+    @Test("a reference with no trait list gives the default trait under its own location")
+    func unlistedReferenceGivesDefault() throws {
         let set = try FixtureWorld.read("package-traits")
-        #expect(set.packageTraits[kingfisher] == ["Animated", "default"])
-        #expect(set.packageTraits["https://github.com/onevcat/Kingfisher"] == nil)
+        #expect(set.packageTraits[nuke] == ["default"])
+        #expect(set.packageTraits["https://github.com/onevcat/Kingfisher"] == ["default"])
     }
 
-    @Test("a project with no trait lists gives no traits")
-    func noTraitListsGiveNothing() throws {
+    @Test("two references to one package under different spellings keep their own names")
+    func spellingsOfOnePackageStaySeparate() throws {
+        let set = try FixtureWorld.read("package-traits")
+        #expect(set.packageTraits[kingfisher] == ["Animated"])
+        #expect(set.packageTraits["https://github.com/onevcat/Kingfisher"] == ["default"])
+    }
+
+    @Test("a project with no trait lists gives the default trait to every reference")
+    func noTraitListsGiveDefaults() throws {
         let set = try FixtureWorld.read("local-package")
-        #expect(set.packageTraits.isEmpty)
+        let expected: [String: Set<String>] = [
+            "/work/Packages/LocalKit": ["default"],
+            "/work/App/Packages/Other": ["default"],
+            alamofire: ["default"],
+        ]
+        #expect(set.packageTraits == expected)
     }
 
     @Test("an other project that the app reaches adds the traits that it picks")

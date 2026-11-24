@@ -29,9 +29,22 @@ struct EndToEndTraitsTests {
     /// Builds the world. `projectTraits` is the `traits` entry that the project writes on its
     /// SQLite.swift reference, such as `traits = (SQLiteSwiftCSQLite, );`, or `nil` for none.
     private func world(
-        defaultTrait: String, csqlite: Bool, projectTraits: String? = nil
+        defaultTrait: String, csqlite: Bool, projectTraits: String? = nil,
+        sqlcipher: Bool = false, secondReference: String? = nil
     ) throws -> EndToEndWorld {
         var projectFile = Self.sqliteProject
+        if let secondReference {
+            projectFile =
+                projectFile
+                .replacingOccurrences(
+                    of: "packageReferences = (R1);", with: "packageReferences = (R1, R2);"
+                )
+                .replacingOccurrences(
+                    of: "D1 = {isa = XCSwiftPackageProductDependency;",
+                    with: "R2 = {isa = XCRemoteSwiftPackageReference; "
+                        + #"repositoryURL = "https://github.com/stephencelis/SQLite.swift"; "#
+                        + secondReference + " };\n\t\tD1 = {isa = XCSwiftPackageProductDependency;")
+        }
         if let projectTraits {
             projectFile = projectFile.replacingOccurrences(
                 of: #"repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";"#,
@@ -51,6 +64,14 @@ struct EndToEndTraitsTests {
                 manifest: EndToEndWorld.manifest(product: "SQLiteSwiftCSQLite"))
             pins.append(
                 #"{"identity":"csqlite","kind":"remoteSourceControl","location":"https://github.com/stephencelis/CSQLite.git","state":{"revision":"r1","version":"1.0.0"}}"#
+            )
+        }
+        if sqlcipher {
+            try world.addRemote(
+                "sqlcipher.swift", owner: "sqlcipher",
+                manifest: EndToEndWorld.manifest(product: "SQLCipher"))
+            pins.append(
+                #"{"identity":"sqlcipher.swift","kind":"remoteSourceControl","location":"https://github.com/sqlcipher/SQLCipher.swift.git","state":{"revision":"r1","version":"1.0.0"}}"#
             )
         }
         let resolved = #"{"version":2,"pins":["# + pins.joined(separator: ",") + "]}"
@@ -90,6 +111,16 @@ struct EndToEndTraitsTests {
         #expect(result.code == 0, "errors: \(result.errors)")
         #expect(try world.indexTitles() == ["csqlite", "sqlite.swift"])
         #expect(result.output.contains("Dependi: wrote 2 acknowledgements"))
+    }
+
+    @Test("a reference with no trait list and one that lists a trait both count")
+    func referencesWithAndWithoutTraitsJoin() throws {
+        let world = try world(
+            defaultTrait: "SQLCipher", csqlite: true, sqlcipher: true,
+            secondReference: "traits = (SQLiteSwiftCSQLite, );")
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        #expect(try world.indexTitles() == ["csqlite", "sqlcipher.swift", "sqlite.swift"])
     }
 
     @Test("an empty trait list in the project file turns the default trait and its package off")

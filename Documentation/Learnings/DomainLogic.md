@@ -43,4 +43,4 @@
 
 The 31 entries owned by this slice are all killed. Each one names the test that fails. See `Documentation/Registers/mutations.md`.
 
-The 10 entries of the `swiftpm-traits` slice are all killed too. They cover the trait gate, the default traits, the conditional request, the missing trait list, the repeat of the walk, the trait expansion and the three reads of the trait data in the manifest reader. The entries added later for the traits that the project picks cover the seed, the empty pick, the implicit `default`, the reads of remote and local references, the join with a reference that has no key and the other projects. They have not been run yet.
+The 10 entries of the `swiftpm-traits` slice are all killed too. They cover the trait gate, the default traits, the conditional request, the missing trait list, the repeat of the walk, the trait expansion and the three reads of the trait data in the manifest reader. The entries added later for the traits that the project picks cover the seed, the empty pick, the implicit `default`, the reads of remote and local references, the join with a reference that has no key and the other projects. They are all killed too.

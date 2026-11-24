@@ -2682,19 +2682,17 @@
     "id": "trait-reader-empty-list-dropped",
     "slice": "swiftpm-traits",
     "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
-    "search": "listed[location, default: []].formUnion(names)",
-    "replace": "if !names.isEmpty { listed[location, default: []].formUnion(names) }",
-    "test": "emptyTraitListIsKept",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "search": "traits[location, default: []].formUnion(names)",
+    "replace": "if !names.isEmpty { traits[location, default: []].formUnion(names) }",
+    "test": "emptyTraitListIsKept"
   },
   {
     "id": "trait-reader-unlisted-no-default",
     "slice": "swiftpm-traits",
     "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
-    "search": "unlisted.insert(normalizer.identity(forLocation: location))",
+    "search": "traits[location, default: []].insert(\"default\")",
     "replace": "_ = location",
-    "test": "unlistedReferenceAddsDefault",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "test": "unlistedReferenceGivesDefault"
   },
   {
     "id": "trait-reader-bad-value-accepted",

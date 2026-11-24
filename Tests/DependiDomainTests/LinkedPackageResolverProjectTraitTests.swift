@@ -131,6 +131,20 @@ struct LinkedPackageResolverProjectTraitTests {
         #expect(followed == ["csqlite", "sqlite.swift", "swift-log"])
     }
 
+    @Test("a default pick at one location joins a listed trait at another location of the package")
+    func defaultAndListedLocationsJoin() throws {
+        let followed = try linkSQLite([
+            "https://github.com/stephencelis/SQLite.swift": ["default"],
+            sqliteURL: ["SQLiteSwiftCSQLite"],
+        ])
+        #expect(followed == ["csqlite", "sqlite.swift", "swift-log"])
+    }
+
+    @Test("a default pick alone behaves like no pick")
+    func defaultAloneIsNoPick() throws {
+        #expect(try linkSQLite([sqliteURL: ["default"]]) == ["sqlite.swift", "swift-log"])
+    }
+
     @Test("a trait that the project picks for a local package follows the dependency behind it")
     func localPackageSelection() throws {
         let core = PackageManifest(

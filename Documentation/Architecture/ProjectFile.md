@@ -45,10 +45,10 @@ Every `XCLocalSwiftPackageReference` listed in the project `packageReferences` g
 
 Since Xcode 26.4 an app can pick the traits of each package. Xcode writes them as `traits` on the `XCRemoteSwiftPackageReference` and `XCLocalSwiftPackageReference` objects. The reader reads the `packageReferences` of the project and of every other project that the walk of the app loaded. `packageTraits` holds the result, keyed by the repository URL as written or by the resolved local path.
 
-- No `traits` key gives no entry, so the package keeps its default traits.
+- No `traits` key gives `["default"]` under the location of that reference.
 - `traits = ( );` gives an empty entry, which turns the defaults off.
 - A list gives exactly those names. It does not add `default`.
-- Two references to one package join their names. When one of them has no key, the entry also gets `default`, because that reference asks for the defaults. References are matched by `PackageIdentityNormalizer`.
+- The reader does not match references to one package. Two references with the same location join their names. References with different spellings of one package keep separate entries. The resolver joins the picks of the locations that name one package, so a package with a reference that has no key also gets `default`.
 - A `traits` value that is not a list of names fails with `fileUnreadable` and names the reference. So does a remote reference that has `traits` but no `repositoryURL`. A remote reference with neither is skipped.
 
 ## Platforms
