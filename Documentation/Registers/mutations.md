@@ -256,7 +256,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | trait-reader-local-dropped | swiftpm-traits | `Sources/DependiProjectFile/ProjectFileReader.swift` | `localReferenceTraitsAreRead` | killed | 2026-11-24 KILLED |
 | trait-reader-other-projects-dropped | swiftpm-traits | `Sources/DependiProjectFile/ProjectFileReader.swift` | `crossProjectTraitsAreRead` | killed | 2026-11-24 KILLED |
 | trait-reader-remote-dropped | swiftpm-traits | `Sources/DependiProjectFile/ProjectFileReader.swift` | `remoteReferenceTraitsAreRead` | killed | 2026-11-24 KILLED |
-| trait-reader-unlisted-no-default | swiftpm-traits | `Sources/DependiProjectFile/PackageTraitCollector.swift` | `unlistedReferenceAddsDefault` | killed | 2026-11-24 KILLED |
+| trait-reader-unlisted-no-default | swiftpm-traits | `Sources/DependiProjectFile/PackageTraitCollector.swift` | `unlistedReferenceGivesDefault` | killed | 2026-11-24 KILLED |
 | trait-root-default-missing | swiftpm-traits | `Sources/DependiDomain/LinkedPackageResolver.swift` | `defaultTraitFollows` | killed | 2026-11-24 KILLED |
 | trait-table-unread | swiftpm-traits | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `traitsManifest` | killed | 2026-11-24 KILLED |
 | validator-component | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `similarSiblingRefused` | killed | 2026-11-04 KILLED |

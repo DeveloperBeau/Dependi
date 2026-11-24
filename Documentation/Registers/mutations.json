@@ -2684,7 +2684,8 @@
     "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
     "search": "traits[location, default: []].formUnion(names)",
     "replace": "if !names.isEmpty { traits[location, default: []].formUnion(names) }",
-    "test": "emptyTraitListIsKept"
+    "test": "emptyTraitListIsKept",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-unlisted-no-default",
@@ -2692,7 +2693,8 @@
     "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
     "search": "traits[location, default: []].insert(\"default\")",
     "replace": "_ = location",
-    "test": "unlistedReferenceGivesDefault"
+    "test": "unlistedReferenceGivesDefault",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-bad-value-accepted",
