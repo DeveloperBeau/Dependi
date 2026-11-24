@@ -122,7 +122,7 @@ public struct GenerateFeature: Sendable {
             localPackages: locals, excludes: Set(settings.excludes),
             platformNames: PlatformNames.manifestNames(
                 platformName: context.platformName, supportedPlatforms: linked.supportedPlatforms),
-            includeBuildTools: settings.includeBuildTools)
+            includeBuildTools: settings.includeBuildTools, projectTraits: linked.packageTraits)
         if !result.unreached.isEmpty && !settings.allowUnreached {
             throw .packagesUnreached(result.unreached.map(\.identity.value))
         }

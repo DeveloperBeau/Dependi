@@ -2534,10 +2534,9 @@
     "id": "trait-root-default-missing",
     "slice": "swiftpm-traits",
     "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
-    "search": "for (identity, _) in roots { seeds[identity] = [\"default\"] }",
+    "search": "for (identity, _) in roots { seeds[identity] = seed(identity) }",
     "replace": "_ = roots",
-    "test": "defaultTraitFollows",
-    "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
+    "test": "defaultTraitFollows"
   },
   {
     "id": "trait-ask-condition-ignored",
@@ -2601,5 +2600,93 @@
     "replace": "let raw = first[\"traits\"] as? [[String: Any]], !raw.isEmpty",
     "test": "traitsManifest",
     "lastRun": {"date": "2026-11-16", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-project-pick-ignored",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "selected[identity] ?? [\"default\"]",
+    "replace": "_ = selected[identity]; return [\"default\"]",
+    "test": "listedTraitFollowsGatedDependency"
+  },
+  {
+    "id": "trait-project-empty-pick-as-absent",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "selected[identity] ?? [\"default\"]",
+    "replace": "selected[identity].flatMap { $0.isEmpty ? nil : $0 } ?? [\"default\"]",
+    "test": "emptySelectionTurnsDefaultsOff"
+  },
+  {
+    "id": "trait-project-pick-adds-default",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "selected[identity] ?? [\"default\"]",
+    "replace": "selected[identity].map { $0.union([\"default\"]) } ?? [\"default\"]",
+    "test": "listWithoutDefaultLeavesDefaultOff"
+  },
+  {
+    "id": "trait-project-local-seed-default",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "for package in localPackages { seeds[package.identity] = seed(package.identity) }",
+    "replace": "for package in localPackages { seeds[package.identity] = [\"default\"] }",
+    "test": "unlinkedLocalPackageSelection"
+  },
+  {
+    "id": "trait-project-locations-not-joined",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "selected[normalizer.identity(forLocation: location), default: []].formUnion(traits)",
+    "replace": "selected[normalizer.identity(forLocation: location)] = traits",
+    "test": "locationsOfOnePackageJoin"
+  },
+  {
+    "id": "trait-reader-remote-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "try traits.add(remote, id: id, location: url, in: model)",
+    "replace": "_ = url",
+    "test": "remoteReferenceTraitsAreRead"
+  },
+  {
+    "id": "trait-reader-local-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "try traits.add(local, id: id, location: path, in: model)",
+    "replace": "_ = path",
+    "test": "localReferenceTraitsAreRead"
+  },
+  {
+    "id": "trait-reader-other-projects-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "_ = try packageReferences(in: other, traits: &traits)",
+    "replace": "_ = other",
+    "test": "crossProjectTraitsAreRead"
+  },
+  {
+    "id": "trait-reader-empty-list-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
+    "search": "listed[location, default: []].formUnion(names)",
+    "replace": "if !names.isEmpty { listed[location, default: []].formUnion(names) }",
+    "test": "emptyTraitListIsKept"
+  },
+  {
+    "id": "trait-reader-unlisted-no-default",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
+    "search": "unlisted.insert(normalizer.identity(forLocation: location))",
+    "replace": "_ = location",
+    "test": "unlistedReferenceAddsDefault"
+  },
+  {
+    "id": "trait-reader-bad-value-accepted",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
+    "search": "guard let names = value as? [String] else {",
+    "replace": "guard let names = value as? [String] ?? Optional([]) else {",
+    "test": "traitsNotAList"
   }
 ]

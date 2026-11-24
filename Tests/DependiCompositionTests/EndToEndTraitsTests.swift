@@ -26,18 +26,34 @@ struct EndToEndTraitsTests {
         """
     }
 
-    private func world(defaultTrait: String, csqlite: Bool) throws -> EndToEndWorld {
-        let world = try EndToEndWorld(projectFile: Self.sqliteProject)
+    /// Builds the world. `projectTraits` is the `traits` entry that the project writes on its
+    /// SQLite.swift reference, such as `traits = (SQLiteSwiftCSQLite, );`, or `nil` for none.
+    private func world(
+        defaultTrait: String, csqlite: Bool, projectTraits: String? = nil
+    ) throws -> EndToEndWorld {
+        var projectFile = Self.sqliteProject
+        if let projectTraits {
+            projectFile = projectFile.replacingOccurrences(
+                of: #"repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";"#,
+                with: #"repositoryURL = "https://github.com/stephencelis/SQLite.swift.git"; "#
+                    + projectTraits)
+        }
+        let world = try EndToEndWorld(projectFile: projectFile)
         try world.addRemote(
             "sqlite.swift", owner: "stephencelis",
             manifest: Self.sqliteManifest(defaultTrait: defaultTrait))
+        var pins = [
+            #"{"identity":"sqlite.swift","kind":"remoteSourceControl","location":"https://github.com/stephencelis/SQLite.swift.git","state":{"revision":"r1","version":"1.0.0"}}"#
+        ]
         if csqlite {
             try world.addRemote(
                 "csqlite", owner: "stephencelis",
                 manifest: EndToEndWorld.manifest(product: "SQLiteSwiftCSQLite"))
+            pins.append(
+                #"{"identity":"csqlite","kind":"remoteSourceControl","location":"https://github.com/stephencelis/CSQLite.git","state":{"revision":"r1","version":"1.0.0"}}"#
+            )
         }
-        let resolved =
-            #"{"version":2,"pins":[{"identity":"sqlite.swift","kind":"remoteSourceControl","location":"https://github.com/stephencelis/SQLite.swift.git","state":{"revision":"r1","version":"1.0.0"}}]}"#
+        let resolved = #"{"version":2,"pins":["# + pins.joined(separator: ",") + "]}"
         try FileManager.default.createDirectory(
             atPath: world.project + "/App.xcodeproj/project.xcworkspace/xcshareddata/swiftpm",
             withIntermediateDirectories: true)
@@ -63,6 +79,26 @@ struct EndToEndTraitsTests {
         let result = try world.run()
         #expect(result.code == 0, "errors: \(result.errors)")
         #expect(try world.indexTitles() == ["csqlite", "sqlite.swift"])
+    }
+
+    @Test("an archive follows the package that a trait picked in the project file gates")
+    func projectPickedTraitIsFollowed() throws {
+        let world = try world(
+            defaultTrait: "SystemSQLite", csqlite: true,
+            projectTraits: "traits = (SQLiteSwiftCSQLite, );")
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        #expect(try world.indexTitles() == ["csqlite", "sqlite.swift"])
+        #expect(result.output.contains("Dependi: wrote 2 acknowledgements"))
+    }
+
+    @Test("an empty trait list in the project file turns the default trait and its package off")
+    func projectEmptyTraitListTurnsDefaultsOff() throws {
+        let world = try world(
+            defaultTrait: "SQLiteSwiftCSQLite", csqlite: false, projectTraits: "traits = ( );")
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        #expect(try world.indexTitles() == ["sqlite.swift"])
     }
 
     @Test("a product that a trait that is on needs, and that no package has, fails and names it")

@@ -1,0 +1,176 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXNativeTarget section */
+		AA01 /* App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA02 /* Build configuration list for PBXNativeTarget "App" */;
+			buildPhases = (
+			);
+			dependencies = (
+			);
+			name = App;
+			packageProductDependencies = (
+				BB01 /* SQLite */,
+				BB02 /* Alamofire */,
+				BB03 /* Nuke */,
+				BB04 /* Core */,
+			);
+			productName = App;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA00 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = AA03 /* Build configuration list for PBXProject "App" */;
+			packageReferences = (
+				AB12 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+				AB13 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				AB14 /* XCRemoteSwiftPackageReference "Nuke" */,
+				CD34 /* XCLocalSwiftPackageReference "Packages/Core" */,
+				AB15 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+				AB16 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				AB17 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
+			targets = (
+				AA01 /* App */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		AA04 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		AA05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA02 /* Build configuration list for PBXNativeTarget "App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA05 /* Release */,
+			);
+		};
+		AA03 /* Build configuration list for PBXProject "App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA04 /* Release */,
+			);
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		CD34 /* XCLocalSwiftPackageReference "Packages/Core" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/Core;
+			traits = (
+				Extra,
+				Logging,
+			);
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AB12 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.16.0;
+			};
+			traits = (
+				SQLiteSwiftCSQLite,
+			);
+		};
+		AB13 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.0;
+			};
+			traits = (
+			);
+		};
+		AB14 /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
+		AB15 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.16.0;
+			};
+			traits = (
+				FTS5,
+				SQLiteSwiftCSQLite,
+			);
+		};
+		AB16 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+			traits = (
+				Animated,
+			);
+		};
+		AB17 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BB01 /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB12 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+		BB02 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB13 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		BB03 /* Nuke */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB14 /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = Nuke;
+		};
+		BB04 /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = AA00 /* Project object */;
+}

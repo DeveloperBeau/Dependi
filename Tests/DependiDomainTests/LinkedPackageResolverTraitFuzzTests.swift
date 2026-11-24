@@ -45,18 +45,29 @@ struct LinkedPackageResolverTraitFuzzTests {
     }
 
     @Test(
-        "random trait tables follow exactly the dependencies whose trait is on, with no extra and none missing"
+        "random trait tables and project picks follow exactly the dependencies whose trait is on, with no extra and none missing"
     )
     func followsExactlyTheEnabledDependencies() throws {
         var generator = SeededGenerator()
         print("trait fuzz seed: \(generator.seed)")
         var followedTotal = 0
         var skippedTotal = 0
+        // How many rounds had no pick, an empty pick and a list.
+        var picks = [0, 0, 0]
         for round in 0..<300 {
             // The parent is linked. It asks the child for traits, some only when a parent trait is on.
             let parentTable = table(&generator)
             let childTable = table(&generator)
-            let parentOn = settle(parentTable["default"] ?? [], parentTable)
+            // The project picks no traits for the parent, an empty list, or a list of names that
+            // may hold `default`. No pick means the default traits.
+            let pick: [String]?
+            switch Int.random(in: 0..<3, using: &generator) {
+            case 0: pick = nil
+            case 1: pick = []
+            default: pick = (["default"] + names).filter { _ in Bool.random(using: &generator) }
+            }
+            picks[pick.map { $0.isEmpty ? 1 : 2 } ?? 0] += 1
+            let parentOn = settle(pick ?? ["default"], parentTable)
             let asks: [ManifestTraitRequest]? =
                 Int.random(in: 0..<4, using: &generator) == 0
                 ? nil
@@ -122,7 +133,8 @@ struct LinkedPackageResolverTraitFuzzTests {
                 linked: [ProductReference(productName: "Parent", packageName: "parent")],
                 otherLinked: [],
                 remotePackages: (["parent", "child"] + (0..<5).map { "leaf\($0)" }).map(remote),
-                localPackages: [], excludes: [], platformNames: nil, includeBuildTools: false)
+                localPackages: [], excludes: [], platformNames: nil, includeBuildTools: false,
+                projectTraits: pick.map { ["https://github.com/org/parent.git": Set($0)] } ?? [:])
             let actual = result.linked.map(\.identity.value)
             #expect(
                 actual == expected.sorted(),
@@ -132,5 +144,6 @@ struct LinkedPackageResolverTraitFuzzTests {
         // Both directions were exercised, so the check can fail on a false positive and a false negative.
         #expect(followedTotal > 200, "seed \(generator.seed): too few followed dependencies")
         #expect(skippedTotal > 200, "seed \(generator.seed): too few skipped dependencies")
+        #expect(picks.allSatisfy { $0 > 50 }, "seed \(generator.seed): picks \(picks)")
     }
 }
