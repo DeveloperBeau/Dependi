@@ -291,8 +291,11 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | wrapper-lock-live-owner-stolen | review-fix | `Sources/DependiInit/WrapperScript.swift` | `liveOwnerLockIsRespected` | killed | 2026-11-04 KILLED |
 | wrapper-lock-malformed-owner-kept | review-fix | `Sources/DependiInit/WrapperScript.swift` | `malformedLockOwnerIsStale` | killed | 2026-11-04 KILLED |
 | wrapper-lock-never-released | review-fix | `Sources/DependiInit/WrapperScript.swift` | `releaseRemovesOwnLock` | killed | 2026-11-04 KILLED |
+| wrapper-lock-probe-kept-on-exit | lock-takeover-race | `Sources/DependiInit/WrapperScript.swift` | `stoppedScriptRemovesLockProbe` | killed | not run |
+| wrapper-lock-probe-never-fails | lock-takeover-race | `Sources/DependiInit/WrapperScript.swift` | `unwritableCacheFolderFailsAtOnce` | killed | not run |
 | wrapper-lock-reclaim-skipped | review-fix | `Sources/DependiInit/WrapperScript.swift` | `concurrentRunsOnDeadLockBuildOnce` | killed | 2026-11-04 KILLED |
 | wrapper-lock-release-unconditional | review-fix | `Sources/DependiInit/WrapperScript.swift` | `releaseKeepsForeignLock` | killed | 2026-11-04 KILLED |
+| wrapper-lock-released-called-unusable | lock-takeover-race | `Sources/DependiInit/WrapperScript.swift` | `lockReleasedAfterFailedTakeIsTaken` | killed | not run |
 | wrapper-lock-removed | 10 | `Sources/DependiInit/WrapperScript.swift` | `concurrentRunsBuildOnce` | killed | 2026-11-04 KILLED |
 | wrapper-path-pin-removed | review-fix | `Sources/DependiInit/WrapperScript.swift` | `callerPathIsIgnored` | killed | 2026-11-04 KILLED |
 | wrapper-pre-gate-inverted | 10 | `Sources/DependiInit/WrapperScript.swift` | `debugBuildSkipsBeforeAnyCall` | killed | 2026-11-04 KILLED |

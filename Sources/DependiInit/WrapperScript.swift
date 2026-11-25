@@ -13,6 +13,8 @@
 /// user and refuses a folder that another user owns or can write:
 /// - `<version>-<commit>/bin/dependi` and `dependi.sha256`: a finished build.
 /// - `<version>-<commit>.build-lock`: the build lock, a symlink whose target is the owner's process id.
+/// - `<version>-<commit>.build-lock.probe.<pid>`: a short-lived link that tells a lock released
+///   mid-check from a folder that cannot take a link. The script removes it on every exit.
 /// - `build.XXXXXX`: a temporary build folder with `src`, `build`, `out` and `build.log`.
 ///   The product is read from `build/release/dependi`. `out` is renamed to `bin`.
 public enum WrapperScript {
@@ -129,6 +131,7 @@ public enum WrapperScript {
         key="$version-$commit"
         cached="$cache_root/$key/bin"
         lock="$cache_root/$key.build-lock"
+        probe="$lock.probe.$$"
         token=$$
 
         cache_valid() {
@@ -152,6 +155,7 @@ public enum WrapperScript {
                 rm -rf "$tmp"
                 tmp=
             fi
+            rm -f "$probe"
             if [ "$have_lock" = 1 ]; then
                 owner=$(readlink "$lock" 2>/dev/null || true)
                 if [ "$owner" = "$token" ]; then
@@ -212,9 +216,18 @@ public enum WrapperScript {
             fi
         }
 
+        # A failed ln with no lock in place means one of two things. The owner may have released
+        # the lock after ln failed, so the next try can take it. Or the folder cannot take a link.
+        # A probe link that only this process uses tells the two apart. The trap removes it too.
+        can_link() {
+            rm -f "$probe"
+            ln -s "$token" "$probe" 2>/dev/null || return 1
+            rm -f "$probe"
+        }
+
         steps=0
         while ! ln -s "$token" "$lock" 2>/dev/null; do
-            if [ ! -L "$lock" ] && [ ! -e "$lock" ]; then
+            if [ ! -L "$lock" ] && [ ! -e "$lock" ] && ! can_link; then
                 fail 'could not create the build lock in the cache folder'
             fi
             steps=$((steps + 1))

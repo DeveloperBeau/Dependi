@@ -36,6 +36,12 @@
 - **Finding:** The lock is a symlink whose target is the owner's process id. It is made in one step. Release checks the target. A stale lock is renamed away before it is removed. A dead owner is reclaimed at once.
 - **Rule:** Record the owner in the lock itself, remove only your own lock, and reclaim by rename and check.
 
+## A failed take with no lock in place is not a broken folder
+
+- **Trap:** The lock loop treated a failed `ln -s` followed by a missing lock as a cache folder that cannot take a link. An owner that released its lock between those two steps made a waiting script fail with `could not create the build lock`. A concurrent lock test failed this way twice in full runs and then passed 56 reruns.
+- **Finding:** An `ln` shim first on the script's pinned `PATH` removes the lock right after the failed take. That forces the interleaving every time. A probe link with a name that only this process uses now tells a released lock from a folder that cannot take a link.
+- **Rule:** One failed check against a shared file says what was true a moment ago. Before a wait loop gives up, confirm the cause with a step that no other process can change.
+
 ## A version string alone does not pin a build
 
 - **Trap:** The project copy was accepted when `VERSION` equalled the config version. A new pinned commit with the same version kept running the old binary.
@@ -67,3 +73,6 @@
 | The lock is never held | `concurrentRunsBuildOnce` |
 | The repository override works without the test flag | `repoOverrideNeedsTestingFlag` |
 | The build runs without `env -i` | `buildEnvironmentIsClean` |
+| A missing lock after a failed take fails at once again | `lockReleasedAfterFailedTakeIsTaken` |
+| The lock probe never fails | `unwritableCacheFolderFailsAtOnce` |
+| The exit trap keeps the lock probe | `stoppedScriptRemovesLockProbe` |

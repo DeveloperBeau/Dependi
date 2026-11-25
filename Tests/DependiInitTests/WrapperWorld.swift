@@ -156,6 +156,20 @@ final class WrapperWorld {
     /// The wrapper under test.
     var script: URL { project.appendingPathComponent(".dependi/run.sh") }
 
+    /// A folder for programs that a script finds only when a test puts the folder on its `PATH`.
+    var tools: URL { root.appendingPathComponent("tools") }
+
+    /// Replaces the wrapper under test with other text.
+    func installScript(_ text: String) throws {
+        try install(text, at: script)
+    }
+
+    /// Writes an executable program into `tools`.
+    func installTool(_ name: String, text: String) throws {
+        try fm.createDirectory(at: tools, withIntermediateDirectories: true)
+        try install(text, at: tools.appendingPathComponent(name))
+    }
+
     /// A commit hash that does not exist anywhere.
     static let missingCommit = String(repeating: "c", count: 40)
 
