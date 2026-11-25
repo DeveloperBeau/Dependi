@@ -14,6 +14,7 @@
 | `ProductReference` | A product name and the package name that the project file gives, or `nil` for a local package. |
 | `LicenseDocument` | A file name and the license text. The initializer rejects a name that is empty, `.`, `..`, or holds a separator or control character. |
 | `Acknowledgement` | Display name, identity, normalized location and license documents. |
+| `AcknowledgementLayout` | How the settings bundle lays out the acknowledgements: `panePerPackage` or `singlePage`. |
 | `ManualEntry` | A name and a license path for code that Dependi cannot find. |
 | `BuildContext` | The Xcode build settings. A missing setting is `nil`, because the release gate must tell absent from empty. |
 | `ToolConfiguration` | The settings in `.dependi.json`. |
