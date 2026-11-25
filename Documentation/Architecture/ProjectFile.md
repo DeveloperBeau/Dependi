@@ -12,6 +12,7 @@ The project file reader answers one question. Which package products does an app
 | `ProjectFileLoader` | Resolves the path, reads at most 64 MB and parses. |
 | `ProjectModel` | The parsed objects table with checked accessors. All structure errors come from here. |
 | `ProductCollector` | Walks targets and gathers products. It keeps the other projects that it loads. |
+| `LegacyLocalPackages` | Finds local packages that an older Xcode wrote as folder file references. |
 | `PackageTraitCollector` | Gathers the traits that the package references pick. |
 | `SupportedPlatformDeriver` | Reads the build settings and returns SDK names. |
 | `ProjectPathMath` | Joins and standardizes paths as text. It never touches the file system. |
@@ -40,6 +41,10 @@ A product with a remote package gets the identity of the repository URL from `Pa
 ## Local package paths
 
 Every `XCLocalSwiftPackageReference` listed in the project `packageReferences` gives one path. The `relativePath` is resolved against the folder that holds the `.xcodeproj`, standardized and sorted.
+
+Older Xcode versions wrote a local package as a `PBXFileReference` folder. Its `lastKnownFileType` or `explicitFileType` is `wrapper` or `folder`. `LegacyLocalPackages` treats such a reference as a local package when its folder holds a `Package.swift`. It joins the `path` of the reference with the `path` of each group above it. The `sourceTree` decides the start of the join. `<group>` goes up to the main group, which stands for the project folder. `SOURCE_ROOT` starts at the project folder. `<absolute>` starts at the root. Any other tree, such as `SDKROOT`, is not a package. A group cycle ends the search for that reference. The paths join the paths of the local references, and a folder that appears twice is listed once.
+
+The product dependencies of such a package have no `package` key. The collector gives them no package name. The resolver then matches them to a local package by product name. A product that no local package provides fails with `productUnmatched` and names the product.
 
 ## Package traits
 

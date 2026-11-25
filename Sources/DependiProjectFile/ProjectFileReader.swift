@@ -33,7 +33,8 @@ public struct ProjectFileReader: LinkedProductReading {
         var everything = ProductCollector(files: files, includeTests: true)
         for other in targets { try? everything.visit(model, targetID: other.id) }
         var traits = PackageTraitCollector()
-        let localPaths = try packageReferences(in: model, traits: &traits)
+        var localPaths = try packageReferences(in: model, traits: &traits)
+        localPaths.formUnion(LegacyLocalPackages(files: files).paths(in: model))
         // The other projects that the walk of the app loaded can pick traits for their packages too.
         for other in collector.loadedModels {
             _ = try packageReferences(in: other, traits: &traits)
