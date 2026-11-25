@@ -707,7 +707,7 @@
     "search": "Set(products).sorted {",
     "replace": "products.sorted {",
     "test": "sharedProductIsDeduplicated",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-base",
@@ -743,7 +743,7 @@
     "search": "targets.map(\\.name).sorted()",
     "replace": "[String]()",
     "test": "unknownTarget",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "pf-size-cap",
@@ -2354,7 +2354,7 @@
     "replace": "everything.found",
     "test": "appProductsAreNotOtherProducts",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "pins-named-workspace-preferred",
@@ -2658,7 +2658,7 @@
     "search": "try traits.add(remote, id: id, location: url, in: model)",
     "replace": "_ = url",
     "test": "remoteReferenceTraitsAreRead",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-local-dropped",
@@ -2667,7 +2667,7 @@
     "search": "try traits.add(local, id: id, location: path, in: model)",
     "replace": "_ = path",
     "test": "localReferenceTraitsAreRead",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-other-projects-dropped",
@@ -2676,7 +2676,7 @@
     "search": "_ = try packageReferences(in: other, traits: &traits)",
     "replace": "_ = other",
     "test": "crossProjectTraitsAreRead",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-empty-list-dropped",
@@ -2712,7 +2712,7 @@
     "search": "localPaths.formUnion(LegacyLocalPackages(files: files).paths(in: model))",
     "replace": "_ = LegacyLocalPackages(files: files)",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {"date": "2026-11-23", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-kind-folder",
@@ -2721,7 +2721,7 @@
     "search": "[\"wrapper\", \"folder\"]",
     "replace": "[\"wrapper\"]",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {"date": "2026-11-23", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-kind-wrapper",
@@ -2730,7 +2730,7 @@
     "search": "[\"wrapper\", \"folder\"]",
     "replace": "[\"folder\"]",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {"date": "2026-11-23", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-manifest-check",
@@ -2739,7 +2739,7 @@
     "search": "files.exists(at: folder + \"/Package.swift\")",
     "replace": "true",
     "test": "foldersWithoutManifestAreIgnored",
-    "lastRun": {"date": "2026-11-23", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-group-order",
@@ -2748,7 +2748,7 @@
     "search": "parts.insert(path, at: 0)",
     "replace": "parts.append(path)",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {"date": "2026-11-23", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-sdk-source-tree",
@@ -2757,7 +2757,7 @@
     "search": "            default:\n                return nil",
     "replace": "            default:\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
     "test": "sdkReferenceIsIgnored",
-    "lastRun": {"date": "2026-11-23", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-source-root",
@@ -2766,7 +2766,7 @@
     "search": "case \"SOURCE_ROOT\":\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
     "replace": "case \"SOURCE_ROOT\":\n                return nil",
     "test": "sourceRootAndAbsoluteReferences",
-    "lastRun": {"date": "2026-11-23", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-absolute",
@@ -2775,6 +2775,6 @@
     "search": "ProjectPathMath.standardize(parts.joined(separator: \"/\"))",
     "replace": "nil",
     "test": "sourceRootAndAbsoluteReferences",
-    "lastRun": {"date": "2026-11-23", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   }
 ]
