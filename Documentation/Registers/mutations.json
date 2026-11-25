@@ -293,7 +293,7 @@
     "search": "stack.append(.target(identity, targetName))",
     "replace": "_ = targetName",
     "test": "transitive",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-macro",
@@ -302,7 +302,7 @@
     "search": "&& !includeBuildTools {",
     "replace": "&& !includeBuildTools && false {",
     "test": "LinkedPackageResolverTests/macroDependencies()",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-platform",
@@ -311,7 +311,7 @@
     "search": "platformNames.isDisjoint(with: dependency.platforms)",
     "replace": "false",
     "test": "platformConditions",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-unmatched-product",
@@ -320,7 +320,7 @@
     "search": "throw .productUnmatched(product: product.productName)",
     "replace": "return nil",
     "test": "LinkedPackageResolverTests/unmatchedProduct()",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-exclude-unmatched",
@@ -329,7 +329,7 @@
     "search": "throw .unmatchedExclude(exclude)",
     "replace": "continue",
     "test": "excludeMatchesNothing",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-ambiguous",
@@ -338,7 +338,7 @@
     "search": "if matches.count > 1 {",
     "replace": "if matches.count > 99 {",
     "test": "localProductAmbiguous",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-identity-conflict",
@@ -347,7 +347,7 @@
     "search": "if let existing = packages[package.identity] {",
     "replace": "if let existing = packages[package.identity], false {",
     "test": "LinkedPackageResolverTests/duplicateIdentity()",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "loader-size-cap",
@@ -617,7 +617,7 @@
     "search": "type.hasSuffix(\"unit-test\") ||",
     "replace": "false ||",
     "test": "testOnlyProductsAreExcluded",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-test-exclusion-ui",
@@ -626,7 +626,7 @@
     "search": "|| type.hasSuffix(\"ui-testing\")",
     "replace": "|| false",
     "test": "uiTestProductsAreExcludedToo",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-embed-following",
@@ -635,7 +635,7 @@
     "search": "try followEmbeds(of: target, in: model)",
     "replace": "_ = 0",
     "test": "embeddedFrameworkIsIncluded",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-dependency-following",
@@ -644,7 +644,7 @@
     "search": "try followDependencies(of: target, in: model)",
     "replace": "_ = 0",
     "test": "directTargetDependency",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-proxy-following",
@@ -653,7 +653,7 @@
     "search": "let proxyID = dependency[\"targetProxy\"] as? String,",
     "replace": "let proxyID = dependency[\"targetProxy\"] as? String, proxyID.isEmpty,",
     "test": "proxyDependencyInSameProject",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-same-project-portal",
@@ -662,7 +662,7 @@
     "search": "portal == nil || portal == model.projectID",
     "replace": "portal == nil",
     "test": "proxyDependencyInSameProject",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-cross-project-following",
@@ -671,7 +671,7 @@
     "search": "let portal, let other",
     "replace": "let portal, portal.isEmpty, let other",
     "test": "crossProjectReachable",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-local-without-package",
@@ -680,7 +680,7 @@
     "search": "dependency[\"package\"] as? String else { return nil }",
     "replace": "dependency[\"package\"] as? String else { throw .fileUnreadable(path: \"\", reason: \"\") }",
     "test": "localPackageProducts",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-local-package-reference",
@@ -689,7 +689,7 @@
     "search": "if model.object(id, isa: \"XCLocalSwiftPackageReference\") != nil { return nil }",
     "replace": "if id.isEmpty { return nil }",
     "test": "localPackageProducts",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-remote-name-normalization",
@@ -698,7 +698,7 @@
     "search": "normalizer.identity(forLocation: url).value",
     "replace": "url",
     "test": "sameProductNameTwoPackages",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-deduplication",
@@ -707,7 +707,7 @@
     "search": "Set(products).sorted {",
     "replace": "products.sorted {",
     "test": "sharedProductIsDeduplicated",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-base",
@@ -743,7 +743,7 @@
     "search": "targets.map(\\.name).sorted()",
     "replace": "[String]()",
     "test": "unknownTarget",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-size-cap",
@@ -860,7 +860,7 @@
     "search": "values.count > 3 ? values[3] : nil",
     "replace": "values.count > 2 ? values[2] : nil",
     "test": "syntheticPackage",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "graph-declared-lowercase",
@@ -869,7 +869,7 @@
     "search": "identities.append(identity.lowercased())",
     "replace": "identities.append(identity)",
     "test": "unknownDependencyShapeIgnored",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "settings-cleanup-escapes-folder",
@@ -995,7 +995,7 @@
     "search": "if context.isScriptSandboxEnabled == true { throw .scriptSandboxEnabled }",
     "replace": "",
     "test": "sandboxOnFails",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-revision-check",
@@ -1004,7 +1004,7 @@
     "search": "wanted != actual",
     "replace": "false",
     "test": "revisionMismatch",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-unreached",
@@ -1013,7 +1013,7 @@
     "search": "if !result.unreached.isEmpty && !settings.allowUnreached {",
     "replace": "if false {",
     "test": "unreachedPackages",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-permission-mapping",
@@ -1022,7 +1022,7 @@
     "search": "reason.lowercased().contains(\"not permitted\")",
     "replace": "false",
     "test": "permissionErrorMeansSandbox",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-outside",
@@ -1031,7 +1031,7 @@
     "search": "catch .licenseOutsideCheckout {",
     "replace": "catch .licenseMissing {",
     "test": "manualEntryRefused",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-absolute",
@@ -1040,7 +1040,7 @@
     "search": "!path.hasPrefix(\"/\"), ",
     "replace": "",
     "test": "manualEntryRefused",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-local-packages",
@@ -1049,7 +1049,7 @@
     "search": "for path in linked.localPackagePaths {",
     "replace": "for path in linked.localPackagePaths where false {",
     "test": "localPackageFromProject",
-    "lastRun": {"date": "2026-11-10", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-debug-skip",
@@ -1058,7 +1058,7 @@
     "search": "if case .skip(let reason) = decision {",
     "replace": "if case .skip(let reason) = decision, reason.isEmpty {",
     "test": "GenerateFeatureTests/debugSkips()",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-platform-ios",
@@ -2165,7 +2165,7 @@
     "replace": "let excludes = rawExcludes",
     "test": "excludeIsNormalized",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "validator-form-feed",
@@ -2201,7 +2201,7 @@
     "replace": "guard true else { continue }",
     "test": "licenseFolderOnlyIsMissing",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-nested-folder-skipped",
@@ -2210,7 +2210,7 @@
     "replace": "where true {",
     "test": "licenseLayouts",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "workspace-registry-skipped",
@@ -2246,7 +2246,7 @@
     "replace": "identity = normalizer.identity(forLocation: name); if excludes.contains(identity.value) { return nil }",
     "test": "excludedRootStillBringsItsDependencies",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-package-name-fallback",
@@ -2255,7 +2255,7 @@
     "replace": "if packages[wanted] != nil { return wanted }; throw .productUnmatched(product: name)",
     "test": "manifestNameInsteadOfIdentity",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-package-name-in-error",
@@ -2264,7 +2264,7 @@
     "replace": "name)",
     "test": "wrongPackageNameStillFails",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-remote-search-no-early-exit",
@@ -2273,7 +2273,7 @@
     "replace": "                    _ = 0",
     "test": "remoteSearchStopsAtFirstMatch",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-remote-search-unsorted",
@@ -2282,7 +2282,7 @@
     "replace": "remotePackages",
     "test": "remoteSearchStopsAtFirstMatch",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-plugin-product-gate",
@@ -2291,7 +2291,7 @@
     "replace": "if false, !product.targetNames.isEmpty,",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-plugin-product-kinds",
@@ -2300,7 +2300,7 @@
     "replace": "return kind == .macro",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-mixed-product-all",
@@ -2309,7 +2309,7 @@
     "replace": "product.targetNames.contains(where: { targetName in",
     "test": "mixedProductShips",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-plugin-only-reported",
@@ -2318,7 +2318,7 @@
     "replace": "!reached.contains($0.identity)",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-other-targets-expected",
@@ -2327,7 +2327,7 @@
     "replace": "&& !excludes.contains($0.identity.value)",
     "test": "otherTargetPackagesAreNotUnreached",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-other-targets-walk",
@@ -2336,7 +2336,7 @@
     "replace": "expected.insert(found.0)",
     "test": "otherTargetPackagesAreNotUnreached",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "projectfile-tests-in-other-products",
@@ -2345,7 +2345,7 @@
     "replace": "!Self.isTestTarget(target)",
     "test": "testTargetProductsAreOtherProducts",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "projectfile-other-products-subtract-app",
@@ -2354,7 +2354,7 @@
     "replace": "everything.found",
     "test": "appProductsAreNotOtherProducts",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pins-named-workspace-preferred",
@@ -2421,7 +2421,8 @@
     "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
     "search": "let absolute = path.hasPrefix(\"/\") ? path : packagePath + \"/\" + path",
     "replace": "let absolute = path",
-    "test": "localDependencyPaths"
+    "test": "localDependencyPaths",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-follow-locals",
@@ -2429,7 +2430,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": ".collect(from: locals)",
     "replace": ".collect(from: [])",
-    "test": "nestedProductResolves"
+    "test": "nestedProductResolves",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-local-quietly",
@@ -2437,7 +2439,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "if package.kind == .local { continue }",
     "replace": "if false { continue }",
-    "test": "localSkippedQuietly"
+    "test": "localSkippedQuietly",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-require-licenses",
@@ -2445,7 +2448,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "if settings.requireLicenses {",
     "replace": "if false {",
-    "test": "strictFails"
+    "test": "strictFails",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-line",
@@ -2453,7 +2457,8 @@
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
     "search": "\"Dependi: skipped \\(package.identity.value): no license file\")",
     "replace": "\"\")",
-    "test": "remoteSkipped"
+    "test": "remoteSkipped",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "config-require-licenses",
@@ -2510,5 +2515,194 @@
     "search": "detail: \"imports \\(imported) without declaring it\"",
     "replace": "detail: \"imports a module without declaring it\"",
     "test": "conditionalSiblingImportFails"
+  },
+  {
+    "id": "trait-gate-ignored",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "enabledTraits.isDisjoint(with: dependency.traits)",
+    "replace": "false",
+    "test": "offTraitDependencyIsNotFollowed",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-gate-inverted",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "if !dependency.traits.isEmpty,",
+    "replace": "if dependency.traits.isEmpty,",
+    "test": "defaultTraitFollows",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-root-default-missing",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "for (identity, _) in roots { seeds[identity] = seed(identity) }",
+    "replace": "_ = roots",
+    "test": "defaultTraitFollows",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-ask-condition-ignored",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "|| !enabledTraits.isDisjoint(with: ask.conditionTraits)",
+    "replace": "|| true",
+    "test": "conditionalRequest",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-no-list-no-default",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "?? [ManifestTraitRequest(name: \"default\", conditionTraits: [])]",
+    "replace": "?? []",
+    "test": "noTraitListMeansDefaults",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-no-repeat",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "isSettled = next == requested",
+    "replace": "isSettled = true",
+    "test": "requestFromAReachedDependentSettles",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-expansion-shallow",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/TraitExpansion.swift",
+    "search": "pending.append(contentsOf: definitions[name] ?? [])",
+    "replace": "_ = definitions",
+    "test": "traitEnabledByTrait",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-condition-unread",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "return condition[\"traits\"] as? [String] ?? []",
+    "replace": "return []",
+    "test": "traitsManifest",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-table-unread",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "definitions[name] = entry[\"enabledTraits\"] as? [String] ?? []",
+    "replace": "definitions[name] = []",
+    "test": "traitsManifest",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-empty-list-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "let raw = first[\"traits\"] as? [[String: Any]]",
+    "replace": "let raw = first[\"traits\"] as? [[String: Any]], !raw.isEmpty",
+    "test": "traitsManifest",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-project-pick-ignored",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "selected[identity] ?? [\"default\"]",
+    "replace": "_ = selected[identity]; return [\"default\"]",
+    "test": "listedTraitFollowsGatedDependency",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-project-empty-pick-as-absent",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "selected[identity] ?? [\"default\"]",
+    "replace": "selected[identity].flatMap { $0.isEmpty ? nil : $0 } ?? [\"default\"]",
+    "test": "emptySelectionTurnsDefaultsOff",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-project-pick-adds-default",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "selected[identity] ?? [\"default\"]",
+    "replace": "selected[identity].map { $0.union([\"default\"]) } ?? [\"default\"]",
+    "test": "listWithoutDefaultLeavesDefaultOff",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-project-local-seed-default",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "for package in localPackages { seeds[package.identity] = seed(package.identity) }",
+    "replace": "for package in localPackages { seeds[package.identity] = [\"default\"] }",
+    "test": "unlinkedLocalPackageSelection",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-project-locations-not-joined",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiDomain/LinkedPackageResolver.swift",
+    "search": "selected[normalizer.identity(forLocation: location), default: []].formUnion(traits)",
+    "replace": "selected[normalizer.identity(forLocation: location)] = traits",
+    "test": "locationsOfOnePackageJoin",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-reader-remote-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "try traits.add(remote, id: id, location: url, in: model)",
+    "replace": "_ = url",
+    "test": "remoteReferenceTraitsAreRead",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-reader-local-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "try traits.add(local, id: id, location: path, in: model)",
+    "replace": "_ = path",
+    "test": "localReferenceTraitsAreRead",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-reader-other-projects-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/ProjectFileReader.swift",
+    "search": "_ = try packageReferences(in: other, traits: &traits)",
+    "replace": "_ = other",
+    "test": "crossProjectTraitsAreRead",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-reader-empty-list-dropped",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
+    "search": "traits[location, default: []].formUnion(names)",
+    "replace": "if !names.isEmpty { traits[location, default: []].formUnion(names) }",
+    "test": "emptyTraitListIsKept",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-reader-unlisted-no-default",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
+    "search": "traits[location, default: []].insert(\"default\")",
+    "replace": "_ = location",
+    "test": "unlistedReferenceGivesDefault",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+  },
+  {
+    "id": "trait-reader-bad-value-accepted",
+    "slice": "swiftpm-traits",
+    "file": "Sources/DependiProjectFile/PackageTraitCollector.swift",
+    "search": "guard let names = value as? [String] else {",
+    "replace": "guard let names = value as? [String] ?? Optional([]) else {",
+    "test": "traitsNotAList",
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   }
 ]

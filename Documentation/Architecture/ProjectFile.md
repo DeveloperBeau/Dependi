@@ -11,7 +11,8 @@ The project file reader answers one question. Which package products does an app
 | `ProjectFileReader` | The public type. Finds the target, runs the walk and builds the result. |
 | `ProjectFileLoader` | Resolves the path, reads at most 64 MB and parses. |
 | `ProjectModel` | The parsed objects table with checked accessors. All structure errors come from here. |
-| `ProductCollector` | Walks targets and gathers products. |
+| `ProductCollector` | Walks targets and gathers products. It keeps the other projects that it loads. |
+| `PackageTraitCollector` | Gathers the traits that the package references pick. |
 | `SupportedPlatformDeriver` | Reads the build settings and returns SDK names. |
 | `ProjectPathMath` | Joins and standardizes paths as text. It never touches the file system. |
 
@@ -22,7 +23,7 @@ The project file reader answers one question. Which package products does an app
 3. The reader looks up the named `PBXNativeTarget` among the targets of the project.
 4. The collector visits the target. For each visited target it takes the `packageProductDependencies`, then follows `dependencies`, then follows embed phases.
 5. A second walk visits every native target of the project, test targets included. Its products, minus the app's own, are the other products. A target of that walk that cannot be read is ignored.
-6. The reader removes duplicates, sorts by product name and package name, and adds the local package paths and the platforms.
+6. The reader removes duplicates, sorts by product name and package name, and adds the local package paths, the platforms and the package traits.
 
 ## What the walk follows
 
@@ -39,6 +40,16 @@ A product with a remote package gets the identity of the repository URL from `Pa
 ## Local package paths
 
 Every `XCLocalSwiftPackageReference` listed in the project `packageReferences` gives one path. The `relativePath` is resolved against the folder that holds the `.xcodeproj`, standardized and sorted.
+
+## Package traits
+
+Since Xcode 26.4 an app can pick the traits of each package. Xcode writes them as `traits` on the `XCRemoteSwiftPackageReference` and `XCLocalSwiftPackageReference` objects. The reader reads the `packageReferences` of the project and of every other project that the walk of the app loaded. `packageTraits` holds the result, keyed by the repository URL as written or by the resolved local path.
+
+- No `traits` key gives `["default"]` under the location of that reference.
+- `traits = ( );` gives an empty entry, which turns the defaults off.
+- A list gives exactly those names. It does not add `default`.
+- The reader does not match references to one package. Two references with the same location join their names. References with different spellings of one package keep separate entries. The resolver joins the picks of the locations that name one package, so a package with a reference that has no key also gets `default`.
+- A `traits` value that is not a list of names fails with `fileUnreadable` and names the reference. So does a remote reference that has `traits` but no `repositoryURL`. A remote reference with neither is skipped.
 
 ## Platforms
 

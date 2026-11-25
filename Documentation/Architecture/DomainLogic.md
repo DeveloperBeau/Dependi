@@ -13,6 +13,7 @@ The domain logic turns raw project data into the list of acknowledgements to wri
 | `ConfigurationLoader` | Reads `.dependi.json` and maps failures to errors. A time limit must be a finite number above 0. A process limit is at most 3600 seconds and a run limit at most 86400. |
 | `ReleaseGate` | Decides whether a build runs. |
 | `LinkedPackageResolver` | Joins products to packages and follows the product graph. |
+| `TraitExpansion` | Adds the traits that the enabled traits of a package enable. |
 | `LicenseLocator` | Picks license file names from a folder listing. |
 | `LicenseFileValidator` | Checks containment, size, file kind and text of one license file. |
 | `OutputNameSlugger` | Makes a safe output file name. |
@@ -47,13 +48,15 @@ Names are compared exactly. An empty list means archive only.
 2. Excludes are matched by identity, so their case does not matter and a location names its package. Every exclude must match a package or the package name of a linked product.
 3. A product with a package name maps to that package. A product without one is searched in the local packages first and then in the remote ones. More than one local match fails and lists them. The remote search reads manifests in identity order and stops at the first package that has the product, so it reads as few manifests as it can.
 4. The walk goes from product to targets to dependencies and keeps a visited set, so a cycle ends.
-5. A dependency for platforms that do not apply is ignored.
+5. A dependency for platforms that do not apply is ignored. A dependency with trait conditions is ignored unless one of those traits is on for its package.
 6. A macro or plugin target is visited but its dependencies are not followed, unless build tools are included. A product made only of macro and plugin targets does not mark its package as reached unless build tools are included. Such a package is not reported as unreached either.
 7. A `byName` dependency is a target of the same package first, then a product of a declared dependency. A product dependency whose package name is not a package identity, such as a manifest name, is searched the same way.
 8. Each manifest is read once for a run.
 9. A product of an excluded package is still followed, so its dependencies ship. Only the excluded package itself is left out.
 10. The other products of the project are joined and followed the same way. Their packages are expected. A product of them that does not resolve is ignored.
-11. The result lists the linked packages and the resolved remote packages that neither the app nor any other target of the project reached.
+11. A package that the project links, or that is local, starts with the traits that the project picks for it. `projectTraits` holds the picks by repository URL or local path. The resolver turns each location into an identity with `PackageIdentityNormalizer` and joins the picks of locations that name one package. A package with no pick starts with its default traits. An empty pick starts with no traits. A list starts with exactly those names, and `default` is on only when the list names it. A reached package also gets the traits that its manifest asks of each dependency. A request with a condition counts when one of the traits in the condition is on in the asking package. A dependency that the manifest gives no trait list gets its default traits. A trait list that is empty asks for nothing. `TraitExpansion` adds every trait that an enabled trait enables. A walk can reach a package that asks for a new trait, so the resolver repeats the walk until the requests stop growing.
+12. A package that no walk reaches asks for no trait. This is a known limit. SwiftPM counts every package in the graph.
+13. The result lists the linked packages and the resolved remote packages that neither the app nor any other target of the project reached.
 
 ## Finding license files
 

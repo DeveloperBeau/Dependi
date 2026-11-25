@@ -12,6 +12,8 @@ struct ProductCollector {
     private var visited: Set<String> = []
     /// Every product found. A product that several targets link appears more than once.
     private(set) var found: [ProductReference] = []
+    /// Every other project that the walk loaded, in the order loaded.
+    private(set) var loadedModels: [ProjectModel] = []
     private let normalizer = PackageIdentityNormalizer()
 
     init(files: any FileReading, includeTests: Bool) {
@@ -118,6 +120,7 @@ struct ProductCollector {
         if let loaded {
             models[projectFile] = loaded
             models[loaded.path] = loaded
+            loadedModels.append(loaded)
         } else {
             unreachable.insert(projectFile)
         }

@@ -48,6 +48,65 @@ struct PackageGraphParsingTests {
         #expect(try manifest("swift-log") == expected)
     }
 
+    @Test("trait conditions, trait tables and trait requests parse to the hand-written manifest")
+    func traitsManifest() throws {
+        let expected = PackageManifest(
+            products: [ManifestProduct(name: "SQLite", targetNames: ["SQLite"])],
+            targets: [
+                ManifestTarget(
+                    name: "SQLite", kind: .regular,
+                    dependencies: [
+                        ManifestDependency(
+                            kind: .product, name: "SQLiteSwiftCSQLite", packageName: "CSQLite",
+                            platforms: [], traits: ["SQLiteSwiftCSQLite"]),
+                        ManifestDependency(
+                            kind: .product, name: "SQLCipher", packageName: "SQLCipher.swift",
+                            platforms: ["ios", "macos"], traits: ["SQLCipher"]),
+                        ManifestDependency(
+                            kind: .byName, name: "Helper", packageName: nil, platforms: [],
+                            traits: ["FTS5"]),
+                        dependency(.target, "Shared"),
+                    ])
+            ],
+            declaredDependencies: ["csqlite", "sqlcipher.swift", "off", "plain"],
+            traitDefinitions: [
+                "FTS5": [], "SQLCipher": ["FTS5"], "default": ["SystemSQLite"],
+            ],
+            traitRequests: [
+                "csqlite": [ManifestTraitRequest(name: "FTS5", conditionTraits: ["FTS5"])],
+                "sqlcipher.swift": [ManifestTraitRequest(name: "default", conditionTraits: [])],
+                "off": [],
+            ])
+        #expect(try manifest("traits") == expected)
+    }
+
+    @Test("trait data of an odd shape is skipped or read as empty and the rest is kept")
+    func oddTraitData() throws {
+        let json = """
+            {"products":[],"targets":[{"name":"A","type":"regular","dependencies":[
+            {"byName":["B"]},{"target":["C"]},{"product":["D","d"]}]}],
+            "traits":[{"enabledTraits":["X"]},{"name":"Y"}],
+            "dependencies":[{"sourceControl":[{"identity":"d","traits":[{"condition":{"traits":["Y"]}},{"name":"Z"}]}]}]}
+            """
+        let files = try GraphTestSupport.files()
+        let runner = FakeProcessRunner(results: [GraphTestSupport.success(Data(json.utf8))])
+        let parsed = try GraphTestSupport.reader(files: files, runner: runner).manifest(
+            atPackagePath: GraphTestSupport.packagePath)
+        #expect(parsed.targets.first?.dependencies.map(\.name) == ["B", "C", "D"])
+        #expect(parsed.targets.first?.dependencies.allSatisfy { $0.traits.isEmpty } == true)
+        #expect(parsed.traitDefinitions == ["Y": []])
+        #expect(
+            parsed.traitRequests == ["d": [ManifestTraitRequest(name: "Z", conditionTraits: [])]])
+    }
+
+    @Test("a manifest with no traits parses with no trait data")
+    func noTraits() throws {
+        let parsed = try manifest("swift-log")
+        #expect(parsed.traitDefinitions.isEmpty)
+        #expect(parsed.traitRequests.isEmpty)
+        #expect(parsed.targets.flatMap(\.dependencies).allSatisfy { $0.traits.isEmpty })
+    }
+
     @Test("a binary target is read as binary")
     func binaryTarget() throws {
         let expected = PackageManifest(
@@ -159,6 +218,61 @@ struct PackageGraphParsingTests {
             atPackagePath: GraphTestSupport.packagePath)
         #expect(result.targets.first?.dependencies == [dependency(.byName, "U")])
         #expect(result.declaredDependencies == ["scope.name"])
+    }
+
+    private func parse(_ json: String) throws -> PackageManifest {
+        let files = try GraphTestSupport.files()
+        let runner = FakeProcessRunner(results: [GraphTestSupport.success(Data(json.utf8))])
+        return try GraphTestSupport.reader(files: files, runner: runner).manifest(
+            atPackagePath: GraphTestSupport.packagePath)
+    }
+
+    @Test("a manifest with no dependencies key parses and asks for no dependency traits")
+    func missingDependenciesKeyGivesNoTraitRequests() throws {
+        let parsed = try parse(
+            """
+            {"products":[{"name":"P","targets":["T"]}],
+             "targets":[{"name":"T","type":"regular","dependencies":[{"byName":["B",null]}]}],
+             "traits":[{"name":"Y","enabledTraits":["X"]}]}
+            """)
+        #expect(parsed.products == [ManifestProduct(name: "P", targetNames: ["T"])])
+        #expect(parsed.targets.first?.dependencies == [dependency(.byName, "B")])
+        #expect(parsed.traitDefinitions == ["Y": ["X"]])
+        #expect(parsed.traitRequests.isEmpty)
+        #expect(parsed.declaredDependencies.isEmpty)
+    }
+
+    @Test("a dependencies value that is not a list of objects parses and asks for no traits")
+    func nonArrayDependenciesGivesNoTraitRequests() throws {
+        for value in ["\"none\"", "{\"sourceControl\":[]}", "[\"a\",\"b\"]"] {
+            let parsed = try parse(
+                """
+                {"products":[{"name":"P","targets":["T"]}],
+                 "targets":[{"name":"T","type":"regular","dependencies":[{"byName":["B",null]}]}],
+                 "traits":[{"name":"Y","enabledTraits":["X"]}],
+                 "dependencies":\(value)}
+                """)
+            #expect(parsed.targets.first?.dependencies == [dependency(.byName, "B")])
+            #expect(parsed.traitDefinitions == ["Y": ["X"]])
+            #expect(parsed.traitRequests.isEmpty)
+        }
+    }
+
+    @Test("a product dependency whose package slot is not a string is kept with no package name")
+    func nonStringProductPackageIsKeptWithoutPackageName() throws {
+        let parsed = try parse(
+            """
+            {"products":[{"name":"P","targets":["T"]}],
+             "targets":[{"name":"T","type":"regular","dependencies":[
+               {"product":["D",null]},{"product":["E",7]},{"product":["F","pkg"]},{"product":["G"]}]}],
+             "dependencies":[]}
+            """)
+        #expect(parsed.products == [ManifestProduct(name: "P", targetNames: ["T"])])
+        #expect(
+            parsed.targets.first?.dependencies == [
+                dependency(.product, "D"), dependency(.product, "E"),
+                dependency(.product, "F", package: "pkg"), dependency(.product, "G"),
+            ])
     }
 
     @Test("local dependency folders are read, and a relative one is resolved against the package")

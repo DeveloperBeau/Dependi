@@ -26,6 +26,7 @@ public struct LinkedPackageResolver: Sendable {
     ///   - excludes: Packages to leave out, by identity or location. Case does not matter. Each must match a package or a product's package name.
     ///   - platformNames: The manifest platform names that apply, or `nil` to follow every dependency.
     ///   - includeBuildTools: Whether to follow the dependencies of macro and plugin targets.
+    ///   - projectTraits: The traits that the project picks for its packages, keyed by repository URL or local path. Locations that name one package are joined. A linked or local package with an entry starts with exactly those traits. One with no entry starts with its default traits.
     public func resolve(
         linked: [ProductReference],
         otherLinked: [ProductReference],
@@ -33,9 +34,14 @@ public struct LinkedPackageResolver: Sendable {
         localPackages: [ResolvedPackage],
         excludes rawExcludes: Set<String>,
         platformNames: Set<String>?,
-        includeBuildTools: Bool
+        includeBuildTools: Bool,
+        projectTraits: [String: Set<String>] = [:]
     ) throws(DomainError) -> LinkResult {
         let excludes = Set(rawExcludes.map { normalizer.identity(forLocation: $0).value })
+        var selected: [PackageIdentity: Set<String>] = [:]
+        for (location, traits) in projectTraits {
+            selected[normalizer.identity(forLocation: location), default: []].formUnion(traits)
+        }
         var packages: [PackageIdentity: ResolvedPackage] = [:]
         for package in localPackages + remotePackages {
             if let existing = packages[package.identity] {
@@ -121,9 +127,11 @@ public struct LinkedPackageResolver: Sendable {
             return (match, product.productName)
         }
 
-        // Follow the graph from some roots. It gives the packages that ship and the packages that
-        // only a build tool product reaches.
-        func follow(_ roots: [(PackageIdentity, String)]) throws(DomainError) -> (
+        // Walk the graph from some roots with the traits that each package has requested so far.
+        // It gives the packages that ship and the packages that only a build tool product reaches.
+        func walk(
+            _ roots: [(PackageIdentity, String)], requested: [PackageIdentity: Set<String>]
+        ) throws(DomainError) -> (
             reached: Set<PackageIdentity>, buildToolOnly: Set<PackageIdentity>
         ) {
             var reached: Set<PackageIdentity> = []
@@ -162,7 +170,14 @@ public struct LinkedPackageResolver: Sendable {
                     if (target.kind == .macro || target.kind == .plugin) && !includeBuildTools {
                         continue
                     }
+                    let enabledTraits = TraitExpansion.enabled(
+                        requested: requested[identity] ?? [], definitions: read.traitDefinitions)
                     for dependency in target.dependencies {
+                        if !dependency.traits.isEmpty,
+                            enabledTraits.isDisjoint(with: dependency.traits)
+                        {
+                            continue
+                        }
                         if let platformNames, !dependency.platforms.isEmpty,
                             platformNames.isDisjoint(with: dependency.platforms)
                         {
@@ -190,6 +205,51 @@ public struct LinkedPackageResolver: Sendable {
                 }
             }
             return (reached, buildToolOnly)
+        }
+
+        // The project's own pick for a package, or its default traits when the project has none.
+        // A pick never adds `default` by itself.
+        func seed(_ identity: PackageIdentity) -> Set<String> {
+            selected[identity] ?? ["default"]
+        }
+
+        // A dependency is followed only when one of its trait conditions is on. A package that the
+        // project links, or that is local, starts with the traits that the project picks for it.
+        // It also has the traits that its dependents ask for. A dependent asks only when its own
+        // condition holds, so the walk repeats until the requests stop growing. The requests only
+        // grow, so the repeat ends.
+        func follow(_ roots: [(PackageIdentity, String)]) throws(DomainError) -> (
+            reached: Set<PackageIdentity>, buildToolOnly: Set<PackageIdentity>
+        ) {
+            var seeds: [PackageIdentity: Set<String>] = [:]
+            for package in localPackages { seeds[package.identity] = seed(package.identity) }
+            for (identity, _) in roots { seeds[identity] = seed(identity) }
+            var requested = seeds
+            var result = (reached: Set<PackageIdentity>(), buildToolOnly: Set<PackageIdentity>())
+            var isSettled = false
+            repeat {
+                result = try walk(roots, requested: requested)
+                var next = seeds
+                for identity in result.reached {
+                    let read = try manifest(identity)
+                    let enabledTraits = TraitExpansion.enabled(
+                        requested: requested[identity] ?? [], definitions: read.traitDefinitions)
+                    for declared in read.declaredDependencies {
+                        let asks =
+                            read.traitRequests[declared]
+                            ?? [ManifestTraitRequest(name: "default", conditionTraits: [])]
+                        for ask in asks
+                        where ask.conditionTraits.isEmpty
+                            || !enabledTraits.isDisjoint(with: ask.conditionTraits)
+                        {
+                            next[PackageIdentity(declared), default: []].insert(ask.name)
+                        }
+                    }
+                }
+                isSettled = next == requested
+                requested = next
+            } while !isSettled
+            return result
         }
 
         var roots: [(PackageIdentity, String)] = []

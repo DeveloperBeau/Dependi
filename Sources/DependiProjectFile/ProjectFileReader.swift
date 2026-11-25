@@ -32,11 +32,18 @@ public struct ProjectFileReader: LinkedProductReading {
         // Every other target, test targets included. A broken one is ignored, because it does not ship.
         var everything = ProductCollector(files: files, includeTests: true)
         for other in targets { try? everything.visit(model, targetID: other.id) }
+        var traits = PackageTraitCollector()
+        let localPaths = try packageReferences(in: model, traits: &traits)
+        // The other projects that the walk of the app loaded can pick traits for their packages too.
+        for other in collector.loadedModels {
+            _ = try packageReferences(in: other, traits: &traits)
+        }
         return LinkedProductSet(
             products: Self.sorted(collector.found),
             otherProducts: Self.sorted(everything.found.filter { !ownProducts.contains($0) }),
-            localPackagePaths: try localPackagePaths(in: model),
-            supportedPlatforms: try SupportedPlatformDeriver.platforms(of: object, in: model))
+            localPackagePaths: localPaths.sorted(),
+            supportedPlatforms: try SupportedPlatformDeriver.platforms(of: object, in: model),
+            packageTraits: traits.traits)
     }
 
     private static func sorted(_ products: [ProductReference]) -> [ProductReference] {
@@ -50,18 +57,31 @@ public struct ProjectFileReader: LinkedProductReading {
         return name == "project.pbxproj" ? path : path + "/project.pbxproj"
     }
 
-    private func localPackagePaths(in model: ProjectModel) throws(DomainError) -> [String] {
-        var result = Set<String>()
+    /// Reads the package references of a project. It returns the local package paths and adds the
+    /// traits that each reference picks, keyed by the repository URL as written or the local path.
+    private func packageReferences(
+        in model: ProjectModel, traits: inout PackageTraitCollector
+    ) throws(DomainError) -> Set<String> {
+        var paths = Set<String>()
         for id in try model.strings(model.project, "packageReferences") {
-            guard let local = model.object(id, isa: "XCLocalSwiftPackageReference") else {
-                continue
+            if let local = model.object(id, isa: "XCLocalSwiftPackageReference") {
+                guard let relative = local["relativePath"] as? String else {
+                    throw .fileUnreadable(
+                        path: model.path, reason: "local package \(id) has no relative path")
+                }
+                let path = ProjectPathMath.resolve(relative, against: model.folder)
+                paths.insert(path)
+                try traits.add(local, id: id, location: path, in: model)
+            } else if let remote = model.object(id, isa: "XCRemoteSwiftPackageReference") {
+                // A reference with no URL names no package. It fails only when it picks traits.
+                guard let url = remote["repositoryURL"] as? String else {
+                    if remote["traits"] == nil { continue }
+                    throw .fileUnreadable(
+                        path: model.path, reason: "package reference \(id) has traits but no URL")
+                }
+                try traits.add(remote, id: id, location: url, in: model)
             }
-            guard let relative = local["relativePath"] as? String else {
-                throw .fileUnreadable(
-                    path: model.path, reason: "local package \(id) has no relative path")
-            }
-            result.insert(ProjectPathMath.resolve(relative, against: model.folder))
         }
-        return result.sorted()
+        return paths
     }
 }
