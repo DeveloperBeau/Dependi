@@ -76,3 +76,5 @@
 | A missing lock after a failed take fails at once again | `lockReleasedAfterFailedTakeIsTaken` |
 | The lock probe never fails | `unwritableCacheFolderFailsAtOnce` |
 | The exit trap keeps the lock probe | `stoppedScriptRemovesLockProbe` |
+| A probe left from an earlier run with the same process id is kept, so the probe fails | `leftoverProbeWithSameProcessIdIsReplaced` |
+| The probe stays in the cache folder while the script waits and builds | `lockProbeIsGoneDuringBuild` |
