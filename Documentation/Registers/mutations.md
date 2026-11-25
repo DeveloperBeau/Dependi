@@ -292,6 +292,8 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | wrapper-lock-malformed-owner-kept | review-fix | `Sources/DependiInit/WrapperScript.swift` | `malformedLockOwnerIsStale` | killed | 2026-11-25 KILLED |
 | wrapper-lock-never-released | review-fix | `Sources/DependiInit/WrapperScript.swift` | `releaseRemovesOwnLock` | killed | 2026-11-25 KILLED |
 | wrapper-lock-probe-kept-on-exit | lock-takeover-race | `Sources/DependiInit/WrapperScript.swift` | `stoppedScriptRemovesLockProbe` | killed | 2026-11-25 KILLED |
+| wrapper-lock-probe-kept-while-waiting | lock-takeover-race | `Sources/DependiInit/WrapperScript.swift` | `lockProbeIsGoneDuringBuild` | killed | 2026-11-25 KILLED |
+| wrapper-lock-probe-leftover-kept | lock-takeover-race | `Sources/DependiInit/WrapperScript.swift` | `leftoverProbeWithSameProcessIdIsReplaced` | killed | 2026-11-25 KILLED |
 | wrapper-lock-probe-never-fails | lock-takeover-race | `Sources/DependiInit/WrapperScript.swift` | `unwritableCacheFolderFailsAtOnce` | killed | 2026-11-25 KILLED |
 | wrapper-lock-reclaim-skipped | review-fix | `Sources/DependiInit/WrapperScript.swift` | `concurrentRunsOnDeadLockBuildOnce` | killed | 2026-11-25 KILLED |
 | wrapper-lock-release-unconditional | review-fix | `Sources/DependiInit/WrapperScript.swift` | `releaseKeepsForeignLock` | killed | 2026-11-25 KILLED |
