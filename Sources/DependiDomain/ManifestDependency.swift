@@ -18,12 +18,17 @@ public struct ManifestDependency: Equatable, Sendable {
     public let packageName: String?
     /// The platforms that the dependency applies to. Empty means all.
     public let platforms: [String]
+    /// The traits of the declaring package that the dependency applies to. Empty means all.
+    public let traits: [String]
 
     /// Creates a manifest dependency.
-    public init(kind: Kind, name: String, packageName: String?, platforms: [String]) {
+    public init(
+        kind: Kind, name: String, packageName: String?, platforms: [String], traits: [String] = []
+    ) {
         self.kind = kind
         self.name = name
         self.packageName = packageName
         self.platforms = platforms
+        self.traits = traits
     }
 }

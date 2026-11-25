@@ -44,7 +44,9 @@ enum ManifestJSONParser {
         return PackageManifest(
             products: products, targets: targets,
             declaredDependencies: declared(root["dependencies"]),
-            localDependencyPaths: localPaths(root["dependencies"], packagePath: packagePath))
+            localDependencyPaths: localPaths(root["dependencies"], packagePath: packagePath),
+            traitDefinitions: traitDefinitions(root["traits"]),
+            traitRequests: traitRequests(root["dependencies"]))
     }
 
     private static func fail(_ reason: String, _ path: String) -> DomainError {
@@ -56,24 +58,60 @@ enum ManifestJSONParser {
         return (condition["platformNames"] as? [String] ?? []).map { $0.lowercased() }
     }
 
+    private static func traits(_ condition: Any?) -> [String] {
+        guard let condition = condition as? [String: Any] else { return [] }
+        return condition["traits"] as? [String] ?? []
+    }
+
     private static func parseDependency(_ entry: [String: Any]) -> ManifestDependency? {
         if let values = entry["byName"] as? [Any], let name = values.first as? String {
+            let condition = values.count > 1 ? values[1] : nil
             return ManifestDependency(
                 kind: .byName, name: name, packageName: nil,
-                platforms: platforms(values.count > 1 ? values[1] : nil))
+                platforms: platforms(condition), traits: traits(condition))
         }
         if let values = entry["target"] as? [Any], let name = values.first as? String {
+            let condition = values.count > 1 ? values[1] : nil
             return ManifestDependency(
                 kind: .target, name: name, packageName: nil,
-                platforms: platforms(values.count > 1 ? values[1] : nil))
+                platforms: platforms(condition), traits: traits(condition))
         }
         if let values = entry["product"] as? [Any], let name = values.first as? String {
             let package = values.count > 1 ? values[1] as? String : nil
+            let condition = values.count > 3 ? values[3] : nil
             return ManifestDependency(
                 kind: .product, name: name, packageName: package,
-                platforms: platforms(values.count > 3 ? values[3] : nil))
+                platforms: platforms(condition), traits: traits(condition))
         }
         return nil
+    }
+
+    private static func traitDefinitions(_ value: Any?) -> [String: [String]] {
+        var definitions: [String: [String]] = [:]
+        for entry in value as? [[String: Any]] ?? [] {
+            guard let name = entry["name"] as? String else { continue }
+            definitions[name] = entry["enabledTraits"] as? [String] ?? []
+        }
+        return definitions
+    }
+
+    /// The traits that the package asks of each declared dependency. A dependency that gives no `traits` list is left out.
+    private static func traitRequests(_ value: Any?) -> [String: [ManifestTraitRequest]] {
+        var requests: [String: [ManifestTraitRequest]] = [:]
+        for entry in value as? [[String: Any]] ?? [] {
+            for (_, details) in entry {
+                guard let first = (details as? [[String: Any]])?.first,
+                    let identity = first["identity"] as? String,
+                    let raw = first["traits"] as? [[String: Any]]
+                else { continue }
+                requests[identity.lowercased()] = raw.compactMap { item in
+                    guard let name = item["name"] as? String else { return nil }
+                    return ManifestTraitRequest(
+                        name: name, conditionTraits: traits(item["condition"]))
+                }
+            }
+        }
+        return requests
     }
 
     /// The folders of the `fileSystem` dependencies. A relative path is resolved against the package folder.

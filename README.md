@@ -21,6 +21,7 @@ Debug builds skip. An archive always runs.
 ## What it checks
 
 - A remote package that the app links and that has no license file is skipped, and the build log names it. Set `requireLicenses` in `.dependi.json` to make this a failure.
+- A dependency that a package ties to a SwiftPM trait is followed only when that trait is on. A package that the app links, or that is local, has the traits that the project picks for it in the Package Dependencies tab of Xcode. With no pick it has its default traits. An empty pick turns the defaults off, and a list of names turns on only those names. A package also has the traits that the packages which use it ask for. A trait that another trait enables is on too.
 - Local packages, also the local packages that other local packages name with `.package(path:)`, are followed to find the remote packages that they use. A local package with no license file is left out of the output.
 - Manual entries add a name and a license text file from the project for code that has no package.
 - The Acknowledgements pane lists packages and manual entries in one list, sorted by name without case, then by identity. The order does not depend on the locale or on the order of the input.
