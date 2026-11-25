@@ -401,7 +401,11 @@ struct WrapperScriptTests {
     /// Installs a copy of the script whose pinned `PATH` puts an `ln` shim first. The shim runs
     /// the real `ln`. With the `release-once` flag, a failed take of the lock removes the lock, as
     /// an owner that releases it would, once, before the script looks at the lock. With the
-    /// `stop-at-probe` flag, a probe link that was made sends TERM to the script.
+    /// `plant-probe` flag, that release also leaves a probe link with the script's own name, as a
+    /// run killed with KILL whose process id came round again would. The shim is a child of the
+    /// script, so `$PPID` is the script's process id. It writes that id to `script-pid` and every
+    /// probe name the script passes to `probes`. With the `stop-at-probe` flag, a probe link that
+    /// was made sends TERM to the script.
     private func installLnShim(_ world: WrapperWorld, head: String) throws {
         let pinned = "\nPATH=/usr/bin:/bin\n"
         try #require(
@@ -423,10 +427,15 @@ struct WrapperScriptTests {
                         [ -f '\(control)/release-once' ]; then
                         rm -f '\(control)/release-once'
                         rm -f '\(lock)'
+                        if [ -f '\(control)/plant-probe' ]; then
+                            echo "$PPID" > '\(control)/script-pid'
+                            /bin/ln -s 1 '\(lock)'.probe."$PPID"
+                        fi
                         : > '\(control)/released'
                     fi
                     case "$argument" in
                     '\(lock)'.probe.*)
+                        echo "$argument" >> '\(control)/probes'
                         if [ "$status" -eq 0 ] && [ -f '\(control)/stop-at-probe' ]; then
                             : > '\(control)/stopped'
                             kill -TERM "$PPID"
@@ -479,6 +488,60 @@ struct WrapperScriptTests {
         #expect(run.stderr == "")
         #expect(world.calls().isEmpty)
         #expect(world.cacheEntries() == [])
+    }
+
+    @Test(
+        "a probe left over from an earlier run with the same process id does not stop the lock being taken"
+    )
+    func leftoverProbeWithSameProcessIdIsReplaced() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        try installLnShim(world, head: head)
+        try world.flag("release-once")
+        try world.flag("plant-probe")
+        try world.plantLock(version: Self.version, commit: head, owner: String(getpid()))
+        let running = try world.start(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        let script = running.processIdentifier
+        let run = running.finish()
+        let planted = world.lock(version: Self.version, commit: head).path + ".probe.\(script)"
+        let recorded = try String(
+            contentsOf: world.control.appendingPathComponent("script-pid"), encoding: .utf8)
+        #expect(recorded == "\(script)\n", "the shim's parent is not the script")
+        let probes = try String(
+            contentsOf: world.control.appendingPathComponent("probes"), encoding: .utf8)
+        #expect(probes == planted + "\n", "the script probed a name other than the planted one")
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(run.stderr == "")
+        #expect(run.stdout == "built-marker\n")
+        #expect(world.calls(of: "xcrun").count == 1)
+        #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
+    }
+
+    @Test("no lock probe stays in the cache folder while the script builds")
+    func lockProbeIsGoneDuringBuild() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        try installLnShim(world, head: head)
+        try world.flag("release-once")
+        try world.plantLock(version: Self.version, commit: head, owner: String(getpid()))
+        try world.flag("hold-build")
+        defer { try? world.flag("proceed") }
+        let running = try world.start(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        try #require(world.waitForControlFile("building"), "the build never started")
+        #expect(
+            FileManager.default.fileExists(atPath: world.control.path + "/probes"),
+            "the script never made a probe")
+        let held = world.cacheEntries()
+        #expect(held.filter { $0.contains(".probe.") } == [], "entries while building: \(held)")
+        try world.flag("proceed")
+        let run = running.finish()
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(world.calls(of: "xcrun").count == 1)
+        #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
     }
 
     @Test("a lock whose owner process is gone is reclaimed at once")
