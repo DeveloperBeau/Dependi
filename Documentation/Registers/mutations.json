@@ -2821,5 +2821,157 @@
     "replace": "nil",
     "test": "sourceRootAndAbsoluteReferences",
     "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-layout-switch",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "case .singlePage: try writeSinglePage(acknowledgements, bundle: bundlePath)",
+    "replace": "case .singlePage: try writePanes(acknowledgements, intoBundleAt: bundlePath)",
+    "test": "singlePageOneDocumentPackageWritesOnlyTheIndex"
+  },
+  {
+    "id": "single-page-title-many-documents",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "acknowledgement.documents.count == 1",
+    "replace": "acknowledgement.documents.count >= 1",
+    "test": "singlePageTitlesNameTheFileOnlyWhenAPackageHasSeveralDocuments"
+  },
+  {
+    "id": "single-page-title-one-document",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "isOnlyDocument ? name :",
+    "replace": "false ? name :",
+    "test": "singlePageOneDocumentPackageWritesOnlyTheIndex"
+  },
+  {
+    "id": "single-page-title-file-name",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "\"\\(name) (\\(document.fileName))\"",
+    "replace": "name",
+    "test": "singlePageTitlesNameTheFileOnlyWhenAPackageHasSeveralDocuments"
+  },
+  {
+    "id": "single-page-footer-text",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "\"Title\": title, \"FooterText\": document.text]",
+    "replace": "\"Title\": title, \"FooterText\": name]",
+    "test": "singlePageOneDocumentPackageWritesOnlyTheIndex"
+  },
+  {
+    "id": "single-page-no-document-group",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "return [[\"Type\": \"PSGroupSpecifier\", \"Title\": name]]",
+    "replace": "return []",
+    "test": "singlePagePackageWithNoDocumentsKeepsATitleOnlyGroup"
+  },
+  {
+    "id": "single-page-folder-not-created",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "guard hasFolder else { return }",
+    "replace": "try writer.createDirectory(at: folder)",
+    "test": "singlePageOneDocumentPackageWritesOnlyTheIndex"
+  },
+  {
+    "id": "single-page-user-file-left-alone",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "directories.topLevelNames(in: folder).filter(Self.isTemporaryLeftover)",
+    "replace": "directories.topLevelNames(in: folder).filter { !$0.hasPrefix(\".\") }",
+    "test": "switchingToSinglePageRemovesOnlyTheManifestPanesAndEmptiesTheManifest"
+  },
+  {
+    "id": "single-page-leftovers-removed",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "previous.sorted() + leftovers",
+    "replace": "previous.sorted()",
+    "test": "singlePageRemovesTheTemporaryLeftoversOfAnInterruptedWrite"
+  },
+  {
+    "id": "single-page-old-panes-removed",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writer.removeItem(at: Self.join(folder, stale))",
+    "replace": "_ = stale",
+    "test": "switchingToSinglePageRemovesOnlyTheManifestPanesAndEmptiesTheManifest"
+  },
+  {
+    "id": "single-page-missing-pane-skipped",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "where files.exists(at: Self.join(folder, stale))",
+    "replace": "where !stale.isEmpty",
+    "test": "singlePageSkipsAManifestNameThatIsNoLongerInTheFolder"
+  },
+  {
+    "id": "single-page-manifest-emptied",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writeIfDifferent(Data(), to: manifestPath)",
+    "replace": "_ = manifestPath",
+    "test": "switchingToSinglePageRemovesOnlyTheManifestPanesAndEmptiesTheManifest"
+  },
+  {
+    "id": "single-page-manifest-only-when-different",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writeIfDifferent(Data(), to: manifestPath)",
+    "replace": "try writer.write(Data(), toPath: manifestPath)",
+    "test": "singlePageRepeatRunWritesNothing"
+  },
+  {
+    "id": "single-page-index-before-removals",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writePlist(page, encodedAs: pageData, to: indexPath)",
+    "replace": "for stale in previous where hasFolder { try writer.removeItem(at: Self.join(folder, stale)) }; try writePlist(page, encodedAs: pageData, to: indexPath)",
+    "test": "singlePageWritesTheIndexThenRemovesPanesThenWritesTheManifest"
+  },
+  {
+    "id": "single-page-manifest-last",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writePlist(page, encodedAs: pageData, to: indexPath)",
+    "replace": "if hasFolder { try writeIfDifferent(Data(), to: manifestPath) }; try writePlist(page, encodedAs: pageData, to: indexPath)",
+    "test": "singlePageWritesTheIndexThenRemovesPanesThenWritesTheManifest"
+  },
+  {
+    "id": "single-page-nul-before-write",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "let pageData = try Self.encode(page, path: indexPath)",
+    "replace": "let pageData = (try? Self.encode(page, path: indexPath)) ?? Data()",
+    "test": "singlePageNulInALicenseTextFailsBeforeAnyWriteOrRemoval"
+  },
+  {
+    "id": "single-page-link-refused",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try requirePlainFolder(folder, inBundle: bundle)",
+    "replace": "_ = bundle",
+    "test": "singlePageRefusesALinkWhereTheFolderBelongsAndWritesNothing"
+  },
+  {
+    "id": "single-page-layout-raw-value",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/AcknowledgementLayout.swift",
+    "search": "case singlePage",
+    "replace": "case singlePage = \"single-page\"",
+    "test": "acknowledgementLayoutText"
+  },
+  {
+    "id": "single-page-composition-keeps-panes",
+    "slice": "single-page",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "layout: .panePerPackage",
+    "replace": "layout: .singlePage",
+    "test": "archiveWritesDirectAndTransitive"
   }
 ]
