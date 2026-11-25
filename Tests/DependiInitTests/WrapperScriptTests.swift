@@ -398,6 +398,89 @@ struct WrapperScriptTests {
         #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
     }
 
+    /// Installs a copy of the script whose pinned `PATH` puts an `ln` shim first. The shim runs
+    /// the real `ln`. With the `release-once` flag, a failed take of the lock removes the lock, as
+    /// an owner that releases it would, once, before the script looks at the lock. With the
+    /// `stop-at-probe` flag, a probe link that was made sends TERM to the script.
+    private func installLnShim(_ world: WrapperWorld, head: String) throws {
+        let pinned = "\nPATH=/usr/bin:/bin\n"
+        try #require(
+            WrapperScript.text.components(separatedBy: pinned).count == 2,
+            "the PATH line was not found, so the shim would not run")
+        try world.installScript(
+            WrapperScript.text.replacingOccurrences(
+                of: pinned, with: "\nPATH='\(world.tools.path)':/usr/bin:/bin\n"))
+        let lock = world.lock(version: Self.version, commit: head).path
+        let control = world.control.path
+        try world.installTool(
+            "ln",
+            text: """
+                #!/bin/sh
+                /bin/ln "$@"
+                status=$?
+                for argument in "$@"; do
+                    if [ "$status" -ne 0 ] && [ "$argument" = '\(lock)' ] &&
+                        [ -f '\(control)/release-once' ]; then
+                        rm -f '\(control)/release-once'
+                        rm -f '\(lock)'
+                        : > '\(control)/released'
+                    fi
+                    case "$argument" in
+                    '\(lock)'.probe.*)
+                        if [ "$status" -eq 0 ] && [ -f '\(control)/stop-at-probe' ]; then
+                            : > '\(control)/stopped'
+                            kill -TERM "$PPID"
+                        fi
+                        ;;
+                    esac
+                done
+                exit "$status"
+                """)
+    }
+
+    @Test("a lock that its owner removes just after a failed take is taken, not called unusable")
+    func lockReleasedAfterFailedTakeIsTaken() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        try installLnShim(world, head: head)
+        try world.flag("release-once")
+        // The owner is this test process, which is running, so the first take fails.
+        try world.plantLock(version: Self.version, commit: head, owner: String(getpid()))
+        // Three waits are less than a second. A script that waits for the lock fails.
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(
+            FileManager.default.fileExists(atPath: world.control.path + "/released"),
+            "the shim never removed the lock")
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(run.stderr == "")
+        #expect(run.stdout == "built-marker\n")
+        #expect(world.calls(of: "xcrun").count == 1)
+        #expect(world.lockOwner(version: Self.version, commit: head) == nil)
+        #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
+    }
+
+    @Test("a script stopped while its lock probe exists leaves no probe behind")
+    func stoppedScriptRemovesLockProbe() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        try installLnShim(world, head: head)
+        try world.flag("release-once")
+        try world.flag("stop-at-probe")
+        try world.plantLock(version: Self.version, commit: head, owner: String(getpid()))
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(
+            FileManager.default.fileExists(atPath: world.control.path + "/stopped"),
+            "the shim never saw a probe")
+        #expect(run.status == 1)
+        #expect(run.stderr == "")
+        #expect(world.calls().isEmpty)
+        #expect(world.cacheEntries() == [])
+    }
+
     @Test("a lock whose owner process is gone is reclaimed at once")
     func deadOwnerLockIsReclaimed() throws {
         let world = try world()

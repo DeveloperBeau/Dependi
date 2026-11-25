@@ -2144,10 +2144,34 @@
     "id": "wrapper-lock-create-failure-ignored",
     "slice": "review-fix",
     "file": "Sources/DependiInit/WrapperScript.swift",
-    "search": "if [ ! -L \"$lock\" ] && [ ! -e \"$lock\" ]; then",
+    "search": "if [ ! -L \"$lock\" ] && [ ! -e \"$lock\" ] && ! can_link; then",
     "replace": "if false; then",
     "test": "unwritableCacheFolderFailsAtOnce",
     "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+  },
+  {
+    "id": "wrapper-lock-released-called-unusable",
+    "slice": "lock-takeover-race",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "[ ! -e \"$lock\" ] && ! can_link; then",
+    "replace": "[ ! -e \"$lock\" ]; then",
+    "test": "lockReleasedAfterFailedTakeIsTaken"
+  },
+  {
+    "id": "wrapper-lock-probe-never-fails",
+    "slice": "lock-takeover-race",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "ln -s \"$token\" \"$probe\" 2>/dev/null || return 1",
+    "replace": "ln -s \"$token\" \"$probe\" 2>/dev/null || return 0",
+    "test": "unwritableCacheFolderFailsAtOnce"
+  },
+  {
+    "id": "wrapper-lock-probe-kept-on-exit",
+    "slice": "lock-takeover-race",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "            rm -f \"$probe\"\n            if [ \"$have_lock\" = 1 ]; then",
+    "replace": "            if [ \"$have_lock\" = 1 ]; then",
+    "test": "stoppedScriptRemovesLockProbe"
   },
   {
     "id": "slugger-hash-width",
