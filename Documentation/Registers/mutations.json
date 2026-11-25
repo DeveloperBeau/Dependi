@@ -2177,6 +2177,22 @@
     "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
+    "id": "wrapper-lock-probe-leftover-kept",
+    "slice": "lock-takeover-race",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "        can_link() {\n            rm -f \"$probe\"",
+    "replace": "        can_link() {",
+    "test": "leftoverProbeWithSameProcessIdIsReplaced"
+  },
+  {
+    "id": "wrapper-lock-probe-kept-while-waiting",
+    "slice": "lock-takeover-race",
+    "file": "Sources/DependiInit/WrapperScript.swift",
+    "search": "ln -s \"$token\" \"$probe\" 2>/dev/null || return 1\n            rm -f \"$probe\"",
+    "replace": "ln -s \"$token\" \"$probe\" 2>/dev/null || return 1",
+    "test": "lockProbeIsGoneDuringBuild"
+  },
+  {
     "id": "slugger-hash-width",
     "file": "Sources/DependiDomain/OutputNameSlugger.swift",
     "search": "digest.prefix(6)",
