@@ -255,6 +255,37 @@ struct EndToEndTests {
         #expect(result.output.contains("Dependi: wrote 2 acknowledgements"))
     }
 
+    @Test("generate --single-page with an empty configuration writes the single page index only")
+    func flagForcesSinglePage() throws {
+        let world = try standardWorld(configuration: "{}")
+        let result = try world.run(["generate", "--single-page"])
+        #expect(result.code == 0, "errors: \(result.errors)")
+        let index = try world.plist("Acknowledgements.plist")
+        let groups = try requireValue(index["PreferenceSpecifiers"] as? [[String: String]])
+        #expect(
+            groups == [
+                [
+                    "Type": "PSGroupSpecifier", "Title": "alamofire",
+                    "FooterText": "license of alamofire",
+                ],
+                [
+                    "Type": "PSGroupSpecifier", "Title": "swift-log",
+                    "FooterText": "license of swift-log",
+                ],
+            ])
+        #expect(world.files(in: "") == ["Acknowledgements.plist"])
+    }
+
+    @Test(
+        "generate --single-page with an unknown flag exits with the usage code and writes nothing")
+    func flagWithUnknownFlagIsRefused() throws {
+        let world = try standardWorld(configuration: "{}")
+        let result = try world.run(["generate", "--single-page", "--bogus"])
+        #expect(result.code == 64)
+        #expect(result.errors.contains("Unknown flag '--bogus' for 'generate'."))
+        #expect(!FileManager.default.fileExists(atPath: world.bundle))
+    }
+
     @Test("an empty configuration still writes one child pane for each package")
     func defaultStillWritesPanes() throws {
         let world = try standardWorld(configuration: "{}")

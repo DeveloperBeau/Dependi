@@ -8,7 +8,7 @@
 
 | Type | Role |
 |---|---|
-| `Command` | The result: `generate`, `initialize(projectPath:isDryRun:)`, `version`, `help`. |
+| `Command` | The result: `generate(forcesSinglePage:)`, `initialize(projectPath:isDryRun:)`, `version`, `help`. |
 | `CommandLineParser` | `parse(_:)` with typed throws of `CommandLineError`. |
 | `CommandLineError` | The one error enum of the module. Each case has a message. |
 | `UsageText` | The help text with every command and flag. |
@@ -17,7 +17,7 @@
 
 | Command | Flags |
 |---|---|
-| `generate` | none |
+| `generate` | `--single-page` (switch) |
 | `init` | `--project <path>` (required), `--dry-run` (switch) |
 | `--version`, `version` | none |
 | `help`, `--help`, `-h` | none |
@@ -26,8 +26,9 @@
 
 1. The first argument names the command. No arguments gives `noCommand`. An unmatched name gives `unknownCommand`.
 2. A command without flags refuses any further argument with `unexpectedArgument`.
-3. `init` reads the rest left to right. `--project` takes the next token as its value. `--dry-run` takes none.
-4. After the loop, a missing `--project` gives `missingRequiredFlag`.
+3. `generate` reads the rest left to right. `--single-page` takes no value. Without it, `forcesSinglePage` is false.
+4. `init` reads the rest left to right. `--project` takes the next token as its value. `--dry-run` takes none.
+5. After the loop, a missing `--project` gives `missingRequiredFlag`.
 
 ## Edge cases
 
@@ -36,6 +37,7 @@
 - A value that is empty or starts with `--` gives `missingValue`. A value that starts with one dash is kept.
 - A repeated flag gives `duplicateFlag`, also when the first use is complete.
 - A token that starts with a dash and is not a flag gives `unknownFlag`. Any other stray token gives `unexpectedArgument`.
+- `--single-page=yes` and `--singlepage` are unknown flags for `generate`. There is no `--no-single-page`.
 - Paths keep spaces, unicode and relative parts as written.
 
 ## Tests

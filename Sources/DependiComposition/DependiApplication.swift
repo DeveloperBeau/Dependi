@@ -49,8 +49,8 @@ public struct DependiApplication {
         case .version:
             console.writeLine("dependi \(DependiVersion.current)")
             return 0
-        case .generate:
-            return generate(environment: environment)
+        case .generate(let forcesSinglePage):
+            return generate(environment: environment, forcesSinglePage: forcesSinglePage)
         case .initialize(let path, let isDryRun):
             return initialize(path: path, isDryRun: isDryRun)
         }
@@ -99,7 +99,7 @@ public struct DependiApplication {
         )
     }
 
-    private func generate(environment: [String: String]) -> Int32 {
+    private func generate(environment: [String: String], forcesSinglePage: Bool) -> Int32 {
         let disk = DiskFileSystem()
         let settings = configuration(environment: environment, files: disk)
         let limited = DeadlineProcessRunner(
@@ -118,7 +118,7 @@ public struct DependiApplication {
                     files: disk, directories: disk, writer: disk, slugger: OutputNameSlugger(),
                     layout: layout)
             },
-            output: console)
+            output: console, forcesSinglePage: forcesSinglePage)
         do {
             _ = try feature.run()
             return 0

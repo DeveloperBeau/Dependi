@@ -138,6 +138,51 @@ struct GenerateFeatureTests {
         #expect(world.layoutsAsked == [.panePerPackage])
     }
 
+    @Test("the flag with an empty configuration asks for the single page layout")
+    func flagWithEmptyConfigurationAsksForSinglePage() throws {
+        let world = try world()
+        world.forcesSinglePage = true
+        _ = try world.run()
+        #expect(world.layoutsAsked == [.singlePage])
+    }
+
+    @Test("the flag beats a configuration that sets singlePage to false")
+    func flagBeatsSinglePageFalse() throws {
+        let world = try world(configuration: #"{"singlePage":false}"#)
+        world.forcesSinglePage = true
+        _ = try world.run()
+        #expect(world.layoutsAsked == [.singlePage])
+    }
+
+    @Test("the flag with singlePage true in the configuration asks for the single page layout")
+    func flagWithSinglePageTrueAsksForSinglePage() throws {
+        let world = try world(configuration: #"{"singlePage":true}"#)
+        world.forcesSinglePage = true
+        _ = try world.run()
+        #expect(world.layoutsAsked == [.singlePage])
+    }
+
+    @Test("no flag leaves singlePage true in the configuration in charge")
+    func noFlagSinglePageTrueAsksForSinglePage() throws {
+        let world = try world(configuration: #"{"singlePage":true}"#)
+        world.forcesSinglePage = false
+        _ = try world.run()
+        #expect(world.layoutsAsked == [.singlePage])
+    }
+
+    @Test("a skipped run with the flag on never asks the writers closure")
+    func skipWithFlagNeverAsksForAWriter() throws {
+        let world = try world()
+        world.forcesSinglePage = true
+        world.environment["ACTION"] = "build"
+        world.environment["CONFIGURATION"] = "Debug"
+        guard case .skipped = try world.run() else {
+            Issue.record("expected a skip")
+            return
+        }
+        #expect(world.layoutsAsked.isEmpty)
+    }
+
     @Test("a skipped run never asks the writers closure")
     func skipNeverAsksForAWriter() throws {
         let world = try world(configuration: #"{"singlePage":true}"#)

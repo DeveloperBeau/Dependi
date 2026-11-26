@@ -11,8 +11,7 @@ public struct CommandLineParser: Sendable {
         let rest = Array(arguments.dropFirst())
         switch name {
         case "generate":
-            try rejectArguments(rest, command: name)
-            return .generate
+            return try parseGenerate(rest, command: name)
         case "--version", "version":
             try rejectArguments(rest, command: name)
             return .version
@@ -30,6 +29,25 @@ public struct CommandLineParser: Sendable {
         if let first = rest.first {
             throw CommandLineError.unexpectedArgument(command: command, argument: first)
         }
+    }
+
+    private func parseGenerate(_ rest: [String], command: String) throws(CommandLineError)
+        -> Command
+    {
+        var forcesSinglePage = false
+        for token in rest {
+            if token == "--single-page" {
+                if forcesSinglePage {
+                    throw CommandLineError.duplicateFlag(command: command, flag: token)
+                }
+                forcesSinglePage = true
+            } else if token.hasPrefix("-") {
+                throw CommandLineError.unknownFlag(command: command, flag: token)
+            } else {
+                throw CommandLineError.unexpectedArgument(command: command, argument: token)
+            }
+        }
+        return .generate(forcesSinglePage: forcesSinglePage)
     }
 
     private func parseInitialize(_ rest: [String], command: String) throws(CommandLineError)

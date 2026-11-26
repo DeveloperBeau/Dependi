@@ -24,6 +24,8 @@ final class GenerateWorld {
     var manifests: [String: PackageManifest] = [:]
     var sourceFailure: DomainError?
     var writerFailure: DomainError?
+    /// Whether the command line forces the single page layout.
+    var forcesSinglePage = false
     let console = FakeConsole(answers: [])
     private(set) var writer = RecordingAcknowledgementWriter(failure: nil)
     private let askedLayouts = LockedBox<[AcknowledgementLayout]>([])
@@ -104,7 +106,7 @@ final class GenerateWorld {
                 asked.withValue { $0.append(layout) }
                 return recorder
             },
-            output: console)
+            output: console, forcesSinglePage: forcesSinglePage)
     }
 
     func run() throws(DomainError) -> GenerateOutcome { try makeFeature().run() }

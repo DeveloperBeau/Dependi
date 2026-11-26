@@ -5,11 +5,14 @@ public enum UsageText {
         Usage: dependi <command> [flags]
 
         Commands:
-          generate                      Write the acknowledgements into the settings bundle.
+          generate [--single-page]      Write the acknowledgements into the settings bundle.
           init --project <path> [--dry-run]
                                         Add Dependi to the project at <path>.
           version, --version            Print the version.
           help, --help, -h              Print this text.
+
+        Flags for generate:
+          --single-page                 Put every license on one page for this run.
 
         Flags for init:
           --project <path>              The project to change. Required.

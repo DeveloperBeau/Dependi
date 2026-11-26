@@ -17,7 +17,8 @@ struct CommandLineParserTests {
     @Test("every row of the command table is accepted and gives the hand-written command")
     func tableRowsAreAccepted() throws {
         let table: [([String], Command)] = [
-            (["generate"], .generate),
+            (["generate"], .generate(forcesSinglePage: false)),
+            (["generate", "--single-page"], .generate(forcesSinglePage: true)),
             (["init", "--project", "App"], .initialize(projectPath: "App", isDryRun: false)),
             (
                 ["init", "--project", "App", "--dry-run"],
@@ -66,6 +67,34 @@ struct CommandLineParserTests {
         #expect(
             error(["init", "--project", "a", "extra"])
                 == .unexpectedArgument(command: "init", argument: "extra"))
+    }
+
+    @Test("a repeated single page flag on generate is refused")
+    func generateDuplicate() {
+        #expect(
+            error(["generate", "--single-page", "--single-page"])
+                == .duplicateFlag(command: "generate", flag: "--single-page"))
+    }
+
+    @Test("a look-alike or unknown flag on generate is refused as an unknown flag")
+    func generateUnknownFlags() {
+        for flag in [
+            "--single-page=yes", "--singlepage", "--Single-Page", "-s", "--no-single-page",
+        ] {
+            #expect(
+                error(["generate", flag]) == .unknownFlag(command: "generate", flag: flag),
+                "flag: \(flag)")
+        }
+        #expect(
+            error(["generate", "--single-page", "--bogus"])
+                == .unknownFlag(command: "generate", flag: "--bogus"))
+    }
+
+    @Test("a stray word on generate is refused even beside the single page flag")
+    func generateStrayWord() {
+        #expect(
+            error(["generate", "--single-page", "extra"])
+                == .unexpectedArgument(command: "generate", argument: "extra"))
     }
 
     @Test("a missing, empty or dashed project value is refused")
@@ -154,9 +183,21 @@ struct CommandLineParserTests {
     func usageMentionsEverything() {
         for word in [
             "generate", "init", "version", "--version", "help", "--help", "-h", "--project",
-            "--dry-run", "<path>",
+            "--dry-run", "<path>", "--single-page",
         ] {
             #expect(UsageText.text.contains(word), "missing: \(word)")
         }
+    }
+
+    @Test("the usage text shows the generate flag on the command line and in its own section")
+    func usageShowsGenerateFlag() {
+        #expect(
+            UsageText.text.contains(
+                "  generate [--single-page]      Write the acknowledgements into the settings bundle.\n"
+            ))
+        #expect(
+            UsageText.text.contains(
+                "Flags for generate:\n  --single-page                 Put every license on one page for this run.\n"
+            ))
     }
 }
