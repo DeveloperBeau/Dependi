@@ -113,7 +113,8 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
         try writeIfDifferent(Data(Self.manifestText(newNames).utf8), to: manifestPath)
     }
 
-    /// Writes every license onto the index pane. It never creates the Acknowledgements folder.
+    /// Writes every license onto the index pane. It creates the bundle folder if it is missing,
+    /// as the other layout does. It never creates the Acknowledgements folder.
     /// If the folder is there from the other layout, it removes the panes that the manifest
     /// names and leaves the manifest empty. Nothing is written into the folder but the manifest,
     /// so a file that Dependi did not write stays and does not fail the run.
@@ -137,6 +138,7 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
             leftovers = try directories.topLevelNames(in: folder).filter(Self.isTemporaryLeftover)
         }
 
+        try writer.createDirectory(at: bundle)
         try writePlist(page, encodedAs: pageData, to: indexPath)
         guard hasFolder else { return }
         // The old panes go only after the index stops pointing at them.

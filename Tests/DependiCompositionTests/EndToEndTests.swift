@@ -234,9 +234,6 @@ struct EndToEndTests {
     @Test("singlePage true writes one group for each license on the index and no pane folder")
     func singlePageWritesOneIndex() throws {
         let world = try standardWorld(configuration: #"{"singlePage":true}"#)
-        // A real build has copied the project's Settings.bundle into the product already.
-        try FileManager.default.createDirectory(
-            atPath: world.bundle, withIntermediateDirectories: true)
         let result = try world.run()
         #expect(result.code == 0, "errors: \(result.errors)")
         let index = try world.plist("Acknowledgements.plist")
