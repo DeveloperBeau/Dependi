@@ -229,6 +229,66 @@ struct EndToEndTests {
             result.output.contains("Dependi: skipped. configuration Debug is not in the gate list"))
     }
 
+    // MARK: Layout
+
+    @Test("singlePage true writes one group for each license on the index and no pane folder")
+    func singlePageWritesOneIndex() throws {
+        let world = try standardWorld(configuration: #"{"singlePage":true}"#)
+        // A real build has copied the project's Settings.bundle into the product already.
+        try FileManager.default.createDirectory(
+            atPath: world.bundle, withIntermediateDirectories: true)
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        let index = try world.plist("Acknowledgements.plist")
+        #expect(index["Title"] as? String == "Acknowledgements")
+        #expect(index["StringsTable"] as? String == "Acknowledgements")
+        let groups = try requireValue(index["PreferenceSpecifiers"] as? [[String: String]])
+        #expect(
+            groups == [
+                [
+                    "Type": "PSGroupSpecifier", "Title": "alamofire",
+                    "FooterText": "license of alamofire",
+                ],
+                [
+                    "Type": "PSGroupSpecifier", "Title": "swift-log",
+                    "FooterText": "license of swift-log",
+                ],
+            ])
+        #expect(world.files(in: "") == ["Acknowledgements.plist"])
+        #expect(result.output.contains("Dependi: wrote 2 acknowledgements"))
+    }
+
+    @Test("an empty configuration still writes one child pane for each package")
+    func defaultStillWritesPanes() throws {
+        let world = try standardWorld(configuration: "{}")
+        _ = try world.run()
+        #expect(world.files(in: "").contains("Acknowledgements"))
+        #expect(
+            world.files(in: "Acknowledgements").contains("alamofire-5f720a3f84a5.plist"))
+    }
+
+    @Test("switching singlePage on removes the old child panes and empties the manifest")
+    func switchingToSinglePageRemovesPanes() throws {
+        let world = try standardWorld(configuration: "{}")
+        _ = try world.run()
+        #expect(world.files(in: "Acknowledgements").count == 3)
+        try #"{"singlePage":true}"#.write(
+            toFile: world.project + "/.dependi.json", atomically: true, encoding: .utf8)
+        let result = try world.run()
+        #expect(result.code == 0, "errors: \(result.errors)")
+        #expect(world.files(in: "Acknowledgements") == [".dependi-manifest"])
+        let manifest = try Data(
+            contentsOf: URL(fileURLWithPath: world.bundle + "/Acknowledgements/.dependi-manifest"))
+        #expect(manifest.isEmpty)
+        let index = try world.plist("Acknowledgements.plist")
+        let groups = try requireValue(index["PreferenceSpecifiers"] as? [[String: String]])
+        #expect(groups.map { $0["Type"] } == ["PSGroupSpecifier", "PSGroupSpecifier"])
+        #expect(groups.map { $0["Title"] } == ["alamofire", "swift-log"])
+        #expect(
+            groups.map { $0["FooterText"] } == ["license of alamofire", "license of swift-log"])
+        #expect(groups.allSatisfy { $0["File"] == nil })
+    }
+
     // MARK: Failures
 
     @Test("in strict mode a package without a license fails the run, names it and writes nothing")

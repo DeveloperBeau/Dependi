@@ -15,7 +15,7 @@ The caller passes the path of the `Settings.bundle` folder. The writer writes wh
 
 ## Layouts
 
-The writer takes an `AcknowledgementLayout` when it is created. The composition passes `panePerPackage`. Nothing in the tool passes `singlePage` yet.
+The writer takes an `AcknowledgementLayout` when it is created. The generate feature chooses the layout from the `singlePage` key of `.dependi.json`. If the key is absent or false, it is `panePerPackage`.
 
 | Layout | Output |
 |---|---|

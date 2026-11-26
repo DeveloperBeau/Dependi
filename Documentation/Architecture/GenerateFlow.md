@@ -27,7 +27,7 @@
 11. For each linked package list the top level of its folder, pick the license files and validate each. A package with no license file is skipped. A local package is skipped with no message. A remote package is skipped with the line `Dependi: skipped <identity>: no license file` on the error output. If `requireLicenses` is set, a remote package with no license file fails with `licenseMissing`.
 12. Add the manual entries. Each license path must be relative and stay inside the project folder.
 13. Assemble. A duplicate identity and an output name clash fail here. The packages and the manual entries make one list. The sort key is the lowercased name, then the identity, then the output name. The comparison uses Unicode code points, so the order does not depend on the locale or on the order of the input.
-14. Work out the bundle path and write.
+14. Work out the bundle path and write. The layout comes from `singlePage`. If it is set, the layout is `singlePage`. Otherwise it is `panePerPackage`. The feature asks for the writer of that layout once, only when it writes.
 15. Log the number written.
 
 ## Where the bundle goes

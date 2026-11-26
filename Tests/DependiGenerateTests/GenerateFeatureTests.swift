@@ -113,6 +113,53 @@ struct GenerateFeatureTests {
         #expect(world.writer.calls.first?.acknowledgements.map(\.displayName) == ["kit"])
     }
 
+    // MARK: Layout
+
+    @Test("singlePage true asks the writers closure once for the single page layout")
+    func singlePageAsksForSinglePage() throws {
+        let world = try world(configuration: #"{"singlePage":true}"#)
+        _ = try world.run()
+        #expect(world.layoutsAsked == [.singlePage])
+        #expect(world.writer.calls.count == 1)
+    }
+
+    @Test("an empty configuration asks the writers closure once for the pane per package layout")
+    func defaultAsksForPanes() throws {
+        let world = try world()
+        _ = try world.run()
+        #expect(world.layoutsAsked == [.panePerPackage])
+        #expect(world.writer.calls.count == 1)
+    }
+
+    @Test("singlePage false asks the writers closure for the pane per package layout")
+    func singlePageFalseAsksForPanes() throws {
+        let world = try world(configuration: #"{"singlePage":false}"#)
+        _ = try world.run()
+        #expect(world.layoutsAsked == [.panePerPackage])
+    }
+
+    @Test("a skipped run never asks the writers closure")
+    func skipNeverAsksForAWriter() throws {
+        let world = try world(configuration: #"{"singlePage":true}"#)
+        world.environment["ACTION"] = "build"
+        world.environment["CONFIGURATION"] = "Debug"
+        guard case .skipped = try world.run() else {
+            Issue.record("expected a skip")
+            return
+        }
+        #expect(world.layoutsAsked.isEmpty)
+    }
+
+    @Test("a run that fails before the write never asks the writers closure")
+    func earlyFailureNeverAsksForAWriter() throws {
+        let world = try world(configuration: #"{"singlePage":true}"#)
+        world.sourceFailure = .fileUnreadable(path: "/x", reason: "broken")
+        #expect(throws: DomainError.fileUnreadable(path: "/x", reason: "broken")) {
+            try world.run()
+        }
+        #expect(world.layoutsAsked.isEmpty)
+    }
+
     // MARK: Skips
 
     @Test("a Debug build skips, writes nothing and reads no package")

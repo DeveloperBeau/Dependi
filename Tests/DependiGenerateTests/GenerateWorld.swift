@@ -26,6 +26,9 @@ final class GenerateWorld {
     var writerFailure: DomainError?
     let console = FakeConsole(answers: [])
     private(set) var writer = RecordingAcknowledgementWriter(failure: nil)
+    private let askedLayouts = LockedBox<[AcknowledgementLayout]>([])
+    /// The layout of each call to the writers closure, in order.
+    var layoutsAsked: [AcknowledgementLayout] { askedLayouts.withValue { $0 } }
     private(set) var manifestReader = StubManifestReader(manifests: [:])
 
     init(configuration: String? = "{}") throws {
@@ -82,7 +85,9 @@ final class GenerateWorld {
     }
 
     func makeFeature() -> GenerateFeature {
-        writer = RecordingAcknowledgementWriter(failure: writerFailure)
+        let recorder = RecordingAcknowledgementWriter(failure: writerFailure)
+        writer = recorder
+        let asked = askedLayouts
         manifestReader = StubManifestReader(manifests: manifests)
         let source: StubDependencySource
         if let sourceFailure {
@@ -94,7 +99,12 @@ final class GenerateWorld {
         return GenerateFeature(
             environment: FakeEnvironment(environment), files: files, directories: files,
             dependencySource: source, linkedProducts: StubLinkedProducts(.success(linked)),
-            manifests: manifestReader, writer: writer, output: console)
+            manifests: manifestReader,
+            writers: { layout in
+                asked.withValue { $0.append(layout) }
+                return recorder
+            },
+            output: console)
     }
 
     func run() throws(DomainError) -> GenerateOutcome { try makeFeature().run() }
