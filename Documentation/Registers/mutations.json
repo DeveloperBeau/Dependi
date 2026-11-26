@@ -3026,6 +3026,7 @@
     "file": "Scripts/mutate.swift",
     "search": "if isStopping() { while true { sleep(60) } }",
     "replace": "if false { while true { sleep(60) } }",
-    "test": "shutdownOwnsTheExitWhenCleanupIsSlow"
+    "test": "shutdownOwnsTheExitWhenCleanupIsSlow",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   }
 ]
