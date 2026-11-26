@@ -221,8 +221,21 @@ func shutDown(code: Int32) -> Never {
     let file = mutatedFile
     let folders = workerFolders
     stateLock.unlock()
+    // The runner tests set this to slow the shutdown. No `isStopping()` check here, or the wait
+    // would end at once.
+    func delayForTests() {
+        guard
+            let delay = ProcessInfo.processInfo.environment["MUTATE_SHUTDOWN_DELAY_FOR_TESTS"]
+                .flatMap(Double.init)
+        else { return }
+        let end = Date().addingTimeInterval(delay)
+        while Date() < end { Thread.sleep(forTimeInterval: 0.05) }
+    }
     for pid in processIDs { killTree(pid) }
     if let file { restore(file) }
+    // The first delay comes before `copyLock` is taken, so the workers can finish the current
+    // mutation, remove their copies, leave the group and let `workers.wait()` return.
+    delayForTests()
     copyLock.lock()
     stateLock.lock()
     let allFolders = Set(folders + workerFolders)
@@ -233,6 +246,9 @@ func shutDown(code: Int32) -> Never {
     let lateProcessIDs = activeProcessIDs.subtracting(processIDs)
     stateLock.unlock()
     for pid in lateProcessIDs { killTree(pid) }
+    // The second delay holds the exit, so main reaches its own exit first if it does not wait
+    // after `workers.wait()`.
+    delayForTests()
     exit(code)
 }
 

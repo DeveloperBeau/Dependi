@@ -679,6 +679,36 @@ struct MutationRunnerTests {
         }
     }
 
+    @Test("an interrupt still exits 130 when shutdown is slow")
+    func shutdownOwnsTheExitWhenCleanupIsSlow() throws {
+        let package = try MiniPackage.create()
+        let double = try SwiftDouble.make()
+        defer { double.remove() }
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
+        let registerURL = try Self.writeParallelLoopingRegister()
+        defer { try? FileManager.default.removeItem(at: registerURL) }
+        // The shutdown waits 2 seconds before it takes the copy lock, so the workers end once their
+        // children are killed, leave the group, and main gets past `workers.wait()`. It waits 2
+        // more seconds before it exits, so main reaches its end first and must leave the exit to
+        // the shutdown.
+        var environment = temporary.applied(to: double.environment)
+        environment["MUTATE_SHUTDOWN_DELAY_FOR_TESTS"] = "2"
+        let process = try Self.startParallelRun(
+            on: package, registerURL: registerURL, environment: environment)
+        let watch = try Self.waitForMutatedCopy(in: temporary, while: process)
+        #expect(watch.sawMutation, "no worker applied the mutation")
+        Self.interrupt(process)
+        #expect(!process.isRunning, "the runner did not stop after the interrupt")
+        if !process.isRunning {
+            #expect(
+                process.terminationReason == .exit && process.terminationStatus == 130,
+                "status \(process.terminationStatus), reason \(process.terminationReason)")
+        }
+        #expect(try MiniPackage.workerFolders(in: temporary.url).isEmpty)
+        #expect(try package.gitStatus().isEmpty)
+    }
+
     /// Writes a register with a looping entry and an entry in another file, so two workers start
     /// and one of them hangs.
     private static func writeParallelLoopingRegister() throws -> URL {

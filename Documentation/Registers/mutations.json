@@ -3019,5 +3019,13 @@
     "replace": "let folder = (NSTemporaryDirectory() as NSString).appendingPathComponent(",
     "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "runner-shutdown-owns-exit",
+    "slice": "runner-temp",
+    "file": "Scripts/mutate.swift",
+    "search": "if isStopping() { while true { sleep(60) } }",
+    "replace": "if false { while true { sleep(60) } }",
+    "test": "shutdownOwnsTheExitWhenCleanupIsSlow"
   }
 ]
