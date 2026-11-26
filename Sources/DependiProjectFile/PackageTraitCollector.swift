@@ -1,5 +1,4 @@
 import DependiDomain
-import DependiEntities
 
 /// Gathers the traits that a project picks for its packages from the `traits` key of its package references.
 struct PackageTraitCollector {
