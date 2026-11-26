@@ -7,6 +7,10 @@ Every key that Dependi writes into a plist. A change that adds a key adds a row.
 | `Acknowledgements.plist` | `Title` | `Acknowledgements` |
 | `Acknowledgements.plist` | `StringsTable` | `Acknowledgements` |
 | `Acknowledgements.plist` | `PreferenceSpecifiers` | One entry for each package, in the given order. |
+| `Acknowledgements.plist` (single page) | `PreferenceSpecifiers` | One single page entry for each license document, in package order and then document order. A package with no documents has one entry. |
+| single page entry | `Type` | `PSGroupSpecifier` |
+| single page entry | `Title` | The display name of the package when it has one document or none. `<display name> (<file name>)` when it has two or more. |
+| single page entry | `FooterText` | The license text, unchanged. Absent for a package with no documents. |
 | index entry | `Type` | `PSChildPaneSpecifier` |
 | index entry | `Title` | The display name of the package. |
 | index entry | `File` | `Acknowledgements/<slug>`, with no extension. |

@@ -45,6 +45,21 @@ struct EntityValueTests {
         #expect(PackageKind(rawValue: "other") == nil)
     }
 
+    @Test("an acknowledgement layout uses its documented text and refuses any other")
+    func acknowledgementLayoutText() throws {
+        #expect(AcknowledgementLayout.allCases == [.panePerPackage, .singlePage])
+        #expect(AcknowledgementLayout.panePerPackage.rawValue == "panePerPackage")
+        #expect(AcknowledgementLayout.singlePage.rawValue == "singlePage")
+        let decoded = try JSONDecoder().decode(
+            [AcknowledgementLayout].self, from: Data(#"["singlePage","panePerPackage"]"#.utf8))
+        #expect(decoded == [.singlePage, .panePerPackage])
+        #expect(AcknowledgementLayout(rawValue: "single-page") == nil)
+        #expect(AcknowledgementLayout(rawValue: "SinglePage") == nil)
+        #expect(throws: DecodingError.self) {
+            try JSONDecoder().decode([AcknowledgementLayout].self, from: Data(#"["pages"]"#.utf8))
+        }
+    }
+
     @Test("a product reference keeps a missing package as nil")
     func productReferenceKeepsNil() {
         let local = ProductReference(productName: "Core", packageName: nil)

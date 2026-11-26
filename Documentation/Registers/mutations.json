@@ -878,7 +878,7 @@
     "search": "!name.contains(\"/\")",
     "replace": "true",
     "test": "manifestEntriesThatEscapeTheFolderAreNeverDeleted",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-cleanup-removes-kept",
@@ -887,7 +887,7 @@
     "search": "previous.subtracting(newNames).sorted()",
     "replace": "previous.sorted()",
     "test": "removedPackageRemovesItsPlistAndManifestEntry",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-unknown-file-refusal",
@@ -896,7 +896,7 @@
     "search": "where !Self.isTolerated(name) && !previous.contains(name)",
     "replace": "where false && !previous.contains(name)",
     "test": "unknownFileInFolderFailsBeforeAnyWrite",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-write-only-when-different",
@@ -905,7 +905,7 @@
     "search": "current == data {",
     "replace": "current == data, false {",
     "test": "secondIdenticalRunWritesNothing",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-slug-replaced-by-raw-name",
@@ -914,7 +914,7 @@
     "search": "children.append((name: \"\\(slug).plist\"",
     "replace": "children.append((name: \"\\(acknowledgement.displayName).plist\"",
     "test": "oddNamesStayInsideTheFolderAndAppearOnlyAsText",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-manifest-not-updated",
@@ -923,7 +923,7 @@
     "search": "Self.manifestText(newNames)",
     "replace": "Self.manifestText(previous.union(newNames))",
     "test": "removedPackageRemovesItsPlistAndManifestEntry",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-read-back-removed",
@@ -932,7 +932,7 @@
     "search": "try verify(plist, at: path)",
     "replace": "_ = plist",
     "test": "readBackMismatchFailsWithFileUnwritable",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "cli-required-flag",
@@ -1121,7 +1121,7 @@
     "search": "public static let usageExitCode: Int32 = 64",
     "replace": "public static let usageExitCode: Int32 = 1",
     "test": "commandLineErrors",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "comp-version-text",
@@ -1130,7 +1130,7 @@
     "search": "\"dependi \\(DependiVersion.current)\"",
     "replace": "\"dependi\"",
     "test": "versionAndHelp",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "comp-clean-environment",
@@ -1463,7 +1463,7 @@
     "search": "guard resolvedFolder == Self.join(resolvedBundle, Self.folderName) else { throw refusal }",
     "replace": "guard resolvedFolder == resolvedFolder, !resolvedBundle.isEmpty else { throw refusal }",
     "test": "linkToAFolderInsideTheBundleIsRefused",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-link-folder-checked",
@@ -1472,7 +1472,7 @@
     "search": "try requirePlainFolder(folder, inBundle: bundlePath)",
     "replace": "_ = bundlePath",
     "test": "linkToAnOutsideFolderAsAcknowledgementsIsRefusedAndNothingIsWritten",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-hidden-tolerated",
@@ -1481,7 +1481,7 @@
     "search": "name.hasPrefix(\".\") || isTemporaryLeftover(name)",
     "replace": "isTemporaryLeftover(name)",
     "test": "hiddenFilesAreIgnoredAndKept",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-leftovers-swept",
@@ -1490,7 +1490,7 @@
     "search": "leftovers = present.filter(Self.isTemporaryLeftover)",
     "replace": "leftovers = []",
     "test": "temporaryLeftoversOfOurOwnWritesAreSwept",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-leftover-uuid-check",
@@ -1499,7 +1499,7 @@
     "search": "guard UUID(uuidString: String(name[range.upperBound...])) != nil else { return false }",
     "replace": "guard UUID(uuidString: String(name[range.upperBound...])) == nil else { return false }",
     "test": "realForeignFilesAreStillRefused",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-manifest-union",
@@ -1508,7 +1508,7 @@
     "search": "Data(Self.manifestText(previous.union(newNames)).utf8), to: manifestPath)",
     "replace": "Data(Self.manifestText(newNames).utf8), to: manifestPath)",
     "test": "aStopAfterAnyNumberOfChangesLosesNoFileAndTheNextRunRecovers",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "proc-reap-failure-as-success",
@@ -1751,7 +1751,7 @@
     "search": "wrapping: process, limitSeconds: settings.runTimeoutSeconds,",
     "replace": "wrapping: process, limitSeconds: ToolConfiguration.defaultRunTimeoutSeconds,",
     "test": "runLimitShortensChildLimits",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "app-config-wired",
@@ -1760,7 +1760,7 @@
     "search": "environment: environment, configuration: settings, now: { Date() },",
     "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), now: { Date() },",
     "test": "configuredLimitsReachTheRequests",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "lazy-process-limit-xcrun",
@@ -2821,5 +2821,176 @@
     "replace": "nil",
     "test": "sourceRootAndAbsoluteReferences",
     "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-layout-switch",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "case .singlePage: try writeSinglePage(acknowledgements, bundle: bundlePath)",
+    "replace": "case .singlePage: try writePanes(acknowledgements, intoBundleAt: bundlePath)",
+    "test": "singlePageOneDocumentPackageWritesOnlyTheIndex",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-title-many-documents",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "acknowledgement.documents.count == 1",
+    "replace": "acknowledgement.documents.count >= 1",
+    "test": "singlePageTitlesNameTheFileOnlyWhenAPackageHasSeveralDocuments",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-title-one-document",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "isOnlyDocument ? name :",
+    "replace": "false ? name :",
+    "test": "singlePageOneDocumentPackageWritesOnlyTheIndex",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-title-file-name",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "\"\\(name) (\\(document.fileName))\"",
+    "replace": "name",
+    "test": "singlePageTitlesNameTheFileOnlyWhenAPackageHasSeveralDocuments",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-footer-text",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "\"Title\": title, \"FooterText\": document.text]",
+    "replace": "\"Title\": title, \"FooterText\": name]",
+    "test": "singlePageOneDocumentPackageWritesOnlyTheIndex",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-no-document-group",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "return [[\"Type\": \"PSGroupSpecifier\", \"Title\": name]]",
+    "replace": "return []",
+    "test": "singlePagePackageWithNoDocumentsKeepsATitleOnlyGroup",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-folder-not-created",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "guard hasFolder else { return }",
+    "replace": "try writer.createDirectory(at: folder)",
+    "test": "singlePageOneDocumentPackageWritesOnlyTheIndex",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-user-file-left-alone",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "directories.topLevelNames(in: folder).filter(Self.isTemporaryLeftover)",
+    "replace": "directories.topLevelNames(in: folder).filter { !$0.hasPrefix(\".\") }",
+    "test": "switchingToSinglePageRemovesOnlyTheManifestPanesAndEmptiesTheManifest",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-leftovers-removed",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "previous.sorted() + leftovers",
+    "replace": "previous.sorted()",
+    "test": "singlePageRemovesTheTemporaryLeftoversOfAnInterruptedWrite",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-old-panes-removed",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writer.removeItem(at: Self.join(folder, stale))",
+    "replace": "_ = stale",
+    "test": "switchingToSinglePageRemovesOnlyTheManifestPanesAndEmptiesTheManifest",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-missing-pane-skipped",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "where files.exists(at: Self.join(folder, stale))",
+    "replace": "where !stale.isEmpty",
+    "test": "singlePageSkipsAManifestNameThatIsNoLongerInTheFolder",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-manifest-emptied",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writeIfDifferent(Data(), to: manifestPath)",
+    "replace": "_ = manifestPath",
+    "test": "switchingToSinglePageRemovesOnlyTheManifestPanesAndEmptiesTheManifest",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-manifest-only-when-different",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writeIfDifferent(Data(), to: manifestPath)",
+    "replace": "try writer.write(Data(), toPath: manifestPath)",
+    "test": "singlePageRepeatRunWritesNothing",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-index-before-removals",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writePlist(page, encodedAs: pageData, to: indexPath)",
+    "replace": "for stale in previous where hasFolder { try writer.removeItem(at: Self.join(folder, stale)) }; try writePlist(page, encodedAs: pageData, to: indexPath)",
+    "test": "singlePageWritesTheIndexThenRemovesPanesThenWritesTheManifest",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-manifest-last",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writePlist(page, encodedAs: pageData, to: indexPath)",
+    "replace": "if hasFolder { try writeIfDifferent(Data(), to: manifestPath) }; try writePlist(page, encodedAs: pageData, to: indexPath)",
+    "test": "singlePageWritesTheIndexThenRemovesPanesThenWritesTheManifest",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-nul-before-write",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "let pageData = try Self.encode(page, path: indexPath)",
+    "replace": "let pageData = (try? Self.encode(page, path: indexPath)) ?? Data()",
+    "test": "singlePageNulInALicenseTextFailsBeforeAnyWriteOrRemoval",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-link-refused",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try requirePlainFolder(folder, inBundle: bundle)",
+    "replace": "_ = bundle",
+    "test": "singlePageRefusesALinkWhereTheFolderBelongsAndWritesNothing",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-layout-raw-value",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/AcknowledgementLayout.swift",
+    "search": "case singlePage",
+    "replace": "case singlePage = \"single-page\"",
+    "test": "acknowledgementLayoutText",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-composition-keeps-panes",
+    "slice": "single-page",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "layout: .panePerPackage",
+    "replace": "layout: .singlePage",
+    "test": "archiveWritesDirectAndTransitive",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   }
 ]

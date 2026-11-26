@@ -27,7 +27,16 @@ func makeWriter(
     _ fs: InMemoryFileSystem, reader: (any FileReading)? = nil, writes: (any FileWriting)? = nil
 ) -> SettingsBundleWriter {
     SettingsBundleWriter(
-        files: reader ?? fs, directories: fs, writer: writes ?? fs, slugger: OutputNameSlugger())
+        files: reader ?? fs, directories: fs, writer: writes ?? fs, slugger: OutputNameSlugger(),
+        layout: .panePerPackage)
+}
+
+func makeSinglePageWriter(
+    _ fs: InMemoryFileSystem, reader: (any FileReading)? = nil, writes: (any FileWriting)? = nil
+) -> SettingsBundleWriter {
+    SettingsBundleWriter(
+        files: reader ?? fs, directories: fs, writer: writes ?? fs, slugger: OutputNameSlugger(),
+        layout: .singlePage)
 }
 
 func freshFileSystem() throws -> InMemoryFileSystem {
