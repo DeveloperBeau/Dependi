@@ -249,6 +249,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | single-page-config-encode | single-page | `Sources/DependiEntities/ToolConfiguration.swift` | `singlePageRoundTrip` | killed | not run |
 | single-page-config-init-stored | single-page | `Sources/DependiEntities/ToolConfiguration.swift` | `singlePageRoundTrip` | killed | not run |
 | single-page-config-known-key | single-page | `Sources/DependiEntities/ToolConfiguration.swift` | `singlePageTrueDecodes` | killed | not run |
+| single-page-creates-bundle | single-page | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `singlePageCreatesAMissingBundleFolderAndNoAcknowledgementsFolder` | killed | not run |
 | single-page-folder-not-created | single-page | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `singlePageOneDocumentPackageWritesOnlyTheIndex` | killed | 2026-11-26 KILLED |
 | single-page-footer-text | single-page | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `singlePageOneDocumentPackageWritesOnlyTheIndex` | killed | 2026-11-26 KILLED |
 | single-page-generate-layout-forced-panes | single-page | `Sources/DependiGenerate/GenerateFeature.swift` | `singlePageAsksForSinglePage` | killed | not run |

@@ -2940,6 +2940,14 @@
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
+    "id": "single-page-creates-bundle",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writer.createDirectory(at: bundle)",
+    "replace": ";",
+    "test": "singlePageCreatesAMissingBundleFolderAndNoAcknowledgementsFolder"
+  },
+  {
     "id": "single-page-index-before-removals",
     "slice": "single-page",
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
