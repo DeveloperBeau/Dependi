@@ -2821,5 +2821,29 @@
     "replace": "nil",
     "test": "sourceRootAndAbsoluteReferences",
     "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
+  },
+  {
+    "id": "runner-temp-ignores-tmpdir",
+    "slice": "runner-temp",
+    "file": "Scripts/mutate.swift",
+    "search": "return value.isEmpty ? NSTemporaryDirectory() : value",
+    "replace": "return NSTemporaryDirectory()",
+    "test": "foreignWorkerThatStartsMidRunIsLeftAlone"
+  },
+  {
+    "id": "runner-temp-inverted",
+    "slice": "runner-temp",
+    "file": "Scripts/mutate.swift",
+    "search": "return value.isEmpty ? NSTemporaryDirectory() : value",
+    "replace": "return value.isEmpty ? value : NSTemporaryDirectory()",
+    "test": "foreignWorkerThatStartsMidRunIsLeftAlone"
+  },
+  {
+    "id": "runner-temp-copy-folder",
+    "slice": "runner-temp",
+    "file": "Scripts/mutate.swift",
+    "search": "let folder = (temporaryFolder as NSString).appendingPathComponent(",
+    "replace": "let folder = (NSTemporaryDirectory() as NSString).appendingPathComponent(",
+    "test": "foreignWorkerThatStartsMidRunIsLeftAlone"
   }
 ]

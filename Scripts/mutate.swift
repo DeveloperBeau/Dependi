@@ -66,6 +66,12 @@ var shutdownThread: Thread?
 /// Held while a worker writes into its copy. The shutdown takes it and never gives it back, so no
 /// write can put a file back into a copy after the shutdown removes it.
 let copyLock = NSLock()
+/// The folder for worker copies and command output. Foundation on macOS ignores `TMPDIR`, so it
+/// is read here, and the runner tests give each run a folder of its own.
+let temporaryFolder: String = {
+    let value = ProcessInfo.processInfo.environment["TMPDIR"] ?? ""
+    return value.isEmpty ? NSTemporaryDirectory() : value
+}()
 
 /// Half the performance cores, and at least one. Each worker runs its own compiler, so a full
 /// count would starve the machine.
@@ -154,7 +160,7 @@ func killTree(_ root: Int32) {
 
 /// Runs a command in its own process group and kills the whole group on timeout.
 func run(_ arguments: [String], timeout: Double, in folder: String = root) -> CommandResult {
-    let outputURL = FileManager.default.temporaryDirectory
+    let outputURL = URL(fileURLWithPath: temporaryFolder)
         .appendingPathComponent("mutate-\(UUID().uuidString).txt")
     FileManager.default.createFile(atPath: outputURL.path, contents: nil)
     defer { try? FileManager.default.removeItem(at: outputURL) }
@@ -271,11 +277,11 @@ func exactFilter(for listed: String) -> String {
     "^" + NSRegularExpression.escapedPattern(for: listed)
 }
 
-/// A mutation may change production code, or the checker code of the architecture test, which has
-/// no other home. A test file is never mutated.
+/// A mutation may change production code, this runner, or the checker code of the architecture test,
+/// which has no other home. A test file is never mutated.
 func isMutableFile(_ relative: String) -> Bool {
     if relative.hasPrefix("/") || relative.contains("..") { return false }
-    if relative.hasPrefix("Sources/") { return true }
+    if relative.hasPrefix("Sources/") || relative == "Scripts/mutate.swift" { return true }
     return relative.hasPrefix("Tests/ArchitectureTests/") && !relative.hasSuffix("Tests.swift")
         && relative.hasSuffix(".swift")
 }
@@ -296,7 +302,7 @@ func validate(_ entries: [Entry]) -> [String] {
         let relative = entry.file
         if !isMutableFile(relative) {
             problems.append(
-                "\(entry.id): file must be a relative path under Sources/ or an architecture checker file under Tests/ArchitectureTests/"
+                "\(entry.id): file must be a relative path under Sources/, Scripts/mutate.swift, or an architecture checker file under Tests/ArchitectureTests/"
             )
             continue
         }
@@ -386,7 +392,7 @@ func makeCopy(index: Int, files: [String]) -> Result<Workspace, CopyError> {
     copyLock.lock()
     defer { copyLock.unlock() }
     if isStopping() { return .failure(.stopped) }
-    let folder = (NSTemporaryDirectory() as NSString).appendingPathComponent(
+    let folder = (temporaryFolder as NSString).appendingPathComponent(
         "mutate-worker-\(UUID().uuidString)-\(index)")
     stateLock.lock()
     workerFolders.append(folder)
@@ -654,6 +660,8 @@ for index in 0..<startedWorkers {
             for entry in group {
                 let begin = Date()
                 let outcome = mutate(entry, in: workspace)
+                // An interrupt may have ended this mutation. The shutdown owns the exit.
+                if isStopping() { while true { sleep(60) } }
                 stateLock.lock()
                 results[entry.id] = (outcome, Date().timeIntervalSince(begin))
                 stateLock.unlock()
@@ -676,6 +684,8 @@ for index in 0..<startedWorkers {
     }
 }
 workers.wait()
+// The workers can finish after an interrupt killed their child. The shutdown owns the exit.
+if isStopping() { while true { sleep(60) } }
 let rows = groups.joined().compactMap { entry in
     results[entry.id].map { (entry.id, $0.0, $0.1) }
 }

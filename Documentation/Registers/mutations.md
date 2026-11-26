@@ -236,6 +236,9 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | resolver-remote-search-no-early-exit | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `remoteSearchStopsAtFirstMatch` | killed | 2026-11-24 KILLED |
 | resolver-remote-search-unsorted | review-fix | `Sources/DependiDomain/LinkedPackageResolver.swift` | `remoteSearchStopsAtFirstMatch` | killed | 2026-11-24 KILLED |
 | resolver-unmatched-product | 2b | `Sources/DependiDomain/LinkedPackageResolver.swift` | `LinkedPackageResolverTests/unmatchedProduct()` | killed | 2026-11-24 KILLED |
+| runner-temp-copy-folder | runner-temp | `Scripts/mutate.swift` | `foreignWorkerThatStartsMidRunIsLeftAlone` | killed | not run |
+| runner-temp-ignores-tmpdir | runner-temp | `Scripts/mutate.swift` | `foreignWorkerThatStartsMidRunIsLeftAlone` | killed | not run |
+| runner-temp-inverted | runner-temp | `Scripts/mutate.swift` | `foreignWorkerThatStartsMidRunIsLeftAlone` | killed | not run |
 | settings-cleanup-escapes-folder | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `manifestEntriesThatEscapeTheFolderAreNeverDeleted` | killed | 2026-11-04 KILLED |
 | settings-cleanup-removes-kept | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `removedPackageRemovesItsPlistAndManifestEntry` | killed | 2026-11-04 KILLED |
 | settings-manifest-not-updated | 8 | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `removedPackageRemovesItsPlistAndManifestEntry` | killed | 2026-11-04 KILLED |

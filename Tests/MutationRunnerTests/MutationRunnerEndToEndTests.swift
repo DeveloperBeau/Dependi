@@ -28,24 +28,27 @@ struct MutationRunnerEndToEndTests {
     @Test("a real build with two workers kills a mutant in each file and leaves no copy")
     func realBuildWithTwoWorkersKillsInEachFile() throws {
         let package = try MiniPackage.create()
-        let before = try MiniPackage.workerFolders()
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
         let other = Register.entry(
             id: "triple-flip", search: "number * 3", replace: "number * 4",
             test: "tripledTriples", file: "Sources/Mini/Other.swift")
         let result = try RunnerBinary.run(
             on: package, double: nil, register: Register.list([Register.killed, other]),
-            extra: ["--timeout", "120", "--record", "no", "--workers", "2"])
+            extra: ["--timeout", "120", "--record", "no", "--workers", "2"], temporary: temporary)
         #expect(result.status == 0, "output: \(result.output)")
         #expect(result.output.contains("even-flip | KILLED |"))
         #expect(result.output.contains("triple-flip | KILLED |"))
         #expect(result.output.contains("workers: 2\n"))
         #expect(try package.gitStatus().isEmpty)
-        #expect(try MiniPackage.workerFolders().subtracting(before).isEmpty)
+        #expect(try MiniPackage.workerFolders(in: temporary.url).isEmpty)
     }
 
     @Test("an interrupt during a real looping test restores the file and stops every process")
     func interruptDuringRealRunRestoresFile() throws {
         let package = try MiniPackage.create()
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
         let registerURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("register-\(UUID().uuidString).json")
         try Register.list([Register.looping]).write(
@@ -58,6 +61,7 @@ struct MutationRunnerEndToEndTests {
             "--workers", "1", "--record", "no",
         ]
         process.currentDirectoryURL = package.root
+        process.environment = temporary.applied(to: ProcessInfo.processInfo.environment)
         process.standardOutput = FileHandle.nullDevice
         process.standardError = FileHandle.nullDevice
         try process.run()

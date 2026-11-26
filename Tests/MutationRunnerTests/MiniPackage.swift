@@ -176,12 +176,12 @@ struct MiniPackage {
         }
     }
 
-    /// The worker copy folders that the runner made in the temporary folder.
-    static func workerFolders() throws -> Set<String> {
+    /// The worker copy folders in the given folder, which is the runner's temporary folder.
+    static func workerFolders(in folder: URL) throws -> Set<String> {
         Set(
-            try FileManager.default.contentsOfDirectory(
-                atPath: FileManager.default.temporaryDirectory.path
-            ).filter { $0.hasPrefix("mutate-worker-") })
+            try FileManager.default.contentsOfDirectory(atPath: folder.path).filter {
+                $0.hasPrefix("mutate-worker-")
+            })
     }
 
     func sourceText() throws -> String { try String(contentsOf: sourceURL, encoding: .utf8) }
