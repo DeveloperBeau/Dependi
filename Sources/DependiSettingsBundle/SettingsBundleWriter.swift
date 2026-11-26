@@ -16,22 +16,35 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
     private let directories: any DirectoryListing
     private let writer: any FileWriting
     private let slugger: OutputNameSlugger
+    private let layout: AcknowledgementLayout
 
-    /// Creates a writer from the file interfaces and the output name maker.
+    /// Creates a writer from the file interfaces, the output name maker and the layout.
     public init(
         files: any FileReading,
         directories: any DirectoryListing,
         writer: any FileWriting,
-        slugger: OutputNameSlugger
+        slugger: OutputNameSlugger,
+        layout: AcknowledgementLayout
     ) {
         self.files = files
         self.directories = directories
         self.writer = writer
         self.slugger = slugger
+        self.layout = layout
+    }
+
+    /// Writes the acknowledgements into the bundle in the layout given at creation.
+    public func write(_ acknowledgements: [Acknowledgement], intoBundleAt bundlePath: String)
+        throws(DomainError)
+    {
+        switch layout {
+        case .panePerPackage: try writePanes(acknowledgements, intoBundleAt: bundlePath)
+        case .singlePage: try writeSinglePage(acknowledgements, bundle: bundlePath)
+        }
     }
 
     /// Writes the index pane, one child pane for each acknowledgement and the manifest.
-    public func write(_ acknowledgements: [Acknowledgement], intoBundleAt bundlePath: String)
+    private func writePanes(_ acknowledgements: [Acknowledgement], intoBundleAt bundlePath: String)
         throws(DomainError)
     {
         let folder = Self.join(bundlePath, Self.folderName)
@@ -100,7 +113,55 @@ public struct SettingsBundleWriter: AcknowledgementWriting {
         try writeIfDifferent(Data(Self.manifestText(newNames).utf8), to: manifestPath)
     }
 
+    /// Writes every license onto the index pane. It never creates the Acknowledgements folder.
+    /// If the folder is there from the other layout, it removes the panes that the manifest
+    /// names and leaves the manifest empty. Nothing is written into the folder but the manifest,
+    /// so a file that Dependi did not write stays and does not fail the run.
+    private func writeSinglePage(_ acknowledgements: [Acknowledgement], bundle: String)
+        throws(DomainError)
+    {
+        let folder = Self.join(bundle, Self.folderName)
+        let indexPath = Self.join(bundle, "\(Self.folderName).plist")
+        let manifestPath = Self.join(folder, Self.manifestName)
+        let page: [String: Any] = [
+            "Title": Self.tableName, "StringsTable": Self.tableName,
+            "PreferenceSpecifiers": acknowledgements.flatMap(Self.licenseGroups),
+        ]
+        // Encoding fails here, before any write, for text that XML cannot hold.
+        let pageData = try Self.encode(page, path: indexPath)
+        try requirePlainFolder(folder, inBundle: bundle)
+        let hasFolder = files.exists(at: folder)
+        let previous = try previousManifest(at: manifestPath)
+        var leftovers: [String] = []
+        if hasFolder {
+            leftovers = try directories.topLevelNames(in: folder).filter(Self.isTemporaryLeftover)
+        }
+
+        try writePlist(page, encodedAs: pageData, to: indexPath)
+        guard hasFolder else { return }
+        // The old panes go only after the index stops pointing at them.
+        for stale in previous.sorted() + leftovers where files.exists(at: Self.join(folder, stale))
+        {
+            try writer.removeItem(at: Self.join(folder, stale))
+        }
+        try writeIfDifferent(Data(), to: manifestPath)
+    }
+
     // MARK: Panes
+
+    /// One group for each license document. A package with no document keeps a title only
+    /// group, so it is never dropped.
+    private static func licenseGroups(_ acknowledgement: Acknowledgement) -> [[String: Any]] {
+        let name = acknowledgement.displayName
+        guard !acknowledgement.documents.isEmpty else {
+            return [["Type": "PSGroupSpecifier", "Title": name]]
+        }
+        let isOnlyDocument = acknowledgement.documents.count == 1
+        return acknowledgement.documents.map { document in
+            let title = isOnlyDocument ? name : "\(name) (\(document.fileName))"
+            return ["Type": "PSGroupSpecifier", "Title": title, "FooterText": document.text]
+        }
+    }
 
     private static func childPane(_ acknowledgement: Acknowledgement) -> [String: Any] {
         let groups: [[String: Any]] = acknowledgement.documents.map {
