@@ -2730,7 +2730,7 @@
     "search": "traits[location, default: []].formUnion(names)",
     "replace": "if !names.isEmpty { traits[location, default: []].formUnion(names) }",
     "test": "emptyTraitListIsKept",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-unlisted-no-default",
@@ -2739,7 +2739,7 @@
     "search": "traits[location, default: []].insert(\"default\")",
     "replace": "_ = location",
     "test": "unlistedReferenceGivesDefault",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-bad-value-accepted",
@@ -2748,7 +2748,7 @@
     "search": "guard let names = value as? [String] else {",
     "replace": "guard let names = value as? [String] ?? Optional([]) else {",
     "test": "traitsNotAList",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-wired",
@@ -2828,7 +2828,8 @@
     "file": "Scripts/mutate.swift",
     "search": "return value.isEmpty ? NSTemporaryDirectory() : value",
     "replace": "return NSTemporaryDirectory()",
-    "test": "foreignWorkerThatStartsMidRunIsLeftAlone"
+    "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "runner-temp-inverted",
@@ -2836,7 +2837,8 @@
     "file": "Scripts/mutate.swift",
     "search": "return value.isEmpty ? NSTemporaryDirectory() : value",
     "replace": "return value.isEmpty ? value : NSTemporaryDirectory()",
-    "test": "foreignWorkerThatStartsMidRunIsLeftAlone"
+    "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "runner-temp-copy-folder",
@@ -2844,6 +2846,7 @@
     "file": "Scripts/mutate.swift",
     "search": "let folder = (temporaryFolder as NSString).appendingPathComponent(",
     "replace": "let folder = (NSTemporaryDirectory() as NSString).appendingPathComponent(",
-    "test": "foreignWorkerThatStartsMidRunIsLeftAlone"
+    "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   }
 ]
