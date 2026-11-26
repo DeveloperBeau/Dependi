@@ -201,4 +201,17 @@ struct MiniPackage {
             $0.contains(text) && !$0.contains("ps -axo")
         }
     }
+
+    /// Lists running processes whose command line mentions any of the given texts. An empty list
+    /// of texts matches nothing.
+    static func processes(mentioningAnyOf texts: [String]) throws -> [String] {
+        guard !texts.isEmpty else { return [] }
+        let table = try ChildProcess.run(
+            ["ps", "-axo", "pid=,command="],
+            workingDirectory: FileManager.default.temporaryDirectory
+        ).output
+        return table.split(separator: "\n").map(String.init).filter { line in
+            !line.contains("ps -axo") && texts.contains { line.contains($0) }
+        }
+    }
 }

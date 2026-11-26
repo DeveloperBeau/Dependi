@@ -603,6 +603,8 @@ struct MutationRunnerTests {
         let package = try MiniPackage.create()
         let double = try SwiftDouble.make()
         defer { double.remove() }
+        let foreign = try Self.startForeignWorker()
+        defer { foreign.stop() }
         let before = try MiniPackage.workerFolders()
         let registerURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("register-\(UUID().uuidString).json")
@@ -622,8 +624,11 @@ struct MutationRunnerTests {
         try process.run()
         let deadline = Date().addingTimeInterval(300)
         var sawMutation = false
+        var ownFolders = Set<String>()
         while Date() < deadline, process.isRunning, !sawMutation {
-            for folder in try MiniPackage.workerFolders().subtracting(before) {
+            let newFolders = try MiniPackage.workerFolders().subtracting(before)
+            ownFolders.formUnion(newFolders)
+            for folder in newFolders {
                 let file = FileManager.default.temporaryDirectory
                     .appendingPathComponent(folder).appendingPathComponent(
                         "Sources/Mini/Mini.swift")
@@ -635,6 +640,8 @@ struct MutationRunnerTests {
             Thread.sleep(forTimeInterval: 0.25)
         }
         #expect(sawMutation, "no worker applied the mutation")
+        ownFolders.formUnion(try MiniPackage.workerFolders().subtracting(before))
+        #expect(!ownFolders.isEmpty, "the run made no worker copies")
         kill(process.processIdentifier, SIGINT)
         let exitDeadline = Date().addingTimeInterval(60)
         while process.isRunning, Date() < exitDeadline { Thread.sleep(forTimeInterval: 0.1) }
@@ -644,8 +651,52 @@ struct MutationRunnerTests {
         }
         #expect(try package.sourceText() == MiniPackage.sourceText)
         #expect(try package.gitStatus().isEmpty)
-        #expect(try MiniPackage.workerFolders().subtracting(before).isEmpty)
-        #expect(try MiniPackage.processes(mentioning: "mutate-worker-").isEmpty)
+        #expect(try MiniPackage.workerFolders().intersection(ownFolders).isEmpty)
+        #expect(try MiniPackage.processes(mentioningAnyOf: Array(ownFolders)).isEmpty)
+        #expect(foreign.process.isRunning, "the interrupt stopped another run's worker")
+        #expect(try !MiniPackage.processes(mentioning: foreign.marker).isEmpty)
+    }
+
+    /// A running process whose command line mentions `mutate-worker-` but which is not a copy
+    /// made by the run under test.
+    struct ForeignWorker {
+        let process: Process
+        let marker: String
+        let folder: URL
+
+        func stop() {
+            if process.isRunning {
+                process.terminate()
+                process.waitUntilExit()
+            }
+            try? FileManager.default.removeItem(at: folder)
+        }
+    }
+
+    /// Starts a wrapper script from a folder named like a worker copy. The folder sits in the
+    /// build folder, not the temporary folder, so `MiniPackage.workerFolders()` never lists it.
+    /// A copied system binary would not run because its signature would not match the new path.
+    static func startForeignWorker() throws -> ForeignWorker {
+        let marker = "mutate-worker-foreign-\(UUID().uuidString)"
+        let folder = MiniPackage.sharedRoot.deletingLastPathComponent()
+            .appendingPathComponent(marker)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let script = folder.appendingPathComponent(marker)
+        let body = "#!/bin/bash\nwhile true; do sleep 60; done\n"
+        try body.write(to: script, atomically: true, encoding: .utf8)
+        try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: script.path)
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/bin/bash")
+        process.arguments = [script.path]
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+        do {
+            try process.run()
+        } catch {
+            try? FileManager.default.removeItem(at: folder)
+            throw error
+        }
+        return ForeignWorker(process: process, marker: marker, folder: folder)
     }
 
     @Test("each entry builds once and each distinct baseline runs once without a build")
