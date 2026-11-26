@@ -2985,12 +2985,75 @@
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
-    "id": "single-page-composition-keeps-panes",
+    "id": "single-page-composition-passes-layout",
     "slice": "single-page",
     "file": "Sources/DependiComposition/DependiApplication.swift",
-    "search": "layout: .panePerPackage",
-    "replace": "layout: .singlePage",
-    "test": "archiveWritesDirectAndTransitive",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "search": "layout: layout",
+    "replace": "layout: .panePerPackage",
+    "test": "singlePageWritesOneIndex"
+  },
+  {
+    "id": "single-page-config-decode-default",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "singlePage = try value(\"singlePage\", Bool.self) ?? false",
+    "replace": "singlePage = try value(\"singlePage\", Bool.self) ?? true",
+    "test": "singlePageDefaultsToFalse"
+  },
+  {
+    "id": "single-page-config-decode-ignored",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "singlePage = try value(\"singlePage\", Bool.self) ?? false",
+    "replace": "singlePage = false",
+    "test": "singlePageTrueDecodes"
+  },
+  {
+    "id": "single-page-config-known-key",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "\"requireLicenses\", \"singlePage\",",
+    "replace": "\"requireLicenses\",",
+    "test": "singlePageTrueDecodes"
+  },
+  {
+    "id": "single-page-config-encode",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "try put(\"singlePage\", singlePage)",
+    "replace": "try put(\"singlePage\", false)",
+    "test": "singlePageRoundTrip"
+  },
+  {
+    "id": "single-page-config-init-stored",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "self.singlePage = singlePage",
+    "replace": "self.singlePage = false",
+    "test": "singlePageRoundTrip"
+  },
+  {
+    "id": "single-page-generate-layout-swapped",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": "settings.singlePage ? .panePerPackage : .singlePage",
+    "test": "singlePageAsksForSinglePage"
+  },
+  {
+    "id": "single-page-generate-layout-forced-panes",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": ".panePerPackage",
+    "test": "singlePageAsksForSinglePage"
+  },
+  {
+    "id": "single-page-generate-layout-forced-single",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": ".singlePage",
+    "test": "defaultAsksForPanes"
   }
 ]
