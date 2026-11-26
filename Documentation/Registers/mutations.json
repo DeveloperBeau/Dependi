@@ -3052,7 +3052,7 @@
     "id": "single-page-generate-layout-swapped",
     "slice": "single-page",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": "settings.singlePage ? .panePerPackage : .singlePage",
     "test": "singlePageAsksForSinglePage",
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
@@ -3061,7 +3061,7 @@
     "id": "single-page-generate-layout-forced-panes",
     "slice": "single-page",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": ".panePerPackage",
     "test": "singlePageAsksForSinglePage",
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
@@ -3070,7 +3070,7 @@
     "id": "single-page-generate-layout-forced-single",
     "slice": "single-page",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": ".singlePage",
     "test": "defaultAsksForPanes",
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
@@ -3110,5 +3110,45 @@
     "replace": "if false { while true { sleep(60) } }",
     "test": "shutdownOwnsTheExitWhenCleanupIsSlow",
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-flag-parse-always-false",
+    "slice": "single-page",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "return .generate(forcesSinglePage: forcesSinglePage)",
+    "replace": "return .generate(forcesSinglePage: false)",
+    "test": "tableRowsAreAccepted"
+  },
+  {
+    "id": "single-page-flag-duplicate-allowed",
+    "slice": "single-page",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "                if forcesSinglePage {",
+    "replace": "                if false {",
+    "test": "generateDuplicate"
+  },
+  {
+    "id": "single-page-flag-layout-and",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": "forcesSinglePage && settings.singlePage ? .singlePage : .panePerPackage",
+    "test": "flagWithEmptyConfigurationAsksForSinglePage"
+  },
+  {
+    "id": "single-page-flag-layout-ignored",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": "settings.singlePage ? .singlePage : .panePerPackage",
+    "test": "flagBeatsSinglePageFalse"
+  },
+  {
+    "id": "single-page-flag-not-passed",
+    "slice": "single-page",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "output: console, forcesSinglePage: forcesSinglePage)",
+    "replace": "output: console, forcesSinglePage: false)",
+    "test": "flagForcesSinglePage"
   }
 ]

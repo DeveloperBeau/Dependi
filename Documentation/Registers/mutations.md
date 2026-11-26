@@ -254,6 +254,11 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | single-page-config-init-stored | single-page | `Sources/DependiEntities/ToolConfiguration.swift` | `singlePageRoundTrip` | killed | 2026-11-26 KILLED |
 | single-page-config-known-key | single-page | `Sources/DependiEntities/ToolConfiguration.swift` | `singlePageTrueDecodes` | killed | 2026-11-26 KILLED |
 | single-page-creates-bundle | single-page | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `singlePageCreatesAMissingBundleFolderAndNoAcknowledgementsFolder` | killed | 2026-11-26 KILLED |
+| single-page-flag-duplicate-allowed | single-page | `Sources/DependiCommandLine/CommandLineParser.swift` | `generateDuplicate` | killed | not run |
+| single-page-flag-layout-and | single-page | `Sources/DependiGenerate/GenerateFeature.swift` | `flagWithEmptyConfigurationAsksForSinglePage` | killed | not run |
+| single-page-flag-layout-ignored | single-page | `Sources/DependiGenerate/GenerateFeature.swift` | `flagBeatsSinglePageFalse` | killed | not run |
+| single-page-flag-not-passed | single-page | `Sources/DependiComposition/DependiApplication.swift` | `flagForcesSinglePage` | killed | not run |
+| single-page-flag-parse-always-false | single-page | `Sources/DependiCommandLine/CommandLineParser.swift` | `tableRowsAreAccepted` | killed | not run |
 | single-page-folder-not-created | single-page | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `singlePageOneDocumentPackageWritesOnlyTheIndex` | killed | 2026-11-26 KILLED |
 | single-page-footer-text | single-page | `Sources/DependiSettingsBundle/SettingsBundleWriter.swift` | `singlePageOneDocumentPackageWritesOnlyTheIndex` | killed | 2026-11-26 KILLED |
 | single-page-generate-layout-forced-panes | single-page | `Sources/DependiGenerate/GenerateFeature.swift` | `singlePageAsksForSinglePage` | killed | 2026-11-26 KILLED |
