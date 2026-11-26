@@ -64,6 +64,7 @@ Use the same `version` and `commit` values that `.dependi.json` holds. The scrip
 | `manualEntries` | Code that has no package, each with a `name` and a `licensePath` inside the project. |
 | `gateConfigurations` | Configurations that run besides an archive. The default is `Release`. |
 | `requireLicenses` | Fail when a remote package has no license file. The default is off: such a package is skipped and named on the error output. |
+| `singlePage` | Put every license on one page instead of one child pane for each package. The default is off. |
 | `allowUnreached` | Allow resolved packages that no target of your project links. |
 | `includeBuildTools` | Include the dependencies of macro and plugin targets. |
 | `sourcePackagesPath` | Where `SourcePackages` is, if it is not next to the build folder. |

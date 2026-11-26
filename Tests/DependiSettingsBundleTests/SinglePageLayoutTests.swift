@@ -56,6 +56,19 @@ struct SinglePageLayoutTests {
             ])
     }
 
+    @Test func singlePageCreatesAMissingBundleFolderAndNoAcknowledgementsFolder() throws {
+        let fs = InMemoryFileSystem()
+        try fs.createDirectory(at: "/products/App.app")
+        try makeSinglePageWriter(fs).write([alpha], intoBundleAt: bundle)
+        #expect(
+            try readPlist(fs, index)
+                == page([group("Alpha", "MIT")]))
+        #expect(
+            try allPaths(fs, under: "/products/App.app") == [
+                bundle, "\(bundle)/Acknowledgements.plist",
+            ])
+    }
+
     @Test func singlePageTitlesNameTheFileOnlyWhenAPackageHasSeveralDocuments() throws {
         let fs = try freshFileSystem()
         let acks = [

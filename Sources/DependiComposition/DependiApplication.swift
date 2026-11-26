@@ -113,9 +113,11 @@ public struct DependiApplication {
                 environment: environment, configuration: settings, now: { Date() },
                 process: limited, files: disk,
                 directories: disk, writer: disk),
-            writer: SettingsBundleWriter(
-                files: disk, directories: disk, writer: disk, slugger: OutputNameSlugger(),
-                layout: .panePerPackage),
+            writers: { layout in
+                SettingsBundleWriter(
+                    files: disk, directories: disk, writer: disk, slugger: OutputNameSlugger(),
+                    layout: layout)
+            },
             output: console)
         do {
             _ = try feature.run()

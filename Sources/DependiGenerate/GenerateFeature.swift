@@ -9,10 +9,10 @@ public struct GenerateFeature: Sendable {
     private let dependencySource: any DependencySourceReading
     private let linkedProducts: any LinkedProductReading
     private let manifests: any PackageManifestReading
-    private let writer: any AcknowledgementWriting
+    private let writers: @Sendable (AcknowledgementLayout) -> any AcknowledgementWriting
     private let output: any OutputWriting
 
-    /// Creates the feature with every outside capability it needs.
+    /// Creates the feature with every outside capability it needs. `writers` gives the writer for a layout. It is asked once for each write.
     public init(
         environment: any EnvironmentReading,
         files: any FileReading,
@@ -20,7 +20,7 @@ public struct GenerateFeature: Sendable {
         dependencySource: any DependencySourceReading,
         linkedProducts: any LinkedProductReading,
         manifests: any PackageManifestReading,
-        writer: any AcknowledgementWriting,
+        writers: @escaping @Sendable (AcknowledgementLayout) -> any AcknowledgementWriting,
         output: any OutputWriting
     ) {
         self.environment = environment
@@ -29,7 +29,7 @@ public struct GenerateFeature: Sendable {
         self.dependencySource = dependencySource
         self.linkedProducts = linkedProducts
         self.manifests = manifests
-        self.writer = writer
+        self.writers = writers
         self.output = output
     }
 
@@ -56,7 +56,8 @@ public struct GenerateFeature: Sendable {
         }
         let bundle = try OutputLocation(files: files).bundlePath(
             context: context, configuration: settings)
-        try writer.write(acknowledgements, intoBundleAt: bundle)
+        let layout: AcknowledgementLayout = settings.singlePage ? .singlePage : .panePerPackage
+        try writers(layout).write(acknowledgements, intoBundleAt: bundle)
         output.writeLine("Dependi: wrote \(acknowledgements.count) acknowledgements to \(bundle)")
         return .wrote(count: acknowledgements.count)
     }

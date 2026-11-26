@@ -6,7 +6,7 @@
     "search": "throw EntityError.unknownConfigurationKey(first)",
     "replace": "_ = first",
     "test": "unknownKeyFailsNamingTheKey",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "config-mistyped-key",
@@ -15,7 +15,7 @@
     "search": "!Self.knownKeys.contains($0)",
     "replace": "$0 == \"\"",
     "test": "mistypedKeyFails",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "config-version-pattern",
@@ -24,7 +24,7 @@
     "search": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
     "replace": "^[0-9.]+$",
     "test": "badVersionsFail",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "config-commit-case",
@@ -33,7 +33,7 @@
     "search": "^[0-9a-f]{40}$",
     "replace": "^[0-9a-fA-F]{40}$",
     "test": "badCommitsFail",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "config-default-gate",
@@ -42,7 +42,7 @@
     "search": "defaultGateConfigurations = [\"Release\"]",
     "replace": "defaultGateConfigurations = [String]()",
     "test": "emptyObjectGivesDefaults",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "license-name-separator",
@@ -995,7 +995,7 @@
     "search": "if context.isScriptSandboxEnabled == true { throw .scriptSandboxEnabled }",
     "replace": "",
     "test": "sandboxOnFails",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "gen-revision-check",
@@ -1004,7 +1004,7 @@
     "search": "wanted != actual",
     "replace": "false",
     "test": "revisionMismatch",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "gen-unreached",
@@ -1013,7 +1013,7 @@
     "search": "if !result.unreached.isEmpty && !settings.allowUnreached {",
     "replace": "if false {",
     "test": "unreachedPackages",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "gen-permission-mapping",
@@ -1022,7 +1022,7 @@
     "search": "reason.lowercased().contains(\"not permitted\")",
     "replace": "false",
     "test": "permissionErrorMeansSandbox",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-outside",
@@ -1031,7 +1031,7 @@
     "search": "catch .licenseOutsideCheckout {",
     "replace": "catch .licenseMissing {",
     "test": "manualEntryRefused",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-absolute",
@@ -1040,7 +1040,7 @@
     "search": "!path.hasPrefix(\"/\"), ",
     "replace": "",
     "test": "manualEntryRefused",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "gen-local-packages",
@@ -1049,7 +1049,7 @@
     "search": "for path in linked.localPackagePaths {",
     "replace": "for path in linked.localPackagePaths where false {",
     "test": "localPackageFromProject",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "gen-debug-skip",
@@ -1058,7 +1058,7 @@
     "search": "if case .skip(let reason) = decision {",
     "replace": "if case .skip(let reason) = decision, reason.isEmpty {",
     "test": "GenerateFeatureTests/debugSkips()",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "gen-platform-ios",
@@ -2246,7 +2246,7 @@
     "replace": "guard true else { continue }",
     "test": "licenseFolderOnlyIsMissing",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "generate-nested-folder-skipped",
@@ -2255,7 +2255,7 @@
     "replace": "where true {",
     "test": "licenseLayouts",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "workspace-registry-skipped",
@@ -2476,7 +2476,7 @@
     "search": ".collect(from: locals)",
     "replace": ".collect(from: [])",
     "test": "nestedProductResolves",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-local-quietly",
@@ -2485,7 +2485,7 @@
     "search": "if package.kind == .local { continue }",
     "replace": "if false { continue }",
     "test": "localSkippedQuietly",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "generate-require-licenses",
@@ -2494,7 +2494,7 @@
     "search": "if settings.requireLicenses {",
     "replace": "if false {",
     "test": "strictFails",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-line",
@@ -2503,7 +2503,7 @@
     "search": "\"Dependi: skipped \\(package.identity.value): no license file\")",
     "replace": "\"\")",
     "test": "remoteSkipped",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "config-require-licenses",
@@ -2511,7 +2511,8 @@
     "file": "Sources/DependiEntities/ToolConfiguration.swift",
     "search": "requireLicenses = try value(\"requireLicenses\", Bool.self) ?? false",
     "replace": "requireLicenses = false",
-    "test": "strictFails"
+    "test": "strictFails",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "arch-undeclared-import",
@@ -2940,6 +2941,15 @@
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
+    "id": "single-page-creates-bundle",
+    "slice": "single-page",
+    "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
+    "search": "try writer.createDirectory(at: bundle)",
+    "replace": ";",
+    "test": "singlePageCreatesAMissingBundleFolderAndNoAcknowledgementsFolder",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
     "id": "single-page-index-before-removals",
     "slice": "single-page",
     "file": "Sources/DependiSettingsBundle/SettingsBundleWriter.swift",
@@ -2985,12 +2995,84 @@
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
-    "id": "single-page-composition-keeps-panes",
+    "id": "single-page-composition-passes-layout",
     "slice": "single-page",
     "file": "Sources/DependiComposition/DependiApplication.swift",
-    "search": "layout: .panePerPackage",
-    "replace": "layout: .singlePage",
-    "test": "archiveWritesDirectAndTransitive",
+    "search": "layout: layout",
+    "replace": "layout: .panePerPackage",
+    "test": "singlePageWritesOneIndex",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-config-decode-default",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "singlePage = try value(\"singlePage\", Bool.self) ?? false",
+    "replace": "singlePage = try value(\"singlePage\", Bool.self) ?? true",
+    "test": "singlePageDefaultsToFalse",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-config-decode-ignored",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "singlePage = try value(\"singlePage\", Bool.self) ?? false",
+    "replace": "singlePage = false",
+    "test": "singlePageTrueDecodes",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-config-known-key",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "\"requireLicenses\", \"singlePage\",",
+    "replace": "\"requireLicenses\",",
+    "test": "singlePageTrueDecodes",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-config-encode",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "try put(\"singlePage\", singlePage)",
+    "replace": "try put(\"singlePage\", false)",
+    "test": "singlePageRoundTrip",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-config-init-stored",
+    "slice": "single-page",
+    "file": "Sources/DependiEntities/ToolConfiguration.swift",
+    "search": "self.singlePage = singlePage",
+    "replace": "self.singlePage = false",
+    "test": "singlePageRoundTrip",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-generate-layout-swapped",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": "settings.singlePage ? .panePerPackage : .singlePage",
+    "test": "singlePageAsksForSinglePage",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-generate-layout-forced-panes",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": ".panePerPackage",
+    "test": "singlePageAsksForSinglePage",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-generate-layout-forced-single",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": ".singlePage",
+    "test": "defaultAsksForPanes",
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {

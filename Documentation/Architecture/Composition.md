@@ -7,6 +7,7 @@
 ## Parts
 
 - `DependiApplication` parses the arguments, runs one command and returns the exit code. It takes the process runner and the console handles from outside.
+- `DependiApplication` gives the generate feature a closure that builds a `SettingsBundleWriter` for the layout that the feature asks for.
 - `LazyManifestReader` creates the package graph reader when the first manifest is needed. A build that is skipped therefore starts no process.
 - `DeadlineProcessRunner` wraps the process runner for the generate command. It starts the run clock when it is built. Before each process it checks the run limit and fails with a message that names `runTimeoutSeconds`. It also caps the time of the child at the time that is left.
 - `SourceRootFinder` walks up from the running program to find the Dependi source folder, if there is one. The wizard uses it to pin the commit.

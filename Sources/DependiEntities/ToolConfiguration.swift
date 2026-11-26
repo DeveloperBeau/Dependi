@@ -18,6 +18,8 @@ public struct ToolConfiguration: Hashable, Sendable, Codable {
     public let allowUnreached: Bool
     /// Whether a remote package with no license file fails the run. When it is off, the package is skipped with a warning.
     public let requireLicenses: Bool
+    /// Whether every license goes on one page instead of one child pane for each package.
+    public let singlePage: Bool
     /// The time limit in seconds for one child process.
     public let processTimeoutSeconds: Double
     /// The time limit in seconds for a whole run.
@@ -47,7 +49,8 @@ public struct ToolConfiguration: Hashable, Sendable, Codable {
         runTimeoutSeconds: Double,
         version: String?,
         commit: String?,
-        requireLicenses: Bool = false
+        requireLicenses: Bool = false,
+        singlePage: Bool = false
     ) {
         self.excludes = excludes
         self.manualEntries = manualEntries
@@ -57,6 +60,7 @@ public struct ToolConfiguration: Hashable, Sendable, Codable {
         self.includeBuildTools = includeBuildTools
         self.allowUnreached = allowUnreached
         self.requireLicenses = requireLicenses
+        self.singlePage = singlePage
         self.processTimeoutSeconds = processTimeoutSeconds
         self.runTimeoutSeconds = runTimeoutSeconds
         self.version = version
@@ -73,7 +77,7 @@ public struct ToolConfiguration: Hashable, Sendable, Codable {
     private static let knownKeys: Set<String> = [
         "excludes", "manualEntries", "gateConfigurations", "sourcePackagesPath", "outputPath",
         "includeBuildTools", "allowUnreached", "processTimeoutSeconds", "runTimeoutSeconds",
-        "version", "commit", "requireLicenses",
+        "version", "commit", "requireLicenses", "singlePage",
     ]
 
     /// Decodes a configuration. An unknown key, a bad version or a bad commit fails.
@@ -95,6 +99,7 @@ public struct ToolConfiguration: Hashable, Sendable, Codable {
         includeBuildTools = try value("includeBuildTools", Bool.self) ?? false
         allowUnreached = try value("allowUnreached", Bool.self) ?? false
         requireLicenses = try value("requireLicenses", Bool.self) ?? false
+        singlePage = try value("singlePage", Bool.self) ?? false
         processTimeoutSeconds =
             try value("processTimeoutSeconds", Double.self) ?? Self.defaultProcessTimeoutSeconds
         runTimeoutSeconds =
@@ -127,6 +132,7 @@ public struct ToolConfiguration: Hashable, Sendable, Codable {
         try put("includeBuildTools", includeBuildTools)
         try put("allowUnreached", allowUnreached)
         try put("requireLicenses", requireLicenses)
+        try put("singlePage", singlePage)
         try put("processTimeoutSeconds", processTimeoutSeconds)
         try put("runTimeoutSeconds", runTimeoutSeconds)
         try put("version", version)

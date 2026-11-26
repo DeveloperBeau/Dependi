@@ -15,7 +15,7 @@ The caller passes the path of the `Settings.bundle` folder. The writer writes wh
 
 ## Layouts
 
-The writer takes an `AcknowledgementLayout` when it is created. The composition passes `panePerPackage`. Nothing in the tool passes `singlePage` yet.
+The writer takes an `AcknowledgementLayout` when it is created. The generate feature chooses the layout from the `singlePage` key of `.dependi.json`. If the key is absent or false, it is `panePerPackage`.
 
 | Layout | Output |
 |---|---|
@@ -26,7 +26,7 @@ The writer takes an `AcknowledgementLayout` when it is created. The composition 
 
 The single page layout writes `<bundle>/Acknowledgements.plist` with `Title` and `StringsTable`. Its `PreferenceSpecifiers` hold one `PSGroupSpecifier` for each license document, in the given package order and then in document order. The group `Title` is the display name when the package has one document. With two or more documents it is `<display name> (<file name>)`. `FooterText` is the license text. A package with no documents gives one group with only a `Title`, so no package is dropped. Two packages with the same display name both appear. No slugs are used.
 
-The single page layout never creates `Acknowledgements/`. If the folder does not exist, the index is the only file written.
+The single page layout creates the bundle folder if it does not exist, as the other layout does. It never creates `Acknowledgements/`. If that folder does not exist, the index is the only file written.
 
 If the folder exists, the run does this:
 
@@ -85,4 +85,4 @@ Plists use `PropertyListSerialization` in XML form. Foundation writes dictionary
 
 `SettingsBundleWriterTests` covers the shape of each plist, text fidelity, odd names, order, repeat runs, changed and removed packages, the unknown-file refusal, ownership, read-only and read-back failures, platform path fixtures, the golden bytes and a seeded fuzz.
 
-`SinglePageLayoutTests` covers the single page shape, the titles, a package with no documents, equal display names, both switches between layouts, temporary leftovers, the write order, repeat runs, the link refusal, a NUL in a text, read-only and read-back failures, the golden bytes and a seeded fuzz.
+`SinglePageLayoutTests` covers the single page shape, the missing bundle folder, the titles, a package with no documents, equal display names, both switches between layouts, temporary leftovers, the write order, repeat runs, the link refusal, a NUL in a text, read-only and read-back failures, the golden bytes and a seeded fuzz.
