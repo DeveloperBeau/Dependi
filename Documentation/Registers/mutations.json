@@ -2992,5 +2992,41 @@
     "replace": "layout: .singlePage",
     "test": "archiveWritesDirectAndTransitive",
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "runner-temp-ignores-tmpdir",
+    "slice": "runner-temp",
+    "file": "Scripts/mutate.swift",
+    "search": "return value.isEmpty ? NSTemporaryDirectory() : value",
+    "replace": "return NSTemporaryDirectory()",
+    "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "runner-temp-inverted",
+    "slice": "runner-temp",
+    "file": "Scripts/mutate.swift",
+    "search": "return value.isEmpty ? NSTemporaryDirectory() : value",
+    "replace": "return value.isEmpty ? value : NSTemporaryDirectory()",
+    "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "runner-temp-copy-folder",
+    "slice": "runner-temp",
+    "file": "Scripts/mutate.swift",
+    "search": "let folder = (temporaryFolder as NSString).appendingPathComponent(",
+    "replace": "let folder = (NSTemporaryDirectory() as NSString).appendingPathComponent(",
+    "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "runner-shutdown-owns-exit",
+    "slice": "runner-temp",
+    "file": "Scripts/mutate.swift",
+    "search": "if isStopping() { while true { sleep(60) } }",
+    "replace": "if false { while true { sleep(60) } }",
+    "test": "shutdownOwnsTheExitWhenCleanupIsSlow",
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   }
 ]

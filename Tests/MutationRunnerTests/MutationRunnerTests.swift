@@ -359,6 +359,8 @@ struct MutationRunnerTests {
         let package = try MiniPackage.create()
         let double = try SwiftDouble.make()
         defer { double.remove() }
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
         let registerURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("register-\(UUID().uuidString).json")
         try Register.list([Register.looping]).write(
@@ -371,7 +373,7 @@ struct MutationRunnerTests {
             "--root", package.root.path, "--register", registerURL.path, "--timeout", "600",
         ]
         process.currentDirectoryURL = package.root
-        process.environment = double.environment
+        process.environment = temporary.applied(to: double.environment)
         process.standardOutput = FileHandle.nullDevice
         process.standardError = FileHandle.nullDevice
         try process.run()
@@ -419,8 +421,13 @@ struct MutationRunnerTests {
         let generated = FileManager.default.temporaryDirectory
             .appendingPathComponent("page-\(UUID().uuidString).md")
         defer { try? FileManager.default.removeItem(at: generated) }
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
         let result = try ChildProcess.run(
-            [RunnerBinary.url.path, "--root", root.path, "--markdown", generated.path],
+            [
+                temporary.setting, RunnerBinary.url.path, "--root", root.path, "--markdown",
+                generated.path,
+            ],
             workingDirectory: root)
         #expect(result.status == 0, "output: \(result.output)")
         let committed = try String(
@@ -584,18 +591,19 @@ struct MutationRunnerTests {
         let package = try MiniPackage.create()
         let double = try SwiftDouble.make()
         defer { double.remove() }
-        let before = try MiniPackage.workerFolders()
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
         let result = try RunnerBinary.run(
             on: package, double: double,
             register: Register.list([Register.killed, Register.survivor, Self.otherKilled]),
-            extra: ["--timeout", "90", "--record", "no", "--workers", "2"])
+            extra: ["--timeout", "90", "--record", "no", "--workers", "2"], temporary: temporary)
         #expect(result.status == 1, "output: \(result.output)")
         #expect(result.output.contains("even-flip | KILLED |"))
         #expect(result.output.contains("unused | SURVIVED |"))
         #expect(result.output.contains("triple-flip | KILLED |"))
         #expect(result.output.contains("workers: 2\n"))
         #expect(try package.gitStatus().isEmpty)
-        #expect(try MiniPackage.workerFolders().subtracting(before).isEmpty)
+        #expect(try MiniPackage.workerFolders(in: temporary.url).isEmpty)
     }
 
     @Test("an interrupt during a parallel run removes the copies and stops every process")
@@ -603,12 +611,118 @@ struct MutationRunnerTests {
         let package = try MiniPackage.create()
         let double = try SwiftDouble.make()
         defer { double.remove() }
-        let before = try MiniPackage.workerFolders()
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
+        let foreign = try Self.startForeignWorker(in: FileManager.default.temporaryDirectory)
+        defer { foreign.stop() }
+        let registerURL = try Self.writeParallelLoopingRegister()
+        defer { try? FileManager.default.removeItem(at: registerURL) }
+        let process = try Self.startParallelRun(
+            on: package, registerURL: registerURL,
+            environment: temporary.applied(to: double.environment))
+        let watch = try Self.waitForMutatedCopy(in: temporary, while: process)
+        #expect(watch.sawMutation, "no worker applied the mutation")
+        #expect(!watch.folders.isEmpty, "the run made no worker copies")
+        Self.interrupt(process)
+        #expect(!process.isRunning, "the runner did not stop after the interrupt")
+        if !process.isRunning {
+            #expect(
+                process.terminationReason == .exit && process.terminationStatus == 130,
+                "status \(process.terminationStatus), reason \(process.terminationReason)")
+        }
+        #expect(try package.sourceText() == MiniPackage.sourceText)
+        #expect(try package.gitStatus().isEmpty)
+        #expect(try MiniPackage.workerFolders(in: temporary.url).isEmpty)
+        #expect(try MiniPackage.processes(mentioningAnyOf: Array(watch.folders)).isEmpty)
+        #expect(foreign.process.isRunning, "the interrupt stopped another run's worker")
+        #expect(try !MiniPackage.processes(mentioning: foreign.marker).isEmpty)
+        #expect(FileManager.default.fileExists(atPath: foreign.folder.path))
+    }
+
+    @Test("a foreign worker that starts mid-run is left alone")
+    func foreignWorkerThatStartsMidRunIsLeftAlone() throws {
+        let package = try MiniPackage.create()
+        let double = try SwiftDouble.make()
+        defer { double.remove() }
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
+        let registerURL = try Self.writeParallelLoopingRegister()
+        defer { try? FileManager.default.removeItem(at: registerURL) }
+        let process = try Self.startParallelRun(
+            on: package, registerURL: registerURL,
+            environment: temporary.applied(to: double.environment))
+        var foreign: ForeignWorker?
+        defer { foreign?.stop() }
+        // The foreign worker goes into the shared folder only once this run has a copy of its
+        // own, so it is new to the run and sits where a runner that ignored TMPDIR would look.
+        let watch = try Self.waitForMutatedCopy(in: temporary, while: process) {
+            foreign = try Self.startForeignWorker(in: FileManager.default.temporaryDirectory)
+        }
+        #expect(watch.sawMutation, "no worker applied the mutation")
+        #expect(!watch.folders.isEmpty, "the run made no worker copies")
+        #expect(foreign != nil, "the foreign worker never started")
+        Self.interrupt(process)
+        #expect(!process.isRunning, "the runner did not stop after the interrupt")
+        if !process.isRunning {
+            #expect(
+                process.terminationReason == .exit && process.terminationStatus == 130,
+                "status \(process.terminationStatus), reason \(process.terminationReason)")
+        }
+        #expect(try package.sourceText() == MiniPackage.sourceText)
+        #expect(try package.gitStatus().isEmpty)
+        #expect(try MiniPackage.workerFolders(in: temporary.url).isEmpty)
+        #expect(try MiniPackage.processes(mentioningAnyOf: Array(watch.folders)).isEmpty)
+        if let foreign {
+            #expect(foreign.process.isRunning, "the interrupt stopped another run's worker")
+            #expect(try !MiniPackage.processes(mentioning: foreign.marker).isEmpty)
+            #expect(FileManager.default.fileExists(atPath: foreign.folder.path))
+        }
+    }
+
+    @Test("an interrupt still exits 130 when shutdown is slow")
+    func shutdownOwnsTheExitWhenCleanupIsSlow() throws {
+        let package = try MiniPackage.create()
+        let double = try SwiftDouble.make()
+        defer { double.remove() }
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
+        let registerURL = try Self.writeParallelLoopingRegister()
+        defer { try? FileManager.default.removeItem(at: registerURL) }
+        // The shutdown waits 2 seconds before it takes the copy lock, so the workers end once their
+        // children are killed, leave the group, and main gets past `workers.wait()`. It waits 2
+        // more seconds before it exits, so main reaches its end first and must leave the exit to
+        // the shutdown.
+        var environment = temporary.applied(to: double.environment)
+        environment["MUTATE_SHUTDOWN_DELAY_FOR_TESTS"] = "2"
+        let process = try Self.startParallelRun(
+            on: package, registerURL: registerURL, environment: environment)
+        let watch = try Self.waitForMutatedCopy(in: temporary, while: process)
+        #expect(watch.sawMutation, "no worker applied the mutation")
+        Self.interrupt(process)
+        #expect(!process.isRunning, "the runner did not stop after the interrupt")
+        if !process.isRunning {
+            #expect(
+                process.terminationReason == .exit && process.terminationStatus == 130,
+                "status \(process.terminationStatus), reason \(process.terminationReason)")
+        }
+        #expect(try MiniPackage.workerFolders(in: temporary.url).isEmpty)
+        #expect(try package.gitStatus().isEmpty)
+    }
+
+    /// Writes a register with a looping entry and an entry in another file, so two workers start
+    /// and one of them hangs.
+    private static func writeParallelLoopingRegister() throws -> URL {
         let registerURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("register-\(UUID().uuidString).json")
-        try Register.list([Register.looping, Self.otherKilled]).write(
+        try Register.list([Register.looping, otherKilled]).write(
             to: registerURL, atomically: true, encoding: .utf8)
-        defer { try? FileManager.default.removeItem(at: registerURL) }
+        return registerURL
+    }
+
+    /// Starts the runner with two workers, so a test can interrupt it.
+    private static func startParallelRun(
+        on package: MiniPackage, registerURL: URL, environment: [String: String]
+    ) throws -> Process {
         let process = Process()
         process.executableURL = RunnerBinary.url
         process.arguments = [
@@ -616,17 +730,36 @@ struct MutationRunnerTests {
             "--workers", "2", "--record", "no",
         ]
         process.currentDirectoryURL = package.root
-        process.environment = double.environment
+        process.environment = environment
         process.standardOutput = FileHandle.nullDevice
         process.standardError = FileHandle.nullDevice
         try process.run()
+        return process
+    }
+
+    /// Waits until a worker copy in the temporary folder holds the looping mutation. Returns
+    /// whether one did and every copy seen on the way. `onFirstCopy` runs once, when the first
+    /// copy appears.
+    private static func waitForMutatedCopy(
+        in temporary: RunnerTemporaryFolder, while process: Process,
+        onFirstCopy: () throws -> Void = {}
+    ) throws -> (sawMutation: Bool, folders: Set<String>) {
+        // The double answers at once, so the first copy comes within seconds. A runner that puts
+        // its copies elsewhere then fails here, well inside the mutation run's test time limit.
+        let copyDeadline = Date().addingTimeInterval(60)
         let deadline = Date().addingTimeInterval(300)
         var sawMutation = false
-        while Date() < deadline, process.isRunning, !sawMutation {
-            for folder in try MiniPackage.workerFolders().subtracting(before) {
-                let file = FileManager.default.temporaryDirectory
-                    .appendingPathComponent(folder).appendingPathComponent(
-                        "Sources/Mini/Mini.swift")
+        var folders = Set<String>()
+        var sawCopy = false
+        while Date() < (sawCopy ? deadline : copyDeadline), process.isRunning, !sawMutation {
+            folders.formUnion(try MiniPackage.workerFolders(in: temporary.url))
+            if !sawCopy, !folders.isEmpty {
+                sawCopy = true
+                try onFirstCopy()
+            }
+            for folder in folders {
+                let file = temporary.url.appendingPathComponent(folder)
+                    .appendingPathComponent("Sources/Mini/Mini.swift")
                 if (try? String(contentsOf: file, encoding: .utf8))?.contains("value += 1") == true
                 {
                     sawMutation = true
@@ -634,18 +767,55 @@ struct MutationRunnerTests {
             }
             Thread.sleep(forTimeInterval: 0.25)
         }
-        #expect(sawMutation, "no worker applied the mutation")
+        folders.formUnion(try MiniPackage.workerFolders(in: temporary.url))
+        return (sawMutation, folders)
+    }
+
+    /// Sends an interrupt and waits up to a minute for the runner to exit.
+    private static func interrupt(_ process: Process) {
         kill(process.processIdentifier, SIGINT)
         let exitDeadline = Date().addingTimeInterval(60)
         while process.isRunning, Date() < exitDeadline { Thread.sleep(forTimeInterval: 0.1) }
-        #expect(!process.isRunning, "the runner did not stop after the interrupt")
-        if !process.isRunning {
-            #expect(process.terminationReason == .exit && process.terminationStatus == 130)
+    }
+
+    /// A running process whose command line mentions `mutate-worker-` but which is not a copy
+    /// made by the run under test.
+    struct ForeignWorker {
+        let process: Process
+        let marker: String
+        let folder: URL
+
+        func stop() {
+            if process.isRunning {
+                process.terminate()
+                process.waitUntilExit()
+            }
+            try? FileManager.default.removeItem(at: folder)
         }
-        #expect(try package.sourceText() == MiniPackage.sourceText)
-        #expect(try package.gitStatus().isEmpty)
-        #expect(try MiniPackage.workerFolders().subtracting(before).isEmpty)
-        #expect(try MiniPackage.processes(mentioning: "mutate-worker-").isEmpty)
+    }
+
+    /// Starts a wrapper script from a folder named like a worker copy in the given directory.
+    /// A copied system binary would not run because its signature would not match the new path.
+    static func startForeignWorker(in directory: URL) throws -> ForeignWorker {
+        let marker = "mutate-worker-foreign-\(UUID().uuidString)"
+        let folder = directory.appendingPathComponent(marker)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let script = folder.appendingPathComponent(marker)
+        let body = "#!/bin/bash\nwhile true; do sleep 60; done\n"
+        try body.write(to: script, atomically: true, encoding: .utf8)
+        try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: script.path)
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/bin/bash")
+        process.arguments = [script.path]
+        process.standardOutput = FileHandle.nullDevice
+        process.standardError = FileHandle.nullDevice
+        do {
+            try process.run()
+        } catch {
+            try? FileManager.default.removeItem(at: folder)
+            throw error
+        }
+        return ForeignWorker(process: process, marker: marker, folder: folder)
     }
 
     @Test("each entry builds once and each distinct baseline runs once without a build")
@@ -712,7 +882,8 @@ struct MutationRunnerTests {
         let double = try SwiftDouble.make()
         defer { double.remove() }
         let entries = try Self.commitFourFiles(in: package)
-        let before = try MiniPackage.workerFolders()
+        let temporary = try RunnerTemporaryFolder.make()
+        defer { temporary.remove() }
         let registerURL = FileManager.default.temporaryDirectory
             .appendingPathComponent("register-\(UUID().uuidString).json")
         try Register.list(entries).write(to: registerURL, atomically: true, encoding: .utf8)
@@ -726,7 +897,7 @@ struct MutationRunnerTests {
         process.currentDirectoryURL = package.root
         // Each copy waits 30 seconds while it holds the copy lock, so the interrupt comes while
         // one worker copies and the others wait for the lock.
-        var environment = double.environment
+        var environment = temporary.applied(to: double.environment)
         environment["MUTATE_COPY_DELAY_FOR_TESTS"] = "30"
         process.environment = environment
         process.standardOutput = FileHandle.nullDevice
@@ -735,7 +906,7 @@ struct MutationRunnerTests {
         let deadline = Date().addingTimeInterval(120)
         var sawCopy = false
         while Date() < deadline, process.isRunning, !sawCopy {
-            sawCopy = !(try MiniPackage.workerFolders().subtracting(before).isEmpty)
+            sawCopy = !(try MiniPackage.workerFolders(in: temporary.url).isEmpty)
             if !sawCopy { Thread.sleep(forTimeInterval: 0.01) }
         }
         #expect(sawCopy, "no worker started a copy")
@@ -748,9 +919,11 @@ struct MutationRunnerTests {
         if process.isRunning {
             kill(process.processIdentifier, SIGKILL)
         } else {
-            #expect(process.terminationReason == .exit && process.terminationStatus == 130)
+            #expect(
+                process.terminationReason == .exit && process.terminationStatus == 130,
+                "status \(process.terminationStatus), reason \(process.terminationReason)")
         }
-        #expect(try MiniPackage.workerFolders().subtracting(before).isEmpty)
+        #expect(try MiniPackage.workerFolders(in: temporary.url).isEmpty)
         #expect(try package.gitStatus().isEmpty)
     }
 

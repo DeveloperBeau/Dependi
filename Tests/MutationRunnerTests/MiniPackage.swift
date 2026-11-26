@@ -176,12 +176,12 @@ struct MiniPackage {
         }
     }
 
-    /// The worker copy folders that the runner made in the temporary folder.
-    static func workerFolders() throws -> Set<String> {
+    /// The worker copy folders in the given folder, which is the runner's temporary folder.
+    static func workerFolders(in folder: URL) throws -> Set<String> {
         Set(
-            try FileManager.default.contentsOfDirectory(
-                atPath: FileManager.default.temporaryDirectory.path
-            ).filter { $0.hasPrefix("mutate-worker-") })
+            try FileManager.default.contentsOfDirectory(atPath: folder.path).filter {
+                $0.hasPrefix("mutate-worker-")
+            })
     }
 
     func sourceText() throws -> String { try String(contentsOf: sourceURL, encoding: .utf8) }
@@ -199,6 +199,19 @@ struct MiniPackage {
         ).output
         return table.split(separator: "\n").map(String.init).filter {
             $0.contains(text) && !$0.contains("ps -axo")
+        }
+    }
+
+    /// Lists running processes whose command line mentions any of the given texts. An empty list
+    /// of texts matches nothing.
+    static func processes(mentioningAnyOf texts: [String]) throws -> [String] {
+        guard !texts.isEmpty else { return [] }
+        let table = try ChildProcess.run(
+            ["ps", "-axo", "pid=,command="],
+            workingDirectory: FileManager.default.temporaryDirectory
+        ).output
+        return table.split(separator: "\n").map(String.init).filter { line in
+            !line.contains("ps -axo") && texts.contains { line.contains($0) }
         }
     }
 }
