@@ -956,8 +956,8 @@
     "id": "cli-equals-form",
     "slice": "8b",
     "file": "Sources/DependiCommandLine/CommandLineParser.swift",
-    "search": "if token.hasPrefix(\"-\") {",
-    "replace": "if token.hasPrefix(\"--project=\") { projectPath = String(token.dropFirst(10)); index += 1; continue }\n                if token.hasPrefix(\"-\") {",
+    "search": "default:\n                throw rejection(of: token, command: command)",
+    "replace": "default:\n                if token.hasPrefix(\"--project=\") { projectPath = String(token.dropFirst(10)); index += 1; continue }\n                throw rejection(of: token, command: command)",
     "test": "unknownFlags",
     "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },

@@ -31,6 +31,13 @@ public struct CommandLineParser: Sendable {
         }
     }
 
+    /// Names why a token is not accepted: a dashed token is an unknown flag, any other is stray.
+    private func rejection(of token: String, command: String) -> CommandLineError {
+        token.hasPrefix("-")
+            ? .unknownFlag(command: command, flag: token)
+            : .unexpectedArgument(command: command, argument: token)
+    }
+
     private func parseGenerate(_ rest: [String], command: String) throws(CommandLineError)
         -> Command
     {
@@ -41,10 +48,8 @@ public struct CommandLineParser: Sendable {
                     throw CommandLineError.duplicateFlag(command: command, flag: token)
                 }
                 forcesSinglePage = true
-            } else if token.hasPrefix("-") {
-                throw CommandLineError.unknownFlag(command: command, flag: token)
             } else {
-                throw CommandLineError.unexpectedArgument(command: command, argument: token)
+                throw rejection(of: token, command: command)
             }
         }
         return .generate(forcesSinglePage: forcesSinglePage)
@@ -78,10 +83,7 @@ public struct CommandLineParser: Sendable {
                 isDryRun = true
                 index += 1
             default:
-                if token.hasPrefix("-") {
-                    throw CommandLineError.unknownFlag(command: command, flag: token)
-                }
-                throw CommandLineError.unexpectedArgument(command: command, argument: token)
+                throw rejection(of: token, command: command)
             }
         }
         guard let projectPath else {
