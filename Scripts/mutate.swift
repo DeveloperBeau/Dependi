@@ -660,8 +660,6 @@ for index in 0..<startedWorkers {
             for entry in group {
                 let begin = Date()
                 let outcome = mutate(entry, in: workspace)
-                // An interrupt may have ended this mutation. The shutdown owns the exit.
-                if isStopping() { while true { sleep(60) } }
                 stateLock.lock()
                 results[entry.id] = (outcome, Date().timeIntervalSince(begin))
                 stateLock.unlock()

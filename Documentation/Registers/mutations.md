@@ -281,12 +281,12 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | trait-project-locations-not-joined | swiftpm-traits | `Sources/DependiDomain/LinkedPackageResolver.swift` | `locationsOfOnePackageJoin` | killed | 2026-11-24 KILLED |
 | trait-project-pick-adds-default | swiftpm-traits | `Sources/DependiDomain/LinkedPackageResolver.swift` | `listWithoutDefaultLeavesDefaultOff` | killed | 2026-11-24 KILLED |
 | trait-project-pick-ignored | swiftpm-traits | `Sources/DependiDomain/LinkedPackageResolver.swift` | `listedTraitFollowsGatedDependency` | killed | 2026-11-24 KILLED |
-| trait-reader-bad-value-accepted | swiftpm-traits | `Sources/DependiProjectFile/PackageTraitCollector.swift` | `traitsNotAList` | killed | 2026-11-26 KILLED |
-| trait-reader-empty-list-dropped | swiftpm-traits | `Sources/DependiProjectFile/PackageTraitCollector.swift` | `emptyTraitListIsKept` | killed | 2026-11-26 KILLED |
+| trait-reader-bad-value-accepted | swiftpm-traits | `Sources/DependiProjectFile/PackageTraitCollector.swift` | `traitsNotAList` | killed | 2026-11-24 KILLED |
+| trait-reader-empty-list-dropped | swiftpm-traits | `Sources/DependiProjectFile/PackageTraitCollector.swift` | `emptyTraitListIsKept` | killed | 2026-11-24 KILLED |
 | trait-reader-local-dropped | swiftpm-traits | `Sources/DependiProjectFile/ProjectFileReader.swift` | `localReferenceTraitsAreRead` | killed | 2026-11-25 KILLED |
 | trait-reader-other-projects-dropped | swiftpm-traits | `Sources/DependiProjectFile/ProjectFileReader.swift` | `crossProjectTraitsAreRead` | killed | 2026-11-25 KILLED |
 | trait-reader-remote-dropped | swiftpm-traits | `Sources/DependiProjectFile/ProjectFileReader.swift` | `remoteReferenceTraitsAreRead` | killed | 2026-11-25 KILLED |
-| trait-reader-unlisted-no-default | swiftpm-traits | `Sources/DependiProjectFile/PackageTraitCollector.swift` | `unlistedReferenceGivesDefault` | killed | 2026-11-26 KILLED |
+| trait-reader-unlisted-no-default | swiftpm-traits | `Sources/DependiProjectFile/PackageTraitCollector.swift` | `unlistedReferenceGivesDefault` | killed | 2026-11-24 KILLED |
 | trait-root-default-missing | swiftpm-traits | `Sources/DependiDomain/LinkedPackageResolver.swift` | `defaultTraitFollows` | killed | 2026-11-24 KILLED |
 | trait-table-unread | swiftpm-traits | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `traitsManifest` | killed | 2026-11-24 KILLED |
 | validator-component | 2b | `Sources/DependiDomain/LicenseFileValidator.swift` | `similarSiblingRefused` | killed | 2026-11-04 KILLED |

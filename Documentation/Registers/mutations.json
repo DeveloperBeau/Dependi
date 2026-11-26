@@ -6,10 +6,7 @@
     "search": "throw EntityError.unknownConfigurationKey(first)",
     "replace": "_ = first",
     "test": "unknownKeyFailsNamingTheKey",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "config-mistyped-key",
@@ -18,10 +15,7 @@
     "search": "!Self.knownKeys.contains($0)",
     "replace": "$0 == \"\"",
     "test": "mistypedKeyFails",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "config-version-pattern",
@@ -30,10 +24,7 @@
     "search": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
     "replace": "^[0-9.]+$",
     "test": "badVersionsFail",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "config-commit-case",
@@ -42,10 +33,7 @@
     "search": "^[0-9a-f]{40}$",
     "replace": "^[0-9a-fA-F]{40}$",
     "test": "badCommitsFail",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "config-default-gate",
@@ -54,10 +42,7 @@
     "search": "defaultGateConfigurations = [\"Release\"]",
     "replace": "defaultGateConfigurations = [String]()",
     "test": "emptyObjectGivesDefaults",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "license-name-separator",
@@ -66,10 +51,7 @@
     "search": "!hasSeparator, ",
     "replace": "",
     "test": "unsafeNamesAreRejected",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "license-name-dot-names",
@@ -78,10 +60,7 @@
     "search": "fileName != \"..\", ",
     "replace": "",
     "test": "unsafeNamesAreRejected",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-limit-plus-one",
@@ -90,10 +69,7 @@
     "search": "max(limit, 0) + 1 : limit",
     "replace": "max(limit, 0) : limit",
     "test": "doublePassesBehaviorSuite",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-link-hop-limit",
@@ -102,10 +78,7 @@
     "search": "maximumLinkHops = 32",
     "replace": "maximumLinkHops = 20",
     "test": "loopsAndChains",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-readonly-component",
@@ -114,10 +87,7 @@
     "search": "path.hasPrefix(readOnly + \"/\")",
     "replace": "path.hasPrefix(readOnly)",
     "test": "readOnlyIsMatchedByComponent",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-archive-runs",
@@ -126,10 +96,7 @@
     "search": "if isArchive { return .run(reason: \"archive build\") }",
     "replace": "",
     "test": "archiveRuns",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-debug-skips",
@@ -138,10 +105,7 @@
     "search": "            return .skip(\n                reason: \"configuration",
     "replace": "            return .run(\n                reason: \"configuration",
     "test": "otherConfigurationsSkip",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-config-error-archive",
@@ -150,10 +114,7 @@
     "search": "if isArchive { throw error }",
     "replace": "",
     "test": "unreadableConfigurationOnArchiveFails",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-config-error-build-skips",
@@ -162,10 +123,7 @@
     "search": "return .skip(reason: \"the configuration cannot be read: \\(error)\")",
     "replace": "throw error",
     "test": "unreadableConfigurationOnBuildSkips",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-missing-action",
@@ -174,10 +132,7 @@
     "search": "if insideXcode { throw .buildContextIncomplete(missing: [\"ACTION\"]) }",
     "replace": "",
     "test": "ReleaseGateTests/missingAction()",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gate-case-sensitive",
@@ -186,10 +141,7 @@
     "search": "settings.gateConfigurations.contains(name)",
     "replace": "settings.gateConfigurations.contains { $0.lowercased() == name.lowercased() }",
     "test": "otherConfigurationsSkip",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "identity-git-strip",
@@ -198,10 +150,7 @@
     "search": "if text.lowercased().hasSuffix(\".git\") { text.removeLast(4) }",
     "replace": "",
     "test": "formsJoin",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "identity-lowercase",
@@ -210,10 +159,7 @@
     "search": "return text.lowercased()",
     "replace": "return text",
     "test": "formsJoin",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "locator-last-anchor",
@@ -222,10 +168,7 @@
     "search": "anchor = index",
     "replace": "anchor = anchor ?? index",
     "test": "earlierBuildFolderIsIgnored",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "locator-anchor-next",
@@ -234,10 +177,7 @@
     "search": "parts[index + 1] == \"Products\" || parts[index + 1] == \"Intermediates.noindex\"",
     "replace": "true",
     "test": "schemeNamedBuild",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "license-notice-pattern",
@@ -246,10 +186,7 @@
     "search": "|unlicense|notice|copyright)",
     "replace": "|unlicense|copyright)",
     "test": "noticeNextToLicense",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "license-order",
@@ -258,10 +195,7 @@
     "search": "return leftKey < rightKey",
     "replace": "return false",
     "test": "foundInFixedOrder",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "validator-containment",
@@ -270,10 +204,7 @@
     "search": "guard real == realRoot || real.hasPrefix(realRoot + \"/\") else {",
     "replace": "guard true else {",
     "test": "outsideLinkRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "validator-component",
@@ -282,10 +213,7 @@
     "search": "real.hasPrefix(realRoot + \"/\")",
     "replace": "real.hasPrefix(realRoot)",
     "test": "similarSiblingRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "validator-size",
@@ -294,10 +222,7 @@
     "search": "if data.count > maximumBytes {",
     "replace": "if data.count > maximumBytes + 1 {",
     "test": "sizeBoundary",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "validator-control",
@@ -306,10 +231,7 @@
     "search": "if scalar != \"\\t\" && scalar != \"\\n\" && scalar != \"\\r\" && scalar != \"\\u{0C}\" {",
     "replace": "if false {",
     "test": "controlCharactersRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "slugger-hash-input",
@@ -318,10 +240,7 @@
     "search": "Data(normalizedLocation.utf8)",
     "replace": "Data(identity.value.utf8)",
     "test": "slugMatchesHandComputedHash",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "slugger-sanitize",
@@ -330,10 +249,7 @@
     "search": "allowed.contains($0) ? $0 : \"-\"",
     "replace": "$0",
     "test": "unsafeIdentityIsReduced",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "assembler-duplicate-identity",
@@ -342,10 +258,7 @@
     "search": "if let first = identities[candidate.identity] {",
     "replace": "if let first = identities[candidate.identity], false {",
     "test": "AcknowledgementAssemblerTests/duplicateIdentity()",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "assembler-slug-collision",
@@ -354,10 +267,7 @@
     "search": "if let first = slugs[slug] {",
     "replace": "if let first = slugs[slug], false {",
     "test": "slugCollision",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "assembler-missing-license",
@@ -366,10 +276,7 @@
     "search": "if candidate.documents.isEmpty { throw .licenseMissing(package: candidate.displayName) }",
     "replace": "",
     "test": "AcknowledgementAssemblerTests/missingLicense()",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "assembler-sort",
@@ -386,10 +293,7 @@
     "search": "stack.append(.target(identity, targetName))",
     "replace": "_ = targetName",
     "test": "transitive",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-macro",
@@ -398,10 +302,7 @@
     "search": "&& !includeBuildTools {",
     "replace": "&& !includeBuildTools && false {",
     "test": "LinkedPackageResolverTests/macroDependencies()",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-platform",
@@ -410,10 +311,7 @@
     "search": "platformNames.isDisjoint(with: dependency.platforms)",
     "replace": "false",
     "test": "platformConditions",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-unmatched-product",
@@ -422,10 +320,7 @@
     "search": "throw .productUnmatched(product: product.productName)",
     "replace": "return nil",
     "test": "LinkedPackageResolverTests/unmatchedProduct()",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-exclude-unmatched",
@@ -434,10 +329,7 @@
     "search": "throw .unmatchedExclude(exclude)",
     "replace": "continue",
     "test": "excludeMatchesNothing",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-ambiguous",
@@ -446,10 +338,7 @@
     "search": "if matches.count > 1 {",
     "replace": "if matches.count > 99 {",
     "test": "localProductAmbiguous",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-identity-conflict",
@@ -458,10 +347,7 @@
     "search": "if let existing = packages[package.identity] {",
     "replace": "if let existing = packages[package.identity], false {",
     "test": "LinkedPackageResolverTests/duplicateIdentity()",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "loader-size-cap",
@@ -470,10 +356,7 @@
     "search": "if data.count > Self.maximumBytes {",
     "replace": "if false {",
     "test": "oversizeAndFolder",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-nofollow",
@@ -482,10 +365,7 @@
     "search": "O_RDONLY | O_NOFOLLOW | O_NONBLOCK",
     "replace": "O_RDONLY | O_NONBLOCK",
     "test": "lastComponentLinkIsRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-regular-check",
@@ -494,10 +374,7 @@
     "search": "guard (info.st_mode & S_IFMT) == S_IFREG else",
     "replace": "guard (info.st_mode & S_IFMT) != 0 else",
     "test": "folderIsRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-limit-plus-one",
@@ -506,10 +383,7 @@
     "search": "max(limit, 0) + 1",
     "replace": "max(limit, 0)",
     "test": "readStopsAfterLimitPlusOne",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-not-found-mapping",
@@ -518,10 +392,7 @@
     "search": "case ENOENT, ENOTDIR: throw .fileNotFound(path: path)",
     "replace": "case ENOTDIR: throw .fileNotFound(path: path)",
     "test": "missingPathHasNoRealPath",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-loop-mapping",
@@ -530,10 +401,7 @@
     "search": "case ELOOP: throw .symlinkLoop(path: path)",
     "replace": "case ELOOP: throw .fileNotFound(path: path)",
     "test": "loopIsReported",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-exists-lstat",
@@ -542,10 +410,7 @@
     "search": "return lstat(path, &info) == 0",
     "replace": "return stat(path, &info) == 0",
     "test": "danglingLinkExists",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-sorted-listing",
@@ -554,10 +419,7 @@
     "search": "return names.sorted()",
     "replace": "return names",
     "test": "listingIsSorted",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-move-replaces",
@@ -566,10 +428,7 @@
     "search": "try removeItem(at: destination)",
     "replace": "_ = destination",
     "test": "moveReplacesDestination",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-remove-link-only",
@@ -578,10 +437,7 @@
     "search": "if lstat(path, &info) != 0 {",
     "replace": "if stat(path, &info) != 0 {",
     "test": "removingLinkKeepsTarget",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-write-atomic-rename",
@@ -590,10 +446,7 @@
     "search": "failure == nil && rename(temporary, path) != 0",
     "replace": "failure == nil && rename(temporary, temporary) != 0",
     "test": "writeIsCleanAndReplaces",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-pipe-drain",
@@ -602,10 +455,7 @@
     "search": "while !signals.isStopped {",
     "replace": "while signals.isStopped {",
     "test": "bigOutputOnBothStreamsArrivesWithExactBytesAndChecksum",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-group-kill",
@@ -614,10 +464,7 @@
     "search": "static func kill(root: pid_t) {",
     "replace": "static func kill(root: pid_t) { _ = Darwin.kill(root, SIGKILL); return",
     "test": "aGrandchildHoldingStandardOutputIsKilledOnTimeout",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-descendant-kill",
@@ -626,10 +473,7 @@
     "search": "let known = descendants(of: root)",
     "replace": "let known = [pid_t]()",
     "test": "aDescendantThatLeftTheProcessGroupIsKilledOnTimeout",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-clean-environment",
@@ -638,10 +482,7 @@
     "search": "request.environment.map",
     "replace": "ProcessInfo.processInfo.environment.map",
     "test": "theChildEnvironmentIsExactlyTheRequestEnvironment",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-output-cap",
@@ -650,10 +491,7 @@
     "search": "buffer.count + count > limit",
     "replace": "buffer.count + count > limit * 1000",
     "test": "outputOverTheCapFailsAndNamesTheLimit",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-output-cap-edge",
@@ -662,10 +500,7 @@
     "search": "buffer.count + count > limit",
     "replace": "buffer.count + count >= limit",
     "test": "outputExactlyAtTheCapIsKept",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "process-timeout-check",
@@ -674,10 +509,7 @@
     "search": "if now >= deadline {",
     "replace": "if false {",
     "test": "aSlowChildIsTimedOutQuickly",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "console-attempt-bound-high",
@@ -686,10 +518,7 @@
     "search": "maximumAttempts = 3",
     "replace": "maximumAttempts = 4",
     "test": "threeInvalidLinesFailEvenWhenAValidLineFollows",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "console-attempt-bound-low",
@@ -698,10 +527,7 @@
     "search": "maximumAttempts = 3",
     "replace": "maximumAttempts = 2",
     "test": "twoInvalidLinesThenAValidOneStillSucceeds",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-containment-prefix",
@@ -710,10 +536,7 @@
     "search": "let prefix = rootReal.hasSuffix(\"/\") ? rootReal : rootReal + \"/\"",
     "replace": "let prefix = rootReal",
     "test": "siblingWithSimilarNameIsRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-subpath-traversal",
@@ -722,10 +545,7 @@
     "search": ".contains(\"..\")",
     "replace": ".contains(\"...\")",
     "test": "subpathTraversalIsRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-subpath-absolute",
@@ -734,10 +554,7 @@
     "search": "subpath.hasPrefix(\"/\")",
     "replace": "subpath.hasPrefix(\"//\")",
     "test": "absoluteSubpathIsRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-subpath-empty",
@@ -746,10 +563,7 @@
     "search": "if subpath.isEmpty {",
     "replace": "if subpath == \"\\u{0}\" {",
     "test": "emptySubpathIsRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-identity-from-location",
@@ -758,10 +572,7 @@
     "search": "normalizer.identity(forLocation: location)",
     "replace": "PackageIdentity(ref.identity ?? \"\")",
     "test": "identityFromLocation",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pins-identity-from-location",
@@ -770,10 +581,7 @@
     "search": "normalizer.identity(forLocation: pin.location)",
     "replace": "PackageIdentity(pin.identity)",
     "test": "pinIdentityFromLocation",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pins-workspace-before-project",
@@ -782,10 +590,7 @@
     "search": "let tiers = [workspaces.map(\\.path), projects, root]",
     "replace": "let tiers = [root, projects, workspaces.map(\\.path)]",
     "test": "workspaceBeforeProject",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-kind-file-system",
@@ -794,10 +599,7 @@
     "search": "ref.kind == \"fileSystem\" ||",
     "replace": "ref.kind == \"fileSystemX\" ||",
     "test": "localPackageIsLocal",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "workspace-kind-remote",
@@ -806,10 +608,7 @@
     "search": "ref.kind == \"remoteSourceControl\"",
     "replace": "ref.kind == \"remoteSourceControlX\"",
     "test": "realVersion7Remote",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-test-exclusion-unit",
@@ -818,10 +617,7 @@
     "search": "type.hasSuffix(\"unit-test\") ||",
     "replace": "false ||",
     "test": "testOnlyProductsAreExcluded",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-test-exclusion-ui",
@@ -830,10 +626,7 @@
     "search": "|| type.hasSuffix(\"ui-testing\")",
     "replace": "|| false",
     "test": "uiTestProductsAreExcludedToo",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-embed-following",
@@ -842,10 +635,7 @@
     "search": "try followEmbeds(of: target, in: model)",
     "replace": "_ = 0",
     "test": "embeddedFrameworkIsIncluded",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-dependency-following",
@@ -854,10 +644,7 @@
     "search": "try followDependencies(of: target, in: model)",
     "replace": "_ = 0",
     "test": "directTargetDependency",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-proxy-following",
@@ -866,10 +653,7 @@
     "search": "let proxyID = dependency[\"targetProxy\"] as? String,",
     "replace": "let proxyID = dependency[\"targetProxy\"] as? String, proxyID.isEmpty,",
     "test": "proxyDependencyInSameProject",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-same-project-portal",
@@ -878,10 +662,7 @@
     "search": "portal == nil || portal == model.projectID",
     "replace": "portal == nil",
     "test": "proxyDependencyInSameProject",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-cross-project-following",
@@ -890,10 +671,7 @@
     "search": "let portal, let other",
     "replace": "let portal, portal.isEmpty, let other",
     "test": "crossProjectReachable",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-local-without-package",
@@ -902,10 +680,7 @@
     "search": "dependency[\"package\"] as? String else { return nil }",
     "replace": "dependency[\"package\"] as? String else { throw .fileUnreadable(path: \"\", reason: \"\") }",
     "test": "localPackageProducts",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-local-package-reference",
@@ -914,10 +689,7 @@
     "search": "if model.object(id, isa: \"XCLocalSwiftPackageReference\") != nil { return nil }",
     "replace": "if id.isEmpty { return nil }",
     "test": "localPackageProducts",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-remote-name-normalization",
@@ -926,10 +698,7 @@
     "search": "normalizer.identity(forLocation: url).value",
     "replace": "url",
     "test": "sameProductNameTwoPackages",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "pf-deduplication",
@@ -938,10 +707,7 @@
     "search": "Set(products).sorted {",
     "replace": "products.sorted {",
     "test": "sharedProductIsDeduplicated",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-base",
@@ -950,10 +716,7 @@
     "search": "base + \"/\" + relative)",
     "replace": "relative)",
     "test": "localPackageProducts",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-parent",
@@ -962,10 +725,7 @@
     "search": "if component == \"..\" {",
     "replace": "if component == \"...\" {",
     "test": "localPackageProducts",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-current",
@@ -974,10 +734,7 @@
     "search": "if component == \".\" { continue }",
     "replace": "if component == \"..\" { continue }",
     "test": "localPackageProducts",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-unknown-target-list",
@@ -986,10 +743,7 @@
     "search": "targets.map(\\.name).sorted()",
     "replace": "[String]()",
     "test": "unknownTarget",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "pf-size-cap",
@@ -998,10 +752,7 @@
     "search": "data.count <= sizeLimit",
     "replace": "data.count <= sizeLimit * 2",
     "test": "oversizeFile",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-catalyst",
@@ -1010,10 +761,7 @@
     "search": "values(\"SUPPORTS_MACCATALYST\").contains(\"yes\")",
     "replace": "values(\"SUPPORTS_MACCATALYST\").contains(\"no\")",
     "test": "catalystDisabled",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-sdk-auto",
@@ -1022,10 +770,7 @@
     "search": "where sdk != \"auto\"",
     "replace": "where sdk != \"automatic\"",
     "test": "autoSDKRoot",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pf-project-fallback",
@@ -1034,10 +779,7 @@
     "search": "fromTarget.isEmpty ? tokens(key, in: projectSettings) : fromTarget",
     "replace": "fromTarget",
     "test": "projectLevelFallback",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-key-versioned-manifests",
@@ -1046,10 +788,7 @@
     "search": "^Package(@swift-",
     "replace": "^Package(@swiftx-",
     "test": "versionedManifestInvalidates",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-key-environment",
@@ -1058,10 +797,7 @@
     "search": "environmentHash(),",
     "replace": "\"\",",
     "test": "toolchainAndEnvironmentInvalidate",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-key-toolchain",
@@ -1070,10 +806,7 @@
     "search": "settings.toolchainVersion,",
     "replace": "\"\",",
     "test": "toolchainAndEnvironmentInvalidate",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-key-stored",
@@ -1082,10 +815,7 @@
     "search": "entry.key == key",
     "replace": "true",
     "test": "wrongKeyValidDumpIsAMiss",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-remote-tier",
@@ -1094,10 +824,7 @@
     "search": "return real.hasPrefix(root + \"/\")",
     "replace": "return false",
     "test": "cacheTiers",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-exit-status",
@@ -1106,10 +833,7 @@
     "search": "guard result.exitStatus == 0 else {",
     "replace": "guard true else {",
     "test": "nonZeroExit",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-scratch-path",
@@ -1118,10 +842,7 @@
     "search": "\"--scratch-path\", scratch, ",
     "replace": "",
     "test": "requestShape",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-stderr-snippet",
@@ -1130,10 +851,7 @@
     "search": "standardError.prefix(300)",
     "replace": "standardError.prefix(0)",
     "test": "nonZeroExit",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-product-condition-index",
@@ -1142,10 +860,7 @@
     "search": "values.count > 3 ? values[3] : nil",
     "replace": "values.count > 2 ? values[2] : nil",
     "test": "syntheticPackage",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "graph-declared-lowercase",
@@ -1154,10 +869,7 @@
     "search": "identities.append(identity.lowercased())",
     "replace": "identities.append(identity)",
     "test": "unknownDependencyShapeIgnored",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "settings-cleanup-escapes-folder",
@@ -1166,10 +878,7 @@
     "search": "!name.contains(\"/\")",
     "replace": "true",
     "test": "manifestEntriesThatEscapeTheFolderAreNeverDeleted",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-cleanup-removes-kept",
@@ -1178,10 +887,7 @@
     "search": "previous.subtracting(newNames).sorted()",
     "replace": "previous.sorted()",
     "test": "removedPackageRemovesItsPlistAndManifestEntry",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-unknown-file-refusal",
@@ -1190,10 +896,7 @@
     "search": "where !Self.isTolerated(name) && !previous.contains(name)",
     "replace": "where false && !previous.contains(name)",
     "test": "unknownFileInFolderFailsBeforeAnyWrite",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-write-only-when-different",
@@ -1202,10 +905,7 @@
     "search": "current == data {",
     "replace": "current == data, false {",
     "test": "secondIdenticalRunWritesNothing",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-slug-replaced-by-raw-name",
@@ -1214,10 +914,7 @@
     "search": "children.append((name: \"\\(slug).plist\"",
     "replace": "children.append((name: \"\\(acknowledgement.displayName).plist\"",
     "test": "oddNamesStayInsideTheFolderAndAppearOnlyAsText",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-manifest-not-updated",
@@ -1226,10 +923,7 @@
     "search": "Self.manifestText(newNames)",
     "replace": "Self.manifestText(previous.union(newNames))",
     "test": "removedPackageRemovesItsPlistAndManifestEntry",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "settings-read-back-removed",
@@ -1238,10 +932,7 @@
     "search": "try verify(plist, at: path)",
     "replace": "_ = plist",
     "test": "readBackMismatchFailsWithFileUnwritable",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "cli-required-flag",
@@ -1250,10 +941,7 @@
     "search": "guard let projectPath else {",
     "replace": "guard let projectPath = projectPath ?? Optional(\"\") else {",
     "test": "missingRequired",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-duplicate-flag",
@@ -1262,10 +950,7 @@
     "search": "if projectPath != nil {",
     "replace": "if false {",
     "test": "duplicates",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-equals-form",
@@ -1274,10 +959,7 @@
     "search": "if token.hasPrefix(\"-\") {",
     "replace": "if token.hasPrefix(\"--project=\") { projectPath = String(token.dropFirst(10)); index += 1; continue }\n                if token.hasPrefix(\"-\") {",
     "test": "unknownFlags",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-dry-run-ignored",
@@ -1286,10 +968,7 @@
     "search": "isDryRun = true",
     "replace": "isDryRun = false",
     "test": "tableRowsAreAccepted",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-dashed-value",
@@ -1298,10 +977,7 @@
     "search": "!rest[valueIndex].hasPrefix(\"--\")",
     "replace": "true",
     "test": "missingValues",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cli-help-alias",
@@ -1310,10 +986,7 @@
     "search": "case \"help\", \"--help\", \"-h\":",
     "replace": "case \"help\", \"--help\":",
     "test": "tableRowsAreAccepted",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-sandbox-check",
@@ -1322,10 +995,7 @@
     "search": "if context.isScriptSandboxEnabled == true { throw .scriptSandboxEnabled }",
     "replace": "",
     "test": "sandboxOnFails",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-revision-check",
@@ -1334,10 +1004,7 @@
     "search": "wanted != actual",
     "replace": "false",
     "test": "revisionMismatch",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-unreached",
@@ -1346,10 +1013,7 @@
     "search": "if !result.unreached.isEmpty && !settings.allowUnreached {",
     "replace": "if false {",
     "test": "unreachedPackages",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-permission-mapping",
@@ -1358,10 +1022,7 @@
     "search": "reason.lowercased().contains(\"not permitted\")",
     "replace": "false",
     "test": "permissionErrorMeansSandbox",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-outside",
@@ -1370,10 +1031,7 @@
     "search": "catch .licenseOutsideCheckout {",
     "replace": "catch .licenseMissing {",
     "test": "manualEntryRefused",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-absolute",
@@ -1382,10 +1040,7 @@
     "search": "!path.hasPrefix(\"/\"), ",
     "replace": "",
     "test": "manualEntryRefused",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-local-packages",
@@ -1394,10 +1049,7 @@
     "search": "for path in linked.localPackagePaths {",
     "replace": "for path in linked.localPackagePaths where false {",
     "test": "localPackageFromProject",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-debug-skip",
@@ -1406,10 +1058,7 @@
     "search": "if case .skip(let reason) = decision {",
     "replace": "if case .skip(let reason) = decision, reason.isEmpty {",
     "test": "GenerateFeatureTests/debugSkips()",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "gen-platform-ios",
@@ -1418,10 +1067,7 @@
     "search": "return [\"ios\"]",
     "replace": "return nil",
     "test": "platformConditionUsed",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-output-relative",
@@ -1430,10 +1076,7 @@
     "search": "&& !path.hasPrefix(\"/\")",
     "replace": "",
     "test": "badOutputPath",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-output-dotdot",
@@ -1442,10 +1085,7 @@
     "search": ".contains(\"..\")",
     "replace": ".contains(\"...\")",
     "test": "badOutputPath",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-output-absolute-build",
@@ -1454,10 +1094,7 @@
     "search": "guard targetBuildDirectory.hasPrefix(\"/\") else {",
     "replace": "guard true else {",
     "test": "badProductLocation",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-sandbox-yes",
@@ -1466,10 +1103,7 @@
     "search": "$0 == \"YES\"",
     "replace": "$0 != \"NO\"",
     "test": "sandboxValues",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-empty-variable",
@@ -1478,10 +1112,7 @@
     "search": ", !text.isEmpty",
     "replace": "",
     "test": "missingAndEmptyAreNil",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "comp-usage-exit-code",
@@ -1490,10 +1121,7 @@
     "search": "public static let usageExitCode: Int32 = 64",
     "replace": "public static let usageExitCode: Int32 = 1",
     "test": "commandLineErrors",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "comp-version-text",
@@ -1502,10 +1130,7 @@
     "search": "\"dependi \\(DependiVersion.current)\"",
     "replace": "\"dependi\"",
     "test": "versionAndHelp",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "comp-clean-environment",
@@ -1514,10 +1139,7 @@
     "search": "\"PATH\": \"/usr/bin:/bin\"",
     "replace": "\"PATH\": \"/usr/bin:/bin\", \"SDKROOT\": environment[\"SDKROOT\"] ?? \"\"",
     "test": "processRequestsAreClean",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "comp-toolchain-from-xcrun",
@@ -1526,10 +1148,7 @@
     "search": "[\"--find\", \"swift\"]",
     "replace": "[\"--find\", \"swiftc\"]",
     "test": "processRequestsAreClean",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "error-sandbox-message",
@@ -1538,10 +1157,7 @@
     "search": "Set ENABLE_USER_SCRIPT_SANDBOXING to NO",
     "replace": "Change the setting",
     "test": "sandboxMessageNamesTheFix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "error-payload-package",
@@ -1550,10 +1166,7 @@
     "search": "The package \\(package) has no license file.",
     "replace": "A package has no license file.",
     "test": "messagesNamePayloads",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-dry-run",
@@ -1562,10 +1175,7 @@
     "search": "if isDryRun {",
     "replace": "if false {",
     "test": "dryRun",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-macos-refused",
@@ -1574,10 +1184,7 @@
     "search": "linked.supportedPlatforms.allSatisfy({ $0 == \"macosx\" })",
     "replace": "linked.supportedPlatforms.allSatisfy({ $0 == \"never\" })",
     "test": "platforms",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-format",
@@ -1586,10 +1193,7 @@
     "search": "^[0-9a-f]{40}$",
     "replace": "^.*$",
     "test": "commitFormatIsExact",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-backup",
@@ -1598,10 +1202,7 @@
     "search": "try writer.write(original, toPath: root + \"/.dependi/Root.plist.bak\")",
     "replace": "",
     "test": "paneAppended",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-clash-confirmation",
@@ -1610,10 +1211,7 @@
     "search": "if try prompts.askConfirmation(",
     "replace": "if try !prompts.askConfirmation(",
     "test": "clashesNeedConfirmation",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-run-script-executable",
@@ -1622,10 +1220,7 @@
     "search": "try executables.makeExecutable(at: root + \"/.dependi/run.sh\")",
     "replace": "",
     "test": "freshInstall",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-gitignore-duplicate",
@@ -1634,10 +1229,7 @@
     "search": "if lines.contains(rule) { return }",
     "replace": "",
     "test": "gitignoreRules",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-existing-config",
@@ -1646,10 +1238,7 @@
     "search": "output.writeLine(\"Dependi: kept the existing .dependi.json.\")\n            return",
     "replace": "output.writeLine(\"Dependi: kept the existing .dependi.json.\")",
     "test": "existingConfigurationKept",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-old-entry",
@@ -1658,10 +1247,7 @@
     "search": "$0[\"File\"] as? String == oldPaneName",
     "replace": "$0[\"File\"] as? String == oldPaneName + \"x\"",
     "test": "oldEntryRewritten",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-binary-format",
@@ -1670,10 +1256,7 @@
     "search": "format == .binary ? .binary : .xml",
     "replace": "PropertyListSerialization.PropertyListFormat.xml",
     "test": "binaryFormatKept",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-workspace-sibling",
@@ -1682,10 +1265,7 @@
     "search": "guard files.exists(at: sibling) else {",
     "replace": "guard true else {",
     "test": "workspaceWithoutProject",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-dependi-itself",
@@ -1694,10 +1274,7 @@
     "search": "?.contains(\"DependiDomain\")",
     "replace": "?.contains(\"NoSuchFolder\")",
     "test": "dependiItself",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-already-present",
@@ -1706,10 +1283,7 @@
     "search": "return (original, .unchanged)",
     "replace": "return (original, .added)",
     "test": "secondRunChangesNothingNew",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-pre-gate-inverted",
@@ -1718,10 +1292,7 @@
     "search": "[ \"${ACTION:-}\" != install ] && ! in_gate",
     "replace": "[ \"${ACTION:-}\" != install ] && in_gate",
     "test": "debugBuildSkipsBeforeAnyCall",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-version-validation-removed",
@@ -1730,10 +1301,7 @@
     "search": "'^[0-9]+\\.[0-9]+\\.[0-9]+$'",
     "replace": "'^.*$'",
     "test": "badVersionsAreRejected",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-commit-validation-removed",
@@ -1742,10 +1310,7 @@
     "search": "'^[0-9a-f]{40}$'",
     "replace": "'^.*$'",
     "test": "badCommitsAreRejected",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-version-compare-removed",
@@ -1754,10 +1319,7 @@
     "search": "[ \"$installed\" = \"$version-$commit\" ]",
     "replace": "true",
     "test": "otherCommitIgnoresProjectCopy",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-sha-check-removed",
@@ -1766,10 +1328,7 @@
     "search": "[ -n \"$actual\" ] && [ \"$actual\" = \"$recorded\" ]",
     "replace": "true",
     "test": "cacheWithWrongShaIsRebuilt",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-commit-recheck-removed",
@@ -1778,10 +1337,7 @@
     "search": "[ \"$head\" != \"$commit\" ]",
     "replace": "false",
     "test": "movedCommitFailsClean",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-removed",
@@ -1790,10 +1346,7 @@
     "search": "while ! ln -s \"$token\" \"$lock\" 2>/dev/null; do",
     "replace": "while ! true; do",
     "test": "concurrentRunsBuildOnce",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-repo-override-unconditional",
@@ -1802,10 +1355,7 @@
     "search": "if testing && [ -n \"${DEPENDI_REPO_URL:-}\" ]",
     "replace": "if [ -n \"${DEPENDI_REPO_URL:-}\" ]",
     "test": "repoOverrideNeedsTestingFlag",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-env-clean-removed",
@@ -1814,10 +1364,7 @@
     "search": "env -i HOME=\"$home\"",
     "replace": "env HOME=\"$home\"",
     "test": "buildEnvironmentIsClean",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "init-backup-outside-bundle",
@@ -1826,10 +1373,7 @@
     "search": "root + \"/.dependi/Root.plist.bak\"",
     "replace": "plistPath + \".bak\"",
     "test": "paneAppended",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-output-empty",
@@ -1838,10 +1382,7 @@
     "search": "!path.isEmpty && !path.hasPrefix(\"/\")",
     "replace": "!path.hasPrefix(\"/\")",
     "test": "badOutputPath",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "gen-output-dots-in-name",
@@ -1850,10 +1391,7 @@
     "search": ".contains(\"..\")",
     "replace": ".contains(where: { $0.contains(\"..\") })",
     "test": "dotsInsideANameAreAccepted",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-write-onto-folder",
@@ -1862,10 +1400,7 @@
     "search": "if case .directory? = state.nodes[target] {",
     "replace": "if false, case .directory? = state.nodes[target] {",
     "test": "writeOntoFolderFails",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-link-hop-limit-disk",
@@ -1874,10 +1409,7 @@
     "search": "maximumLinkHops = 32",
     "replace": "maximumLinkHops = 40",
     "test": "linkChainLimitMatchesDisk",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-read-limit-floor",
@@ -1886,10 +1418,7 @@
     "search": "max(limit, 0) + 1 : limit",
     "replace": "max(limit, 1) + 1 : limit",
     "test": "extremeReadLimits",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "double-read-limit-max",
@@ -1898,10 +1427,7 @@
     "search": "max(limit, 0) + 1 : limit",
     "replace": "max(limit, 0) + 1 : 0",
     "test": "extremeReadLimits",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "out-link-resolved-compare",
@@ -1910,10 +1436,7 @@
     "search": "guard resolved == path else {",
     "replace": "guard resolved == resolved else {",
     "test": "linkOutsideIsRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "out-link-walk-components",
@@ -1922,10 +1445,7 @@
     "search": "try requirePlain(walked, name: bundleName)",
     "replace": "try requirePlain(bundle, name: bundleName)",
     "test": "middleLinkIsRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "out-link-dangling",
@@ -1934,10 +1454,7 @@
     "search": "guard files.exists(at: path) else { return }",
     "replace": "guard files.exists(at: path), (try? files.realPath(of: path)) != nil else { return }",
     "test": "danglingLinkIsRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "writer-link-folder-compare",
@@ -1946,10 +1463,7 @@
     "search": "guard resolvedFolder == Self.join(resolvedBundle, Self.folderName) else { throw refusal }",
     "replace": "guard resolvedFolder == resolvedFolder, !resolvedBundle.isEmpty else { throw refusal }",
     "test": "linkToAFolderInsideTheBundleIsRefused",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-link-folder-checked",
@@ -1958,10 +1472,7 @@
     "search": "try requirePlainFolder(folder, inBundle: bundlePath)",
     "replace": "_ = bundlePath",
     "test": "linkToAnOutsideFolderAsAcknowledgementsIsRefusedAndNothingIsWritten",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-hidden-tolerated",
@@ -1970,10 +1481,7 @@
     "search": "name.hasPrefix(\".\") || isTemporaryLeftover(name)",
     "replace": "isTemporaryLeftover(name)",
     "test": "hiddenFilesAreIgnoredAndKept",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-leftovers-swept",
@@ -1982,10 +1490,7 @@
     "search": "leftovers = present.filter(Self.isTemporaryLeftover)",
     "replace": "leftovers = []",
     "test": "temporaryLeftoversOfOurOwnWritesAreSwept",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-leftover-uuid-check",
@@ -1994,10 +1499,7 @@
     "search": "guard UUID(uuidString: String(name[range.upperBound...])) != nil else { return false }",
     "replace": "guard UUID(uuidString: String(name[range.upperBound...])) == nil else { return false }",
     "test": "realForeignFilesAreStillRefused",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "writer-manifest-union",
@@ -2006,10 +1508,7 @@
     "search": "Data(Self.manifestText(previous.union(newNames)).utf8), to: manifestPath)",
     "replace": "Data(Self.manifestText(newNames).utf8), to: manifestPath)",
     "test": "aStopAfterAnyNumberOfChangesLosesNoFileAndTheNextRunRecovers",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "proc-reap-failure-as-success",
@@ -2018,10 +1517,7 @@
     "search": "if errno != EINTR { return .failure(WaitFailure(code: errno)) }",
     "replace": "if errno != EINTR { return .success(0) }",
     "test": "aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "proc-state-failure-as-exited",
@@ -2030,10 +1526,7 @@
     "search": "if errno != EINTR { return .failed(errno) }",
     "replace": "if errno != EINTR { return .exited }",
     "test": "aProcessThatIsNotOurChildFailsTheWaitInsteadOfReportingSuccess",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "proc-look-reaps-child",
@@ -2042,10 +1535,7 @@
     "search": "WEXITED | WNOHANG | WNOWAIT",
     "replace": "WEXITED | WNOHANG",
     "test": "aLookAtAnExitedChildDoesNotReapIt",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "proc-child-not-tracked",
@@ -2054,10 +1544,7 @@
     "search": "children.started(pid)",
     "replace": "_ = children",
     "test": "theRunnerTellsTheTrackerAboutStartAndFinishAndNothingMore",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "proc-finish-after-reap",
@@ -2066,10 +1553,7 @@
     "search": "_ = ChildWait.reap(pid)",
     "replace": "_ = ChildWait.reap(pid); children.finished(pid)",
     "test": "aTimedOutChildIsFinishedBeforeItIsReaped",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "proc-parent-pipes-not-closed",
@@ -2078,10 +1562,7 @@
     "search": "parentEnds.forEach { close($0) }",
     "replace": "_ = parentEnds",
     "test": "timedOutRunsLeaveNoPipeDescriptorBehind",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "proc-late-child-not-killed",
@@ -2090,10 +1571,7 @@
     "search": "if isTerminating { terminate(pid) }",
     "replace": "if isTerminating && false { terminate(pid) }",
     "test": "aChildThatStartsAfterTerminateAllIsKilledAtOnce",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "proc-terminate-first-only",
@@ -2102,10 +1580,7 @@
     "search": "for pid in live { terminate(pid) }",
     "replace": "for pid in live.prefix(1) { terminate(pid) }",
     "test": "terminateAllKillsEveryLiveChildAndNoFinishedOne",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "proc-finished-not-forgotten",
@@ -2114,10 +1589,7 @@
     "search": "lock.withLock { _ = live.remove(pid) }",
     "replace": "lock.withLock { _ = live.count }",
     "test": "terminateAllKillsEveryLiveChildAndNoFinishedOne",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "proc-real-child-terminated",
@@ -2126,10 +1598,7 @@
     "search": "self.init(terminate: { ProcessTree.kill(root: $0) })",
     "replace": "self.init(terminate: { _ in })",
     "test": "terminateAllStopsARealRunningChildQuickly",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "comp-signal-number-forwarded",
@@ -2138,10 +1607,7 @@
     "search": "source.setEventHandler { handler(number) }",
     "replace": "source.setEventHandler { handler(SIGUSR2) }",
     "test": "eachWatchedSignalIsReportedUnderItsOwnNumber",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "comp-signal-default-ignored",
@@ -2150,10 +1616,7 @@
     "search": "source.resume()",
     "replace": "_ = source",
     "test": "aWatchedSignalCallsTheHandlerWithItsNumber",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cfg-limit-positive",
@@ -2162,10 +1625,7 @@
     "search": "guard value > 0, value <= maximum else {",
     "replace": "guard value >= 0, value <= maximum else {",
     "test": "badProcessLimit",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cfg-limit-maximum",
@@ -2174,10 +1634,7 @@
     "search": "guard value > 0, value <= maximum else {",
     "replace": "guard value > 0 else {",
     "test": "badRunLimit",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "cfg-limit-edge-included",
@@ -2186,10 +1643,7 @@
     "search": "guard value > 0, value <= maximum else {",
     "replace": "guard value > 0, value < maximum else {",
     "test": "goodLimits",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "lazy-process-limit-dump",
@@ -2198,10 +1652,7 @@
     "search": "processTimeoutSeconds: configuration.processTimeoutSeconds,",
     "replace": "processTimeoutSeconds: ToolConfiguration.defaultProcessTimeoutSeconds,",
     "test": "processLimitIsUsed",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "lazy-swift-path-absolute",
@@ -2210,10 +1661,7 @@
     "search": "guard swift.hasPrefix(\"/\") else {",
     "replace": "guard !swift.isEmpty else {",
     "test": "relativeSwiftPath",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "lazy-version-unknown",
@@ -2222,10 +1670,7 @@
     "search": "?? \"unknown\"",
     "replace": "?? \"\"",
     "test": "unknownVersion",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "lazy-env-leak-cc",
@@ -2234,10 +1679,7 @@
     "search": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home }",
     "replace": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home; result[\"CC\"] = environment[\"CC\"] }",
     "test": "processRequestsAreClean",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "lazy-env-drops-developer-dir",
@@ -2246,10 +1688,7 @@
     "search": "if let developer = environment[\"DEVELOPER_DIR\"] { result[\"DEVELOPER_DIR\"] = developer }",
     "replace": "_ = environment[\"DEVELOPER_DIR\"]",
     "test": "processRequestsAreClean",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "lazy-env-home-dropped",
@@ -2258,10 +1697,7 @@
     "search": "if let home = environment[\"HOME\"] { result[\"HOME\"] = home }",
     "replace": "result[\"HOME\"] = environment[\"HOME\"] ?? \"/root\"",
     "test": "absentVariablesStayAbsent",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "lazy-home-fallback",
@@ -2270,10 +1706,7 @@
     "search": "let home = environment[\"HOME\"] ?? child[\"TMPDIR\"] ?? \"/tmp\"",
     "replace": "let home = environment[\"HOME\"] ?? \"/tmp\"",
     "test": "foldersFallBackToTmpdir",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "lazy-build-dir-fallback",
@@ -2282,10 +1715,7 @@
     "search": "let buildBase = environment[\"BUILD_DIR\"] ?? child[\"TMPDIR\"] ?? \"/tmp\"",
     "replace": "let buildBase = environment[\"BUILD_DIR\"] ?? \"/tmp\"",
     "test": "foldersFallBackToTmpdir",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "dead-check-before-spawn",
@@ -2294,10 +1724,7 @@
     "search": "guard remaining > 0 else {",
     "replace": "guard remaining > -1_000_000 else {",
     "test": "afterTheLimit",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "dead-clamp-child-time",
@@ -2306,10 +1733,7 @@
     "search": "timeoutSeconds: min(request.timeoutSeconds, remaining),",
     "replace": "timeoutSeconds: request.timeoutSeconds,",
     "test": "childTimeIsClamped",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "dead-boundary-inclusive",
@@ -2318,10 +1742,7 @@
     "search": "guard remaining > 0 else {",
     "replace": "guard remaining >= 0 else {",
     "test": "afterTheLimit",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "app-run-limit-wired",
@@ -2330,10 +1751,7 @@
     "search": "wrapping: process, limitSeconds: settings.runTimeoutSeconds,",
     "replace": "wrapping: process, limitSeconds: ToolConfiguration.defaultRunTimeoutSeconds,",
     "test": "runLimitShortensChildLimits",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "app-config-wired",
@@ -2342,10 +1760,7 @@
     "search": "environment: environment, configuration: settings, now: { Date() },",
     "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), now: { Date() },",
     "test": "configuredLimitsReachTheRequests",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "lazy-process-limit-xcrun",
@@ -2354,10 +1769,7 @@
     "search": "timeoutSeconds: configuration.processTimeoutSeconds,",
     "replace": "timeoutSeconds: 60,",
     "test": "processLimitIsUsed",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-printable-controls",
@@ -2366,10 +1778,7 @@
     "search": "let isControl = value < 0x20 || value == 0x7F || (0x80...0x9F).contains(value)",
     "replace": "let isControl = value < 0x20",
     "test": "childErrorIsPrintable",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-sweep-cutoff",
@@ -2378,10 +1787,7 @@
     "search": "changed < settings.staleTemporaryFilesBefore",
     "replace": "changed > settings.staleTemporaryFilesBefore",
     "test": "staleTemporaryFilesAreSwept",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-sweep-only-temporaries",
@@ -2390,10 +1796,7 @@
     "search": "for name in names where Self.isTemporaryCacheFile(name) {",
     "replace": "for name in names {",
     "test": "staleTemporaryFilesAreSwept",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-sweep-uuid-check",
@@ -2402,10 +1805,7 @@
     "search": "return UUID(uuidString: String(name[range.upperBound...])) != nil",
     "replace": "return !name.isEmpty",
     "test": "staleTemporaryFilesAreSwept",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-sweep-called",
@@ -2414,10 +1814,7 @@
     "search": "sweepStaleTemporaryFiles(in: directory)",
     "replace": "_ = directory",
     "test": "staleTemporaryFilesAreSwept",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "domain-license-outside-names-file",
@@ -2426,10 +1823,7 @@
     "search": "throw .licenseOutsideCheckout(package: owner, file: fileName)",
     "replace": "throw .licenseOutsideCheckout(package: owner, file: real)",
     "test": "outsideLinkRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-modification-date-no-follow",
@@ -2438,10 +1832,7 @@
     "search": "guard lstat(path, &info) == 0 else { return nil }",
     "replace": "guard stat(path, &info) == 0 else { return nil }",
     "test": "modificationDateOfALinkIsTheLinksOwn",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "graph-printable-keeps-newline",
@@ -2450,10 +1841,7 @@
     "search": "return isControl && scalar != \"\\n\" && scalar != \"\\t\" ? \" \" : Character(scalar)",
     "replace": "return isControl ? \" \" : Character(scalar)",
     "test": "printableTextIsKept",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-version-file-commit",
@@ -2462,10 +1850,7 @@
     "search": "let installed = commit.map { version + \"-\" + $0 } ?? version",
     "replace": "let installed = version",
     "test": "freshInstall",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-cache-override-unconditional",
@@ -2474,10 +1859,7 @@
     "search": "if testing && [ -n \"${DEPENDI_CACHE_ROOT:-}\" ]; then",
     "replace": "if [ -n \"${DEPENDI_CACHE_ROOT:-}\" ]; then",
     "test": "cacheOverrideNeedsTestingFlag",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-cache-umask-removed",
@@ -2486,10 +1868,7 @@
     "search": "(umask 077 && mkdir -p \"$cache_root\")",
     "replace": "mkdir -p \"$cache_root\"",
     "test": "newCacheFolderIsPrivate",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-cache-owner-check-removed",
@@ -2498,10 +1877,7 @@
     "search": "[ ! -O \"$cache_root\" ]; then",
     "replace": "false; then",
     "test": "foreignCacheFolderIsRefused",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-cache-symlink-check-removed",
@@ -2510,10 +1886,7 @@
     "search": "if [ -L \"$cache_root\" ] || [ ! -d \"$cache_root\" ]",
     "replace": "if [ ! -d \"$cache_root\" ]",
     "test": "symlinkCacheFolderIsRefused",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-cache-writable-check-removed",
@@ -2522,10 +1895,7 @@
     "search": "find \"$cache_root\" -maxdepth 0 \\( -perm -020 -o -perm -002 \\) 2>/dev/null",
     "replace": "find \"$cache_root\" -maxdepth 0 -name nomatch 2>/dev/null",
     "test": "writableCacheFolderIsRefused",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-git-env-clean-removed",
@@ -2534,10 +1904,7 @@
     "search": "env -i HOME=\"$tmp/githome\" ",
     "replace": "env HOME=\"$tmp/githome\" ",
     "test": "gitEnvironmentIsClean",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-git-hooks-enabled",
@@ -2546,10 +1913,7 @@
     "search": "-c core.hooksPath=/dev/null \"$@\"",
     "replace": "\"$@\"",
     "test": "gitEnvironmentIsClean",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-git-global-config-allowed",
@@ -2558,10 +1922,7 @@
     "search": "GIT_CONFIG_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null ",
     "replace": "GIT_CONFIG_NOSYSTEM=1 ",
     "test": "gitEnvironmentIsClean",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-git-template-allowed",
@@ -2570,10 +1931,7 @@
     "search": "clone --quiet --template= \"$repo_url\"",
     "replace": "clone --quiet \"$repo_url\"",
     "test": "missingBinaryBuildsAndRuns",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-path-pin-removed",
@@ -2582,10 +1940,7 @@
     "search": "PATH=/usr/bin:/bin\n        export PATH",
     "replace": "export PATH",
     "test": "callerPathIsIgnored",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-dead-owner-kept",
@@ -2594,10 +1949,7 @@
     "search": "kill -0 \"$holder\" 2>/dev/null || return 0",
     "replace": "kill -0 \"$holder\" 2>/dev/null || true",
     "test": "deadOwnerLockIsReclaimed",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-live-owner-stolen",
@@ -2606,10 +1958,7 @@
     "search": "kill -0 \"$holder\" 2>/dev/null || return 0",
     "replace": "return 0",
     "test": "liveOwnerLockIsRespected",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-age-ignored",
@@ -2618,10 +1967,7 @@
     "search": "[ -n \"$(find \"$lock\" -maxdepth 0 -mmin +30 2>/dev/null)\" ]",
     "replace": "false",
     "test": "oldLockWithLiveOwnerIsReclaimed",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-age-too-short",
@@ -2630,10 +1976,7 @@
     "search": "-maxdepth 0 -mmin +30 2>/dev/null",
     "replace": "-maxdepth 0 -mmin +1 2>/dev/null",
     "test": "recentLockWithLiveOwnerIsRespected",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-malformed-owner-kept",
@@ -2642,10 +1985,7 @@
     "search": "\"\" | *[!0-9]*) return 0 ;;",
     "replace": "\"\") return 0 ;;",
     "test": "malformedLockOwnerIsStale",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-release-unconditional",
@@ -2654,10 +1994,7 @@
     "search": "if [ \"$owner\" = \"$token\" ]; then",
     "replace": "if true; then",
     "test": "releaseKeepsForeignLock",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-never-released",
@@ -2666,10 +2003,7 @@
     "search": "rm -f \"$lock\"",
     "replace": "true",
     "test": "releaseRemovesOwnLock",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-reclaim-skipped",
@@ -2678,10 +2012,7 @@
     "search": "            if lock_is_stale; then",
     "replace": "            if false; then",
     "test": "concurrentRunsOnDeadLockBuildOnce",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "init-binary-executable",
@@ -2690,10 +2021,7 @@
     "search": "try executables.makeExecutable(at: root + \"/.dependi/bin/dependi\")",
     "replace": "",
     "test": "freshInstall",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-end-anchor",
@@ -2702,10 +2030,7 @@
     "search": "#\"^[0-9a-f]{40}$\"#",
     "replace": "#\"^[0-9a-f]{40}\"#",
     "test": "commitFormatIsExact",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-start-anchor",
@@ -2714,10 +2039,7 @@
     "search": "#\"^[0-9a-f]{40}$\"#",
     "replace": "#\"[0-9a-f]{40}$\"#",
     "test": "commitFormatIsExact",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-uppercase",
@@ -2726,10 +2048,7 @@
     "search": "#\"^[0-9a-f]{40}$\"#",
     "replace": "#\"^[0-9a-fA-F]{40}$\"#",
     "test": "commitFormatIsExact",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-length",
@@ -2738,10 +2057,7 @@
     "search": "#\"^[0-9a-f]{40}$\"#",
     "replace": "#\"^[0-9a-f]{39,41}$\"#",
     "test": "commitFormatIsExact",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-executable-mode",
@@ -2750,10 +2066,7 @@
     "search": "if chmod(path, 0o755) != 0 {",
     "replace": "if chmod(path, 0o644) != 0 {",
     "test": "makeExecutableSetsMode",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-executable-missing",
@@ -2762,10 +2075,7 @@
     "search": "if code == ENOENT || code == ENOTDIR {",
     "replace": "if code == ENOTDIR {",
     "test": "passesExecutableSuite",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-executable-not-directory",
@@ -2774,10 +2084,7 @@
     "search": "if code == ENOENT || code == ENOTDIR {",
     "replace": "if code == ENOENT {",
     "test": "passesExecutableSuite",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "disk-executable-error-text",
@@ -2786,10 +2093,7 @@
     "search": "path: path, reason: \"chmod failed: \\(String(cString: strerror(code)))\")",
     "replace": "path: path, reason: \"failed\")",
     "test": "makeExecutableRefused",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "memory-write-keeps-mark",
@@ -2798,10 +2102,7 @@
     "search": "state.executablePaths.remove(target)",
     "replace": "_ = target",
     "test": "doublePassesExecutableSuite",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "memory-remove-keeps-mark",
@@ -2810,10 +2111,7 @@
     "search": "state.executablePaths.remove(key)",
     "replace": "_ = key",
     "test": "doublePassesExecutableSuite",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "memory-move-drops-mark",
@@ -2822,10 +2120,7 @@
     "search": "state.executablePaths.formUnion(marked.map { to + $0.dropFirst(from.count) })",
     "replace": "_ = marked",
     "test": "doublePassesExecutableSuite",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "memory-move-keeps-destination-mark",
@@ -2834,10 +2129,7 @@
     "search": "state.executablePaths.subtract(replaced)",
     "replace": "_ = replaced",
     "test": "doublePassesExecutableSuite",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "memory-move-keeps-source-mark",
@@ -2846,10 +2138,7 @@
     "search": "state.executablePaths.subtract(marked)",
     "replace": "_ = marked",
     "test": "doublePassesExecutableSuite",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-create-failure-ignored",
@@ -2858,10 +2147,7 @@
     "search": "if [ ! -L \"$lock\" ] && [ ! -e \"$lock\" ] && ! can_link; then",
     "replace": "if false; then",
     "test": "unwritableCacheFolderFailsAtOnce",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-released-called-unusable",
@@ -2870,10 +2156,7 @@
     "search": "[ ! -e \"$lock\" ] && ! can_link; then",
     "replace": "[ ! -e \"$lock\" ]; then",
     "test": "lockReleasedAfterFailedTakeIsTaken",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-probe-never-fails",
@@ -2882,10 +2165,7 @@
     "search": "ln -s \"$token\" \"$probe\" 2>/dev/null || return 1",
     "replace": "ln -s \"$token\" \"$probe\" 2>/dev/null || return 0",
     "test": "unwritableCacheFolderFailsAtOnce",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-probe-kept-on-exit",
@@ -2894,10 +2174,7 @@
     "search": "            rm -f \"$probe\"\n            if [ \"$have_lock\" = 1 ]; then",
     "replace": "            if [ \"$have_lock\" = 1 ]; then",
     "test": "stoppedScriptRemovesLockProbe",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-probe-leftover-kept",
@@ -2906,10 +2183,7 @@
     "search": "        can_link() {\n            rm -f \"$probe\"",
     "replace": "        can_link() {",
     "test": "leftoverProbeWithSameProcessIdIsReplaced",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-lock-probe-kept-while-waiting",
@@ -2918,10 +2192,7 @@
     "search": "ln -s \"$token\" \"$probe\" 2>/dev/null || return 1\n            rm -f \"$probe\"",
     "replace": "ln -s \"$token\" \"$probe\" 2>/dev/null || return 1",
     "test": "lockProbeIsGoneDuringBuild",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "slugger-hash-width",
@@ -2930,10 +2201,7 @@
     "replace": "digest.prefix(4)",
     "test": "slugMatchesHandComputedHash",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "resolver-excludes-normalized",
@@ -2942,10 +2210,7 @@
     "replace": "let excludes = rawExcludes",
     "test": "excludeIsNormalized",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "validator-form-feed",
@@ -2954,10 +2219,7 @@
     "replace": " {",
     "test": "formFeedAccepted",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "locator-licenses-folder",
@@ -2966,10 +2228,7 @@
     "replace": ")$\"#,",
     "test": "variantsAreFound",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "locator-hidden-skipped",
@@ -2978,10 +2237,7 @@
     "replace": "guard true else { return false }",
     "test": "licensesFolderFiles",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "generate-folder-skipped",
@@ -2990,10 +2246,7 @@
     "replace": "guard true else { continue }",
     "test": "licenseFolderOnlyIsMissing",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-nested-folder-skipped",
@@ -3002,10 +2255,7 @@
     "replace": "where true {",
     "test": "licenseLayouts",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "workspace-registry-skipped",
@@ -3014,10 +2264,7 @@
     "replace": "if false { continue }",
     "test": "registryPackageIsSkipped",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pins-revisionless-skipped",
@@ -3026,10 +2273,7 @@
     "replace": "let revision = pin.revision ?? \"\"",
     "test": "registryPinIsSkipped",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pins-only-registry-may-lack-revision",
@@ -3038,10 +2282,7 @@
     "replace": "if true { return nil }",
     "test": "sourceControlPinWithoutRevisionFails",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "resolver-excluded-root-skipped",
@@ -3050,10 +2291,7 @@
     "replace": "identity = normalizer.identity(forLocation: name); if excludes.contains(identity.value) { return nil }",
     "test": "excludedRootStillBringsItsDependencies",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-package-name-fallback",
@@ -3062,10 +2300,7 @@
     "replace": "if packages[wanted] != nil { return wanted }; throw .productUnmatched(product: name)",
     "test": "manifestNameInsteadOfIdentity",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-package-name-in-error",
@@ -3074,10 +2309,7 @@
     "replace": "name)",
     "test": "wrongPackageNameStillFails",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-remote-search-no-early-exit",
@@ -3086,10 +2318,7 @@
     "replace": "                    _ = 0",
     "test": "remoteSearchStopsAtFirstMatch",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-remote-search-unsorted",
@@ -3098,10 +2327,7 @@
     "replace": "remotePackages",
     "test": "remoteSearchStopsAtFirstMatch",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-plugin-product-gate",
@@ -3110,10 +2336,7 @@
     "replace": "if false, !product.targetNames.isEmpty,",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-plugin-product-kinds",
@@ -3122,10 +2345,7 @@
     "replace": "return kind == .macro",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-mixed-product-all",
@@ -3134,10 +2354,7 @@
     "replace": "product.targetNames.contains(where: { targetName in",
     "test": "mixedProductShips",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-plugin-only-reported",
@@ -3146,10 +2363,7 @@
     "replace": "!reached.contains($0.identity)",
     "test": "pluginProductIsNotShipped",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-other-targets-expected",
@@ -3158,10 +2372,7 @@
     "replace": "&& !excludes.contains($0.identity.value)",
     "test": "otherTargetPackagesAreNotUnreached",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "resolver-other-targets-walk",
@@ -3170,10 +2381,7 @@
     "replace": "expected.insert(found.0)",
     "test": "otherTargetPackagesAreNotUnreached",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "projectfile-tests-in-other-products",
@@ -3182,10 +2390,7 @@
     "replace": "!Self.isTestTarget(target)",
     "test": "testTargetProductsAreOtherProducts",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "projectfile-other-products-subtract-app",
@@ -3194,10 +2399,7 @@
     "replace": "everything.found",
     "test": "appProductsAreNotOtherProducts",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "pins-named-workspace-preferred",
@@ -3206,10 +2408,7 @@
     "replace": "if false { workspaces = named }",
     "test": "workspaceNamedLikeProjectWins",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "pins-conflict-dropped",
@@ -3218,10 +2417,7 @@
     "replace": "where revisions.count >= 1 {",
     "test": "conflictingWorkspacesDropThePin",
     "slice": "review-fix",
-    "lastRun": {
-      "date": "2026-11-04",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
   },
   {
     "id": "assembler-code-point-order",
@@ -3246,10 +2442,7 @@
     "search": "guard seen.insert(real).inserted else { continue }",
     "replace": "seen.insert(real)",
     "test": "sharedDependencyIsListedOnce",
-    "lastRun": {
-      "date": "2026-11-10",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-10", "outcome": "KILLED"}
   },
   {
     "id": "local-missing-path",
@@ -3274,10 +2467,7 @@
     "search": "let absolute = path.hasPrefix(\"/\") ? path : packagePath + \"/\" + path",
     "replace": "let absolute = path",
     "test": "localDependencyPaths",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-follow-locals",
@@ -3286,10 +2476,7 @@
     "search": ".collect(from: locals)",
     "replace": ".collect(from: [])",
     "test": "nestedProductResolves",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-local-quietly",
@@ -3298,10 +2485,7 @@
     "search": "if package.kind == .local { continue }",
     "replace": "if false { continue }",
     "test": "localSkippedQuietly",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-require-licenses",
@@ -3310,10 +2494,7 @@
     "search": "if settings.requireLicenses {",
     "replace": "if false {",
     "test": "strictFails",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-line",
@@ -3322,10 +2503,7 @@
     "search": "\"Dependi: skipped \\(package.identity.value): no license file\")",
     "replace": "\"\")",
     "test": "remoteSkipped",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "config-require-licenses",
@@ -3390,10 +2568,7 @@
     "search": "enabledTraits.isDisjoint(with: dependency.traits)",
     "replace": "false",
     "test": "offTraitDependencyIsNotFollowed",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-gate-inverted",
@@ -3402,10 +2577,7 @@
     "search": "if !dependency.traits.isEmpty,",
     "replace": "if dependency.traits.isEmpty,",
     "test": "defaultTraitFollows",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-root-default-missing",
@@ -3414,10 +2586,7 @@
     "search": "for (identity, _) in roots { seeds[identity] = seed(identity) }",
     "replace": "_ = roots",
     "test": "defaultTraitFollows",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-ask-condition-ignored",
@@ -3426,10 +2595,7 @@
     "search": "|| !enabledTraits.isDisjoint(with: ask.conditionTraits)",
     "replace": "|| true",
     "test": "conditionalRequest",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-no-list-no-default",
@@ -3438,10 +2604,7 @@
     "search": "?? [ManifestTraitRequest(name: \"default\", conditionTraits: [])]",
     "replace": "?? []",
     "test": "noTraitListMeansDefaults",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-no-repeat",
@@ -3450,10 +2613,7 @@
     "search": "isSettled = next == requested",
     "replace": "isSettled = true",
     "test": "requestFromAReachedDependentSettles",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-expansion-shallow",
@@ -3462,10 +2622,7 @@
     "search": "pending.append(contentsOf: definitions[name] ?? [])",
     "replace": "_ = definitions",
     "test": "traitEnabledByTrait",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-condition-unread",
@@ -3474,10 +2631,7 @@
     "search": "return condition[\"traits\"] as? [String] ?? []",
     "replace": "return []",
     "test": "traitsManifest",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-table-unread",
@@ -3486,10 +2640,7 @@
     "search": "definitions[name] = entry[\"enabledTraits\"] as? [String] ?? []",
     "replace": "definitions[name] = []",
     "test": "traitsManifest",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-empty-list-dropped",
@@ -3498,10 +2649,7 @@
     "search": "let raw = first[\"traits\"] as? [[String: Any]]",
     "replace": "let raw = first[\"traits\"] as? [[String: Any]], !raw.isEmpty",
     "test": "traitsManifest",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-project-pick-ignored",
@@ -3510,10 +2658,7 @@
     "search": "selected[identity] ?? [\"default\"]",
     "replace": "_ = selected[identity]; return [\"default\"]",
     "test": "listedTraitFollowsGatedDependency",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-project-empty-pick-as-absent",
@@ -3522,10 +2667,7 @@
     "search": "selected[identity] ?? [\"default\"]",
     "replace": "selected[identity].flatMap { $0.isEmpty ? nil : $0 } ?? [\"default\"]",
     "test": "emptySelectionTurnsDefaultsOff",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-project-pick-adds-default",
@@ -3534,10 +2676,7 @@
     "search": "selected[identity] ?? [\"default\"]",
     "replace": "selected[identity].map { $0.union([\"default\"]) } ?? [\"default\"]",
     "test": "listWithoutDefaultLeavesDefaultOff",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-project-local-seed-default",
@@ -3546,10 +2685,7 @@
     "search": "for package in localPackages { seeds[package.identity] = seed(package.identity) }",
     "replace": "for package in localPackages { seeds[package.identity] = [\"default\"] }",
     "test": "unlinkedLocalPackageSelection",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-project-locations-not-joined",
@@ -3558,10 +2694,7 @@
     "search": "selected[normalizer.identity(forLocation: location), default: []].formUnion(traits)",
     "replace": "selected[normalizer.identity(forLocation: location)] = traits",
     "test": "locationsOfOnePackageJoin",
-    "lastRun": {
-      "date": "2026-11-24",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-remote-dropped",
@@ -3570,10 +2703,7 @@
     "search": "try traits.add(remote, id: id, location: url, in: model)",
     "replace": "_ = url",
     "test": "remoteReferenceTraitsAreRead",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-local-dropped",
@@ -3582,10 +2712,7 @@
     "search": "try traits.add(local, id: id, location: path, in: model)",
     "replace": "_ = path",
     "test": "localReferenceTraitsAreRead",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-other-projects-dropped",
@@ -3594,10 +2721,7 @@
     "search": "_ = try packageReferences(in: other, traits: &traits)",
     "replace": "_ = other",
     "test": "crossProjectTraitsAreRead",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-empty-list-dropped",
@@ -3606,10 +2730,7 @@
     "search": "traits[location, default: []].formUnion(names)",
     "replace": "if !names.isEmpty { traits[location, default: []].formUnion(names) }",
     "test": "emptyTraitListIsKept",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-unlisted-no-default",
@@ -3618,10 +2739,7 @@
     "search": "traits[location, default: []].insert(\"default\")",
     "replace": "_ = location",
     "test": "unlistedReferenceGivesDefault",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-bad-value-accepted",
@@ -3630,10 +2748,7 @@
     "search": "guard let names = value as? [String] else {",
     "replace": "guard let names = value as? [String] ?? Optional([]) else {",
     "test": "traitsNotAList",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-wired",
@@ -3642,10 +2757,7 @@
     "search": "localPaths.formUnion(LegacyLocalPackages(files: files).paths(in: model))",
     "replace": "_ = LegacyLocalPackages(files: files)",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-kind-folder",
@@ -3654,10 +2766,7 @@
     "search": "[\"wrapper\", \"folder\"]",
     "replace": "[\"wrapper\"]",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-kind-wrapper",
@@ -3666,10 +2775,7 @@
     "search": "[\"wrapper\", \"folder\"]",
     "replace": "[\"folder\"]",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-manifest-check",
@@ -3678,10 +2784,7 @@
     "search": "files.exists(at: folder + \"/Package.swift\")",
     "replace": "true",
     "test": "foldersWithoutManifestAreIgnored",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-group-order",
@@ -3690,10 +2793,7 @@
     "search": "parts.insert(path, at: 0)",
     "replace": "parts.append(path)",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-sdk-source-tree",
@@ -3702,10 +2802,7 @@
     "search": "            default:\n                return nil",
     "replace": "            default:\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
     "test": "sdkReferenceIsIgnored",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-source-root",
@@ -3714,10 +2811,7 @@
     "search": "case \"SOURCE_ROOT\":\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
     "replace": "case \"SOURCE_ROOT\":\n                return nil",
     "test": "sourceRootAndAbsoluteReferences",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-absolute",
@@ -3726,10 +2820,7 @@
     "search": "ProjectPathMath.standardize(parts.joined(separator: \"/\"))",
     "replace": "nil",
     "test": "sourceRootAndAbsoluteReferences",
-    "lastRun": {
-      "date": "2026-11-25",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-25", "outcome": "KILLED"}
   },
   {
     "id": "single-page-layout-switch",
@@ -3738,10 +2829,7 @@
     "search": "case .singlePage: try writeSinglePage(acknowledgements, bundle: bundlePath)",
     "replace": "case .singlePage: try writePanes(acknowledgements, intoBundleAt: bundlePath)",
     "test": "singlePageOneDocumentPackageWritesOnlyTheIndex",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-title-many-documents",
@@ -3750,10 +2838,7 @@
     "search": "acknowledgement.documents.count == 1",
     "replace": "acknowledgement.documents.count >= 1",
     "test": "singlePageTitlesNameTheFileOnlyWhenAPackageHasSeveralDocuments",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-title-one-document",
@@ -3762,10 +2847,7 @@
     "search": "isOnlyDocument ? name :",
     "replace": "false ? name :",
     "test": "singlePageOneDocumentPackageWritesOnlyTheIndex",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-title-file-name",
@@ -3774,10 +2856,7 @@
     "search": "\"\\(name) (\\(document.fileName))\"",
     "replace": "name",
     "test": "singlePageTitlesNameTheFileOnlyWhenAPackageHasSeveralDocuments",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-footer-text",
@@ -3786,10 +2865,7 @@
     "search": "\"Title\": title, \"FooterText\": document.text]",
     "replace": "\"Title\": title, \"FooterText\": name]",
     "test": "singlePageOneDocumentPackageWritesOnlyTheIndex",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-no-document-group",
@@ -3798,10 +2874,7 @@
     "search": "return [[\"Type\": \"PSGroupSpecifier\", \"Title\": name]]",
     "replace": "return []",
     "test": "singlePagePackageWithNoDocumentsKeepsATitleOnlyGroup",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-folder-not-created",
@@ -3810,10 +2883,7 @@
     "search": "guard hasFolder else { return }",
     "replace": "try writer.createDirectory(at: folder)",
     "test": "singlePageOneDocumentPackageWritesOnlyTheIndex",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-user-file-left-alone",
@@ -3822,10 +2892,7 @@
     "search": "directories.topLevelNames(in: folder).filter(Self.isTemporaryLeftover)",
     "replace": "directories.topLevelNames(in: folder).filter { !$0.hasPrefix(\".\") }",
     "test": "switchingToSinglePageRemovesOnlyTheManifestPanesAndEmptiesTheManifest",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-leftovers-removed",
@@ -3834,10 +2901,7 @@
     "search": "previous.sorted() + leftovers",
     "replace": "previous.sorted()",
     "test": "singlePageRemovesTheTemporaryLeftoversOfAnInterruptedWrite",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-old-panes-removed",
@@ -3846,10 +2910,7 @@
     "search": "try writer.removeItem(at: Self.join(folder, stale))",
     "replace": "_ = stale",
     "test": "switchingToSinglePageRemovesOnlyTheManifestPanesAndEmptiesTheManifest",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-missing-pane-skipped",
@@ -3858,10 +2919,7 @@
     "search": "where files.exists(at: Self.join(folder, stale))",
     "replace": "where !stale.isEmpty",
     "test": "singlePageSkipsAManifestNameThatIsNoLongerInTheFolder",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-manifest-emptied",
@@ -3870,10 +2928,7 @@
     "search": "try writeIfDifferent(Data(), to: manifestPath)",
     "replace": "_ = manifestPath",
     "test": "switchingToSinglePageRemovesOnlyTheManifestPanesAndEmptiesTheManifest",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-manifest-only-when-different",
@@ -3882,10 +2937,7 @@
     "search": "try writeIfDifferent(Data(), to: manifestPath)",
     "replace": "try writer.write(Data(), toPath: manifestPath)",
     "test": "singlePageRepeatRunWritesNothing",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-index-before-removals",
@@ -3894,10 +2946,7 @@
     "search": "try writePlist(page, encodedAs: pageData, to: indexPath)",
     "replace": "for stale in previous where hasFolder { try writer.removeItem(at: Self.join(folder, stale)) }; try writePlist(page, encodedAs: pageData, to: indexPath)",
     "test": "singlePageWritesTheIndexThenRemovesPanesThenWritesTheManifest",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-manifest-last",
@@ -3906,10 +2955,7 @@
     "search": "try writePlist(page, encodedAs: pageData, to: indexPath)",
     "replace": "if hasFolder { try writeIfDifferent(Data(), to: manifestPath) }; try writePlist(page, encodedAs: pageData, to: indexPath)",
     "test": "singlePageWritesTheIndexThenRemovesPanesThenWritesTheManifest",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-nul-before-write",
@@ -3918,10 +2964,7 @@
     "search": "let pageData = try Self.encode(page, path: indexPath)",
     "replace": "let pageData = (try? Self.encode(page, path: indexPath)) ?? Data()",
     "test": "singlePageNulInALicenseTextFailsBeforeAnyWriteOrRemoval",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-link-refused",
@@ -3930,10 +2973,7 @@
     "search": "try requirePlainFolder(folder, inBundle: bundle)",
     "replace": "_ = bundle",
     "test": "singlePageRefusesALinkWhereTheFolderBelongsAndWritesNothing",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-layout-raw-value",
@@ -3942,10 +2982,7 @@
     "search": "case singlePage",
     "replace": "case singlePage = \"single-page\"",
     "test": "acknowledgementLayoutText",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "single-page-composition-keeps-panes",
@@ -3954,10 +2991,7 @@
     "search": "layout: .panePerPackage",
     "replace": "layout: .singlePage",
     "test": "archiveWritesDirectAndTransitive",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "runner-temp-ignores-tmpdir",
@@ -3966,10 +3000,7 @@
     "search": "return value.isEmpty ? NSTemporaryDirectory() : value",
     "replace": "return NSTemporaryDirectory()",
     "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "runner-temp-inverted",
@@ -3978,10 +3009,7 @@
     "search": "return value.isEmpty ? NSTemporaryDirectory() : value",
     "replace": "return value.isEmpty ? value : NSTemporaryDirectory()",
     "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   },
   {
     "id": "runner-temp-copy-folder",
@@ -3990,9 +3018,6 @@
     "search": "let folder = (temporaryFolder as NSString).appendingPathComponent(",
     "replace": "let folder = (NSTemporaryDirectory() as NSString).appendingPathComponent(",
     "test": "foreignWorkerThatStartsMidRunIsLeftAlone",
-    "lastRun": {
-      "date": "2026-11-26",
-      "outcome": "KILLED"
-    }
+    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
   }
 ]

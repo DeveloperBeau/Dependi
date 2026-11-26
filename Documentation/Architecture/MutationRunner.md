@@ -7,7 +7,7 @@ The runner breaks the code on purpose and checks that a named test fails. A test
 ## Parts
 
 - `Documentation/Registers/mutations.json` lists the mutations. Each entry has an id, the slice that owns it, a file, the exact search text, the replacement text and a test id. Two optional fields exist. `expected` is `killed` (the default) or `timeout`. `lastRun` holds the date and the outcome of the latest run and the runner writes it.
-- The file is under `Sources/`, or it is a checker file under `Tests/ArchitectureTests/`. A checker file is any Swift file there whose name does not end in `Tests.swift`. The architecture rules live in the test target, so their mutations must change files there. A test file is never mutated.
+- The file is under `Sources/`, it is `Scripts/mutate.swift`, or it is a checker file under `Tests/ArchitectureTests/`. A checker file is any Swift file there whose name does not end in `Tests.swift`. The architecture rules live in the test target, so their mutations must change files there. A test file is never mutated.
 - `Scripts/mutate.swift` is the runner. Compile it with `swiftc Scripts/mutate.swift -o mutate`.
 - `Documentation/Registers/mutations.md` is generated from the JSON with `--markdown`. A test fails if it is stale.
 
@@ -34,7 +34,7 @@ The runner breaks the code on purpose and checks that a named test fails. A test
 4. Group the entries by file. A worker takes one whole group at a time, so its builds stay in one module.
 5. Apply the mutation and build the tests. A build failure is INVALID. This is the only build for the entry. The restore of the previous entry goes into the same build.
 6. Run only the named test, selected with an anchored filter on its full listed id. A pass is SURVIVED. A failure with a test failure marker is KILLED. A time-out is KILLED (TIMEOUT).
-7. Restore the file. With one worker, the runner mutates the package folder, restores with `git checkout -- <file>` and requires a clean tree. With more workers, each worker uses a copy of the tracked files in the temporary folder, with its own build folder. The runner writes the original text back into the copy and removes the copy at the end.
+7. Restore the file. With one worker, the runner mutates the package folder, restores with `git checkout -- <file>` and requires a clean tree. With more workers, each worker uses a copy of the tracked files in the temporary folder, with its own build folder. Worker copies and command output go in `TMPDIR` when it is set, and in the system temporary folder otherwise. Foundation on macOS ignores `TMPDIR`, so the runner reads it itself. The runner writes the original text back into the copy and removes the copy at the end.
 8. Print one row for each entry with its seconds, and the total. An outcome that differs from `expected` prints an UNEXPECTED line. A kill by time-out is a pass only when the entry expects `timeout`.
 9. Write `lastRun` into each entry that ran, by editing the entry text in place. Other text in the file is not reformatted.
 
@@ -42,7 +42,7 @@ A survivor, an invalid mutant, an unexpected outcome or a baseline failure makes
 
 ## Interrupts
 
-SIGINT and SIGTERM stop every child process, restore the file that is mutated in the package folder, remove every worker copy and exit with 130. The first shutdown wins. After it starts, no worker starts a command or writes into a copy, so a removed copy does not come back. The runner lists the tracked files once, before the workers start. A worker never runs a command while it holds the copy lock, and a copy stops at once when the shutdown starts. A failed copy or any other failure removes every copy that exists.
+SIGINT and SIGTERM stop every child process, restore the file that is mutated in the package folder, remove every worker copy and exit with 130. The first shutdown wins, and it owns the exit code. After it starts, no worker starts a command or writes into a copy, so a removed copy does not come back. The runner lists the tracked files once, before the workers start. A worker never runs a command while it holds the copy lock, and a copy stops at once when the shutdown starts. A failed copy or any other failure removes every copy that exists.
 
 ## Processes
 
