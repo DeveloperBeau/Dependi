@@ -59,6 +59,83 @@ struct ToolConfigurationTests {
         #expect(try decode("{}") == expected)
     }
 
+    @Test("a singlePage of true decodes to true")
+    func singlePageTrueDecodes() throws {
+        #expect(try decode(#"{"singlePage":true}"#).singlePage == true)
+    }
+
+    @Test("a singlePage of false decodes to false")
+    func singlePageFalseDecodes() throws {
+        #expect(try decode(#"{"singlePage":false}"#).singlePage == false)
+    }
+
+    @Test("an absent singlePage decodes to false")
+    func singlePageDefaultsToFalse() throws {
+        #expect(try decode("{}").singlePage == false)
+        #expect(try decode(#"{"requireLicenses":true}"#).singlePage == false)
+    }
+
+    @Test("a singlePage that is not a boolean fails to decode")
+    func singlePageNotBooleanFails() {
+        for json in [
+            #"{"singlePage":"yes"}"#, #"{"singlePage":1}"#, #"{"singlePage":[true]}"#,
+        ] {
+            #expect(throws: (any Error).self, "json: \(json)") { try decode(json) }
+        }
+    }
+
+    @Test("a configuration with singlePage true survives an encode and decode round trip")
+    func singlePageRoundTrip() throws {
+        let original = ToolConfiguration(
+            excludes: [], manualEntries: [], gateConfigurations: ["Release"],
+            sourcePackagesPath: nil, outputPath: nil, includeBuildTools: false,
+            allowUnreached: false, processTimeoutSeconds: 60, runTimeoutSeconds: 300,
+            version: nil, commit: nil, singlePage: true)
+        let data = try JSONEncoder().encode(original)
+        let object = try #require(try JSONSerialization.jsonObject(with: data) as? [String: Any])
+        #expect(object["singlePage"] as? Bool == true)
+        let decoded = try JSONDecoder().decode(ToolConfiguration.self, from: data)
+        #expect(decoded.singlePage == true)
+        #expect(decoded == original)
+    }
+
+    @Test("fuzz: singlePage decodes to its boolean and every other value is refused")
+    func fuzzSinglePage() {
+        for seed in [SeededGenerator.defaultSeed, 7, 99, 2024] as [UInt64] {
+            var generator = SeededGenerator(seed: seed)
+            for round in 0..<200 {
+                var members: [String] = []
+                if Bool.random(using: &generator) { members.append(#""requireLicenses":true"#) }
+                if Bool.random(using: &generator) { members.append(#""excludes":["a"]"#) }
+                var expected = false
+                var valid = true
+                switch Int.random(in: 0...6, using: &generator) {
+                case 0: break
+                case 1:
+                    expected = true
+                    members.append(#""singlePage":true"#)
+                case 2: members.append(#""singlePage":false"#)
+                default:
+                    valid = false
+                    let bad = [
+                        #""yes""#, #""true""#, "1", "0", "[]", "{}", "1.5", #""""#,
+                    ]
+                    members.append(
+                        "\"singlePage\":" + bad.randomElement(using: &generator)!)
+                }
+                members.shuffle(using: &generator)
+                let json = "{" + members.joined(separator: ",") + "}"
+                let message = "seed \(seed) round \(round) json \(json)"
+                let decoded = try? decode(json)
+                if valid {
+                    #expect(decoded?.singlePage == expected, "\(message)")
+                } else {
+                    #expect(decoded == nil, "\(message)")
+                }
+            }
+        }
+    }
+
     @Test("a configuration survives an encode and decode round trip")
     func roundTrip() throws {
         let original = try decode(fullJSON)
