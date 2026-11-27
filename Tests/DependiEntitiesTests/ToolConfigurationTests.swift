@@ -18,6 +18,8 @@ struct ToolConfigurationTests {
           "outputPath": "Settings.bundle",
           "includeBuildTools": true,
           "allowUnreached": true,
+          "requireLicenses": true,
+          "singlePage": true,
           "processTimeoutSeconds": 30,
           "runTimeoutSeconds": 120,
           "version": "1.4.2",
@@ -38,7 +40,9 @@ struct ToolConfigurationTests {
             processTimeoutSeconds: 30,
             runTimeoutSeconds: 120,
             version: "1.4.2",
-            commit: "0123456789abcdef0123456789abcdef01234567")
+            commit: "0123456789abcdef0123456789abcdef01234567",
+            requireLicenses: true,
+            singlePage: true)
         #expect(try decode(fullJSON) == expected)
     }
 
@@ -171,7 +175,7 @@ struct ToolConfigurationTests {
         for key in [
             "excludes", "manualEntries", "gateConfigurations", "sourcePackagesPath", "outputPath",
             "includeBuildTools", "allowUnreached", "processTimeoutSeconds", "runTimeoutSeconds",
-            "version", "commit",
+            "version", "commit", "requireLicenses", "singlePage",
         ] {
             let json = try JSONSerialization.jsonObject(with: Data(fullJSON.utf8)) as? [String: Any]
             #expect(json?[key] != nil, "the full example lacks \(key)")

@@ -23,8 +23,8 @@
 ## Configuration decoding
 
 1. Decoding is strict. A key that is not known fails with `unknownConfigurationKey` and the name of the key. A typo cannot fall back to a default.
-2. Absent keys use these defaults: no excludes, no manual entries, the gate list `["Release"]`, no paths, `includeBuildTools` and `allowUnreached` false, 60 seconds for a process and 300 seconds for a run. The loader checks the two limits. The process limit is the time for one child. The run limit is the time after which no new child starts.
-3. `singlePage` is a boolean and is false when absent. It chooses the single page layout.
+2. Absent keys use these defaults: no excludes, no manual entries, the gate list `["Release"]`, no paths, `includeBuildTools`, `allowUnreached` and `requireLicenses` false, 60 seconds for a process and 300 seconds for a run. The loader checks the two limits. The process limit is the time for one child. The run limit is the time after which no new child starts.
+3. `singlePage` is a boolean and is false when absent. It chooses the single page layout. The `--single-page` flag of `generate` forces that layout whatever the key holds.
 4. `version` must be three numbers separated by dots. `commit` must be 40 lowercase hexadecimal characters. Both end up in shell paths and commands, so nothing else is accepted.
 
 ## Tests

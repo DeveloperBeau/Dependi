@@ -18,6 +18,8 @@ Dependi writes the licenses of your Swift packages into your app's `Settings.bun
    "${SRCROOT}/.dependi/run.sh" generate
    ```
 
+   To put every license on one page for every run of this phase, use `generate --single-page` instead. The script passes its arguments on to the program. Without the flag, the `singlePage` key in `.dependi.json` decides.
+
 5. In that phase add the input file list `$(SRCROOT)/.dependi/inputs.xcfilelist` and the output file `$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Settings.bundle/Acknowledgements.plist`.
 6. Commit `.dependi.json` and `.dependi/run.sh` (and `.dependi/inputs.xcfilelist`).
 
@@ -64,7 +66,7 @@ Use the same `version` and `commit` values that `.dependi.json` holds. The scrip
 | `manualEntries` | Code that has no package, each with a `name` and a `licensePath` inside the project. |
 | `gateConfigurations` | Configurations that run besides an archive. The default is `Release`. |
 | `requireLicenses` | Fail when a remote package has no license file. The default is off: such a package is skipped and named on the error output. |
-| `singlePage` | Put every license on one page instead of one child pane for each package. The default is off. |
+| `singlePage` | Put every license on one page instead of one child pane for each package. The default is off. `generate --single-page` turns it on for that run. |
 | `allowUnreached` | Allow resolved packages that no target of your project links. |
 | `includeBuildTools` | Include the dependencies of macro and plugin targets. |
 | `sourcePackagesPath` | Where `SourcePackages` is, if it is not next to the build folder. |
@@ -72,3 +74,5 @@ Use the same `version` and `commit` values that `.dependi.json` holds. The scrip
 | `version`, `commit` | The version and full commit that the script builds. |
 
 An unknown key is an error, so a typo cannot silently use a default.
+
+tvOS is not a listed platform. If you use Dependi on tvOS anyway, Settings shows at most five lines of each license in both layouts, so show the full text in the app instead.
