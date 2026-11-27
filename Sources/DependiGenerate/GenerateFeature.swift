@@ -11,8 +11,9 @@ public struct GenerateFeature: Sendable {
     private let manifests: any PackageManifestReading
     private let writers: @Sendable (AcknowledgementLayout) -> any AcknowledgementWriting
     private let output: any OutputWriting
+    private let forcesSinglePage: Bool
 
-    /// Creates the feature with every outside capability it needs. `writers` gives the writer for a layout. It is asked once for each write.
+    /// Creates the feature with every outside capability it needs. `writers` gives the writer for a layout. It is asked once for each write. `forcesSinglePage` selects the single page layout whatever the configuration says.
     public init(
         environment: any EnvironmentReading,
         files: any FileReading,
@@ -21,7 +22,8 @@ public struct GenerateFeature: Sendable {
         linkedProducts: any LinkedProductReading,
         manifests: any PackageManifestReading,
         writers: @escaping @Sendable (AcknowledgementLayout) -> any AcknowledgementWriting,
-        output: any OutputWriting
+        output: any OutputWriting,
+        forcesSinglePage: Bool
     ) {
         self.environment = environment
         self.files = files
@@ -31,6 +33,7 @@ public struct GenerateFeature: Sendable {
         self.manifests = manifests
         self.writers = writers
         self.output = output
+        self.forcesSinglePage = forcesSinglePage
     }
 
     /// Runs the flow. It fails with the first problem and names the package or file involved.
@@ -56,7 +59,8 @@ public struct GenerateFeature: Sendable {
         }
         let bundle = try OutputLocation(files: files).bundlePath(
             context: context, configuration: settings)
-        let layout: AcknowledgementLayout = settings.singlePage ? .singlePage : .panePerPackage
+        let layout: AcknowledgementLayout =
+            forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage
         try writers(layout).write(acknowledgements, intoBundleAt: bundle)
         output.writeLine("Dependi: wrote \(acknowledgements.count) acknowledgements to \(bundle)")
         return .wrote(count: acknowledgements.count)

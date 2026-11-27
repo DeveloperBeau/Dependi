@@ -11,9 +11,25 @@ struct CommandLineFuzzTests {
         guard let name = tokens.first else { return .failure(.noCommand) }
         let rest = Array(tokens.dropFirst())
         let simple: [String: Command] = [
-            "generate": .generate, "version": .version, "--version": .version, "help": .help,
+            "version": .version, "--version": .version, "help": .help,
             "--help": .help, "-h": .help,
         ]
+        if name == "generate" {
+            var forcesSinglePage = false
+            for token in rest {
+                if token == "--single-page" {
+                    if forcesSinglePage {
+                        return .failure(.duplicateFlag(command: name, flag: token))
+                    }
+                    forcesSinglePage = true
+                } else if token.hasPrefix("-") {
+                    return .failure(.unknownFlag(command: name, flag: token))
+                } else {
+                    return .failure(.unexpectedArgument(command: name, argument: token))
+                }
+            }
+            return .success(.generate(forcesSinglePage: forcesSinglePage))
+        }
         if let command = simple[name] {
             if let extra = rest.first {
                 return .failure(.unexpectedArgument(command: name, argument: extra))
@@ -67,7 +83,16 @@ struct CommandLineFuzzTests {
     @Test("the oracle itself names the hand-written outcome for fixed lists")
     func oracleMatchesHandWrittenCases() {
         #expect(Self.oracle([]) == .failure(.noCommand))
-        #expect(Self.oracle(["generate"]) == .success(.generate))
+        #expect(Self.oracle(["generate"]) == .success(.generate(forcesSinglePage: false)))
+        #expect(
+            Self.oracle(["generate", "--single-page"])
+                == .success(.generate(forcesSinglePage: true)))
+        #expect(
+            Self.oracle(["generate", "--single-page", "--single-page"])
+                == .failure(.duplicateFlag(command: "generate", flag: "--single-page")))
+        #expect(
+            Self.oracle(["generate", "--single-page=yes"])
+                == .failure(.unknownFlag(command: "generate", flag: "--single-page=yes")))
         #expect(
             Self.oracle(["generate", "x"])
                 == .failure(.unexpectedArgument(command: "generate", argument: "x")))
@@ -84,7 +109,8 @@ struct CommandLineFuzzTests {
     func randomListsNeverCrash() {
         let alphabet = [
             "generate", "init", "version", "--version", "help", "-h", "--help", "--project",
-            "--dry-run", "--project=x", "x", "a b", "", "--", "-", "Generate", "日本",
+            "--dry-run", "--single-page", "--project=x", "x", "a b", "", "--", "-", "Generate",
+            "日本",
         ]
         var generator = SeededGenerator()
         let seed = generator.seed
@@ -117,6 +143,43 @@ struct CommandLineFuzzTests {
         }
     }
 
+    @Test("lists built from a valid generate template give the hand-written command")
+    func validGenerateTemplatesGiveExpected() throws {
+        var generator = SeededGenerator()
+        let seed = generator.seed
+        for round in 0..<200 {
+            let forcesSinglePage = Bool.random(using: &generator)
+            let arguments = forcesSinglePage ? ["generate", "--single-page"] : ["generate"]
+            #expect(
+                try parser.parse(arguments) == .generate(forcesSinglePage: forcesSinglePage),
+                "seed \(seed) round \(round): \(arguments)")
+        }
+    }
+
+    @Test("a generate list with a stray or repeated token is always refused")
+    func generateStrayOrRepeatedIsRefused() {
+        var generator = SeededGenerator()
+        let seed = generator.seed
+        let strays = [
+            "extra", "--force", "-x", "--single-page=yes", "--singlepage", "Generate", "",
+        ]
+        for round in 0..<500 {
+            var arguments = ["generate"]
+            if Bool.random(using: &generator) {
+                arguments.append("--single-page")
+                arguments.insert(
+                    Bool.random(using: &generator)
+                        ? "--single-page" : strays.randomElement(using: &generator)!,
+                    at: Int.random(in: 1...2, using: &generator))
+            } else {
+                arguments.append(strays.randomElement(using: &generator)!)
+            }
+            #expect(throws: CommandLineError.self, "seed \(seed) round \(round): \(arguments)") {
+                _ = try parser.parse(arguments)
+            }
+        }
+    }
+
     @Test("a valid list with one extra stray token is always refused")
     func strayTokenIsRefused() {
         var generator = SeededGenerator()
@@ -137,7 +200,7 @@ struct CommandLineFuzzTests {
     func unicodeTokensNeverCrash() {
         var generator = SeededGenerator()
         let seed = generator.seed
-        let known = ["init", "--project", "--dry-run", "generate"]
+        let known = ["init", "--project", "--dry-run", "generate", "--single-page"]
         for round in 0..<2000 {
             let count = Int.random(in: 0...4, using: &generator)
             let arguments: [String] = (0..<count).map { _ in

@@ -941,7 +941,7 @@
     "search": "guard let projectPath else {",
     "replace": "guard let projectPath = projectPath ?? Optional(\"\") else {",
     "test": "missingRequired",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "cli-duplicate-flag",
@@ -950,16 +950,16 @@
     "search": "if projectPath != nil {",
     "replace": "if false {",
     "test": "duplicates",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "cli-equals-form",
     "slice": "8b",
     "file": "Sources/DependiCommandLine/CommandLineParser.swift",
-    "search": "if token.hasPrefix(\"-\") {",
-    "replace": "if token.hasPrefix(\"--project=\") { projectPath = String(token.dropFirst(10)); index += 1; continue }\n                if token.hasPrefix(\"-\") {",
+    "search": "default:\n                throw rejection(of: token, command: command)",
+    "replace": "default:\n                if token.hasPrefix(\"--project=\") { projectPath = String(token.dropFirst(10)); index += 1; continue }\n                throw rejection(of: token, command: command)",
     "test": "unknownFlags",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "cli-dry-run-ignored",
@@ -968,7 +968,7 @@
     "search": "isDryRun = true",
     "replace": "isDryRun = false",
     "test": "tableRowsAreAccepted",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "cli-dashed-value",
@@ -977,7 +977,7 @@
     "search": "!rest[valueIndex].hasPrefix(\"--\")",
     "replace": "true",
     "test": "missingValues",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "cli-help-alias",
@@ -986,7 +986,7 @@
     "search": "case \"help\", \"--help\", \"-h\":",
     "replace": "case \"help\", \"--help\":",
     "test": "tableRowsAreAccepted",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "gen-sandbox-check",
@@ -995,7 +995,7 @@
     "search": "if context.isScriptSandboxEnabled == true { throw .scriptSandboxEnabled }",
     "replace": "",
     "test": "sandboxOnFails",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "gen-revision-check",
@@ -1004,7 +1004,7 @@
     "search": "wanted != actual",
     "replace": "false",
     "test": "revisionMismatch",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "gen-unreached",
@@ -1013,7 +1013,7 @@
     "search": "if !result.unreached.isEmpty && !settings.allowUnreached {",
     "replace": "if false {",
     "test": "unreachedPackages",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "gen-permission-mapping",
@@ -1022,7 +1022,7 @@
     "search": "reason.lowercased().contains(\"not permitted\")",
     "replace": "false",
     "test": "permissionErrorMeansSandbox",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-outside",
@@ -1031,7 +1031,7 @@
     "search": "catch .licenseOutsideCheckout {",
     "replace": "catch .licenseMissing {",
     "test": "manualEntryRefused",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-absolute",
@@ -1040,7 +1040,7 @@
     "search": "!path.hasPrefix(\"/\"), ",
     "replace": "",
     "test": "manualEntryRefused",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "gen-local-packages",
@@ -1049,7 +1049,7 @@
     "search": "for path in linked.localPackagePaths {",
     "replace": "for path in linked.localPackagePaths where false {",
     "test": "localPackageFromProject",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "gen-debug-skip",
@@ -1058,7 +1058,7 @@
     "search": "if case .skip(let reason) = decision {",
     "replace": "if case .skip(let reason) = decision, reason.isEmpty {",
     "test": "GenerateFeatureTests/debugSkips()",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "gen-platform-ios",
@@ -1121,7 +1121,7 @@
     "search": "public static let usageExitCode: Int32 = 64",
     "replace": "public static let usageExitCode: Int32 = 1",
     "test": "commandLineErrors",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "comp-version-text",
@@ -1130,7 +1130,7 @@
     "search": "\"dependi \\(DependiVersion.current)\"",
     "replace": "\"dependi\"",
     "test": "versionAndHelp",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "comp-clean-environment",
@@ -1751,7 +1751,7 @@
     "search": "wrapping: process, limitSeconds: settings.runTimeoutSeconds,",
     "replace": "wrapping: process, limitSeconds: ToolConfiguration.defaultRunTimeoutSeconds,",
     "test": "runLimitShortensChildLimits",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "app-config-wired",
@@ -1760,7 +1760,7 @@
     "search": "environment: environment, configuration: settings, now: { Date() },",
     "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), now: { Date() },",
     "test": "configuredLimitsReachTheRequests",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "lazy-process-limit-xcrun",
@@ -2246,7 +2246,7 @@
     "replace": "guard true else { continue }",
     "test": "licenseFolderOnlyIsMissing",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "generate-nested-folder-skipped",
@@ -2255,7 +2255,7 @@
     "replace": "where true {",
     "test": "licenseLayouts",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "workspace-registry-skipped",
@@ -2476,7 +2476,7 @@
     "search": ".collect(from: locals)",
     "replace": ".collect(from: [])",
     "test": "nestedProductResolves",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-local-quietly",
@@ -2485,7 +2485,7 @@
     "search": "if package.kind == .local { continue }",
     "replace": "if false { continue }",
     "test": "localSkippedQuietly",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "generate-require-licenses",
@@ -2494,7 +2494,7 @@
     "search": "if settings.requireLicenses {",
     "replace": "if false {",
     "test": "strictFails",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-line",
@@ -2503,7 +2503,7 @@
     "search": "\"Dependi: skipped \\(package.identity.value): no license file\")",
     "replace": "\"\")",
     "test": "remoteSkipped",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "config-require-licenses",
@@ -3001,7 +3001,7 @@
     "search": "layout: layout",
     "replace": "layout: .panePerPackage",
     "test": "singlePageWritesOneIndex",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "single-page-config-decode-default",
@@ -3052,28 +3052,28 @@
     "id": "single-page-generate-layout-swapped",
     "slice": "single-page",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": "settings.singlePage ? .panePerPackage : .singlePage",
     "test": "singlePageAsksForSinglePage",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "single-page-generate-layout-forced-panes",
     "slice": "single-page",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": ".panePerPackage",
     "test": "singlePageAsksForSinglePage",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "single-page-generate-layout-forced-single",
     "slice": "single-page",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "settings.singlePage ? .singlePage : .panePerPackage",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": ".singlePage",
     "test": "defaultAsksForPanes",
-    "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   },
   {
     "id": "runner-temp-ignores-tmpdir",
@@ -3110,5 +3110,50 @@
     "replace": "if false { while true { sleep(60) } }",
     "test": "shutdownOwnsTheExitWhenCleanupIsSlow",
     "lastRun": {"date": "2026-11-26", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-flag-parse-always-false",
+    "slice": "single-page",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "return .generate(forcesSinglePage: forcesSinglePage)",
+    "replace": "return .generate(forcesSinglePage: false)",
+    "test": "tableRowsAreAccepted",
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-flag-duplicate-allowed",
+    "slice": "single-page",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "                if forcesSinglePage {",
+    "replace": "                if false {",
+    "test": "generateDuplicate",
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-flag-layout-and",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": "forcesSinglePage && settings.singlePage ? .singlePage : .panePerPackage",
+    "test": "flagWithEmptyConfigurationAsksForSinglePage",
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-flag-layout-ignored",
+    "slice": "single-page",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
+    "replace": "settings.singlePage ? .singlePage : .panePerPackage",
+    "test": "flagBeatsSinglePageFalse",
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+  },
+  {
+    "id": "single-page-flag-not-passed",
+    "slice": "single-page",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "output: console, forcesSinglePage: forcesSinglePage)",
+    "replace": "output: console, forcesSinglePage: false)",
+    "test": "flagForcesSinglePage",
+    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
   }
 ]
