@@ -15,12 +15,14 @@ The caller passes the path of the `Settings.bundle` folder. The writer writes wh
 
 ## Layouts
 
-The writer takes an `AcknowledgementLayout` when it is created. The generate feature chooses the layout from the `singlePage` key of `.dependi.json`. If the key is absent or false, it is `panePerPackage`.
+The writer takes an `AcknowledgementLayout` when it is created. The generate feature chooses `singlePage` if the `--single-page` flag of `generate` forces it or if the `singlePage` key of `.dependi.json` is true. Otherwise it is `panePerPackage`.
 
 | Layout | Output |
 |---|---|
 | `panePerPackage` | An index pane with one child pane for each package. The sections below describe it. |
 | `singlePage` | Every license on the index pane itself. There are no child panes. |
+
+Both layouts put each license text in the `FooterText` of a `PSGroupSpecifier`. Apple's Settings Application Schema Reference says that on tvOS this text is limited to five lines. tvOS is not a listed platform. If Dependi is used on tvOS anyway, each license is cut to five lines in both layouts, so the app must show the full text itself.
 
 ### Single page
 

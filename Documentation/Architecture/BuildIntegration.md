@@ -6,7 +6,7 @@ This page describes how Dependi runs inside an Xcode build, and how the contract
 
 ## The Run Script phase
 
-The phase runs `"${SRCROOT}/.dependi/run.sh" generate` after Copy Bundle Resources.
+The phase runs `"${SRCROOT}/.dependi/run.sh" generate` after Copy Bundle Resources. The script passes its arguments on to the program, so `generate --single-page` in the phase forces the single page layout for every run.
 
 - The script is committed. It reads `.dependi.json`, decides in the shell whether the build is an archive or a listed configuration, and only then looks for the program.
 - The program in `.dependi/bin` is ignored by git. A fresh clone or a CI machine builds the pinned commit into a cache and runs it.

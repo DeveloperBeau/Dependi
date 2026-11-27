@@ -2,7 +2,7 @@
 
 Dependi collects the licenses of the Swift packages that your iOS, iPadOS, Mac Catalyst or visionOS app links, and writes them into the app's `Settings.bundle` when you archive. It has no third-party dependencies.
 
-It reads the packages that Xcode resolved, follows the products that your app target really links (direct, transitive, local, and those linked by embedded frameworks and extensions), picks the license files of each package and writes one pane for each package under an Acknowledgements pane.
+It reads the packages that Xcode resolved, follows the products that your app target really links (direct, transitive, local, and those linked by embedded frameworks and extensions), picks the license files of each package and writes one pane for each package under an Acknowledgements pane. A single page layout that puts every license on one page is also available. See the [settings table](Documentation/Guides/Installing.md#settings-in-dependijson).
 
 ## Install
 
@@ -23,6 +23,7 @@ Debug builds skip. An archive always runs.
 - A remote package that the app links and that has no license file is skipped, and the build log names it. Set `requireLicenses` in `.dependi.json` to make this a failure.
 - A dependency that a package ties to a SwiftPM trait is followed only when that trait is on. A package that the app links, or that is local, has the traits that the project picks for it in the Package Dependencies tab of Xcode. With no pick it has its default traits. An empty pick turns the defaults off, and a list of names turns on only those names. A package also has the traits that the packages which use it ask for. A trait that another trait enables is on too.
 - Local packages, also the local packages that other local packages name with `.package(path:)`, are followed to find the remote packages that they use. A local package with no license file is left out of the output.
+- By default the Acknowledgements pane has one child pane for each package. Set `singlePage` in `.dependi.json` to put every license on one page instead. See the [settings table](Documentation/Guides/Installing.md#settings-in-dependijson).
 - Manual entries add a name and a license text file from the project for code that has no package.
 - The Acknowledgements pane lists packages and manual entries in one list, sorted by name without case, then by identity. The order does not depend on the locale or on the order of the input.
 - License files are regular files inside their package, within 1 MB, valid text and free of control characters.
@@ -34,7 +35,7 @@ Debug builds skip. An archive always runs.
 
 | Command | Meaning |
 |---|---|
-| `dependi generate` | Write the acknowledgements. Xcode runs it. |
+| `dependi generate [--single-page]` | Write the acknowledgements. Xcode runs it. `--single-page` puts every license on one page for that run. Without it, the `singlePage` key decides. |
 | `dependi init --project <path> [--dry-run]` | Set Dependi up in a project. |
 | `dependi --version` | Print the version. |
 | `dependi help` | Print the usage. |
