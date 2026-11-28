@@ -707,7 +707,7 @@
     "search": "Set(products).sorted {",
     "replace": "products.sorted {",
     "test": "sharedProductIsDeduplicated",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "pf-relative-base",
@@ -743,7 +743,7 @@
     "search": "targets.map(\\.name).sorted()",
     "replace": "[String]()",
     "test": "unknownTarget",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "pf-size-cap",
@@ -752,7 +752,7 @@
     "search": "data.count <= sizeLimit",
     "replace": "data.count <= sizeLimit * 2",
     "test": "oversizeFile",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "pf-catalyst",
@@ -2399,7 +2399,7 @@
     "replace": "everything.found",
     "test": "appProductsAreNotOtherProducts",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "pins-named-workspace-preferred",
@@ -2704,7 +2704,7 @@
     "search": "try traits.add(remote, id: id, location: url, in: model)",
     "replace": "_ = url",
     "test": "remoteReferenceTraitsAreRead",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-local-dropped",
@@ -2713,7 +2713,7 @@
     "search": "try traits.add(local, id: id, location: path, in: model)",
     "replace": "_ = path",
     "test": "localReferenceTraitsAreRead",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-other-projects-dropped",
@@ -2722,7 +2722,7 @@
     "search": "_ = try packageReferences(in: other, traits: &traits)",
     "replace": "_ = other",
     "test": "crossProjectTraitsAreRead",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "trait-reader-empty-list-dropped",
@@ -2758,7 +2758,7 @@
     "search": "localPaths.formUnion(LegacyLocalPackages(files: files).paths(in: model))",
     "replace": "_ = LegacyLocalPackages(files: files)",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-kind-folder",
@@ -2767,7 +2767,7 @@
     "search": "[\"wrapper\", \"folder\"]",
     "replace": "[\"wrapper\"]",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-kind-wrapper",
@@ -2776,7 +2776,7 @@
     "search": "[\"wrapper\", \"folder\"]",
     "replace": "[\"folder\"]",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-manifest-check",
@@ -2785,7 +2785,7 @@
     "search": "files.exists(at: folder + \"/Package.swift\")",
     "replace": "true",
     "test": "foldersWithoutManifestAreIgnored",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-group-order",
@@ -2794,7 +2794,7 @@
     "search": "parts.insert(path, at: 0)",
     "replace": "parts.append(path)",
     "test": "legacyFolderReferencesAreLocalPackages",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-sdk-source-tree",
@@ -2803,7 +2803,7 @@
     "search": "            default:\n                return nil",
     "replace": "            default:\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
     "test": "sdkReferenceIsIgnored",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-source-root",
@@ -2812,7 +2812,7 @@
     "search": "case \"SOURCE_ROOT\":\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
     "replace": "case \"SOURCE_ROOT\":\n                return nil",
     "test": "sourceRootAndAbsoluteReferences",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "legacy-local-absolute",
@@ -2821,7 +2821,7 @@
     "search": "ProjectPathMath.standardize(parts.joined(separator: \"/\"))",
     "replace": "nil",
     "test": "sourceRootAndAbsoluteReferences",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "single-page-layout-switch",
@@ -3253,7 +3253,7 @@
     "search": "if plan.edits.isEmpty { return plan.lines }",
     "replace": "if false { return plan.lines }",
     "test": "rerunIsIdentical",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-dry-run-writes",
@@ -3262,7 +3262,7 @@
     "search": "if isDryRun { return lines }",
     "replace": "if false { return lines }",
     "test": "dryRunWritesNothing",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-backup-first",
@@ -3271,7 +3271,7 @@
     "search": "try writer.write(Data(original), toPath: backupPath)",
     "replace": "_ = backupPath",
     "test": "BuildEditRefusalTests/backupFirst()",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-backup-verified",
@@ -3280,7 +3280,7 @@
     "search": "guard Array(backup) == original else {",
     "replace": "guard true else {",
     "test": "backupMismatch",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-verify-called",
@@ -3289,7 +3289,7 @@
     "search": "try plan.verify(before: model, after: after)",
     "replace": "_ = after",
     "test": "verifierUnplannedChange",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-settled-called",
@@ -3298,7 +3298,7 @@
     "search": "try checkSettled(edited, after: after, target: targetName, bundlePath: settingsBundlePath)",
     "replace": "_ = edited",
     "test": "verifierStepStillOpen",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-crlf-refused",
@@ -3307,7 +3307,7 @@
     "search": "if bytes.contains(0x0D) {",
     "replace": "if false {",
     "test": "crlf",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-spaces-refused",
@@ -3316,7 +3316,7 @@
     "search": "$0 == 0x0A && $1 == 0x20",
     "replace": "$0 == 0x0A && $1 == 0x21",
     "test": "spaceIndented",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-temp-removed",
@@ -3325,7 +3325,7 @@
     "search": "try? writer.removeItem(at: temporary)",
     "replace": "_ = temporary",
     "test": "projectWriteFails",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-real-path",
@@ -3334,7 +3334,7 @@
     "search": "original: original, edited: edited, realPath: model.path,",
     "replace": "original: original, edited: edited, realPath: ProjectFileLoader.fileLocation(projectFilePath),",
     "test": "linkedProjectFile",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-atomic-move",
@@ -3343,7 +3343,7 @@
     "search": "try writer.moveItem(at: temporary, to: realPath)",
     "replace": "try writer.write(Data(edited), toPath: realPath)",
     "test": "mewGetsAllThreeSteps",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-file-location",
@@ -3352,7 +3352,7 @@
     "search": "return name == \"project.pbxproj\" ? path : path + \"/project.pbxproj\"",
     "replace": "return path + \"/project.pbxproj\"",
     "test": "projectFilePathIsAccepted",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-unknown-target",
@@ -3361,7 +3361,7 @@
     "search": "targets.first(where: { $0.name == targetName })",
     "replace": "targets.first",
     "test": "BuildEditRefusalTests/unknownTargetMessageListsTargets()",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-bundle-inside-folder",
@@ -3370,7 +3370,7 @@
     "search": "bundle.hasPrefix(prefix), bundle.hasSuffix",
     "replace": "bundle.hasSuffix",
     "test": "bundleOutsideFolder",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-bundle-name",
@@ -3379,7 +3379,7 @@
     "search": "bundle.hasSuffix(\"/Settings.bundle\")",
     "replace": "bundle.hasSuffix(\"\")",
     "test": "bundleOutsideFolder",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-bundle-standardize",
@@ -3388,7 +3388,7 @@
     "search": "ProjectPathMath.standardize(bundlePath)",
     "replace": "bundlePath",
     "test": "bundleOutsideFolder",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-resources-isa",
@@ -3397,7 +3397,7 @@
     "search": "\"PBXResourcesBuildPhase\"",
     "replace": "\"PBXSourcesBuildPhase\"",
     "test": "mewGetsAllThreeSteps",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-same-bundle-return",
@@ -3406,7 +3406,7 @@
     "search": "if resolver.location(of: referenceID) == bundle { return }",
     "replace": "if true { return }",
     "test": "differentBundle",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-bundle-name-check",
@@ -3415,7 +3415,7 @@
     "search": "return name == \"Settings.bundle\"",
     "replace": "return true",
     "test": "mewGetsAllThreeSteps",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-folder-ref-ignored",
@@ -3424,7 +3424,7 @@
     "search": "guard reference[\"lastKnownFileType\"] as? String != \"folder\" else { return false }",
     "replace": "guard true else { return false }",
     "test": "folderReferenceDoesNotCount",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-sync-skip",
@@ -3433,7 +3433,7 @@
     "search": "if try isCoveredBySynchronizedGroup(target: target, object: object, bundle: bundle) {",
     "replace": "if false {",
     "test": "filaAddsNoReference",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-sync-exception",
@@ -3442,7 +3442,7 @@
     "search": "membershipExceptions\").contains(inside)",
     "replace": "membershipExceptions\").contains(\"\")",
     "test": "synchronizedExceptionRefuses",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-sync-exception-target",
@@ -3451,7 +3451,7 @@
     "search": "set[\"target\"] as? String == target.id",
     "replace": "set[\"target\"] as? String != target.id",
     "test": "exceptionOfAnotherTarget",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-reuse-reference",
@@ -3460,7 +3460,7 @@
     "search": "if let existing = existingReference(at: bundle) {",
     "replace": "if let existing = Optional<String>.none {",
     "test": "existingReferenceOutsideTargetIsReused",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-quote-plain",
@@ -3469,7 +3469,7 @@
     "search": "guard !plain else",
     "replace": "guard plain else",
     "test": "spaceInPathIsQuoted",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-quote-escape-quote",
@@ -3478,7 +3478,7 @@
     "search": ".replacingOccurrences(of: \"\\\"\", with: \"\\\\\\\"\")",
     "replace": ".replacingOccurrences(of: \"\\\"\", with: \"\\\"\")",
     "test": "awkwardPaths",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-quote-escape-backslash",
@@ -3487,7 +3487,7 @@
     "search": "replacingOccurrences(of: \"\\\\\", with: \"\\\\\\\\\")",
     "replace": "replacingOccurrences(of: \"\\\\\", with: \"\\\\\")",
     "test": "awkwardPaths",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-phase-detect",
@@ -3496,7 +3496,7 @@
     "search": ".contains(\".dependi/run.sh\") == true",
     "replace": ".contains(\"\") == true",
     "test": "overlandKeepsExistingResource",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-phase-order-warning",
@@ -3505,7 +3505,7 @@
     "search": "if index < resourcesIndex {",
     "replace": "if false {",
     "test": "phaseBeforeResourcesIsKept",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-phase-position",
@@ -3514,7 +3514,7 @@
     "search": "key: \"buildPhases\", after: resourcesID)",
     "replace": "key: \"buildPhases\", after: nil)",
     "test": "phaseGoesRightAfterResources",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-section-order",
@@ -3523,7 +3523,7 @@
     "search": "$0.isa > Self.shellSection",
     "replace": "$0.isa < Self.shellSection",
     "test": "mewGetsAllThreeSteps",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-section-end",
@@ -3532,7 +3532,7 @@
     "search": "offset: scanner.lineEnd(of: last.end)",
     "replace": "offset: last.end",
     "test": "sectionAtTheEnd",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-sandbox-done",
@@ -3541,7 +3541,7 @@
     "search": "scanner.text(existing.valueFirst) == \"NO\"",
     "replace": "scanner.text(existing.valueFirst) == \"YES\"",
     "test": "rerunIsIdentical",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-sandbox-replace-length",
@@ -3550,7 +3550,7 @@
     "search": "removeCount: range.count, insertText: \"NO\"",
     "replace": "removeCount: 0, insertText: \"NO\"",
     "test": "quotedNoAndReplacedYes",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-xcconfig-note",
@@ -3559,7 +3559,7 @@
     "search": "configuration[\"baseConfigurationReference\"] != nil",
     "replace": "configuration[\"baseConfigurationReference\"] == nil",
     "test": "xcconfigGetsOverrideNote",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-xcconfig-anchor-note",
@@ -3568,7 +3568,7 @@
     "search": "|| configuration[\"baseConfigurationReferenceAnchor\"] != nil",
     "replace": "|| false",
     "test": "xcconfigAnchorGetsOverrideNote",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-setting-order",
@@ -3577,7 +3577,7 @@
     "search": "other.utf8.lexicographicallyPrecedes(key.utf8)",
     "replace": "key.utf8.lexicographicallyPrecedes(other.utf8)",
     "test": "onlyAddedLines",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-section-line-order",
@@ -3586,7 +3586,7 @@
     "search": "if Self.sortsAfter(String(decoding: entryID, as: UTF8.self), id) { break }",
     "replace": "if false { break }",
     "test": "onlyAddedLines",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-empty-list-indent",
@@ -3595,7 +3595,7 @@
     "search": "insertText: \"\\(indent)\\t\\(item),\\n\"",
     "replace": "insertText: \"\\(indent)\\(item),\\n\"",
     "test": "BuildEditLayoutTests/emptyList()",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "plan-one-line-settings-refused",
@@ -3604,7 +3604,7 @@
     "search": "            let indent = scanner.tabsBefore(span: close)\n        else {",
     "replace": "            let indent = Optional(\"\\t\\t\\t\")\n        else {",
     "test": "oneLineSettings",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-uppercase",
@@ -3613,7 +3613,7 @@
     "search": "\"%02X\"",
     "replace": "\"%02x\"",
     "test": "ProjectObjectIDMakerTests/shape()",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-length",
@@ -3622,7 +3622,7 @@
     "search": "digest.prefix(12)",
     "replace": "digest.prefix(11)",
     "test": "ProjectObjectIDMakerTests/shape()",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-text-collision",
@@ -3631,7 +3631,7 @@
     "search": "if !existingText.contains(id), !made.contains(id) {",
     "replace": "if !made.contains(id) {",
     "test": "collisionWithText",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-run-collision",
@@ -3640,7 +3640,7 @@
     "search": "if !existingText.contains(id), !made.contains(id) {",
     "replace": "if !existingText.contains(id) {",
     "test": "collisionWithEarlierID",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-role",
@@ -3649,7 +3649,7 @@
     "search": "\\u{0}\\(role)\\u{0}\\(counter)",
     "replace": "\\u{0}\\(counter)",
     "test": "repeatable",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-target",
@@ -3658,7 +3658,7 @@
     "search": "\\(targetID)\\u{0}\\(role)",
     "replace": "\\(role)",
     "test": "repeatable",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "scanner-escape",
@@ -3667,7 +3667,7 @@
     "search": "index += bytes[index] == UInt8(ascii: \"\\\\\") ? 2 : 1",
     "replace": "index += 1",
     "test": "escapedQuote",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "scanner-block-comment",
@@ -3676,7 +3676,7 @@
     "search": "!(bytes[index] == UInt8(ascii: \"*\") && bytes[index + 1] == UInt8(ascii: \"/\"))",
     "replace": "false",
     "test": "braceInComment",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "scanner-line-comment",
@@ -3685,7 +3685,7 @@
     "search": "where index + 1 < bytes.count && bytes[index + 1] == UInt8(ascii: \"/\"):",
     "replace": "where index + 1 < bytes.count && bytes[index + 1] == UInt8(ascii: \"!\"):",
     "test": "braceInComment",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "scanner-brackets-match",
@@ -3694,7 +3694,7 @@
     "search": "Self.opener(of: bytes[span.range.lowerBound])",
     "replace": "bytes[spans[start].range.lowerBound]",
     "test": "malformed",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "scanner-one-dictionary",
@@ -3703,7 +3703,7 @@
     "search": "closers[0] == spans.count - 1",
     "replace": "true",
     "test": "malformed",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "scanner-object-depth",
@@ -3712,7 +3712,7 @@
     "search": "spans: spans, closers: closers, bytes: bytes, at: objects.valueFirst, path: path)",
     "replace": "spans: spans, closers: closers, bytes: bytes, at: 0, path: path)",
     "test": "objectDepth",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "scanner-tabs",
@@ -3721,7 +3721,7 @@
     "search": "$0 == UInt8(ascii: \"\\t\")",
     "replace": "$0 != 0",
     "test": "listsAndTabs",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "scanner-section-begin",
@@ -3730,7 +3730,7 @@
     "search": "line.hasPrefix(\"/* Begin \")",
     "replace": "line.hasPrefix(\"/* Bagin \")",
     "test": "sections",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "verify-count",
@@ -3739,7 +3739,7 @@
     "search": "after.objects.count == before.objects.count + addedIDs.count",
     "replace": "true",
     "test": "verifierObjectCount",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "verify-unplanned",
@@ -3748,7 +3748,7 @@
     "search": "guard editedIDs.contains(id) else {",
     "replace": "guard true else {",
     "test": "verifierUnplannedChange",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "verify-keys",
@@ -3757,7 +3757,7 @@
     "search": "guard Self.editableKeys.contains(key) else",
     "replace": "guard true else",
     "test": "verifierOtherKey",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "verify-list-order",
@@ -3766,7 +3766,7 @@
     "search": "else if !Self.isSubsequence(",
     "replace": "else if false && !Self.isSubsequence(",
     "test": "verifierListLosesEntry",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "verify-setting-other",
@@ -3775,7 +3775,7 @@
     "search": "guard NSDictionary(dictionary: old).isEqual(to: new) else {",
     "replace": "guard true else {",
     "test": "verifierOtherSetting",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "editor-backup-folder",
@@ -3784,7 +3784,7 @@
     "search": "try writer.createDirectory(at: ProjectPathMath.parent(of: backupPath))",
     "replace": "_ = ProjectPathMath.parent(of: backupPath)",
     "test": "missingBackupFolderIsCreated",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-editor-original-text",
@@ -3793,7 +3793,7 @@
     "search": "ids: ProjectObjectIDMaker(existingText: String(decoding: original, as: UTF8.self)))",
     "replace": "ids: ProjectObjectIDMaker(existingText: \"\"))",
     "test": "idsInACommentAreSkipped",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "bundle-folder-slash",
@@ -3802,7 +3802,7 @@
     "search": "bundle.hasPrefix(folder + \"/\")",
     "replace": "bundle.hasPrefix(folder)",
     "test": "filaSiblingFolderIsNotCovered",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "layout-first-byte-space",
@@ -3811,7 +3811,7 @@
     "search": "bytes.first == 0x20",
     "replace": "bytes.first == 0x21",
     "test": "leadingSpace",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "refuse-section-markers",
@@ -3820,7 +3820,7 @@
     "search": "throw .unsafeProject(path: model.path, why: \"the section markers are missing\")",
     "replace": "return",
     "test": "noSectionMarkers",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "refuse-setting-own-line",
@@ -3829,7 +3829,7 @@
     "search": "guard let indent = scanner.tabsBefore(span: next.keyIndex) else {",
     "replace": "guard let indent = Optional(scanner.tabsBefore(span: next.keyIndex) ?? \"\\t\\t\\t\\t\") else {",
     "test": "settingNotOnItsOwnLine",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-item-own-line",
@@ -3838,7 +3838,7 @@
     "search": "guard let indent = scanner.tabsBefore(span: anchor),",
     "replace": "guard let indent = Optional(scanner.tabsBefore(span: anchor) ?? \"\\t\\t\\t\\t\"),",
     "test": "listItemNotOnItsOwnLine",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-comma-line",
@@ -3847,7 +3847,7 @@
     "search": "== scanner.lineStart(of: scanner.spans[anchor].range.lowerBound)",
     "replace": "== scanner.lineStart(of: scanner.spans[anchor + 1].range.lowerBound)",
     "test": "listItemNotOnItsOwnLine",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-close-line",
@@ -3856,7 +3856,7 @@
     "search": "guard let indent = scanner.tabsBefore(span: close) else {",
     "replace": "guard let indent = Optional(scanner.tabsBefore(span: close) ?? \"\\t\\t\\t\") else {",
     "test": "emptyListOnOneLine",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "refuse-byte-not-allowed",
@@ -3865,7 +3865,7 @@
     "search": "guard isWordByte(byte) else {",
     "replace": "guard isWordByte(byte) else { index += 1; continue }\n                guard true else {",
     "test": "byteNotAllowed",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "refuse-dictionary-not-closed",
@@ -3874,7 +3874,7 @@
     "search": "throw .unsafeProject(path: path, why: \"a dictionary is not closed\")",
     "replace": "return []",
     "test": "dictionaryNotClosed",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-not-closed",
@@ -3883,7 +3883,7 @@
     "search": "guard let close = closers[open], Self.isOpen(spans, bytes, open, \"(\") else {",
     "replace": "guard let close = closers[open] else {",
     "test": "listNotClosed",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-item-comma",
@@ -3892,7 +3892,7 @@
     "search": "guard last + 1 <= close, Self.isOpen(spans, bytes, last + 1, \",\") else {",
     "replace": "guard last + 1 <= close, true else {",
     "test": "listItemWithoutComma",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "verify-settings-dictionary",
@@ -3901,7 +3901,7 @@
     "search": "throw fail(\"the build settings are not a dictionary\")",
     "replace": "return",
     "test": "settingsNotADictionary",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "verify-name-key",
@@ -3910,7 +3910,7 @@
     "search": "\"files\", \"children\", \"buildPhases\", \"buildSettings\",",
     "replace": "\"files\", \"children\", \"buildPhases\", \"buildSettings\", \"name\",",
     "test": "renameIsRefused",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "verify-path-keys",
@@ -3919,7 +3919,7 @@
     "search": "\"files\", \"children\", \"buildPhases\", \"buildSettings\",",
     "replace": "\"files\", \"children\", \"buildPhases\", \"buildSettings\", \"path\", \"sourceTree\",",
     "test": "pathAndSourceTreeAreRefused",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "reference-first-in-file",
@@ -3928,7 +3928,7 @@
     "search": ".min { $0.index < $1.index }?.id",
     "replace": ".min { $0.index > $1.index }?.id",
     "test": "firstOfTwoReferencesIsReused",
-    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "sandbox-conditional-key-ignored",
@@ -3936,7 +3936,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "{ $0.key.hasPrefix(Self.settingKey + \"[\") }",
     "replace": "{ $0.key == \"never\" }",
-    "test": "conditionalKeyInRealProject"
+    "test": "conditionalKeyInRealProject",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "sandbox-conditional-key-only-without-plain",
@@ -3944,7 +3945,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "{ $0.key.hasPrefix(Self.settingKey + \"[\") }",
     "replace": "{ $0.key.hasPrefix(Self.settingKey + \"[\") && !entries.contains { $0.key == Self.settingKey } }",
-    "test": "conditionalKeyBesidePlainNo"
+    "test": "conditionalKeyBesidePlainNo",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "sandbox-conditional-key-prefix-too-wide",
@@ -3952,7 +3954,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "{ $0.key.hasPrefix(Self.settingKey + \"[\") }",
     "replace": "{ $0.key.hasPrefix(Self.settingKey) }",
-    "test": "mewGetsAllThreeSteps"
+    "test": "mewGetsAllThreeSteps",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "backup-first-overwritten",
@@ -3960,7 +3963,8 @@
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
     "search": "let keepsBackup = files.exists(at: backupPath)",
     "replace": "let keepsBackup = false",
-    "test": "secondEditKeepsOriginalBackup"
+    "test": "secondEditKeepsOriginalBackup",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "backup-kept-line-says-written",
@@ -3968,7 +3972,8 @@
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
     "search": "\"Dependi: kept the backup of the original project file at \\(backupPath).\"",
     "replace": "\"Dependi: backup of the original project file is at \\(backupPath).\"",
-    "test": "existingBackupIsKept"
+    "test": "existingBackupIsKept",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "backup-kept-ignored",
@@ -3976,7 +3981,8 @@
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
     "search": "backupPath: keepsBackup ? nil : backupPath)",
     "replace": "backupPath: backupPath)",
-    "test": "existingBackupIsKept"
+    "test": "existingBackupIsKept",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "resources-two-phases-allowed",
@@ -3984,7 +3990,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "guard resourcePhases.count == 1 else {",
     "replace": "guard true else {",
-    "test": "twoResourcesPhases"
+    "test": "twoResourcesPhases",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-attempt-limit-ignored",
@@ -3992,7 +3999,8 @@
     "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
     "search": "for counter in 0..<attemptLimit {",
     "replace": "for counter in 0..<Int.max {",
-    "test": "attemptLimit"
+    "test": "attemptLimit",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-attempt-limit-off-by-one",
@@ -4000,7 +4008,8 @@
     "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
     "search": "for counter in 0..<attemptLimit {",
     "replace": "for counter in 0...attemptLimit {",
-    "test": "attemptLimit"
+    "test": "attemptLimit",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "id-planner-no-refusal",
@@ -4008,7 +4017,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "guard let id = ids.make(targetID: target.id, role: role) else {",
     "replace": "guard let id = ids.make(targetID: target.id, role: role) ?? Optional(\"0\") else {",
-    "test": "plannerRefusesWithoutFreeID"
+    "test": "plannerRefusesWithoutFreeID",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "scanner-list-item-closer-ignored",
@@ -4016,6 +4026,7 @@
     "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
     "search": "let last = closers[index] ?? index",
     "replace": "let last = index",
-    "test": "listItemsThatAreBrackets"
+    "test": "listItemsThatAreBrackets",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   }
 ]
