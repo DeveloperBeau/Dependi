@@ -4197,7 +4197,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "Self.settingKey + \"[\"",
     "replace": "Self.settingKey + \"[sdk=\"",
-    "test": "conditionalKeyArch"
+    "test": "conditionalKeyArch",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-edit-conditional-first-entry-skipped",
@@ -4205,7 +4206,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "try scanner.entries(ofDictionaryAt: settings.valueFirst)",
     "replace": "Array(try scanner.entries(ofDictionaryAt: settings.valueFirst).dropFirst())",
-    "test": "conditionalKeyFirstInRealProject"
+    "test": "conditionalKeyFirstInRealProject",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-edit-id-default-limit-lowered",
@@ -4213,7 +4215,8 @@
     "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
     "search": "attemptLimit: Int = 1000",
     "replace": "attemptLimit: Int = 100",
-    "test": "defaultLimitAllowsManyClashes"
+    "test": "defaultLimitAllowsManyClashes",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-edit-id-default-limit-301",
@@ -4221,7 +4224,8 @@
     "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
     "search": "attemptLimit: Int = 1000",
     "replace": "attemptLimit: Int = 301",
-    "test": "defaultLimitAllowsManyClashes"
+    "test": "defaultLimitAllowsManyClashes",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-edit-id-default-limit-999",
@@ -4229,7 +4233,8 @@
     "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
     "search": "attemptLimit: Int = 1000",
     "replace": "attemptLimit: Int = 999",
-    "test": "defaultLimitAllowsManyClashes"
+    "test": "defaultLimitAllowsManyClashes",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-edit-backup-unreadable-accepted",
@@ -4237,6 +4242,7 @@
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
     "search": "guard let backup, Array(backup) == original else {",
     "replace": "guard backup.map({ Array($0) == original }) ?? true else {",
-    "test": "backupReadbackFailsIsRemoved"
+    "test": "backupReadbackFailsIsRemoved",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   }
 ]
