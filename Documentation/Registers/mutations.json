@@ -3717,5 +3717,13 @@
     "search": "guard NSDictionary(dictionary: old).isEqual(to: new) else {",
     "replace": "guard true else {",
     "test": "verifierOtherSetting"
+  },
+  {
+    "id": "editor-backup-folder",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "try writer.createDirectory(at: ProjectPathMath.parent(of: backupPath))",
+    "replace": "_ = ProjectPathMath.parent(of: backupPath)",
+    "test": "missingBackupFolderIsCreated"
   }
 ]

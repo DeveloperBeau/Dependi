@@ -137,7 +137,7 @@ A new id is 24 upper case hex digits. They are the first 12 bytes of a SHA-256 d
 
 ### Backup and write
 
-The editor writes the original bytes to the backup path before it writes the project file. It reads the backup back and compares the bytes. It writes only when the project changes, so a re-run never replaces a good backup with edited bytes. The new text goes to a file next to the project file. A move then replaces the project file. If the write fails, the editor removes the temporary file. The caller gives the backup path, and the folder must exist.
+The editor writes the original bytes to the backup path before it writes the project file. It reads the backup back and compares the bytes. It writes only when the project changes, so a re-run never replaces a good backup with edited bytes. The new text goes to a file next to the project file. A move then replaces the project file. If the write fails, the editor removes the temporary file. The caller gives the backup path. Before the backup, the editor creates the folder of the backup path, and only when it writes.
 
 ### Verify
 

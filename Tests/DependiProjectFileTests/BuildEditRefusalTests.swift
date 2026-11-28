@@ -163,8 +163,8 @@ struct BuildEditRefusalTests {
     func backupFirst() throws {
         let world = try EditWorld("old-format-mew")
         try world.configure(target: "MewTestsApp", bundle: "Settings.bundle")
-        #expect(world.writer.records.first == "write \(EditWorld.backup)")
-        #expect(world.writer.records.count == 3)
+        #expect(world.writer.records.dropFirst().first == "write \(EditWorld.backup)")
+        #expect(world.writer.records.count == 4)
         let backup = try world.files.readRegularFile(at: EditWorld.backup, upToBytes: Int.max)
         #expect(backup == world.original)
     }
@@ -175,7 +175,10 @@ struct BuildEditRefusalTests {
         #expect(throws: DomainError.self) {
             try world.configure(target: "MewTestsApp", bundle: "Settings.bundle")
         }
-        #expect(world.writer.records == ["write \(EditWorld.backup)"])
+        #expect(
+            world.writer.records == [
+                "mkdir \(EditWorld.appFolder)/.dependi", "write \(EditWorld.backup)",
+            ])
         #expect(try world.currentBytes() == world.original)
     }
 

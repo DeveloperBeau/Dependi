@@ -63,7 +63,10 @@ struct BuildEditLayoutTests {
         #expect(throws: DomainError.self) {
             try world.configure(target: "MewTestsApp", bundle: "Settings.bundle")
         }
-        #expect(world.writer.records == ["write \(EditWorld.backup)"])
+        #expect(
+            world.writer.records == [
+                "mkdir \(EditWorld.appFolder)/.dependi", "write \(EditWorld.backup)",
+            ])
         #expect(try world.currentBytes() == world.original)
     }
 

@@ -78,6 +78,7 @@ struct BuildEditSuccessTests {
             ))
         #expect(
             world.writer.records == [
+                "mkdir /work/App/.dependi",
                 "write /work/App/.dependi/project.pbxproj.bak",
                 "write /work/App/App.xcodeproj/project.pbxproj.dependi-new",
                 "move /work/App/App.xcodeproj/project.pbxproj.dependi-new to /work/App/App.xcodeproj/project.pbxproj",
@@ -294,6 +295,23 @@ struct BuildEditSuccessTests {
         #expect(stored != world.original)
         let backup = try world.files.readRegularFile(at: EditWorld.backup, upToBytes: Int.max)
         #expect(backup == world.original)
+    }
+
+    @Test("a missing backup folder is created before the backup and the edit are written")
+    func missingBackupFolderIsCreated() throws {
+        let world = try EditWorld("old-format-mew")
+        try world.files.removeItem(at: EditWorld.appFolder + "/.dependi")
+        try world.configure(target: "MewTestsApp", bundle: "Settings.bundle")
+        #expect(
+            world.writer.records == [
+                "mkdir /work/App/.dependi",
+                "write /work/App/.dependi/project.pbxproj.bak",
+                "write /work/App/App.xcodeproj/project.pbxproj.dependi-new",
+                "move /work/App/App.xcodeproj/project.pbxproj.dependi-new to /work/App/App.xcodeproj/project.pbxproj",
+            ])
+        let backup = try world.files.readRegularFile(at: EditWorld.backup, upToBytes: Int.max)
+        #expect(backup == world.original)
+        #expect(try world.currentBytes() != world.original)
     }
 
     @Test("every fixture is still readable by the project reader after the edit")

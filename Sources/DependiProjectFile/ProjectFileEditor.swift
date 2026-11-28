@@ -87,6 +87,7 @@ public struct ProjectFileEditor: Sendable {
     private func write(
         original: [UInt8], edited: [UInt8], realPath: String, backupPath: String
     ) throws(DomainError) {
+        try writer.createDirectory(at: ProjectPathMath.parent(of: backupPath))
         try writer.write(Data(original), toPath: backupPath)
         let backup = try files.readRegularFile(
             at: files.realPath(of: backupPath), upToBytes: ProjectFileLoader.sizeLimit)
