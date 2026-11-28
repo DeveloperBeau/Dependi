@@ -276,6 +276,14 @@ struct BuildSetupPlanner {
             }
             let name = configuration["name"] as? String ?? configID
             let entries = try scanner.entries(ofDictionaryAt: settings.valueFirst)
+            // A conditional key can still win over the plain one, so it is never edited around.
+            if let conditional = entries.first(where: { $0.key.hasPrefix(Self.settingKey + "[") }) {
+                throw .unsafeProject(
+                    path: model.path,
+                    why:
+                        "the \(name) configuration of \(target.name) sets the conditional key \(conditional.key). Remove it in Xcode, then run again"
+                )
+            }
             if let existing = entries.first(where: { $0.key == Self.settingKey }) {
                 if existing.valueFirst == existing.valueLast,
                     scanner.text(existing.valueFirst) == "NO"
