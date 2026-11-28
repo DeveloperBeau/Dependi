@@ -3792,7 +3792,8 @@
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
     "search": "ids: ProjectObjectIDMaker(existingText: String(decoding: original, as: UTF8.self)))",
     "replace": "ids: ProjectObjectIDMaker(existingText: \"\"))",
-    "test": "idsInACommentAreSkipped"
+    "test": "idsInACommentAreSkipped",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "bundle-folder-slash",
@@ -3800,7 +3801,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "bundle.hasPrefix(folder + \"/\")",
     "replace": "bundle.hasPrefix(folder)",
-    "test": "filaSiblingFolderIsNotCovered"
+    "test": "filaSiblingFolderIsNotCovered",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "layout-first-byte-space",
@@ -3808,7 +3810,8 @@
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
     "search": "bytes.first == 0x20",
     "replace": "bytes.first == 0x21",
-    "test": "leadingSpace"
+    "test": "leadingSpace",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "refuse-section-markers",
@@ -3816,7 +3819,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "throw .unsafeProject(path: model.path, why: \"the section markers are missing\")",
     "replace": "return",
-    "test": "noSectionMarkers"
+    "test": "noSectionMarkers",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "refuse-setting-own-line",
@@ -3824,7 +3828,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "guard let indent = scanner.tabsBefore(span: next.keyIndex) else {",
     "replace": "guard let indent = Optional(scanner.tabsBefore(span: next.keyIndex) ?? \"\\t\\t\\t\\t\") else {",
-    "test": "settingNotOnItsOwnLine"
+    "test": "settingNotOnItsOwnLine",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-item-own-line",
@@ -3832,7 +3837,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "guard let indent = scanner.tabsBefore(span: anchor),",
     "replace": "guard let indent = Optional(scanner.tabsBefore(span: anchor) ?? \"\\t\\t\\t\\t\"),",
-    "test": "listItemNotOnItsOwnLine"
+    "test": "listItemNotOnItsOwnLine",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-comma-line",
@@ -3840,7 +3846,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "== scanner.lineStart(of: scanner.spans[anchor].range.lowerBound)",
     "replace": "== scanner.lineStart(of: scanner.spans[anchor + 1].range.lowerBound)",
-    "test": "listItemNotOnItsOwnLine"
+    "test": "listItemNotOnItsOwnLine",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-close-line",
@@ -3848,7 +3855,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "guard let indent = scanner.tabsBefore(span: close) else {",
     "replace": "guard let indent = Optional(scanner.tabsBefore(span: close) ?? \"\\t\\t\\t\") else {",
-    "test": "emptyListOnOneLine"
+    "test": "emptyListOnOneLine",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "refuse-byte-not-allowed",
@@ -3856,7 +3864,8 @@
     "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
     "search": "guard isWordByte(byte) else {",
     "replace": "guard isWordByte(byte) else { index += 1; continue }\n                guard true else {",
-    "test": "byteNotAllowed"
+    "test": "byteNotAllowed",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "refuse-dictionary-not-closed",
@@ -3864,7 +3873,8 @@
     "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
     "search": "throw .unsafeProject(path: path, why: \"a dictionary is not closed\")",
     "replace": "return []",
-    "test": "dictionaryNotClosed"
+    "test": "dictionaryNotClosed",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-not-closed",
@@ -3872,7 +3882,8 @@
     "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
     "search": "guard let close = closers[open], Self.isOpen(spans, bytes, open, \"(\") else {",
     "replace": "guard let close = closers[open] else {",
-    "test": "listNotClosed"
+    "test": "listNotClosed",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "refuse-list-item-comma",
@@ -3880,7 +3891,8 @@
     "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
     "search": "guard last + 1 <= close, Self.isOpen(spans, bytes, last + 1, \",\") else {",
     "replace": "guard last + 1 <= close, true else {",
-    "test": "listItemWithoutComma"
+    "test": "listItemWithoutComma",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "verify-settings-dictionary",
@@ -3888,7 +3900,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
     "search": "throw fail(\"the build settings are not a dictionary\")",
     "replace": "return",
-    "test": "settingsNotADictionary"
+    "test": "settingsNotADictionary",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "verify-name-key",
@@ -3896,7 +3909,8 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
     "search": "\"files\", \"children\", \"buildPhases\", \"buildSettings\",",
     "replace": "\"files\", \"children\", \"buildPhases\", \"buildSettings\", \"name\",",
-    "test": "renameIsRefused"
+    "test": "renameIsRefused",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "verify-path-keys",
@@ -3904,6 +3918,7 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
     "search": "\"files\", \"children\", \"buildPhases\", \"buildSettings\",",
     "replace": "\"files\", \"children\", \"buildPhases\", \"buildSettings\", \"path\", \"sourceTree\",",
-    "test": "pathAndSourceTreeAreRefused"
+    "test": "pathAndSourceTreeAreRefused",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   }
 ]
