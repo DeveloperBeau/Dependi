@@ -49,13 +49,27 @@ enum ForbiddenContentScanner {
         return violations
     }
 
-    /// Tells whether the line is exactly `Copyright <years> <holder>`, with years of digits and hyphens.
+    /// Tells whether the line is exactly `Copyright <years> <holder>`, with years as `YYYY` or `YYYY-YYYY`.
     static func isCopyrightLine(_ line: Substring, holder: String) -> Bool {
         let prefix = "Copyright "
         let suffix = " " + holder
         guard line.hasPrefix(prefix), line.hasSuffix(suffix) else { return false }
         let years = line.dropFirst(prefix.count).dropLast(suffix.count)
-        return !years.isEmpty && years.allSatisfy { $0 == "-" || ("0"..."9").contains($0) }
+        return isYearOrYearRange(years)
+    }
+
+    /// Tells whether the text is four ASCII digits, or two such groups joined by one hyphen in order.
+    static func isYearOrYearRange(_ years: Substring) -> Bool {
+        let parts = years.split(separator: "-", omittingEmptySubsequences: false)
+        let isYear = { (part: Substring) in
+            part.count == 4 && part.allSatisfy { $0.isASCII && $0.isWholeNumber }
+        }
+        guard parts.allSatisfy(isYear) else { return false }
+        switch parts.count {
+        case 1: return true
+        case 2: return parts[0] <= parts[1]
+        default: return false
+        }
     }
 
     /// Lists every file that git tracks or would track, so ignored files are skipped.

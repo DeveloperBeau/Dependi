@@ -118,7 +118,10 @@ struct ForbiddenContentTests {
             "Copyright 2026 Example Person and others", " Copyright 2026 Example Person",
             "copyright 2026 Example Person", "Copyright Example Person",
             "Copyright 2026 Example Person.", "Copyright (c) 2026 Example Person",
-            "Copyright 20x6 Example Person",
+            "Copyright 20x6 Example Person", "Copyright 2026Example Person",
+            "Copyright 2026-Example Person", "Copyright 2026\tExample Person",
+            "Copyright 2026Example Person.", "Copyright 2026  Example Person",
+            "Copyright\t2026 Example Person",
         ]
         for line in lines {
             #expect(
@@ -128,17 +131,97 @@ struct ForbiddenContentTests {
         }
     }
 
+    @Test("a holder made of digits is judged by the same rules")
+    func digitHolderIsJudgedByTheSameRules() throws {
+        let digits = "1999"
+        for line in ["Copyright 1999-1999x", "Copyright 1999-1999"] {
+            #expect(
+                try scanNotice("Dependi\n\(line)\n", holder: digits)
+                    == [.init(relativePath: "NOTICE", fragment: digits)],
+                "line \(line.debugDescription)")
+        }
+        for line in ["Copyright 2026 1999", "Copyright 1999 1999"] {
+            #expect(
+                try scanNotice("Dependi\n\(line)\n", holder: digits).isEmpty,
+                "line \(line.debugDescription)")
+        }
+    }
+
+    @Test("the copyright years must be one year or an ordered range")
+    func copyrightYearsMustBeOneYearOrAnOrderedRange() throws {
+        let accepted = [
+            "Copyright 2026 Example Person", "Copyright 2024-2026 Example Person",
+            "Copyright 2026-2026 Example Person",
+        ]
+        for line in accepted {
+            #expect(try scanNotice("Dependi\n\(line)\n").isEmpty, "line \(line.debugDescription)")
+        }
+        let flagged = [
+            "Copyright - Example Person", "Copyright 2026- Example Person",
+            "Copyright -2026 Example Person", "Copyright 2026-2025 Example Person",
+            "Copyright 26 Example Person", "Copyright 20260 Example Person",
+            "Copyright 2026-26 Example Person", "Copyright 2026-20260 Example Person",
+            "Copyright 2026--2027 Example Person", "Copyright 2026-2027-2028 Example Person",
+            "Copyright 2026,2027 Example Person", "Copyright 2026 2027 Example Person",
+            "Copyright \u{0662}\u{0660}\u{0662}\u{0666} Example Person",
+            "Copyright \u{FF12}\u{FF10}\u{FF12}\u{FF16} Example Person",
+        ]
+        for line in flagged {
+            #expect(
+                try scanNotice("Dependi\n\(line)\n")
+                    == [.init(relativePath: "NOTICE", fragment: holder)],
+                "line \(line.debugDescription)")
+        }
+    }
+
+    @Test("two valid copyright lines in NOTICE are both accepted")
+    func twoValidCopyrightLinesAreBothAccepted() throws {
+        let first = "Copyright 2025 Example Person"
+        let second = "Copyright 2026 Example Person"
+        let third = "Copyright 2020-2024 Example Person"
+        let texts = [
+            "Dependi\n\(first)\nLicence line\n\(second)\n",
+            "Dependi\n\(first)\n\(second)\n",
+            "Dependi\r\n\(first)\r\n\(second)\r\nLicence line\r\n",
+            "Dependi\n\(first)\n\(second)\nLicence line\n\(third)\n",
+        ]
+        for text in texts {
+            #expect(try scanNotice(text).isEmpty, "text \(text.debugDescription)")
+        }
+    }
+
+    @Test("a broken copyright line next to a valid one is flagged")
+    func aValidLineThenABrokenCopyrightLineIsFlagged() throws {
+        let valid = "Copyright 2026 Example Person"
+        let broken = "Copyright 2026 Example Person Jr"
+        let texts = [
+            "Dependi\n\(valid)\n\(broken)\n",
+            "Dependi\n\(broken)\n\(valid)\n",
+            "Dependi\n\(valid)\n\(broken)\n\(valid)\n",
+        ]
+        for text in texts {
+            #expect(
+                try scanNotice(text) == [.init(relativePath: "NOTICE", fragment: holder)],
+                "text \(text.debugDescription)")
+        }
+    }
+
     @Test("a home path in NOTICE is found even with the copyright exemption")
     func homePathStillFoundInNoticeWithExemption() throws {
-        let home = "/Us" + "ers/"
-        let planted = "Dependi\nCopyright 2026 Example Person\nSee \(home)someone/notes\n"
-        #expect(try scanNotice(planted) == [.init(relativePath: "NOTICE", fragment: home)])
-        let root = try makeTemporaryTree(files: ["NOTICE": "Copyright 2026 \(home)\n"])
-        defer { try? FileManager.default.removeItem(at: root) }
-        let found = try ForbiddenContentScanner.scan(
-            root: root, relativePaths: ["NOTICE"], extraFragments: [home],
-            copyrightFile: "NOTICE")
-        #expect(found.contains(.init(relativePath: "NOTICE", fragment: home)))
+        for home in ForbiddenContentScanner.homeDirectoryFragments {
+            let planted = "Dependi\nCopyright 2026 Example Person\nSee \(home)someone/notes\n"
+            #expect(
+                try scanNotice(planted) == [.init(relativePath: "NOTICE", fragment: home)],
+                "text \(planted.debugDescription)")
+            let root = try makeTemporaryTree(files: ["NOTICE": "Copyright 2026 \(home)\n"])
+            defer { try? FileManager.default.removeItem(at: root) }
+            let found = try ForbiddenContentScanner.scan(
+                root: root, relativePaths: ["NOTICE"], extraFragments: [home],
+                copyrightFile: "NOTICE")
+            #expect(
+                found.contains(.init(relativePath: "NOTICE", fragment: home)),
+                "holder \(home.debugDescription)")
+        }
     }
 
     @Test("without a copyright file the holder name in NOTICE is flagged")
@@ -171,10 +254,11 @@ struct ForbiddenContentTests {
             var generator = SeededGenerator(seed: seed)
             for _ in 0..<300 {
                 let name = randomHolder(using: &generator)
-                let line = "Copyright \(randomYears(using: &generator)) \(name)"
+                let years = randomYears(using: &generator)
+                let line = "Copyright \(years) \(name)"
                 var file = "NOTICE"
                 var broken = line
-                let corruption = Int.random(in: 0..<6, using: &generator)
+                let corruption = Int.random(in: 0..<8, using: &generator)
                 switch corruption {
                 case 0:
                     broken = randomWord(using: &generator) + " " + line
@@ -189,6 +273,15 @@ struct ForbiddenContentTests {
                 case 4:
                     file = ["README.md", "NOTICE.md", "LICENSE", "notice", "NOTICE.txt"]
                         .randomElement(using: &generator)!
+                case 5:
+                    let separator = ["", "-", "\t"].randomElement(using: &generator)!
+                    broken = "Copyright " + years + separator + name
+                case 6:
+                    let badYears = [
+                        "", "-", "20", "202", "20260", "2026-", "-2026", "2026-2025", "2026-26",
+                        "26-2026", "2026--2027", "abcd", "2O26",
+                    ]
+                    broken = "Copyright \(badYears.randomElement(using: &generator)!) \(name)"
                 default:
                     broken = line + "\n" + randomWord(using: &generator) + " " + name
                 }
@@ -246,7 +339,7 @@ struct ForbiddenContentTests {
         [".", " Jr", " and others", " ", ",", " (c)"].randomElement(using: &generator)!
     }
 
-    /// Builds NOTICE text with one valid copyright line among lines that never hold the holder.
+    /// Builds NOTICE text with one or two valid copyright lines among lines that never hold the holder.
     private func randomNotice(holder name: String, using generator: inout SeededGenerator) -> String
     {
         let harmless = [
@@ -257,8 +350,16 @@ struct ForbiddenContentTests {
             let candidate = harmless.randomElement(using: &generator)!
             return candidate.contains(name) ? randomDigits(using: &generator) : candidate
         }
-        let line = "Copyright \(randomYears(using: &generator)) \(name)"
-        lines.insert(line, at: Int.random(in: 0...lines.count, using: &generator))
+        let years = randomYears(using: &generator)
+        lines.insert(
+            "Copyright \(years) \(name)", at: Int.random(in: 0...lines.count, using: &generator))
+        if Bool.random(using: &generator) {
+            var otherYears = randomYears(using: &generator)
+            while otherYears == years { otherYears = randomYears(using: &generator) }
+            lines.insert(
+                "Copyright \(otherYears) \(name)",
+                at: Int.random(in: 0...lines.count, using: &generator))
+        }
         let separator = Bool.random(using: &generator) ? "\r\n" : "\n"
         return lines.joined(separator: separator)
             + (Bool.random(using: &generator) ? separator : "")
