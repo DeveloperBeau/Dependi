@@ -208,11 +208,11 @@ struct BuildEditRefusalTests {
             isDryRun: false)
     }
 
-    @Test("a plan that drops an added object fails the check and writes nothing")
+    @Test("a plan that lists an object that is not there fails the check and writes nothing")
     func verifierObjectCount() throws {
         let (world, editor) = try world { plan in
             var plan = plan
-            plan.edits.removeAll { $0.insertText.contains("isa = PBXBuildFile") }
+            plan.addedIDs.insert("FFFFFFFFFFFFFFFFFFFFFFFF")
             return plan
         }
         #expect(throws: DomainError.self) { try run(editor) }
@@ -252,6 +252,38 @@ struct BuildEditRefusalTests {
                         insertText: $0.insertText + "\t\t\t\tOTHER_SETTING = 1;\n")
                     : $0
             }
+            return plan
+        }
+        #expect(throws: DomainError.self) { try run(editor) }
+        #expect(world.writer.records.isEmpty)
+    }
+
+    @Test("a plan that changes a key that may not change fails the check and writes nothing")
+    func verifierOtherKey() throws {
+        let source = String(decoding: FixtureWorld.fixture("old-format-mew"), as: UTF8.self)
+        let marker = "\t\t\tproductName = MewTestsApp;\n"
+        let range = try #require(source.range(of: marker))
+        let offset = source.utf8.distance(from: source.utf8.startIndex, to: range.lowerBound)
+        let (world, editor) = try world { plan in
+            var plan = plan
+            plan.edits.append(
+                PBXTextEdit(offset: offset, removeCount: 0, insertText: "\t\t\tcomments = x;\n"))
+            return plan
+        }
+        #expect(throws: DomainError.self) { try run(editor) }
+        #expect(world.writer.records.isEmpty)
+    }
+
+    @Test("a plan that removes a list entry fails the check and writes nothing")
+    func verifierListLosesEntry() throws {
+        let source = String(decoding: FixtureWorld.fixture("old-format-mew"), as: UTF8.self)
+        let marker = "\t\t\t\tD2568DE9214BCA3B00FCA44A /* Frameworks */,\n"
+        let range = try #require(source.range(of: marker))
+        let offset = source.utf8.distance(from: source.utf8.startIndex, to: range.lowerBound)
+        let (world, editor) = try world { plan in
+            var plan = plan
+            plan.edits.append(
+                PBXTextEdit(offset: offset, removeCount: marker.utf8.count, insertText: ""))
             return plan
         }
         #expect(throws: DomainError.self) { try run(editor) }

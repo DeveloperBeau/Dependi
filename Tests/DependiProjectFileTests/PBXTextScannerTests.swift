@@ -88,6 +88,8 @@ struct PBXTextScannerTests {
             "{ a = b; }",
             "{ objects = { A = b }; }",
             "{ objects = { A = { x = ; }; }; }",
+            "{ objects = { A = ( }; }; }",
+            "{ objects = { }; } x",
         ])
     func malformed(_ text: String) {
         #expect(throws: DomainError.self) {

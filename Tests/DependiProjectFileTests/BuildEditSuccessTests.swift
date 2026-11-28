@@ -59,6 +59,16 @@ struct BuildEditSuccessTests {
             ]
         #expect(Set(added) == Set(expected))
         #expect(added.count == expected.count)
+        // The new section goes between the sections that sort around its name.
+        let text = try world.currentText()
+        #expect(
+            text.contains(
+                "/* End PBXResourcesBuildPhase section */\n\n/* Begin PBXShellScriptBuildPhase section */\n"
+            ))
+        #expect(
+            text.contains(
+                "/* End PBXShellScriptBuildPhase section */\n\n/* Begin PBXSourcesBuildPhase section */\n"
+            ))
         #expect(
             world.writer.records == [
                 "write /work/App/.dependi/project.pbxproj.bak",
@@ -288,5 +298,63 @@ struct BuildEditSuccessTests {
             let targets = try reader.applicationTargets(projectFilePath: EditWorld.projectFolder)
             #expect(targets.contains(item.target), "\(item.fixture)")
         }
+    }
+
+    @Test("the phase goes right after Copy Bundle Resources, not at the end")
+    func phaseGoesRightAfterResources() throws {
+        let world = try EditWorld("synchronized-fila")
+        try world.configure(target: "Fila", bundle: "Fila/Settings.bundle")
+        let text = try world.currentText()
+        let resources = "\t\t\t\tFA0000000000000000000042 /* Resources */,\n\t\t\t\t"
+        let range = try #require(text.range(of: resources))
+        #expect(text[range.upperBound...].prefix(60).contains("/* Dependi */"))
+    }
+
+    @Test("a path with a quote, a backslash or a comment opener is quoted and escaped")
+    func awkwardPaths() throws {
+        for (folder, written) in [
+            ("A\"B", "\"A\\\"B/Settings.bundle\""),
+            ("A\\B", "\"A\\\\B/Settings.bundle\""),
+            ("a/*b", "\"a/*b/Settings.bundle\""),
+        ] {
+            let world = try EditWorld("old-format-mew")
+            try world.configure(target: "MewTestsApp", bundle: folder + "/Settings.bundle")
+            #expect(try world.currentText().contains("path = \(written);"), "\(folder)")
+        }
+    }
+
+    @Test("a build file with no file reference is ignored")
+    func buildFileWithoutReference() throws {
+        let text = String(decoding: FixtureWorld.fixture("old-format-mew"), as: UTF8.self)
+        var changed = replacing(
+            text, "/* Begin PBXBuildFile section */\n",
+            with:
+                "/* Begin PBXBuildFile section */\n\t\tD2568DFF214BCA3B00FCA44A /* (null) in Resources */ = {isa = PBXBuildFile; };\n"
+        )
+        changed = replacing(
+            changed, "\t\t\t\tD2568DF4214BCA3B00FCA44A /* Main.storyboard in Resources */,\n",
+            with:
+                "\t\t\t\tD2568DFF214BCA3B00FCA44A /* (null) in Resources */,\n\t\t\t\tD2568DF4214BCA3B00FCA44A /* Main.storyboard in Resources */,\n"
+        )
+        let world = try EditWorld("x", bytes: Data(changed.utf8))
+        let lines = try world.configure(target: "MewTestsApp", bundle: "Settings.bundle")
+        #expect(
+            lines.contains(
+                "Dependi: added Settings.bundle to Copy Bundle Resources of MewTestsApp."))
+    }
+
+    @Test("a setting that comes from a configuration anchor is overridden and the note says so")
+    func xcconfigAnchorGetsOverrideNote() throws {
+        let text = String(decoding: FixtureWorld.fixture("settings-bundle-overland"), as: UTF8.self)
+        let line = "\t\t\t\tENABLE_USER_SCRIPT_SANDBOXING = NO;\n"
+        var changed = replacing(
+            text, line, with: "", times: text.components(separatedBy: line).count - 1)
+        changed = changed.replacingOccurrences(
+            of: "baseConfigurationReference =", with: "baseConfigurationReferenceAnchor =")
+        let world = try EditWorld("x", bytes: Data(changed.utf8))
+        let lines = try world.configure(target: "Overland", bundle: "GPSLogger/Settings.bundle")
+        #expect(
+            lines.contains(
+                "Dependi: the value in the xcconfig file is now overridden for Overland."))
     }
 }

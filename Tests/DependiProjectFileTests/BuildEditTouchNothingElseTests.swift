@@ -10,6 +10,11 @@ struct BuildEditTouchNothingElseTests {
         let before = String(decoding: world.original, as: UTF8.self)
         let added = assertOnlyAdded(before: before, after: try world.currentText())
         #expect(!added.isEmpty)
+        let ordered = added.filter {
+            $0.contains("= {isa = PBX") || $0.contains("ENABLE_USER_SCRIPT_SANDBOXING")
+                || $0.contains("/* Dependi */ = {")
+        }
+        assertSortedAmongSiblings(in: try world.currentText(), lines: ordered)
         #expect(
             added.allSatisfy {
                 !$0.contains("ENABLE_USER_SCRIPT_SANDBOXING") || $0.hasSuffix("= NO;")

@@ -4,15 +4,20 @@ import Foundation
 
 /// Passes every change to an in-memory file system and records it in order.
 ///
-/// A change whose record starts with `failingPrefix` fails with `fileUnwritable`.
+/// A change whose record starts with `failingPrefix` fails with `fileUnwritable`. A write whose
+/// record starts with `alteringPrefix` stores one more byte than it was given.
 final class RecordingWriter: FileWriting, @unchecked Sendable {
     private let inner: InMemoryFileSystem
     private let failingPrefix: String?
+    private let alteringPrefix: String?
     private let box = LockedBox<[String]>([])
 
-    init(_ inner: InMemoryFileSystem, failingPrefix: String? = nil) {
+    init(
+        _ inner: InMemoryFileSystem, failingPrefix: String? = nil, alteringPrefix: String? = nil
+    ) {
         self.inner = inner
         self.failingPrefix = failingPrefix
+        self.alteringPrefix = alteringPrefix
     }
 
     /// Every change in the order it was attempted, such as `write /a/b` or `move /a to /b`.
@@ -26,8 +31,10 @@ final class RecordingWriter: FileWriting, @unchecked Sendable {
     }
 
     func write(_ data: Data, toPath path: String) throws(DomainError) {
-        try record("write \(path)", path: path)
-        try inner.write(data, toPath: path)
+        let text = "write \(path)"
+        try record(text, path: path)
+        let altered = alteringPrefix.map { text.hasPrefix($0) } ?? false
+        try inner.write(altered ? data + Data([0x20]) : data, toPath: path)
     }
 
     func createDirectory(at path: String) throws(DomainError) {
