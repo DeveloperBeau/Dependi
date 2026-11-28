@@ -89,6 +89,50 @@ struct BuildEditGuardTests {
             target: "App")
     }
 
+    @Test("a conditional sandbox key on arch is refused and nothing is written")
+    func conditionalKeyArch() throws {
+        try expectRefusal(
+            Data(
+                mini(
+                    settings:
+                        "{\n\t\t\t\tSDKROOT = iphoneos;\n\t\t\t\t\"ENABLE_USER_SCRIPT_SANDBOXING[arch=arm64]\" = YES;\n\t\t\t}"
+                ).utf8),
+            reason: Self.safely
+                + "the Debug configuration of App sets the conditional key ENABLE_USER_SCRIPT_SANDBOXING[arch=arm64]. Remove it in Xcode, then run again",
+            target: "App")
+    }
+
+    @Test("a conditional sandbox key on sdk with a wildcard is refused when its value is NO")
+    func conditionalKeySdkNo() throws {
+        try expectRefusal(
+            Data(
+                mini(
+                    settings:
+                        "{\n\t\t\t\tSDKROOT = iphoneos;\n\t\t\t\t\"ENABLE_USER_SCRIPT_SANDBOXING[sdk=macosx*]\" = NO;\n\t\t\t}"
+                ).utf8),
+            reason: Self.safely
+                + "the Debug configuration of App sets the conditional key ENABLE_USER_SCRIPT_SANDBOXING[sdk=macosx*]. Remove it in Xcode, then run again",
+            target: "App")
+    }
+
+    @Test("a conditional sandbox key that is the first entry of a real project is refused")
+    func conditionalKeyFirstInRealProject() throws {
+        var source = text("old-format-mew")
+        let configuration = try #require(
+            source.range(of: "D2568DFC214BCA3C00FCA44A /* Debug */ = {"))
+        let opening = try #require(
+            source.range(
+                of: "\t\t\tbuildSettings = {\n", range: configuration.upperBound..<source.endIndex))
+        source.insert(
+            contentsOf: "\t\t\t\t\"ENABLE_USER_SCRIPT_SANDBOXING[arch=arm64]\" = YES;\n",
+            at: opening.upperBound)
+        try expectRefusal(
+            Data(source.utf8),
+            reason: Self.safely
+                + "the Debug configuration of MewTestsApp sets the conditional key ENABLE_USER_SCRIPT_SANDBOXING[arch=arm64]. Remove it in Xcode, then run again"
+        )
+    }
+
     @Test("a target with two Copy Bundle Resources phases is refused and nothing is written")
     func twoResourcesPhases() throws {
         var source = mini(settings: nil)

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`dependi init --project <path>` sets Dependi up in an app project. `--dry-run` reports the plan and changes nothing.
+`dependi init --project <path>` sets Dependi up in an app project. `--dry-run` reports the plan and changes nothing. `--edit-project` also sets up the build of the app target in the project file.
 
 ## Parts
 
@@ -10,6 +10,7 @@
 - `ProjectLocator` finds the project from the path that was given.
 - `RootPlistEditor` adds the Acknowledgements pane to a `Root.plist`.
 - `ApplicationTargetListing` is a domain interface. `ProjectFileReader` implements it.
+- `ProjectBuildConfiguring` is a domain interface. `ProjectFileEditor` implements it. `InitFeature` calls it only when `--edit-project` is given.
 - `ExecutableMarking` is a domain interface. `DiskFileSystem` implements it with `chmod`.
 
 ## Steps
@@ -17,7 +18,7 @@
 1. Find the project. The path may be a folder, an `.xcodeproj`, or an `.xcworkspace` with an `.xcodeproj` of the same name next to it. Two projects in a folder ask which one. A Swift package, an empty folder and the Dependi source folder are refused.
 2. List the application targets. None is refused. Two or more ask which one.
 3. Read the platforms of the target. A macOS-only app is refused, because it has no Settings bundle.
-4. In a dry run, print the plan and stop.
+4. With `--edit-project`, call the editor with `isDryRun: true`. A refusal (a parse failure, an unsupported layout or no Resources phase) stops init here, before init writes any file. In a dry run, print the plan and the editor lines, and stop.
 5. Write `.dependi.json` if there is none. It holds the version and the pinned commit. It has no excludes, because generate skips a local package that has no license file. An existing file is never changed.
 6. Find a `Settings.bundle` in the project folder or one folder below it. Two ask which one. If there is none, create `Settings.bundle/Root.plist` and say that the bundle must be added to the target.
 7. Edit `Root.plist`:
@@ -28,7 +29,8 @@
 8. If the source bundle holds `Acknowledgements`, or old LicensePlist files, name them and ask before removing each one. Without a yes nothing is removed.
 9. Copy the running program to `.dependi/bin/dependi`, write `VERSION`, `run.sh` and `inputs.xcfilelist`, and mark the program and the script executable.
 10. Add `.dependi/bin/` to `.gitignore` once.
-11. Print the Run Script text and the settings to change.
+11. With `--edit-project`, call the editor with `isDryRun: false`. The backup path is `.dependi/project.pbxproj.bak` in the project folder. The editor writes it only when nothing is there. Print every line that the editor returns. If it returns none, print that the project is already set up. Then print a note to close and reopen the project in Xcode. Init does not print the Run Script steps, and it does not ask you to add the bundle in Xcode.
+12. Without `--edit-project`, print the Run Script text and the settings to change, and one line that says `--edit-project` makes these changes. Init does not read `project.pbxproj` for writing and does not call the editor.
 
 ## The pinned commit
 
@@ -36,8 +38,10 @@ The wizard asks git for the commit of the Dependi source folder. If there is no 
 
 ## What the wizard does not do
 
-It does not edit `project.pbxproj`. A round trip through a property list writer reorders keys and strips comments. It prints the Run Script instead.
+Without `--edit-project`, it does not edit `project.pbxproj`. It prints the Run Script instead. With the flag, the editor changes the file as text, because a round trip through a property list writer reorders keys and strips comments. See [ProjectFile](ProjectFile.md).
 
 ## Tests
 
-The tests use the in-memory file system and the scripted console. They cover a fresh install, a dry run, a second run, an existing configuration, each `Root.plist` case including binary format and a seeded fuzz, bundle search and clashes, the ignore file, every form of project path, targets and platforms.
+The tests use the in-memory file system and the scripted console. `InitEditProjectTests` uses a recording double for the editor. It checks that plain init never calls the editor, that the flag makes a dry run call and then a real call with the expected paths, and that a refusal stops init before any file is written. The end-to-end tests run init on a real project file in a temporary folder. They cover a plain run, an edit with a backup, a second run, a later edit that keeps the first backup and a damaged file.
+
+The other tests cover a fresh install, a dry run, a second run, an existing configuration, each `Root.plist` case including binary format and a seeded fuzz, bundle search and clashes, the ignore file, every form of project path, targets and platforms.

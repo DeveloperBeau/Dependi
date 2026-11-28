@@ -1,3 +1,4 @@
+import CryptoKit
 import DependiDomain
 import Foundation
 import Testing
@@ -64,6 +65,27 @@ struct ProjectObjectIDMakerTests {
         #expect(enough.make(targetID: "T", role: "buildFile") == second)
         var bothTaken = ProjectObjectIDMaker(existingText: first + second, attemptLimit: 2)
         #expect(bothTaken.make(targetID: "T", role: "buildFile") == nil)
+    }
+
+    // The documented formula: SHA-256 of "dependi", target, role and counter, each after a
+    // zero byte, then the first 12 bytes as upper case hex.
+    private func expectedID(_ counter: Int) -> String {
+        let digest = SHA256.hash(data: Data("dependi\u{0}T\u{0}buildFile\u{0}\(counter)".utf8))
+        return digest.prefix(12).map { String(format: "%02X", $0) }.joined()
+    }
+
+    @Test("the default attempt limit still finds the id for counter 999 after 999 clashes")
+    func defaultLimitAllowsManyClashes() {
+        let taken = (0..<999).map(expectedID).joined(separator: "\n")
+        var maker = ProjectObjectIDMaker(existingText: taken)
+        #expect(maker.make(targetID: "T", role: "buildFile") == expectedID(999))
+    }
+
+    @Test("the default attempt limit gives no id after 1000 clashes")
+    func defaultLimitStopsAtOneThousand() {
+        let taken = (0..<1000).map(expectedID).joined(separator: "\n")
+        var maker = ProjectObjectIDMaker(existingText: taken)
+        #expect(maker.make(targetID: "T", role: "buildFile") == nil)
     }
 
     @Test("the planner refuses when no free id is found and says which id it needed")

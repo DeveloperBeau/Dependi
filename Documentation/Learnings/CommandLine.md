@@ -26,5 +26,7 @@
 | The duplicate check is removed | `duplicates` |
 | `--project=` is accepted | `unknownFlags` |
 | The dry run flag is ignored | `tableRowsAreAccepted` |
+| The edit-project flag is ignored | `tableRowsAreAccepted` |
+| The edit-project duplicate check is removed | `duplicates` |
 | The value dash check is removed | `missingValues` |
 | The `-h` alias is removed | `tableRowsAreAccepted` |

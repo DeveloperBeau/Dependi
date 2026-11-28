@@ -10,7 +10,15 @@ See [the install guide](Documentation/Guides/Installing.md). In short:
 
 1. Clone this repository at the version you want.
 2. Run `swift run -c release dependi init --project <path to your app>`.
-3. Add the Run Script phase that the wizard prints, and turn the user script sandbox off for the target that runs it.
+3. Run init with `--edit-project` to let it add the Run Script phase, the bundle and the sandbox setting, or add them by hand. See [Set up Xcode by hand](#set-up-xcode-by-hand).
+
+## Set up Xcode by hand
+
+If you do not use `--edit-project`, make these three changes in Xcode. The flag makes all three for you, so you skip this section if you use it:
+
+1. Add `Settings.bundle` to the Copy Bundle Resources phase of the app target.
+2. Add a Run Script build phase to the app target, after Copy Bundle Resources, with this text: `"${SRCROOT}/.dependi/run.sh" generate`. Add the input file list `$(SRCROOT)/.dependi/inputs.xcfilelist` and the output file `$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Settings.bundle/Acknowledgements.plist`.
+3. Set `ENABLE_USER_SCRIPT_SANDBOXING` to `NO` for that target.
 
 ## How it runs
 
@@ -37,7 +45,7 @@ Debug builds skip. An archive always runs.
 | Command | Meaning |
 |---|---|
 | `dependi generate [--single-page]` | Write the acknowledgements. Xcode runs it. `--single-page` puts every license on one page for that run. Without it, the `singlePage` key decides. |
-| `dependi init --project <path> [--dry-run]` | Set Dependi up in a project. |
+| `dependi init --project <path> [--dry-run] [--edit-project]` | Set Dependi up in a project. `--edit-project` also edits the Xcode project: it adds the bundle, the Run Script phase and the sandbox setting, and keeps the original file in `.dependi/project.pbxproj.bak`. The first edit writes the backup. Later edits never replace it. To get a fresh backup, delete it by hand. Without it, init never changes the project file. |
 | `dependi --version` | Print the version. |
 | `dependi help` | Print the usage. |
 

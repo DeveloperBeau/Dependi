@@ -12,7 +12,8 @@ Dependi writes the licenses of your Swift packages into your app's `Settings.bun
 1. Clone the Dependi repository at the version you want.
 2. In the clone run `swift run -c release dependi init --project <path to your app folder>`.
 3. Answer the questions. The wizard writes `.dependi.json`, adds the Acknowledgements pane to your `Root.plist` (a backup is saved in `.dependi/`), installs `.dependi/run.sh` and adds `.dependi/bin/` to `.gitignore`.
-4. In Xcode, add a Run Script build phase to the app target, after Copy Bundle Resources, with the text the wizard printed:
+4. To let the wizard change the Xcode project too, add `--edit-project` to the command in step 2. Close the project in Xcode first. Then go to step 7. To change the project by hand, go to step 5.
+5. In Xcode, add `Settings.bundle` to the Copy Bundle Resources phase of the app target. Then add a Run Script build phase to the app target, after Copy Bundle Resources, with the text the wizard printed:
 
    ```
    "${SRCROOT}/.dependi/run.sh" generate
@@ -20,8 +21,24 @@ Dependi writes the licenses of your Swift packages into your app's `Settings.bun
 
    To put every license on one page for every run of this phase, use `generate --single-page` instead. The script passes its arguments on to the program. Without the flag, the `singlePage` key in `.dependi.json` decides.
 
-5. In that phase add the input file list `$(SRCROOT)/.dependi/inputs.xcfilelist` and the output file `$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Settings.bundle/Acknowledgements.plist`.
-6. Commit `.dependi.json` and `.dependi/run.sh` (and `.dependi/inputs.xcfilelist`).
+6. In that phase add the input file list `$(SRCROOT)/.dependi/inputs.xcfilelist` and the output file `$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Settings.bundle/Acknowledgements.plist`.
+7. If you changed the project by hand, set `ENABLE_USER_SCRIPT_SANDBOXING` to `NO` for the target, as the next section says. If you used `--edit-project`, init already did steps 5 and 6 and this setting: it added the bundle to Copy Bundle Resources, added the Run Script phase with its input and output files, and set `ENABLE_USER_SCRIPT_SANDBOXING = NO`. Do only the rest of this step. Commit `.dependi.json` and `.dependi/run.sh` (and `.dependi/inputs.xcfilelist`).
+
+## What `--edit-project` does
+
+With `--edit-project`, init makes these changes to `project.pbxproj` for one app target:
+
+- It adds a `Settings.bundle` file reference and adds the bundle to the Copy Bundle Resources phase.
+- It adds a Run Script phase named Dependi after Copy Bundle Resources. The phase has the script, the input file list and the output file from step 6.
+- It sets `ENABLE_USER_SCRIPT_SANDBOXING` to `NO` in every build configuration of the target.
+
+Init prints one line for each change. It edits only the text that it must change. Other text in the file is not changed.
+
+The file `.dependi/project.pbxproj.bak` is the original project file. The first edit writes it before it writes the new file. Init never replaces it. A later edit, for example for a second target or after a change by hand, keeps the backup and prints that it kept it. A run that changes nothing writes no backup and prints that the project is already set up. To get a fresh backup, delete the file by hand before the next edit.
+
+Init checks the edit before it writes any file. If it cannot edit the project safely, it stops and changes nothing. It refuses a project file that it cannot parse, a layout that it does not support, a target with no Resources phase, a target with two Copy Bundle Resources phases, a build configuration with a conditional sandbox key such as `ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]` and a `Settings.bundle` outside the project folder. Init refuses the two phases because it cannot know which one to use. It refuses the conditional key because the key can win over the plain `NO` setting. The error names the project file and the reason. If you use `--dry-run` with `--edit-project`, init prints the changes that it would make and writes nothing.
+
+If Xcode has the project open, close it and open it again after the run, so that Xcode reads the new file.
 
 ## The script sandbox
 

@@ -39,12 +39,17 @@ struct CommandLineFuzzTests {
         guard name == "init" else { return .failure(.unknownCommand(name)) }
         var path: String?
         var dryRun = false
+        var editsProject = false
         var position = 0
         while position < rest.count {
             let token = rest[position]
             if token == "--dry-run" {
                 if dryRun { return .failure(.duplicateFlag(command: name, flag: token)) }
                 dryRun = true
+                position += 1
+            } else if token == "--edit-project" {
+                if editsProject { return .failure(.duplicateFlag(command: name, flag: token)) }
+                editsProject = true
                 position += 1
             } else if token == "--project" {
                 if path != nil { return .failure(.duplicateFlag(command: name, flag: token)) }
@@ -63,7 +68,8 @@ struct CommandLineFuzzTests {
         guard let path else {
             return .failure(.missingRequiredFlag(command: name, flag: "--project"))
         }
-        return .success(.initialize(projectPath: path, isDryRun: dryRun))
+        return .success(
+            .initialize(projectPath: path, isDryRun: dryRun, editsProject: editsProject))
     }
 
     private func check(
@@ -98,7 +104,10 @@ struct CommandLineFuzzTests {
                 == .failure(.unexpectedArgument(command: "generate", argument: "x")))
         #expect(
             Self.oracle(["init", "--project", "a", "--dry-run"])
-                == .success(.initialize(projectPath: "a", isDryRun: true)))
+                == .success(.initialize(projectPath: "a", isDryRun: true, editsProject: false)))
+        #expect(
+            Self.oracle(["init", "--project", "a", "--edit-project", "--edit-project"])
+                == .failure(.duplicateFlag(command: "init", flag: "--edit-project")))
         #expect(
             Self.oracle(["init", "--project", "--dry-run"])
                 == .failure(.missingValue(command: "init", flag: "--project")))
@@ -109,7 +118,8 @@ struct CommandLineFuzzTests {
     func randomListsNeverCrash() {
         let alphabet = [
             "generate", "init", "version", "--version", "help", "-h", "--help", "--project",
-            "--dry-run", "--single-page", "--project=x", "x", "a b", "", "--", "-", "Generate",
+            "--dry-run", "--edit-project", "--single-page", "--project=x", "x", "a b", "", "--",
+            "-", "Generate",
             "日本",
         ]
         var generator = SeededGenerator()
@@ -132,13 +142,17 @@ struct CommandLineFuzzTests {
         for round in 0..<1000 {
             let path = paths.randomElement(using: &generator)!
             let isDryRun = Bool.random(using: &generator)
+            let editsProject = Bool.random(using: &generator)
             let dryRunFirst = Bool.random(using: &generator)
             var arguments = ["init"]
             if isDryRun && dryRunFirst { arguments.append("--dry-run") }
             arguments += ["--project", path]
             if isDryRun && !dryRunFirst { arguments.append("--dry-run") }
+            if editsProject { arguments.append("--edit-project") }
             #expect(
-                try parser.parse(arguments) == .initialize(projectPath: path, isDryRun: isDryRun),
+                try parser.parse(arguments)
+                    == .initialize(
+                        projectPath: path, isDryRun: isDryRun, editsProject: editsProject),
                 "seed \(seed) round \(round): \(arguments)")
         }
     }

@@ -941,7 +941,7 @@
     "search": "guard let projectPath else {",
     "replace": "guard let projectPath = projectPath ?? Optional(\"\") else {",
     "test": "missingRequired",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "cli-duplicate-flag",
@@ -950,7 +950,7 @@
     "search": "if projectPath != nil {",
     "replace": "if false {",
     "test": "duplicates",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "cli-equals-form",
@@ -959,7 +959,7 @@
     "search": "default:\n                throw rejection(of: token, command: command)",
     "replace": "default:\n                if token.hasPrefix(\"--project=\") { projectPath = String(token.dropFirst(10)); index += 1; continue }\n                throw rejection(of: token, command: command)",
     "test": "unknownFlags",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "cli-dry-run-ignored",
@@ -968,7 +968,7 @@
     "search": "isDryRun = true",
     "replace": "isDryRun = false",
     "test": "tableRowsAreAccepted",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "cli-dashed-value",
@@ -977,7 +977,7 @@
     "search": "!rest[valueIndex].hasPrefix(\"--\")",
     "replace": "true",
     "test": "missingValues",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "cli-help-alias",
@@ -986,7 +986,7 @@
     "search": "case \"help\", \"--help\", \"-h\":",
     "replace": "case \"help\", \"--help\":",
     "test": "tableRowsAreAccepted",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "gen-sandbox-check",
@@ -1121,7 +1121,7 @@
     "search": "public static let usageExitCode: Int32 = 64",
     "replace": "public static let usageExitCode: Int32 = 1",
     "test": "commandLineErrors",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "comp-version-text",
@@ -1130,7 +1130,7 @@
     "search": "\"dependi \\(DependiVersion.current)\"",
     "replace": "\"dependi\"",
     "test": "versionAndHelp",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "comp-clean-environment",
@@ -1175,7 +1175,7 @@
     "search": "if isDryRun {",
     "replace": "if false {",
     "test": "dryRun",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-macos-refused",
@@ -1184,7 +1184,7 @@
     "search": "linked.supportedPlatforms.allSatisfy({ $0 == \"macosx\" })",
     "replace": "linked.supportedPlatforms.allSatisfy({ $0 == \"never\" })",
     "test": "platforms",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-format",
@@ -1193,7 +1193,7 @@
     "search": "^[0-9a-f]{40}$",
     "replace": "^.*$",
     "test": "commitFormatIsExact",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-backup",
@@ -1202,7 +1202,7 @@
     "search": "try writer.write(original, toPath: root + \"/.dependi/Root.plist.bak\")",
     "replace": "",
     "test": "paneAppended",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-clash-confirmation",
@@ -1211,7 +1211,7 @@
     "search": "if try prompts.askConfirmation(",
     "replace": "if try !prompts.askConfirmation(",
     "test": "clashesNeedConfirmation",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-run-script-executable",
@@ -1220,7 +1220,7 @@
     "search": "try executables.makeExecutable(at: root + \"/.dependi/run.sh\")",
     "replace": "",
     "test": "freshInstall",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-gitignore-duplicate",
@@ -1229,7 +1229,7 @@
     "search": "if lines.contains(rule) { return }",
     "replace": "",
     "test": "gitignoreRules",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-existing-config",
@@ -1238,7 +1238,7 @@
     "search": "output.writeLine(\"Dependi: kept the existing .dependi.json.\")\n            return",
     "replace": "output.writeLine(\"Dependi: kept the existing .dependi.json.\")",
     "test": "existingConfigurationKept",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-old-entry",
@@ -1373,7 +1373,7 @@
     "search": "root + \"/.dependi/Root.plist.bak\"",
     "replace": "plistPath + \".bak\"",
     "test": "paneAppended",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "gen-output-empty",
@@ -1751,7 +1751,7 @@
     "search": "wrapping: process, limitSeconds: settings.runTimeoutSeconds,",
     "replace": "wrapping: process, limitSeconds: ToolConfiguration.defaultRunTimeoutSeconds,",
     "test": "runLimitShortensChildLimits",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "app-config-wired",
@@ -1760,7 +1760,7 @@
     "search": "environment: environment, configuration: settings, now: { Date() },",
     "replace": "environment: environment, configuration: configuration(environment: [:], files: disk), now: { Date() },",
     "test": "configuredLimitsReachTheRequests",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "lazy-process-limit-xcrun",
@@ -1850,7 +1850,7 @@
     "search": "let installed = commit.map { version + \"-\" + $0 } ?? version",
     "replace": "let installed = version",
     "test": "freshInstall",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "wrapper-cache-override-unconditional",
@@ -2021,7 +2021,7 @@
     "search": "try executables.makeExecutable(at: root + \"/.dependi/bin/dependi\")",
     "replace": "",
     "test": "freshInstall",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-end-anchor",
@@ -2030,7 +2030,7 @@
     "search": "#\"^[0-9a-f]{40}$\"#",
     "replace": "#\"^[0-9a-f]{40}\"#",
     "test": "commitFormatIsExact",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-start-anchor",
@@ -2039,7 +2039,7 @@
     "search": "#\"^[0-9a-f]{40}$\"#",
     "replace": "#\"[0-9a-f]{40}$\"#",
     "test": "commitFormatIsExact",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-uppercase",
@@ -2048,7 +2048,7 @@
     "search": "#\"^[0-9a-f]{40}$\"#",
     "replace": "#\"^[0-9a-fA-F]{40}$\"#",
     "test": "commitFormatIsExact",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "init-commit-length",
@@ -2057,7 +2057,7 @@
     "search": "#\"^[0-9a-f]{40}$\"#",
     "replace": "#\"^[0-9a-f]{39,41}$\"#",
     "test": "commitFormatIsExact",
-    "lastRun": {"date": "2026-11-04", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "disk-executable-mode",
@@ -3001,7 +3001,7 @@
     "search": "layout: layout",
     "replace": "layout: .panePerPackage",
     "test": "singlePageWritesOneIndex",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "single-page-config-decode-default",
@@ -3118,7 +3118,7 @@
     "search": "return .generate(forcesSinglePage: forcesSinglePage)",
     "replace": "return .generate(forcesSinglePage: false)",
     "test": "tableRowsAreAccepted",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "single-page-flag-duplicate-allowed",
@@ -3127,7 +3127,7 @@
     "search": "                if forcesSinglePage {",
     "replace": "                if false {",
     "test": "generateDuplicate",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "single-page-flag-layout-and",
@@ -3244,7 +3244,7 @@
     "search": "output: console, forcesSinglePage: forcesSinglePage)",
     "replace": "output: console, forcesSinglePage: false)",
     "test": "flagForcesSinglePage",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   },
   {
     "id": "edit-no-change-no-write",
@@ -3277,7 +3277,7 @@
     "id": "edit-backup-verified",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "guard Array(backup) == original else {",
+    "search": "guard let backup, Array(backup) == original else {",
     "replace": "guard true else {",
     "test": "backupMismatch",
     "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
@@ -3961,7 +3961,7 @@
     "id": "backup-first-overwritten",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "let keepsBackup = files.exists(at: backupPath)",
+    "search": "let keepsBackup = try keepsExistingBackup(at: backupPath)",
     "replace": "let keepsBackup = false",
     "test": "secondEditKeepsOriginalBackup",
     "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
@@ -4027,6 +4027,222 @@
     "search": "let last = closers[index] ?? index",
     "replace": "let last = index",
     "test": "listItemsThatAreBrackets",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-flag-ignored",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "isDryRun: isDryRun, editsProject: editsProject)",
+    "replace": "isDryRun: isDryRun, editsProject: false)",
+    "test": "tableRowsAreAccepted",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-flag-duplicate",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "if editsProject {",
+    "replace": "if false {",
+    "test": "duplicates",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-dry-run-first",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "backupPath: backupPath, isDryRun: true)",
+    "replace": "backupPath: backupPath, isDryRun: false)",
+    "test": "editsInTwoSteps",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-refusal-ignored",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "let plannedEdits =",
+    "replace": "let plannedEdits: [String] = []; let _ = try?",
+    "test": "refusalStopsInit",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-real-call-is-dry",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "backupPath: backupPath, isDryRun: false)",
+    "replace": "backupPath: backupPath, isDryRun: true)",
+    "test": "editsInTwoSteps",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-always-calls-editor",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if editsProject {",
+    "replace": "if true {",
+    "test": "plainInitSkipsTheEditor",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-dry-report-always",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "edits: editsProject ? plannedEdits : nil)",
+    "replace": "edits: plannedEdits)",
+    "test": "dryRunWithoutFlag",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-backup-path",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "location.root + \"/.dependi/project.pbxproj.bak\"",
+    "replace": "location.root + \"/.dependi/project.bak\"",
+    "test": "editsInTwoSteps",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-already-set-up-line",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if lines.isEmpty {",
+    "replace": "if false {",
+    "test": "alreadySetUp",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-reopen-note",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "Dependi: close and reopen the project if Xcode has it open, so that it reads the changes.",
+    "replace": "Dependi: done.",
+    "test": "editsInTwoSteps",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-resource-hint-kept",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if original == nil && !editsProject {",
+    "replace": "if original == nil {",
+    "test": "editsInTwoSteps",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-manual-hint-removed",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "\"Or run init again with --edit-project to make these changes for you.\"",
+    "replace": "\"\"",
+    "test": "plainInitSkipsTheEditor",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-app-flag-dropped",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "absolute, isDryRun: isDryRun, editsProject: editsProject)",
+    "replace": "absolute, isDryRun: isDryRun, editsProject: false)",
+    "test": "editProjectSetsUpTheTargetAndBacksUpTheOriginal",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-app-flag-dropped-early",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "return initialize(path: path, isDryRun: isDryRun, editsProject: editsProject)",
+    "replace": "return initialize(path: path, isDryRun: isDryRun, editsProject: false)",
+    "test": "editProjectSetsUpTheTargetAndBacksUpTheOriginal",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-dry-run-already-set-up-removed",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "\"   Dependi: the Xcode project is already set up.\"",
+    "replace": "\"\"",
+    "test": "dryRunAlreadySetUp",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-backup-bad-not-removed",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "do { try writer.removeItem(at: backupPath) } catch {",
+    "replace": "do { _ = backupPath } catch {",
+    "test": "backupMismatch",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-backup-regular-check-skipped",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "(try? files.readRegularFile(at: real, upToBytes: 0)) != nil",
+    "replace": "true",
+    "test": "folderAtBackupPath",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-backup-link-check-skipped",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "real == ProjectPathMath.standardize(parent + \"/\" + name),",
+    "replace": "true,",
+    "test": "linkAtBackupPath",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-conditional-key-narrowed",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "Self.settingKey + \"[\"",
+    "replace": "Self.settingKey + \"[sdk=\"",
+    "test": "conditionalKeyArch",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-conditional-first-entry-skipped",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "try scanner.entries(ofDictionaryAt: settings.valueFirst)",
+    "replace": "Array(try scanner.entries(ofDictionaryAt: settings.valueFirst).dropFirst())",
+    "test": "conditionalKeyFirstInRealProject",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-id-default-limit-lowered",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "attemptLimit: Int = 1000",
+    "replace": "attemptLimit: Int = 100",
+    "test": "defaultLimitAllowsManyClashes",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-id-default-limit-301",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "attemptLimit: Int = 1000",
+    "replace": "attemptLimit: Int = 301",
+    "test": "defaultLimitAllowsManyClashes",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-id-default-limit-999",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "attemptLimit: Int = 1000",
+    "replace": "attemptLimit: Int = 999",
+    "test": "defaultLimitAllowsManyClashes",
+    "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-backup-unreadable-accepted",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "guard let backup, Array(backup) == original else {",
+    "replace": "guard backup.map({ Array($0) == original }) ?? true else {",
+    "test": "backupReadbackFailsIsRemoved",
     "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
   }
 ]

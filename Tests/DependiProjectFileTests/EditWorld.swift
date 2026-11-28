@@ -17,14 +17,15 @@ struct EditWorld {
     /// Places the fixture, or the given bytes in its place, and creates the backup folder.
     init(
         _ fixture: String, bytes: Data? = nil, failingPrefix: String? = nil,
-        alteringPrefix: String? = nil
+        alteringPrefix: String? = nil, unreadablePrefix: String? = nil
     ) throws {
         original = bytes ?? FixtureWorld.fixture(fixture)
         try files.addDirectory(at: Self.projectFolder)
         try files.addDirectory(at: Self.appFolder + "/.dependi")
         try files.addFile(at: Self.projectFile, contents: original)
         writer = RecordingWriter(
-            files, failingPrefix: failingPrefix, alteringPrefix: alteringPrefix)
+            files, failingPrefix: failingPrefix, alteringPrefix: alteringPrefix,
+            unreadablePrefix: unreadablePrefix)
     }
 
     var editor: ProjectFileEditor { ProjectFileEditor(files: files, writer: writer) }

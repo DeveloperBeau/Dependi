@@ -24,6 +24,18 @@
 - **Finding:** A pane named `com.mono0926.LicensePlist2` is left alone by a test.
 - **Rule:** Rewrite only an exact match.
 
+## Check the project before the first write
+
+- **Trap:** If init writes its own files first and the project edit is refused after that, the user has half a setup.
+- **Finding:** A double that refuses the dry run leaves the in-memory file system with no `.dependi.json`.
+- **Rule:** Call the editor with a dry run before any write. Do the real edit last, after the other steps.
+
+## A re-run must not replace the first backup
+
+- **Trap:** A backup that init writes on every run holds the edited file after the second run, and the original is lost.
+- **Finding:** The editor returns no lines for a project that is set up, and it writes nothing then. An end-to-end test compares the backup with the original bytes after two runs.
+- **Rule:** Init writes no backup of its own for the project file. Only the editor writes it, only when it changes the file and only when no backup exists. A later edit keeps the backup and says so.
+
 ## Mutation results
 
 Fourteen entries owned by this slice are all killed. Two first came back INVALID because the mutant ignored a closure argument. Use `$0.hasPrefix("")` rather than `true` inside a closure that takes an argument.

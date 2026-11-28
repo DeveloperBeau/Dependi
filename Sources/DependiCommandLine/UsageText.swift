@@ -6,7 +6,7 @@ public enum UsageText {
 
         Commands:
           generate [--single-page]      Write the acknowledgements into the settings bundle.
-          init --project <path> [--dry-run]
+          init --project <path> [--dry-run] [--edit-project]
                                         Add Dependi to the project at <path>.
           version, --version            Print the version.
           help, --help, -h              Print this text.
@@ -17,5 +17,7 @@ public enum UsageText {
         Flags for init:
           --project <path>              The project to change. Required.
           --dry-run                     Show what would change. Write nothing.
+          --edit-project                Also add the bundle, the Run Script phase and the
+                                        sandbox setting to the Xcode project. Keeps the original as a backup.
         """
 }

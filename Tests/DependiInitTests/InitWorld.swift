@@ -38,6 +38,8 @@ final class InitWorld {
             exitStatus: 0, standardOutput: Data((InitWorld.commit + "\n").utf8),
             standardError: Data()))
     var sourceRoot: String? = "/dependi-source"
+    var projectBuildResult: Result<[String], DomainError> = .success([])
+    private(set) var projectBuild = RecordingProjectBuild(.success([]))
     private(set) var console = FakeConsole(answers: [])
     private(set) var runner = FakeProcessRunner(results: [])
     private(set) var linked = RecordingLinkedProducts(
@@ -52,20 +54,24 @@ final class InitWorld {
     func makeFeature() -> InitFeature {
         console = FakeConsole(answers: answers)
         runner = FakeProcessRunner(results: [gitResult])
+        projectBuild = RecordingProjectBuild(projectBuildResult)
         linked = RecordingLinkedProducts(
             LinkedProductSet(
                 products: [], localPackagePaths: localPaths, supportedPlatforms: platforms))
         return InitFeature(
             files: files, directories: files, writer: files, executables: files,
-            targets: StubApplicationTargets(.success(targets)), linkedProducts: linked,
+            targets: StubApplicationTargets(.success(targets)),
+            projectBuild: projectBuild, linkedProducts: linked,
             process: runner,
             prompts: console, output: console, executablePath: "/bin/dependi",
             sourceRoot: sourceRoot,
             wrapperText: Self.wrapper, version: "0.1.1")
     }
 
-    func run(_ path: String = "/proj", dry: Bool = false) throws(DomainError) -> InitOutcome {
-        try makeFeature().run(projectPath: path, isDryRun: dry)
+    func run(
+        _ path: String = "/proj", dry: Bool = false, editsProject: Bool = false
+    ) throws(DomainError) -> InitOutcome {
+        try makeFeature().run(projectPath: path, isDryRun: dry, editsProject: editsProject)
     }
 
     func text(_ path: String) throws -> String {
