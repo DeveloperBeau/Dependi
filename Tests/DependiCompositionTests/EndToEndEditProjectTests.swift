@@ -111,6 +111,40 @@ struct EndToEndEditProjectTests {
         #expect(second.output.contains("Dependi: the Xcode project is already set up."))
     }
 
+    @Test("a later edit after a change by hand keeps the original backup and says so")
+    func laterEditKeepsTheOriginalBackup() throws {
+        let world = try mewWorld()
+        let original = try projectBytes(world)
+        _ = try world.run(arguments(world, edits: true))
+        let edited = try projectBytes(world)
+
+        // Remove the sandbox lines by hand, so the editor has work again.
+        let handEdited = String(decoding: edited, as: UTF8.self)
+            .split(separator: "\n", omittingEmptySubsequences: false)
+            .filter { !$0.contains("ENABLE_USER_SCRIPT_SANDBOXING = NO;") }
+            .joined(separator: "\n")
+        let projectFile = world.project + "/App.xcodeproj/project.pbxproj"
+        try Data(handEdited.utf8).write(to: URL(fileURLWithPath: projectFile))
+
+        let second = try world.run(arguments(world, edits: true))
+        #expect(second.code == 0, "errors: \(second.errors)")
+        #expect(try projectBytes(world) == edited)
+        #expect(try Data(contentsOf: URL(fileURLWithPath: backupPath(world))) == original)
+        let backups = try FileManager.default.contentsOfDirectory(
+            atPath: world.project + "/.dependi"
+        )
+        .filter { $0.contains(".bak") }
+        #expect(backups == ["project.pbxproj.bak"])
+        // The editor prints the resolved path, so match the start and the end of the line.
+        for part in [
+            "Dependi: kept the backup of the original project file at ",
+            "/proj/.dependi/project.pbxproj.bak.",
+        ] {
+            #expect(second.output.contains(part), "missing: \(part)")
+        }
+        #expect(!second.output.contains("backup of the original project file is at"))
+    }
+
     @Test("a damaged project file with the flag fails by name and changes nothing")
     func malformedProjectWithEditProjectChangesNothing() throws {
         let text = try Self.fixtureText
