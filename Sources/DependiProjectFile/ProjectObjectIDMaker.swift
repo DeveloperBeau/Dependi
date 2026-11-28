@@ -15,15 +15,18 @@ struct ProjectObjectIDMaker {
     /// with an id made earlier gives the next id.
     mutating func make(targetID: String, role: String) -> String {
         var counter = 0
-        while true {
-            let digest = SHA256.hash(
-                data: Data("dependi\u{0}\(targetID)\u{0}\(role)\u{0}\(counter)".utf8))
-            let id = digest.prefix(12).map { String(format: "%02X", $0) }.joined()
-            if !existingText.contains(id) && !made.contains(id) {
-                made.insert(id)
-                return id
-            }
+        var id = Self.id(targetID, role, counter)
+        while existingText.contains(id) || made.contains(id) {
             counter += 1
+            id = Self.id(targetID, role, counter)
         }
+        made.insert(id)
+        return id
+    }
+
+    private static func id(_ targetID: String, _ role: String, _ counter: Int) -> String {
+        let digest = SHA256.hash(
+            data: Data("dependi\u{0}\(targetID)\u{0}\(role)\u{0}\(counter)".utf8))
+        return digest.prefix(12).map { String(format: "%02X", $0) }.joined()
     }
 }
