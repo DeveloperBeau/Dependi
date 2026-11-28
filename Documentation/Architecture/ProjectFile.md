@@ -92,7 +92,7 @@ The editor changes the text of `project.pbxproj` and nothing else. It does not p
 5. If the plan has no edits, the editor returns the warning lines only and writes nothing.
 6. `BuildSetupPlan.apply` applies the edits from the last offset to the first, so earlier offsets stay valid.
 7. The editor parses the new bytes and calls `BuildSetupPlan.verify`. It then plans again on the new text. A correct edit leaves nothing to do. If a check fails, nothing is written.
-8. The editor checks if anything is at the backup path. In a dry run the editor returns the lines here, with the backup line that a real run would print. Otherwise it writes the backup, only if none exists, and then replaces the project file.
+8. The editor checks if anything is at the backup path. In a dry run the editor returns the lines here, with the backup line that a real run would print. Otherwise it writes the backup, only if nothing is at the path, reads it back, removes it again if it does not match, and then replaces the project file. Anything at the path that is not a regular file is refused first, in a dry run too.
 
 ### Supported layout
 
@@ -139,7 +139,7 @@ A new id is 24 upper case hex digits. They are the first 12 bytes of a SHA-256 d
 
 ### Backup and write
 
-If nothing is at the backup path, the editor creates the folder of the backup path, writes the bytes of the project file there, reads them back and compares them. The line says "backup of the original". If something is already at the backup path, the editor never writes, replaces or touches it, and it writes no other backup. The backup is always the original. The line then says "kept the backup of the original". A dry run prints the same line as a real run. It writes only when the project changes, so a re-run writes no backup and prints no backup line. The new text goes to a file next to the project file. A move then replaces the project file. If the write fails, the editor removes the temporary file. The caller gives the backup path.
+If nothing is at the backup path, the editor creates the folder of the backup path, writes the bytes of the project file there, reads them back and compares them. The line says "backup of the original". If the readback fails or does not match, the editor removes the backup, writes no project file and reports an error that says so. If a regular file is already at the backup path, the editor keeps it. It never writes, replaces or compares its bytes, and it writes no other backup. If a link, a folder or another item is at the path, the editor refuses and writes nothing. The backup is the original as long as nobody replaced it by hand. The line says "kept the backup of the original". A dry run prints the same line as a real run. It writes only when the project changes, so a re-run writes no backup and prints no backup line. The new text goes to a file next to the project file. A move then replaces the project file. If the write fails, the editor removes the temporary file. The caller gives the backup path.
 
 ### Verify
 

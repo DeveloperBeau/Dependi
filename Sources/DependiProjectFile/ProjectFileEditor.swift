@@ -49,7 +49,7 @@ public struct ProjectFileEditor: Sendable {
             Data(edited), path: model.path, folder: model.folder)
         try plan.verify(before: model, after: after)
         try checkSettled(edited, after: after, target: targetName, bundlePath: settingsBundlePath)
-        let keepsBackup = files.exists(at: backupPath)
+        let keepsBackup = try keepsExistingBackup(at: backupPath)
         let lines =
             plan.lines + [
                 keepsBackup
@@ -92,6 +92,32 @@ public struct ProjectFileEditor: Sendable {
         }
     }
 
+    /// Returns whether a backup is already at the path. Only a regular file counts as a backup.
+    /// A link, a folder or any other item is refused, so that nothing is written over it.
+    private func keepsExistingBackup(at path: String) throws(DomainError) -> Bool {
+        guard files.exists(at: path) else { return false }
+        // A link resolves to another path, so the resolved path of a regular file equals this one.
+        let name = path.split(separator: "/").last.map(String.init) ?? path
+        let isRegular: Bool
+        if let real = try? files.realPath(of: path),
+            let parent = try? files.realPath(of: ProjectPathMath.parent(of: path)),
+            real == (parent == "/" ? "" : parent) + "/" + name,
+            (try? files.readRegularFile(at: real, upToBytes: 0)) != nil
+        {
+            isRegular = true
+        } else {
+            isRegular = false
+        }
+        guard isRegular else {
+            throw .fileUnwritable(
+                path: path,
+                reason:
+                    "something other than a regular file is at the backup path. Move it away, then run again. Nothing was written."
+            )
+        }
+        return true
+    }
+
     /// Writes the backup first, if there is one to write, and reads it back.
     /// Then it replaces the project file in one move.
     private func write(
@@ -100,11 +126,16 @@ public struct ProjectFileEditor: Sendable {
         if let backupPath {
             try writer.createDirectory(at: ProjectPathMath.parent(of: backupPath))
             try writer.write(Data(original), toPath: backupPath)
-            let backup = try files.readRegularFile(
+            let backup = try? files.readRegularFile(
                 at: files.realPath(of: backupPath), upToBytes: ProjectFileLoader.sizeLimit)
-            guard Array(backup) == original else {
-                throw .fileUnwritable(
-                    path: backupPath, reason: "the backup does not match the original")
+            guard let backup, Array(backup) == original else {
+                var reason =
+                    "the backup did not match the original, so it was removed. The project file was not changed."
+                do { try writer.removeItem(at: backupPath) } catch {
+                    reason =
+                        "the backup did not match the original and it could not be removed. Remove it by hand. The project file was not changed."
+                }
+                throw .fileUnwritable(path: backupPath, reason: reason)
             }
         }
         let temporary = realPath + ".dependi-new"

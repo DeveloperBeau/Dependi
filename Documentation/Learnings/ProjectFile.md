@@ -94,7 +94,7 @@
 
 - **Trap:** A backup that is written after the project file, or a project file that is written in place, can leave the user with a broken file and no copy.
 - **Finding:** A recording writer shows the order of the writes. The backup comes first. The new text goes to a temporary file and a move replaces the project file.
-- **Rule:** Write the backup, read it back, then replace the project file in one move. Write nothing when the project needs no change. Write the backup only when none exists. Never replace it, so it is always the original. A later edit prints the kept line.
+- **Rule:** Write the backup, read it back, then replace the project file in one move. Write nothing when the project needs no change. Write the backup only when nothing is at the path. If its readback fails, remove it and write no project file. Keep any regular file at the path on a later edit and print the kept line, but refuse a link, a folder or another item. Never compare a kept backup with the project file, because after the first edit the project file is no longer the original. The backup is the original as long as nobody replaced it by hand.
 
 ## A check that reads the same text proves little
 
