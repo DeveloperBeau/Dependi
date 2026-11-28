@@ -92,7 +92,7 @@ The editor changes the text of `project.pbxproj` and nothing else. It does not p
 5. If the plan has no edits, the editor returns the warning lines only and writes nothing.
 6. `BuildSetupPlan.apply` applies the edits from the last offset to the first, so earlier offsets stay valid.
 7. The editor parses the new bytes and calls `BuildSetupPlan.verify`. It then plans again on the new text. A correct edit leaves nothing to do. If a check fails, nothing is written.
-8. In a dry run the editor returns the lines here. Otherwise it writes the backup and then replaces the project file.
+8. The editor picks the backup path. In a dry run the editor returns the lines here, with the path that a real run would use. Otherwise it writes the backup and then replaces the project file.
 
 ### Supported layout
 
@@ -138,7 +138,7 @@ A new id is 24 upper case hex digits. They are the first 12 bytes of a SHA-256 d
 
 ### Backup and write
 
-The editor writes the original bytes to the backup path before it writes the project file. It reads the backup back and compares the bytes. It writes only when the project changes, so a re-run never replaces a good backup with edited bytes. The new text goes to a file next to the project file. A move then replaces the project file. If the write fails, the editor removes the temporary file. The caller gives the backup path. Before the backup, the editor creates the folder of the backup path, and only when it writes.
+The editor writes the bytes of the project file to a backup before it writes the project file. It reads the backup back and compares the bytes. It keeps the first backup for ever. If nothing is at the backup path, the backup goes there and the line says "backup of the original". Otherwise the editor leaves that file alone and writes to the path with `.2`, then `.3`, and so on. It uses the lowest number with nothing at its path. The line then says "backup of the project file before this edit". If every number up to `.999` is taken, the editor refuses, names the folder and writes nothing. It writes only when the project changes, so a re-run writes no backup and prints no backup line. The new text goes to a file next to the project file. A move then replaces the project file. If the write fails, the editor removes the temporary file. The caller gives the backup path. Before the backup, the editor creates the folder of the backup path, and only when it writes.
 
 ### Verify
 
