@@ -92,7 +92,7 @@ The editor changes the text of `project.pbxproj` and nothing else. It does not p
 5. If the plan has no edits, the editor returns the warning lines only and writes nothing.
 6. `BuildSetupPlan.apply` applies the edits from the last offset to the first, so earlier offsets stay valid.
 7. The editor parses the new bytes and calls `BuildSetupPlan.verify`. It then plans again on the new text. A correct edit leaves nothing to do. If a check fails, nothing is written.
-8. In a dry run the editor returns the lines here. Otherwise it writes the backup and then replaces the project file.
+8. The editor checks if anything is at the backup path. In a dry run the editor returns the lines here, with the backup line that a real run would print. Otherwise it writes the backup, only if none exists, and then replaces the project file.
 
 ### Supported layout
 
@@ -128,16 +128,18 @@ The editor refuses with `DomainError` and writes nothing when:
 - the target name is unknown. The message lists the targets.
 - the bundle path is not inside the project folder, or its last part is not `Settings.bundle`
 - the target has no Copy Bundle Resources phase. Dependi does not create one.
+- the target has more than one Copy Bundle Resources phase. The message tells the user to merge them in Xcode.
+- a build configuration of the target sets a conditional key such as `ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]`, whatever its value. The message names the configuration and the key. A plain `= NO` would not win over it.
 - the target copies another `Settings.bundle`, because two bundles with one name collide in the product
 - a synchronized folder leaves the bundle out of the target through a membership exception
 
 ### Object ids
 
-A new id is 24 upper case hex digits. They are the first 12 bytes of a SHA-256 digest of a fixed prefix, the target id, a role and a counter. The roles are `fileReference`, `buildFile` and `scriptPhase`. The same input always gives the same id, so a test can write the expected text by hand. An id that appears anywhere in the project text, even in a comment, is skipped. So is an id that the run made before. This also covers projects with hand-made ids.
+A new id is 24 upper case hex digits. They are the first 12 bytes of a SHA-256 digest of a fixed prefix, the target id, a role and a counter. The roles are `fileReference`, `buildFile` and `scriptPhase`. The same input always gives the same id, so a test can write the expected text by hand. An id that appears anywhere in the project text, even in a comment, is skipped. So is an id that the run made before. This also covers projects with hand-made ids. The search stops after 1000 ids, so it cannot loop without end. The planner then refuses and names the role of the missing id.
 
 ### Backup and write
 
-The editor writes the original bytes to the backup path before it writes the project file. It reads the backup back and compares the bytes. It writes only when the project changes, so a re-run never replaces a good backup with edited bytes. The new text goes to a file next to the project file. A move then replaces the project file. If the write fails, the editor removes the temporary file. The caller gives the backup path. Before the backup, the editor creates the folder of the backup path, and only when it writes.
+If nothing is at the backup path, the editor creates the folder of the backup path, writes the bytes of the project file there, reads them back and compares them. The line says "backup of the original". If something is already at the backup path, the editor never writes, replaces or touches it, and it writes no other backup. The backup is always the original. The line then says "kept the backup of the original". A dry run prints the same line as a real run. It writes only when the project changes, so a re-run writes no backup and prints no backup line. The new text goes to a file next to the project file. A move then replaces the project file. If the write fails, the editor removes the temporary file. The caller gives the backup path.
 
 ### Verify
 

@@ -78,6 +78,22 @@ struct PBXTextScannerTests {
     }
 
     @Test(
+        "a list item that is a dictionary or a list starts after the closer of the item before it")
+    func listItemsThatAreBrackets() throws {
+        let scanner = try scan(
+            project(
+                "\t\tA = {\n\t\t\tlist = (\n\t\t\t\t{ a = b; },\n\t\t\t\t( p, q, ),\n\t\t\t\ty,\n\t\t\t);\n\t\t};\n"
+            ))
+        let object = try #require(scanner.object("A"))
+        let list = try #require(try scanner.entry("list", inDictionaryAt: object.valueFirst))
+        let open = list.valueFirst
+        // The spans after the list opener are `{ a = b ; } ,` then `( p , q , ) ,` then `y ,`.
+        let starts = try scanner.itemStarts(ofListAt: open)
+        #expect(starts == [open + 1, open + 8, open + 15])
+        #expect(starts.map { scanner.text($0) } == ["{", "(", "y"])
+    }
+
+    @Test(
         "text that is not a well formed project fails",
         arguments: [
             "{ objects = { A = \"open; }; }",

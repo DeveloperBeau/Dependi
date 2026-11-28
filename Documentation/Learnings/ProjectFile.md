@@ -78,6 +78,12 @@
 - **Finding:** The same project, spelled five ways, must give the same answer. The scanner gives the text without quotes, so all spellings match.
 - **Rule:** Compare the text of a key or a value without its quotes. Count `NO` and `"NO"` as done.
 
+## A conditional key can win over the plain key
+
+- **Trap:** A build configuration can hold `"ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]" = YES;`. The planner that looks for the exact key does not see it, adds a plain `= NO` and reports success. The conditional `YES` still wins.
+- **Finding:** The scanner gives the key without quotes, so the conditional key starts with the plain key and a `[`.
+- **Rule:** Refuse a target that has a conditional form of the key in any configuration, whatever the value, and also when the plain key is already `NO`. Name the configuration and the key. The planner runs before any write, so nothing is written.
+
 ## A section can be missing
 
 - **Trap:** An older project has no `PBXShellScriptBuildPhase` section at all. An insert into a section that is not there fails or lands in the wrong place.
@@ -88,7 +94,7 @@
 
 - **Trap:** A backup that is written after the project file, or a project file that is written in place, can leave the user with a broken file and no copy.
 - **Finding:** A recording writer shows the order of the writes. The backup comes first. The new text goes to a temporary file and a move replaces the project file.
-- **Rule:** Write the backup, read it back, then replace the project file in one move. Write nothing when the project needs no change, so a re-run keeps the first backup.
+- **Rule:** Write the backup, read it back, then replace the project file in one move. Write nothing when the project needs no change. Write the backup only when none exists. Never replace it, so it is always the original. A later edit prints the kept line.
 
 ## A check that reads the same text proves little
 

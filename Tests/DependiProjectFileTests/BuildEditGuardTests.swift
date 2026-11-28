@@ -56,6 +56,61 @@ struct BuildEditGuardTests {
             bundle: "Fila/Settings.bundle")
     }
 
+    @Test("a conditional sandbox key in one configuration is refused and nothing is written")
+    func conditionalKeyInRealProject() throws {
+        // The line goes where Xcode sorts it, after ENABLE_TESTABILITY, in the Debug configuration.
+        var source = text("old-format-mew")
+        let configuration = try #require(
+            source.range(of: "D2568DFC214BCA3C00FCA44A /* Debug */ = {"))
+        let anchor = try #require(
+            source.range(
+                of: "\t\t\t\tENABLE_TESTABILITY = YES;\n",
+                range: configuration.upperBound..<source.endIndex))
+        source.insert(
+            contentsOf: "\t\t\t\t\"ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]\" = YES;\n",
+            at: anchor.upperBound)
+        try expectRefusal(
+            Data(source.utf8),
+            reason: Self.safely
+                + "the Debug configuration of MewTestsApp sets the conditional key ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]. Remove it in Xcode, then run again"
+        )
+    }
+
+    @Test("a conditional sandbox key is refused even when the plain key is already NO")
+    func conditionalKeyBesidePlainNo() throws {
+        try expectRefusal(
+            Data(
+                mini(
+                    settings:
+                        "{\n\t\t\t\tENABLE_USER_SCRIPT_SANDBOXING = NO;\n\t\t\t\t\"ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]\" = YES;\n\t\t\t}"
+                ).utf8),
+            reason: Self.safely
+                + "the Debug configuration of App sets the conditional key ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]. Remove it in Xcode, then run again",
+            target: "App")
+    }
+
+    @Test("a target with two Copy Bundle Resources phases is refused and nothing is written")
+    func twoResourcesPhases() throws {
+        var source = mini(settings: nil)
+        source = replacing(
+            source, "\t\t\t\tE0 /* Resources */,\n",
+            with: "\t\t\t\tE0 /* Resources */,\n\t\t\t\tE1 /* Resources */,\n")
+        source = replacing(
+            source, "/* End PBXResourcesBuildPhase section */",
+            with:
+                "\t\tE1 /* Resources */ = {\n\t\t\tisa = PBXResourcesBuildPhase;\n\t\t\tbuildActionMask = 2147483647;\n\t\t\tfiles = (\n\t\t\t);\n\t\t\trunOnlyForDeploymentPostprocessing = 0;\n\t\t};\n/* End PBXResourcesBuildPhase section */"
+        )
+        let world = try EditWorld("x", bytes: Data(source.utf8))
+        #expect(
+            throws: DomainError.initRefused(
+                reason:
+                    "App has more than one Copy Bundle Resources phase. Merge them in Xcode, then run again."
+            )
+        ) { try world.configure(target: "App", bundle: "Settings.bundle") }
+        #expect(world.writer.records.isEmpty)
+        #expect(try world.currentBytes() == Data(source.utf8))
+    }
+
     @Test("a build setting that shares its line is refused")
     func settingNotOnItsOwnLine() throws {
         try expectRefusal(

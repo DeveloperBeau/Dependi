@@ -43,14 +43,19 @@ struct BuildSetupPlanner {
         }
         let relative = String(bundle.dropFirst(prefix.count))
         let phases = try model.strings(object, "buildPhases")
-        guard
-            let resources = phases.enumerated().compactMap({ index, id in
-                model.object(id, isa: "PBXResourcesBuildPhase").map { (index, id, $0) }
-            }).first
-        else {
+        let resourcePhases = phases.enumerated().compactMap { index, id in
+            model.object(id, isa: "PBXResourcesBuildPhase").map { (index, id, $0) }
+        }
+        guard let resources = resourcePhases.first else {
             throw .initRefused(
                 reason:
                     "\(targetName) has no Copy Bundle Resources phase. Add one in Xcode, then run again."
+            )
+        }
+        guard resourcePhases.count == 1 else {
+            throw .initRefused(
+                reason:
+                    "\(targetName) has more than one Copy Bundle Resources phase. Merge them in Xcode, then run again."
             )
         }
         try planBundle(
@@ -60,6 +65,17 @@ struct BuildSetupPlanner {
             target: target, phases: phases, resourcesID: resources.1, resourcesIndex: resources.0)
         try planSandboxSetting(target: target, object: object)
         return plan
+    }
+
+    private mutating func newID(
+        target: (id: String, name: String), role: String
+    ) throws(DomainError) -> String {
+        guard let id = ids.make(targetID: target.id, role: role) else {
+            throw .unsafeProject(
+                path: model.path,
+                why: "no free object id was found for the \(role) of \(target.name)")
+        }
+        return id
     }
 
     // MARK: Settings.bundle
@@ -89,10 +105,10 @@ struct BuildSetupPlanner {
         if let existing = existingReference(at: bundle) {
             referenceID = existing
         } else {
-            referenceID = ids.make(targetID: target.id, role: "fileReference")
+            referenceID = try newID(target: target, role: "fileReference")
             try addFileReference(id: referenceID, relative: relative)
         }
-        let buildFileID = ids.make(targetID: target.id, role: "buildFile")
+        let buildFileID = try newID(target: target, role: "buildFile")
         try insertSectionLine(
             "\t\t\(buildFileID) /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = \(referenceID) /* Settings.bundle */; };\n",
             id: buildFileID, isa: "PBXBuildFile")
@@ -201,7 +217,7 @@ struct BuildSetupPlanner {
             }
             return
         }
-        let id = ids.make(targetID: target.id, role: "scriptPhase")
+        let id = try newID(target: target, role: "scriptPhase")
         try insertShellPhase(id: id)
         try insertListLine(
             "\(id) /* Dependi */", objectID: target.id, key: "buildPhases", after: resourcesID)
@@ -276,6 +292,14 @@ struct BuildSetupPlanner {
             }
             let name = configuration["name"] as? String ?? configID
             let entries = try scanner.entries(ofDictionaryAt: settings.valueFirst)
+            // A conditional key can still win over the plain one, so it is never edited around.
+            if let conditional = entries.first(where: { $0.key.hasPrefix(Self.settingKey + "[") }) {
+                throw .unsafeProject(
+                    path: model.path,
+                    why:
+                        "the \(name) configuration of \(target.name) sets the conditional key \(conditional.key). Remove it in Xcode, then run again"
+                )
+            }
             if let existing = entries.first(where: { $0.key == Self.settingKey }) {
                 if existing.valueFirst == existing.valueLast,
                     scanner.text(existing.valueFirst) == "NO"
