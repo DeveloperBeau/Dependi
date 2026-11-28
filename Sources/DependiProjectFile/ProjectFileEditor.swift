@@ -73,9 +73,6 @@ public struct ProjectFileEditor: Sendable {
 
     /// Refuses text that the planner does not lay out correctly.
     private static func checkLayout(_ bytes: [UInt8], path: String) throws(DomainError) {
-        guard String(data: Data(bytes), encoding: .utf8) != nil else {
-            throw .unsafeProject(path: path, why: "the text is not UTF-8")
-        }
         if bytes.contains(0x0D) {
             throw .unsafeProject(path: path, why: "the lines end with CR LF")
         }
