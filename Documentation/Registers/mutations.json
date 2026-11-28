@@ -3920,5 +3920,13 @@
     "replace": "\"files\", \"children\", \"buildPhases\", \"buildSettings\", \"path\", \"sourceTree\",",
     "test": "pathAndSourceTreeAreRefused",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "reference-first-in-file",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": ".min { $0.index < $1.index }?.id",
+    "replace": ".min { $0.index > $1.index }?.id",
+    "test": "firstOfTwoReferencesIsReused"
   }
 ]
