@@ -1,0 +1,916 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0FA35DEA813684223A6679FB /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 0FA340492A8B76F051F75FD3 /* AppIcon.icon */; };
+		0FA3AA8D21392AEFF02C81AA /* HealthTripRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3E4340E10D97F838BE4EA /* HealthTripRecorder.swift */; };
+		0FA34571E61D5B5376478C83 /* StatusWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3E4F7FE42CF6A6C8098AC /* StatusWidget.swift */; };
+		0FA36E9BA6A598E3D4E9FC9E /* TripViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3D062240680386D956176 /* TripViews.swift */; };
+		0FA38B2F78A1A177EE03B3F8 /* TripControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA33AF77FF8742D279D8C5E /* TripControls.swift */; };
+		0FA33D161509DED340841E2B /* OverlandAppIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3BE36FCCC7B08321D3B28 /* OverlandAppIntents.swift */; };
+		0FA388001240FD65C4469F9F /* TripIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA363257C4BFB8311081ABB /* TripIntents.swift */; };
+		0FA3BC5894F86DF912DE3564 /* TripIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA363257C4BFB8311081ABB /* TripIntents.swift */; };
+		0FA32669E011B5C5BD0C537F /* SharedStateObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA31EEAFEE992D486B6DD53 /* SharedStateObserver.swift */; };
+		0FA3AA0AAB12CD34EF56000A /* WifiOnlySending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA09AB12CD34EF560009 /* WifiOnlySending.swift */; };
+		0FA3AA18AB12CD34EF560018 /* ReducedResourceSending.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA17AB12CD34EF560017 /* ReducedResourceSending.swift */; };
+		0FA32D2DFE72CCAF1CBCC987 /* SharedTripState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3B7838C357C30292FEB0B /* SharedTripState.swift */; };
+		0FA3AA02AB12CD34EF560002 /* TripModes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA01AB12CD34EF560001 /* TripModes.swift */; };
+		0FA3AA03AB12CD34EF560003 /* TripModes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA01AB12CD34EF560001 /* TripModes.swift */; };
+		0FA3266C3526D9E8A8BDD619 /* SharedTripState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3B7838C357C30292FEB0B /* SharedTripState.swift */; };
+		0FA3A3F72F12736301815740 /* GLTripActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3335218A802C5C01E5BB3 /* GLTripActions.m */; };
+		0F3E5210201E543200DCFAA4 /* OpenSansCondensed-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F3E520E201E543200DCFAA4 /* OpenSansCondensed-Bold.ttf */; };
+		0F3E5211201E543200DCFAA4 /* OpenSansCondensed-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F3E520F201E543200DCFAA4 /* OpenSansCondensed-Light.ttf */; };
+		0F3E5213201E551000DCFAA4 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F3E5212201E54FB00DCFAA4 /* OpenSans-Light.ttf */; };
+		0F444F0C1BD04A7E00106C2E /* TripModeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F444F0B1BD04A7E00106C2E /* TripModeViewController.m */; };
+		0FA3AA08AB12CD34EF560008 /* TripModeIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA07AB12CD34EF560007 /* TripModeIcons.swift */; };
+		0FA3AA0CAB12CD34EF56000C /* SettingsSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA0BAB12CD34EF56000B /* SettingsSliders.swift */; };
+		0FA3AA0EAB12CD34EF56000E /* AutoStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA0DAB12CD34EF56000D /* AutoStop.swift */; };
+		0FA3AA10AB12CD34EF560010 /* TripEndPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA0FAB12CD34EF56000F /* TripEndPrompt.swift */; };
+		0FA3AA12AB12CD34EF560012 /* MapPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA11AB12CD34EF560011 /* MapPath.swift */; };
+		0FA3AA14AB12CD34EF560014 /* FullMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA13AB12CD34EF560013 /* FullMapViewController.swift */; };
+		0FA3AA16AB12CD34EF560016 /* Barometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA15AB12CD34EF560015 /* Barometer.swift */; };
+		0FA3AA1AAB12CD34EF56001A /* SplitLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA19AB12CD34EF560019 /* SplitLayout.swift */; };
+		0FA3AA05AB12CD34EF560005 /* TripModesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA3AA04AB12CD34EF560004 /* TripModesViewController.swift */; };
+		0F70ECDA1FA663F2006F43C2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F70ECD91FA663F2006F43C2 /* SystemConfiguration.framework */; };
+		0FA11FBA259623D911A653DC /* TripActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA14C96E8BC2D9C270B9238 /* TripActivityAttributes.swift */; };
+		0FA1373CC66D67A35F3F31C6 /* OverlandLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0FA1D141E0978A09277D576D /* OverlandLiveActivity.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0FA1409378B424718012BD53 /* TripActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA14C96E8BC2D9C270B9238 /* TripActivityAttributes.swift */; };
+		0FA16490B3131D33B0CB1A0C /* OverlandLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA16DCE2F24E90AC6425AE0 /* OverlandLiveActivityBundle.swift */; };
+		0FA166B2F344A3980F1227C2 /* TripModes.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FA18726CB75B3B166029F8E /* TripModes.xcassets */; };
+		0FA16CC8A66B372B06DD56CB /* TripLiveActivityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA128E0AE4C423AD6DEC0EE /* TripLiveActivityController.swift */; };
+		0FA1E0C0FF1A2B3C4D5E6F70 /* TripEndConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA1E0C0FF1A2B3C4D5E6F71 /* TripEndConfirmation.swift */; };
+		0FA1CFD434AD1CBBC2E9E03C /* TripModes.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FA18726CB75B3B166029F8E /* TripModes.xcassets */; };
+		0FA1F663468D6341CBC4129D /* TripLiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA17CBB687B2DDE01176F37 /* TripLiveActivityWidget.swift */; };
+		0FA2C0DE5E1F00000000A002 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0FA2C0DE5E1F00000000A001 /* PrivacyInfo.xcprivacy */; };
+		0FA2C0DE5E1F00000000B003 /* TipJarStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FA2C0DE5E1F00000000B002 /* TipJarStore.swift */; };
+		0FABDE372B329422003ACD20 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FABDE362B329422003ACD20 /* StoreKit.framework */; };
+		0FABDE3A2B329448003ACD20 /* TipJarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FABDE392B329448003ACD20 /* TipJarViewController.m */; };
+		0FAC1FEB2B255CA60007F3B1 /* NSArray+map.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC1FEA2B255CA60007F3B1 /* NSArray+map.m */; };
+		0FAC1FEE2B25FBB50007F3B1 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC1FED2B25FBB50007F3B1 /* SceneDelegate.m */; };
+		0FB85AC01BE0151800F25126 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FB85ABF1BE0151800F25126 /* ExternalAccessory.framework */; };
+		0FC4E00A2D0B000000000001 /* CustomHeadersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FC4E00A2D0B000000000003 /* CustomHeadersViewController.m */; };
+		0FCF53251F81AB0800577A0F /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FCF53241F81AB0800577A0F /* UserNotifications.framework */; };
+		0FCF532E1F83FDBC00577A0F /* EndpointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FCF532D1F83FDBC00577A0F /* EndpointViewController.m */; };
+		0FE280B12B0180620062936E /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0FE280B02B0180620062936E /* Settings.bundle */; };
+		0FF590302B1FA1D500E3AAA3 /* TripSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FF5902F2B1FA1D500E3AAA3 /* TripSettingsViewController.m */; };
+		0FFD31571BAB7A34009B3A03 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFD31561BAB7A34009B3A03 /* main.m */; };
+		0FFD315A1BAB7A34009B3A03 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFD31591BAB7A34009B3A03 /* AppDelegate.m */; };
+		0FFD315D1BAB7A34009B3A03 /* TrackingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFD315C1BAB7A34009B3A03 /* TrackingViewController.m */; };
+		0FFD31601BAB7A34009B3A03 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFD315F1BAB7A34009B3A03 /* SettingsViewController.m */; };
+		0FFD31631BAB7A34009B3A03 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FFD31611BAB7A34009B3A03 /* Main.storyboard */; };
+		0FFD31651BAB7A34009B3A03 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FFD31641BAB7A34009B3A03 /* Assets.xcassets */; };
+		0FFD31681BAB7A34009B3A03 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FFD31661BAB7A34009B3A03 /* LaunchScreen.storyboard */; };
+		0FFD31731BAB7BEA009B3A03 /* GLManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFD31721BAB7BEA009B3A03 /* GLManager.m */; };
+		0FA2C0DE5E1F00000000C003 /* GLCloudFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA2C0DE5E1F00000000C002 /* GLCloudFileWriter.m */; };
+		0FFD31781BAB7C7F009B3A03 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FFD31741BAB7C7F009B3A03 /* CoreLocation.framework */; };
+		0FFD31791BAB7C7F009B3A03 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FFD31751BAB7C7F009B3A03 /* CoreMotion.framework */; };
+		0FFD317A1BAB7C7F009B3A03 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FFD31761BAB7C7F009B3A03 /* libsqlite3.tbd */; };
+		0FFD317B1BAB7C7F009B3A03 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FFD31771BAB7C7F009B3A03 /* UIKit.framework */; };
+		0FFD317F1BAB7CC7009B3A03 /* LOLDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FFD317E1BAB7CC7009B3A03 /* LOLDatabase.m */; };
+		6D2858D1222B133400F525E1 /* WifiZoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2858D0222B133400F525E1 /* WifiZoneViewController.m */; };
+		F87824B3678FD75F13286822 /* libPods-Overland.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0A408349E469AC6E6DA46BA /* libPods-Overland.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0FA1D78B3DD19B9ED809C876 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0FFD314A1BAB7A34009B3A03 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0FA11B785280455F5A840E1D;
+			remoteInfo = OverlandLiveActivity;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0FA1FC07ED2CFED5ABDD73A1 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				0FA1373CC66D67A35F3F31C6 /* OverlandLiveActivity.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0FA340492A8B76F051F75FD3 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		0FA3E4340E10D97F838BE4EA /* HealthTripRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthTripRecorder.swift; sourceTree = "<group>"; };
+		0FA3E4F7FE42CF6A6C8098AC /* StatusWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusWidget.swift; sourceTree = "<group>"; };
+		0FA3D062240680386D956176 /* TripViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripViews.swift; sourceTree = "<group>"; };
+		0FA33AF77FF8742D279D8C5E /* TripControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripControls.swift; sourceTree = "<group>"; };
+		0FA3BE36FCCC7B08321D3B28 /* OverlandAppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlandAppIntents.swift; sourceTree = "<group>"; };
+		0FA363257C4BFB8311081ABB /* TripIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripIntents.swift; sourceTree = "<group>"; };
+		0FA368263F0C8CF7E9440051 /* OverlandLiveActivity.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OverlandLiveActivity.entitlements; sourceTree = "<group>"; };
+		0FA31EEAFEE992D486B6DD53 /* SharedStateObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateObserver.swift; sourceTree = "<group>"; };
+		0FA3AA09AB12CD34EF560009 /* WifiOnlySending.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WifiOnlySending.swift; sourceTree = "<group>"; };
+		0FA3AA17AB12CD34EF560017 /* ReducedResourceSending.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReducedResourceSending.swift; sourceTree = "<group>"; };
+		0FA3B7838C357C30292FEB0B /* SharedTripState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedTripState.swift; sourceTree = "<group>"; };
+		0FA3AA01AB12CD34EF560001 /* TripModes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripModes.swift; sourceTree = "<group>"; };
+		0FA3335218A802C5C01E5BB3 /* GLTripActions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GLTripActions.m; sourceTree = "<group>"; };
+		0FA37F96307B5014EFE10FFA /* GLTripActions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLTripActions.h; sourceTree = "<group>"; };
+		0F3E520E201E543200DCFAA4 /* OpenSansCondensed-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSansCondensed-Bold.ttf"; path = "Fonts/OpenSansCondensed-Bold.ttf"; sourceTree = SOURCE_ROOT; };
+		0F3E520F201E543200DCFAA4 /* OpenSansCondensed-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSansCondensed-Light.ttf"; path = "Fonts/OpenSansCondensed-Light.ttf"; sourceTree = SOURCE_ROOT; };
+		0F3E5212201E54FB00DCFAA4 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Light.ttf"; path = "Fonts/OpenSans-Light.ttf"; sourceTree = SOURCE_ROOT; };
+		0F444F0A1BD04A7E00106C2E /* TripModeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TripModeViewController.h; sourceTree = "<group>"; };
+		0F444F0B1BD04A7E00106C2E /* TripModeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TripModeViewController.m; sourceTree = "<group>"; };
+		0FA3AA07AB12CD34EF560007 /* TripModeIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripModeIcons.swift; sourceTree = "<group>"; };
+		0FA3AA0BAB12CD34EF56000B /* SettingsSliders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSliders.swift; sourceTree = "<group>"; };
+		0FA3AA0DAB12CD34EF56000D /* AutoStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoStop.swift; sourceTree = "<group>"; };
+		0FA3AA0FAB12CD34EF56000F /* TripEndPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripEndPrompt.swift; sourceTree = "<group>"; };
+		0FA3AA11AB12CD34EF560011 /* MapPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPath.swift; sourceTree = "<group>"; };
+		0FA3AA13AB12CD34EF560013 /* FullMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullMapViewController.swift; sourceTree = "<group>"; };
+		0FA3AA15AB12CD34EF560015 /* Barometer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Barometer.swift; sourceTree = "<group>"; };
+		0FA3AA19AB12CD34EF560019 /* SplitLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitLayout.swift; sourceTree = "<group>"; };
+		0FA3AA04AB12CD34EF560004 /* TripModesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripModesViewController.swift; sourceTree = "<group>"; };
+		0F702B012B2E1F670076E6B9 /* Overland-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Overland-Bridging-Header.h"; sourceTree = "<group>"; };
+		0F70ECD91FA663F2006F43C2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		0FA128E0AE4C423AD6DEC0EE /* TripLiveActivityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripLiveActivityController.swift; sourceTree = "<group>"; };
+		0FA1E0C0FF1A2B3C4D5E6F71 /* TripEndConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripEndConfirmation.swift; sourceTree = "<group>"; };
+		0FA13CEC66AD199B21AD42D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0FA14C96E8BC2D9C270B9238 /* TripActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripActivityAttributes.swift; sourceTree = "<group>"; };
+		0FA16DCE2F24E90AC6425AE0 /* OverlandLiveActivityBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlandLiveActivityBundle.swift; sourceTree = "<group>"; };
+		0FA17CBB687B2DDE01176F37 /* TripLiveActivityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripLiveActivityWidget.swift; sourceTree = "<group>"; };
+		0FA18726CB75B3B166029F8E /* TripModes.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TripModes.xcassets; sourceTree = "<group>"; };
+		0FA1D141E0978A09277D576D /* OverlandLiveActivity.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OverlandLiveActivity.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FA2C0DE5E1F00000000A001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		0FA2C0DE5E1F00000000B002 /* TipJarStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipJarStore.swift; sourceTree = "<group>"; };
+		0FABDE362B329422003ACD20 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		0FABDE382B329448003ACD20 /* TipJarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TipJarViewController.h; sourceTree = "<group>"; };
+		0FABDE392B329448003ACD20 /* TipJarViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TipJarViewController.m; sourceTree = "<group>"; };
+		0FABDE3B2B34F642003ACD20 /* Tips.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tips.storekit; sourceTree = "<group>"; };
+		0FAC1FEA2B255CA60007F3B1 /* NSArray+map.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSArray+map.m"; sourceTree = "<group>"; };
+		0FAC1FEC2B255D460007F3B1 /* NSArray+map.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray+map.h"; sourceTree = "<group>"; };
+		0FAC1FED2B25FBB50007F3B1 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		0FAC1FEF2B25FBC10007F3B1 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		0FB85ABD1BE0151300F25126 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		0FB85ABF1BE0151800F25126 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		0FC4E00A2D0B000000000002 /* CustomHeadersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomHeadersViewController.h; sourceTree = "<group>"; };
+		0FC4E00A2D0B000000000003 /* CustomHeadersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomHeadersViewController.m; sourceTree = "<group>"; };
+		0FCF53241F81AB0800577A0F /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		0FCF532C1F83FDBC00577A0F /* EndpointViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EndpointViewController.h; sourceTree = "<group>"; };
+		0FCF532D1F83FDBC00577A0F /* EndpointViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EndpointViewController.m; sourceTree = "<group>"; };
+		0FE280B02B0180620062936E /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		0FF5902F2B1FA1D500E3AAA3 /* TripSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TripSettingsViewController.m; sourceTree = "<group>"; };
+		0FF590312B1FA22E00E3AAA3 /* TripSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TripSettingsViewController.h; sourceTree = "<group>"; };
+		0FFD31521BAB7A34009B3A03 /* Overland.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Overland.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FFD31561BAB7A34009B3A03 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0FFD31581BAB7A34009B3A03 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		0FFD31591BAB7A34009B3A03 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		0FFD315B1BAB7A34009B3A03 /* TrackingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TrackingViewController.h; sourceTree = "<group>"; };
+		0FFD315C1BAB7A34009B3A03 /* TrackingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrackingViewController.m; sourceTree = "<group>"; };
+		0FFD315E1BAB7A34009B3A03 /* SettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		0FFD315F1BAB7A34009B3A03 /* SettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		0FFD31621BAB7A34009B3A03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0FFD31641BAB7A34009B3A03 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0FFD31671BAB7A34009B3A03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0FFD31691BAB7A34009B3A03 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0FFD31711BAB7BEA009B3A03 /* GLManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLManager.h; sourceTree = "<group>"; };
+		0FFD31721BAB7BEA009B3A03 /* GLManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLManager.m; sourceTree = "<group>"; };
+		0FA2C0DE5E1F00000000C001 /* GLCloudFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLCloudFileWriter.h; sourceTree = "<group>"; };
+		0FA2C0DE5E1F00000000C002 /* GLCloudFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLCloudFileWriter.m; sourceTree = "<group>"; };
+		0FFD31741BAB7C7F009B3A03 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		0FFD31751BAB7C7F009B3A03 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		0FFD31761BAB7C7F009B3A03 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		0FFD31771BAB7C7F009B3A03 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		0FFD317D1BAB7CC7009B3A03 /* LOLDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LOLDatabase.h; sourceTree = "<group>"; };
+		0FFD317E1BAB7CC7009B3A03 /* LOLDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LOLDatabase.m; sourceTree = "<group>"; };
+		251EBCB0197B8F3891607241 /* Pods-Overland.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Overland.release.xcconfig"; path = "Pods/Target Support Files/Pods-Overland/Pods-Overland.release.xcconfig"; sourceTree = "<group>"; };
+		378F9BC146097DEF5A9CCBF9 /* Pods-GPSLogger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GPSLogger.release.xcconfig"; path = "Pods/Target Support Files/Pods-GPSLogger/Pods-GPSLogger.release.xcconfig"; sourceTree = "<group>"; };
+		3CCE0D26F93B3FCD5A4A1D16 /* libPods-GPSLogger.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GPSLogger.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4321137E3D59A45E6CD72293 /* Pods-GPSLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GPSLogger.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GPSLogger/Pods-GPSLogger.debug.xcconfig"; sourceTree = "<group>"; };
+		6D2858CF222B133400F525E1 /* WifiZoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WifiZoneViewController.h; sourceTree = "<group>"; };
+		6D2858D0222B133400F525E1 /* WifiZoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WifiZoneViewController.m; sourceTree = "<group>"; };
+		6DEC9B3621F3F88500D9E8C4 /* Overland.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Overland.entitlements; sourceTree = "<group>"; };
+		E0A408349E469AC6E6DA46BA /* libPods-Overland.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Overland.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4DFFAB32440A8511E1D869A /* Pods-Overland.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Overland.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Overland/Pods-Overland.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0FA121C0D145127EF2E81D5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0FFD314F1BAB7A34009B3A03 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0FABDE372B329422003ACD20 /* StoreKit.framework in Frameworks */,
+				0F70ECDA1FA663F2006F43C2 /* SystemConfiguration.framework in Frameworks */,
+				0FCF53251F81AB0800577A0F /* UserNotifications.framework in Frameworks */,
+				0FB85AC01BE0151800F25126 /* ExternalAccessory.framework in Frameworks */,
+				0FFD31781BAB7C7F009B3A03 /* CoreLocation.framework in Frameworks */,
+				0FFD31791BAB7C7F009B3A03 /* CoreMotion.framework in Frameworks */,
+				0FFD317A1BAB7C7F009B3A03 /* libsqlite3.tbd in Frameworks */,
+				0FFD317B1BAB7C7F009B3A03 /* UIKit.framework in Frameworks */,
+				F87824B3678FD75F13286822 /* libPods-Overland.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0FA3304F6CF12E6DB41EF33A /* Integrations */ = {
+			isa = PBXGroup;
+			children = (
+				0FA31EEAFEE992D486B6DD53 /* SharedStateObserver.swift */,
+				0FA3AA09AB12CD34EF560009 /* WifiOnlySending.swift */,
+				0FA3AA17AB12CD34EF560017 /* ReducedResourceSending.swift */,
+				0FA3BE36FCCC7B08321D3B28 /* OverlandAppIntents.swift */,
+				0FA3E4340E10D97F838BE4EA /* HealthTripRecorder.swift */,
+			);
+			path = Integrations;
+			sourceTree = "<group>";
+		};
+		0FA320A51CB2D01CE6CD6EF7 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				0FA3B7838C357C30292FEB0B /* SharedTripState.swift */,
+				0FA3AA01AB12CD34EF560001 /* TripModes.swift */,
+				0FA363257C4BFB8311081ABB /* TripIntents.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		0BE775F16162CE9DF6AE0775 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0FABDE362B329422003ACD20 /* StoreKit.framework */,
+				0F70ECD91FA663F2006F43C2 /* SystemConfiguration.framework */,
+				0FCF53241F81AB0800577A0F /* UserNotifications.framework */,
+				0FB85ABF1BE0151800F25126 /* ExternalAccessory.framework */,
+				0FB85ABD1BE0151300F25126 /* CoreBluetooth.framework */,
+				0FFD31741BAB7C7F009B3A03 /* CoreLocation.framework */,
+				0FFD31751BAB7C7F009B3A03 /* CoreMotion.framework */,
+				0FFD31761BAB7C7F009B3A03 /* libsqlite3.tbd */,
+				0FFD31771BAB7C7F009B3A03 /* UIKit.framework */,
+				3CCE0D26F93B3FCD5A4A1D16 /* libPods-GPSLogger.a */,
+				E0A408349E469AC6E6DA46BA /* libPods-Overland.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0F3E520D201E515800DCFAA4 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				0F3E5212201E54FB00DCFAA4 /* OpenSans-Light.ttf */,
+				0F3E520E201E543200DCFAA4 /* OpenSansCondensed-Bold.ttf */,
+				0F3E520F201E543200DCFAA4 /* OpenSansCondensed-Light.ttf */,
+			);
+			name = Fonts;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		0FA1426BDF6051CA5973329C /* OverlandLiveActivity */ = {
+			isa = PBXGroup;
+			children = (
+				0FA16DCE2F24E90AC6425AE0 /* OverlandLiveActivityBundle.swift */,
+				0FA17CBB687B2DDE01176F37 /* TripLiveActivityWidget.swift */,
+				0FA13CEC66AD199B21AD42D2 /* Info.plist */,
+				0FA368263F0C8CF7E9440051 /* OverlandLiveActivity.entitlements */,
+				0FA33AF77FF8742D279D8C5E /* TripControls.swift */,
+				0FA3D062240680386D956176 /* TripViews.swift */,
+				0FA3E4F7FE42CF6A6C8098AC /* StatusWidget.swift */,
+			);
+			path = OverlandLiveActivity;
+			sourceTree = "<group>";
+		};
+		0FA16810488AF62B153D87E0 /* LiveActivity */ = {
+			isa = PBXGroup;
+			children = (
+				0FA14C96E8BC2D9C270B9238 /* TripActivityAttributes.swift */,
+				0FA128E0AE4C423AD6DEC0EE /* TripLiveActivityController.swift */,
+				0FA1E0C0FF1A2B3C4D5E6F71 /* TripEndConfirmation.swift */,
+			);
+			path = LiveActivity;
+			sourceTree = "<group>";
+		};
+		0FA2C0DE5E1F00000000B001 /* TipJar */ = {
+			isa = PBXGroup;
+			children = (
+				0FA2C0DE5E1F00000000B002 /* TipJarStore.swift */,
+			);
+			path = TipJar;
+			sourceTree = "<group>";
+		};
+		0FFD31491BAB7A34009B3A03 = {
+			isa = PBXGroup;
+			children = (
+				6DEC9B3621F3F88500D9E8C4 /* Overland.entitlements */,
+				0FFD31541BAB7A34009B3A03 /* GPSLogger */,
+				0FA1426BDF6051CA5973329C /* OverlandLiveActivity */,
+				0F3E520D201E515800DCFAA4 /* Fonts */,
+				0FFD31531BAB7A34009B3A03 /* Products */,
+				0BE775F16162CE9DF6AE0775 /* Frameworks */,
+				1CD5358810FD08AFC4E02284 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		0FFD31531BAB7A34009B3A03 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0FFD31521BAB7A34009B3A03 /* Overland.app */,
+				0FA1D141E0978A09277D576D /* OverlandLiveActivity.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0FFD31541BAB7A34009B3A03 /* GPSLogger */ = {
+			isa = PBXGroup;
+			children = (
+				0FFD31581BAB7A34009B3A03 /* AppDelegate.h */,
+				0FFD31591BAB7A34009B3A03 /* AppDelegate.m */,
+				0FAC1FEF2B25FBC10007F3B1 /* SceneDelegate.h */,
+				0FAC1FED2B25FBB50007F3B1 /* SceneDelegate.m */,
+				0FFD315B1BAB7A34009B3A03 /* TrackingViewController.h */,
+				0FFD315C1BAB7A34009B3A03 /* TrackingViewController.m */,
+				0F444F0A1BD04A7E00106C2E /* TripModeViewController.h */,
+				0F444F0B1BD04A7E00106C2E /* TripModeViewController.m */,
+				0FA3AA04AB12CD34EF560004 /* TripModesViewController.swift */,
+				0FA3AA07AB12CD34EF560007 /* TripModeIcons.swift */,
+				0FA3AA0BAB12CD34EF56000B /* SettingsSliders.swift */,
+				0FA3AA0DAB12CD34EF56000D /* AutoStop.swift */,
+				0FA3AA0FAB12CD34EF56000F /* TripEndPrompt.swift */,
+				0FA3AA11AB12CD34EF560011 /* MapPath.swift */,
+				0FA3AA13AB12CD34EF560013 /* FullMapViewController.swift */,
+				0FA3AA15AB12CD34EF560015 /* Barometer.swift */,
+				0FA3AA19AB12CD34EF560019 /* SplitLayout.swift */,
+				0FFD315E1BAB7A34009B3A03 /* SettingsViewController.h */,
+				0FFD315F1BAB7A34009B3A03 /* SettingsViewController.m */,
+				0FF590312B1FA22E00E3AAA3 /* TripSettingsViewController.h */,
+				0FF5902F2B1FA1D500E3AAA3 /* TripSettingsViewController.m */,
+				0FCF532C1F83FDBC00577A0F /* EndpointViewController.h */,
+				0FCF532D1F83FDBC00577A0F /* EndpointViewController.m */,
+				0FC4E00A2D0B000000000002 /* CustomHeadersViewController.h */,
+				0FC4E00A2D0B000000000003 /* CustomHeadersViewController.m */,
+				6D2858CF222B133400F525E1 /* WifiZoneViewController.h */,
+				6D2858D0222B133400F525E1 /* WifiZoneViewController.m */,
+				0FABDE382B329448003ACD20 /* TipJarViewController.h */,
+				0FABDE392B329448003ACD20 /* TipJarViewController.m */,
+				0FFD31711BAB7BEA009B3A03 /* GLManager.h */,
+				0FFD31721BAB7BEA009B3A03 /* GLManager.m */,
+				0FA2C0DE5E1F00000000C001 /* GLCloudFileWriter.h */,
+				0FA2C0DE5E1F00000000C002 /* GLCloudFileWriter.m */,
+				0FA37F96307B5014EFE10FFA /* GLTripActions.h */,
+				0FA3335218A802C5C01E5BB3 /* GLTripActions.m */,
+				0FAC1FEC2B255D460007F3B1 /* NSArray+map.h */,
+				0FAC1FEA2B255CA60007F3B1 /* NSArray+map.m */,
+				0FFD31611BAB7A34009B3A03 /* Main.storyboard */,
+				0FFD31641BAB7A34009B3A03 /* Assets.xcassets */,
+				0FA340492A8B76F051F75FD3 /* AppIcon.icon */,
+				0FA2C0DE5E1F00000000A001 /* PrivacyInfo.xcprivacy */,
+				0FA18726CB75B3B166029F8E /* TripModes.xcassets */,
+				0FA16810488AF62B153D87E0 /* LiveActivity */,
+				0FA2C0DE5E1F00000000B001 /* TipJar */,
+				0FA320A51CB2D01CE6CD6EF7 /* Shared */,
+				0FA3304F6CF12E6DB41EF33A /* Integrations */,
+				0FFD31661BAB7A34009B3A03 /* LaunchScreen.storyboard */,
+				0FABDE3B2B34F642003ACD20 /* Tips.storekit */,
+				0FFD31691BAB7A34009B3A03 /* Info.plist */,
+				0FFD317C1BAB7CB3009B3A03 /* LOLDB */,
+				0FFD31551BAB7A34009B3A03 /* Supporting Files */,
+				0FE280B02B0180620062936E /* Settings.bundle */,
+				0F702B012B2E1F670076E6B9 /* Overland-Bridging-Header.h */,
+			);
+			path = GPSLogger;
+			sourceTree = "<group>";
+		};
+		0FFD31551BAB7A34009B3A03 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0FFD31561BAB7A34009B3A03 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0FFD317C1BAB7CB3009B3A03 /* LOLDB */ = {
+			isa = PBXGroup;
+			children = (
+				0FFD317D1BAB7CC7009B3A03 /* LOLDatabase.h */,
+				0FFD317E1BAB7CC7009B3A03 /* LOLDatabase.m */,
+			);
+			name = LOLDB;
+			sourceTree = "<group>";
+		};
+		1CD5358810FD08AFC4E02284 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4321137E3D59A45E6CD72293 /* Pods-GPSLogger.debug.xcconfig */,
+				378F9BC146097DEF5A9CCBF9 /* Pods-GPSLogger.release.xcconfig */,
+				F4DFFAB32440A8511E1D869A /* Pods-Overland.debug.xcconfig */,
+				251EBCB0197B8F3891607241 /* Pods-Overland.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0FA11B785280455F5A840E1D /* OverlandLiveActivity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0FA13DF0BACA9D4A2EDB52B6 /* Build configuration list for PBXNativeTarget "OverlandLiveActivity" */;
+			buildPhases = (
+				0FA174E49103F82011050391 /* Sources */,
+				0FA121C0D145127EF2E81D5B /* Frameworks */,
+				0FA1BD64AE9B455ECB34B7C9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OverlandLiveActivity;
+			productName = OverlandLiveActivity;
+			productReference = 0FA1D141E0978A09277D576D /* OverlandLiveActivity.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		0FFD31511BAB7A34009B3A03 /* Overland */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0FFD316C1BAB7A34009B3A03 /* Build configuration list for PBXNativeTarget "Overland" */;
+			buildPhases = (
+				42A683883C70BDF3169358D5 /* [CP] Check Pods Manifest.lock */,
+				0FFD314E1BAB7A34009B3A03 /* Sources */,
+				0FFD314F1BAB7A34009B3A03 /* Frameworks */,
+				0FFD31501BAB7A34009B3A03 /* Resources */,
+				0FA1FC07ED2CFED5ABDD73A1 /* Embed Foundation Extensions */,
+				30B79AFB04231729EBA6E3FD /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0FA1F9682172F1A146C14144 /* PBXTargetDependency */,
+			);
+			name = Overland;
+			productName = GPSLogger;
+			productReference = 0FFD31521BAB7A34009B3A03 /* Overland.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0FFD314A1BAB7A34009B3A03 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				ORGANIZATIONNAME = "Aaron Parecki";
+				TargetAttributes = {
+					0FA11B785280455F5A840E1D = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					0FFD31511BAB7A34009B3A03 = {
+						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 7MC6UZR2UV;
+						LastSwiftMigration = 1500;
+						SystemCapabilities = {
+							com.apple.AccessWiFi = {
+								enabled = 1;
+							};
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 0;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 0FFD314D1BAB7A34009B3A03 /* Build configuration list for PBXProject "Overland" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0FFD31491BAB7A34009B3A03;
+			productRefGroup = 0FFD31531BAB7A34009B3A03 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0FFD31511BAB7A34009B3A03 /* Overland */,
+				0FA11B785280455F5A840E1D /* OverlandLiveActivity */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0FA1BD64AE9B455ECB34B7C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0FA166B2F344A3980F1227C2 /* TripModes.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0FFD31501BAB7A34009B3A03 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0F3E5213201E551000DCFAA4 /* OpenSans-Light.ttf in Resources */,
+				0F3E5211201E543200DCFAA4 /* OpenSansCondensed-Light.ttf in Resources */,
+				0FFD31681BAB7A34009B3A03 /* LaunchScreen.storyboard in Resources */,
+				0F3E5210201E543200DCFAA4 /* OpenSansCondensed-Bold.ttf in Resources */,
+				0FFD31651BAB7A34009B3A03 /* Assets.xcassets in Resources */,
+				0FA35DEA813684223A6679FB /* AppIcon.icon in Resources */,
+				0FA2C0DE5E1F00000000A002 /* PrivacyInfo.xcprivacy in Resources */,
+				0FFD31631BAB7A34009B3A03 /* Main.storyboard in Resources */,
+				0FE280B12B0180620062936E /* Settings.bundle in Resources */,
+				0FA1CFD434AD1CBBC2E9E03C /* TripModes.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		30B79AFB04231729EBA6E3FD /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Overland/Pods-Overland-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/FMDB/FMDB_Privacy.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FMDB_Privacy.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Overland/Pods-Overland-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		42A683883C70BDF3169358D5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Overland-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0FA174E49103F82011050391 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0FA16490B3131D33B0CB1A0C /* OverlandLiveActivityBundle.swift in Sources */,
+				0FA1F663468D6341CBC4129D /* TripLiveActivityWidget.swift in Sources */,
+				0FA1409378B424718012BD53 /* TripActivityAttributes.swift in Sources */,
+				0FA32D2DFE72CCAF1CBCC987 /* SharedTripState.swift in Sources */,
+				0FA3AA02AB12CD34EF560002 /* TripModes.swift in Sources */,
+				0FA388001240FD65C4469F9F /* TripIntents.swift in Sources */,
+				0FA38B2F78A1A177EE03B3F8 /* TripControls.swift in Sources */,
+				0FA36E9BA6A598E3D4E9FC9E /* TripViews.swift in Sources */,
+				0FA34571E61D5B5376478C83 /* StatusWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0FFD314E1BAB7A34009B3A03 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0FFD31601BAB7A34009B3A03 /* SettingsViewController.m in Sources */,
+				0FFD315A1BAB7A34009B3A03 /* AppDelegate.m in Sources */,
+				6D2858D1222B133400F525E1 /* WifiZoneViewController.m in Sources */,
+				0FABDE3A2B329448003ACD20 /* TipJarViewController.m in Sources */,
+				0FAC1FEB2B255CA60007F3B1 /* NSArray+map.m in Sources */,
+				0FFD31731BAB7BEA009B3A03 /* GLManager.m in Sources */,
+				0FA2C0DE5E1F00000000C003 /* GLCloudFileWriter.m in Sources */,
+				0FCF532E1F83FDBC00577A0F /* EndpointViewController.m in Sources */,
+				0FC4E00A2D0B000000000001 /* CustomHeadersViewController.m in Sources */,
+				0F444F0C1BD04A7E00106C2E /* TripModeViewController.m in Sources */,
+				0FA3AA05AB12CD34EF560005 /* TripModesViewController.swift in Sources */,
+				0FA3AA08AB12CD34EF560008 /* TripModeIcons.swift in Sources */,
+				0FA3AA0CAB12CD34EF56000C /* SettingsSliders.swift in Sources */,
+				0FA3AA0EAB12CD34EF56000E /* AutoStop.swift in Sources */,
+				0FA3AA10AB12CD34EF560010 /* TripEndPrompt.swift in Sources */,
+				0FA3AA12AB12CD34EF560012 /* MapPath.swift in Sources */,
+				0FA3AA14AB12CD34EF560014 /* FullMapViewController.swift in Sources */,
+				0FA3AA16AB12CD34EF560016 /* Barometer.swift in Sources */,
+				0FA3AA1AAB12CD34EF56001A /* SplitLayout.swift in Sources */,
+				0FAC1FEE2B25FBB50007F3B1 /* SceneDelegate.m in Sources */,
+				0FFD315D1BAB7A34009B3A03 /* TrackingViewController.m in Sources */,
+				0FFD317F1BAB7CC7009B3A03 /* LOLDatabase.m in Sources */,
+				0FF590302B1FA1D500E3AAA3 /* TripSettingsViewController.m in Sources */,
+				0FFD31571BAB7A34009B3A03 /* main.m in Sources */,
+				0FA11FBA259623D911A653DC /* TripActivityAttributes.swift in Sources */,
+				0FA16CC8A66B372B06DD56CB /* TripLiveActivityController.swift in Sources */,
+				0FA1E0C0FF1A2B3C4D5E6F70 /* TripEndConfirmation.swift in Sources */,
+				0FA2C0DE5E1F00000000B003 /* TipJarStore.swift in Sources */,
+				0FA3A3F72F12736301815740 /* GLTripActions.m in Sources */,
+				0FA3266C3526D9E8A8BDD619 /* SharedTripState.swift in Sources */,
+				0FA3AA03AB12CD34EF560003 /* TripModes.swift in Sources */,
+				0FA32669E011B5C5BD0C537F /* SharedStateObserver.swift in Sources */,
+				0FA3AA0AAB12CD34EF56000A /* WifiOnlySending.swift in Sources */,
+				0FA3AA18AB12CD34EF560018 /* ReducedResourceSending.swift in Sources */,
+				0FA3BC5894F86DF912DE3564 /* TripIntents.swift in Sources */,
+				0FA33D161509DED340841E2B /* OverlandAppIntents.swift in Sources */,
+				0FA3AA8D21392AEFF02C81AA /* HealthTripRecorder.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0FA1F9682172F1A146C14144 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0FA11B785280455F5A840E1D /* OverlandLiveActivity */;
+			targetProxy = 0FA1D78B3DD19B9ED809C876 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		0FFD31611BAB7A34009B3A03 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0FFD31621BAB7A34009B3A03 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		0FFD31661BAB7A34009B3A03 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0FFD31671BAB7A34009B3A03 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0FA1005369F3760CABFBC7E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7MC6UZR2UV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OverlandLiveActivity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Overland;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aaronpk.overland.LiveActivity;
+				CODE_SIGN_ENTITLEMENTS = OverlandLiveActivity/OverlandLiveActivity.entitlements;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		0FA1840DEDAA1D03ED91261A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7MC6UZR2UV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = OverlandLiveActivity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Overland;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aaronpk.overland.LiveActivity;
+				CODE_SIGN_ENTITLEMENTS = OverlandLiveActivity/OverlandLiveActivity.entitlements;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0FFD316A1BAB7A34009B3A03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 202611120749;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		0FFD316B1BAB7A34009B3A03 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 202611120749;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0FFD316D1BAB7A34009B3A03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F4DFFAB32440A8511E1D869A /* Pods-Overland.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Overland.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7MC6UZR2UV;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = GPSLogger/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Overland GPS Tracker";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aaronpk.overland;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) OVERLAND_APP";
+				SWIFT_OBJC_BRIDGING_HEADER = "GPSLogger/Overland-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0FFD316E1BAB7A34009B3A03 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 251EBCB0197B8F3891607241 /* Pods-Overland.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Overland.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 7MC6UZR2UV;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				INFOPLIST_FILE = GPSLogger/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Overland GPS Tracker";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aaronpk.overland;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) OVERLAND_APP";
+				SWIFT_OBJC_BRIDGING_HEADER = "GPSLogger/Overland-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0FA13DF0BACA9D4A2EDB52B6 /* Build configuration list for PBXNativeTarget "OverlandLiveActivity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FA1840DEDAA1D03ED91261A /* Debug */,
+				0FA1005369F3760CABFBC7E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0FFD314D1BAB7A34009B3A03 /* Build configuration list for PBXProject "Overland" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FFD316A1BAB7A34009B3A03 /* Debug */,
+				0FFD316B1BAB7A34009B3A03 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0FFD316C1BAB7A34009B3A03 /* Build configuration list for PBXNativeTarget "Overland" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FFD316D1BAB7A34009B3A03 /* Debug */,
+				0FFD316E1BAB7A34009B3A03 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0FFD314A1BAB7A34009B3A03 /* Project object */;
+}
