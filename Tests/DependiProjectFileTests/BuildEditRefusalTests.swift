@@ -122,7 +122,7 @@ struct BuildEditRefusalTests {
     }
 
     @Test("an unknown target is refused and the message names the targets")
-    func unknownTarget() throws {
+    func unknownTargetMessageListsTargets() throws {
         try expectRefusal(
             FixtureWorld.fixture("old-format-mew"), target: "Nope",
             contains: "Available targets: Mew, MewTests, MewTestsApp")

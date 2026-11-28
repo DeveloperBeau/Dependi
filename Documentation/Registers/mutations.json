@@ -3348,7 +3348,7 @@
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
     "search": "targets.first(where: { $0.name == targetName })",
     "replace": "targets.first",
-    "test": "BuildEditRefusalTests/unknownTarget()"
+    "test": "BuildEditRefusalTests/unknownTargetMessageListsTargets()"
   },
   {
     "id": "plan-bundle-inside-folder",
