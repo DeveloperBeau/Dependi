@@ -135,7 +135,7 @@ The editor refuses with `DomainError` and writes nothing when:
 
 ### Object ids
 
-A new id is 24 upper case hex digits. They are the first 12 bytes of a SHA-256 digest of a fixed prefix, the target id, a role and a counter. The roles are `fileReference`, `buildFile` and `scriptPhase`. The same input always gives the same id, so a test can write the expected text by hand. An id that appears anywhere in the project text, even in a comment, is skipped. So is an id that the run made before. This also covers projects with hand-made ids.
+A new id is 24 upper case hex digits. They are the first 12 bytes of a SHA-256 digest of a fixed prefix, the target id, a role and a counter. The roles are `fileReference`, `buildFile` and `scriptPhase`. The same input always gives the same id, so a test can write the expected text by hand. An id that appears anywhere in the project text, even in a comment, is skipped. So is an id that the run made before. This also covers projects with hand-made ids. The search stops after 1000 ids, so it cannot loop without end. The planner then refuses and names the role of the missing id.
 
 ### Backup and write
 

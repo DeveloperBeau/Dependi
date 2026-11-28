@@ -67,6 +67,17 @@ struct BuildSetupPlanner {
         return plan
     }
 
+    private mutating func newID(
+        target: (id: String, name: String), role: String
+    ) throws(DomainError) -> String {
+        guard let id = ids.make(targetID: target.id, role: role) else {
+            throw .unsafeProject(
+                path: model.path,
+                why: "no free object id was found for the \(role) of \(target.name)")
+        }
+        return id
+    }
+
     // MARK: Settings.bundle
 
     private mutating func planBundle(
@@ -94,10 +105,10 @@ struct BuildSetupPlanner {
         if let existing = existingReference(at: bundle) {
             referenceID = existing
         } else {
-            referenceID = ids.make(targetID: target.id, role: "fileReference")
+            referenceID = try newID(target: target, role: "fileReference")
             try addFileReference(id: referenceID, relative: relative)
         }
-        let buildFileID = ids.make(targetID: target.id, role: "buildFile")
+        let buildFileID = try newID(target: target, role: "buildFile")
         try insertSectionLine(
             "\t\t\(buildFileID) /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = \(referenceID) /* Settings.bundle */; };\n",
             id: buildFileID, isa: "PBXBuildFile")
@@ -206,7 +217,7 @@ struct BuildSetupPlanner {
             }
             return
         }
-        let id = ids.make(targetID: target.id, role: "scriptPhase")
+        let id = try newID(target: target, role: "scriptPhase")
         try insertShellPhase(id: id)
         try insertListLine(
             "\(id) /* Dependi */", objectID: target.id, key: "buildPhases", after: resourcesID)
