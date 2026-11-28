@@ -3277,7 +3277,7 @@
     "id": "edit-backup-verified",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "guard Array(backup) == original else {",
+    "search": "guard let backup, Array(backup) == original else {",
     "replace": "guard true else {",
     "test": "backupMismatch",
     "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
@@ -3961,7 +3961,7 @@
     "id": "backup-first-overwritten",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "let keepsBackup = files.exists(at: backupPath)",
+    "search": "let keepsBackup = try keepsExistingBackup(at: backupPath)",
     "replace": "let keepsBackup = false",
     "test": "secondEditKeepsOriginalBackup",
     "lastRun": {"date": "2026-11-29", "outcome": "KILLED"}
@@ -4163,5 +4163,53 @@
     "replace": "\"\"",
     "test": "dryRunAlreadySetUp",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-backup-bad-not-removed",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "do { try writer.removeItem(at: backupPath) } catch {",
+    "replace": "do { _ = backupPath } catch {",
+    "test": "backupMismatch"
+  },
+  {
+    "id": "init-edit-backup-regular-check-skipped",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "(try? files.readRegularFile(at: real, upToBytes: 0)) != nil",
+    "replace": "true",
+    "test": "folderAtBackupPath"
+  },
+  {
+    "id": "init-edit-backup-link-check-skipped",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "real == (parent == \"/\" ? \"\" : parent) + \"/\" + name,",
+    "replace": "true,",
+    "test": "linkAtBackupPath"
+  },
+  {
+    "id": "init-edit-conditional-key-narrowed",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "Self.settingKey + \"[\"",
+    "replace": "Self.settingKey + \"[sdk=\"",
+    "test": "conditionalKeyArch"
+  },
+  {
+    "id": "init-edit-conditional-first-entry-skipped",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "try scanner.entries(ofDictionaryAt: settings.valueFirst)",
+    "replace": "Array(try scanner.entries(ofDictionaryAt: settings.valueFirst).dropFirst())",
+    "test": "conditionalKeyFirstInRealProject"
+  },
+  {
+    "id": "init-edit-id-default-limit-lowered",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "attemptLimit: Int = 1000",
+    "replace": "attemptLimit: Int = 100",
+    "test": "defaultLimitAllowsManyClashes"
   }
 ]
