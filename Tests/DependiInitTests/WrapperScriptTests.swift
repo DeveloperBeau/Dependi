@@ -398,15 +398,9 @@ struct WrapperScriptTests {
         #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
     }
 
-    /// Installs a copy of the script whose pinned `PATH` puts an `ln` shim first. The shim runs
-    /// the real `ln`. With the `release-once` flag, a failed take of the lock removes the lock, as
-    /// an owner that releases it would, once, before the script looks at the lock. With the
-    /// `plant-probe` flag, that release also leaves a probe link with the script's own name, as a
-    /// run killed with KILL whose process id came round again would. The shim is a child of the
-    /// script, so `$PPID` is the script's process id. It writes that id to `script-pid` and every
-    /// probe name the script passes to `probes`. With the `stop-at-probe` flag, a probe link that
-    /// was made sends TERM to the script.
-    private func installLnShim(_ world: WrapperWorld, head: String) throws {
+    /// Installs a copy of the script whose pinned `PATH` puts `world.tools` first, so shims there
+    /// run in place of the real tools. The check stops a test that would pass with no shim.
+    private func installScriptWithToolsFirst(_ world: WrapperWorld) throws {
         let pinned = "\nPATH=/usr/bin:/bin\n"
         try #require(
             WrapperScript.text.components(separatedBy: pinned).count == 2,
@@ -414,7 +408,24 @@ struct WrapperScriptTests {
         try world.installScript(
             WrapperScript.text.replacingOccurrences(
                 of: pinned, with: "\nPATH='\(world.tools.path)':/usr/bin:/bin\n"))
+    }
+
+    /// Installs a copy of the script whose pinned `PATH` puts an `ln` shim first. The shim runs
+    /// the real `ln`. With the `release-once` flag, a failed take of the lock removes the lock, as
+    /// an owner that releases it would, once, before the script looks at the lock. With the
+    /// `plant-probe` flag, that release also leaves a probe link with the script's own name, as a
+    /// run killed with KILL whose process id came round again would. The shim is a child of the
+    /// script, so `$PPID` is the script's process id. It writes that id to `script-pid` and every
+    /// probe name the script passes to `probes`. With the `stop-at-probe` flag, a probe link that
+    /// was made sends TERM to the script. With the `plant-claim` flag, the first failed take of the
+    /// lock leaves a reclaim claim that names the script, as a run killed with KILL whose process
+    /// id came round again would. With the `stop-at-claim` flag, a claim link that was made sends
+    /// TERM to the script. If `swap-claim` is also set, the claim first becomes a link that names
+    /// this test process, as if another script had taken the claim.
+    private func installLnShim(_ world: WrapperWorld, head: String) throws {
+        try installScriptWithToolsFirst(world)
         let lock = world.lock(version: Self.version, commit: head).path
+        let claim = world.claim(version: Self.version, commit: head).path
         let control = world.control.path
         try world.installTool(
             "ln",
@@ -423,6 +434,12 @@ struct WrapperScriptTests {
                 /bin/ln "$@"
                 status=$?
                 for argument in "$@"; do
+                    if [ "$status" -ne 0 ] && [ "$argument" = '\(lock)' ] &&
+                        [ -f '\(control)/plant-claim' ]; then
+                        /bin/rm -f '\(control)/plant-claim'
+                        /bin/ln -s "$PPID" '\(claim)'
+                        : > '\(control)/claim-planted'
+                    fi
                     if [ "$status" -ne 0 ] && [ "$argument" = '\(lock)' ] &&
                         [ -f '\(control)/release-once' ]; then
                         rm -f '\(control)/release-once'
@@ -434,6 +451,16 @@ struct WrapperScriptTests {
                         : > '\(control)/released'
                     fi
                     case "$argument" in
+                    '\(claim)')
+                        if [ "$status" -eq 0 ] && [ -f '\(control)/stop-at-claim' ]; then
+                            if [ -f '\(control)/swap-claim' ]; then
+                                /bin/rm -f '\(claim)'
+                                /bin/ln -s '\(getpid())' '\(claim)'
+                            fi
+                            : > '\(control)/stopped'
+                            kill -TERM "$PPID"
+                        fi
+                        ;;
                     '\(lock)'.probe.*)
                         echo "$argument" >> '\(control)/probes'
                         if [ "$status" -eq 0 ] && [ -f '\(control)/stop-at-probe' ]; then
@@ -558,6 +585,272 @@ struct WrapperScriptTests {
         #expect(run.status == 0, "\(run.stderr)")
         #expect(run.stdout == "built-marker\n")
         #expect(world.lockOwner(version: Self.version, commit: head) == nil)
+    }
+
+    /// The script under test is script B. Shims on its pinned `PATH` play two other scripts at
+    /// the exact moments that make the race, so no timing is left to chance.
+    ///
+    /// - The `readlink` shim plays script C. On the first read of the lock it prints the dead
+    ///   owner, so B decides the lock is stale. Then C reclaims that lock and takes it with its
+    ///   own live owner. It writes `C` to `holders`, makes the `window` flag and removes the
+    ///   `readlink-once` flag, so it acts only once.
+    /// - The `mv` and `rm` shims play script A. After the real tool runs, if `window` exists and
+    ///   the lock is gone, A takes the lock, as any script that waits would. It writes `A` to
+    ///   `holders` and removes `window`, so it acts only once.
+    ///
+    /// C's owner is this test process and A's owner is a `sleep` process, so both locks are live.
+    /// The last line of `holders` is the script that took the lock last. That script must still
+    /// hold it at the end. B must not build, because a live script holds the lock.
+    @Test(
+        "a lock that another script took after this script read a stale owner stays with its holder, and a third script's lock is never replaced"
+    )
+    func staleReadingThatGoesOutOfDateNeverMovesANewerLock() throws {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        try installScriptWithToolsFirst(world)
+        let sleeper = Process()
+        sleeper.executableURL = URL(fileURLWithPath: "/bin/sleep")
+        sleeper.arguments = ["120"]
+        try sleeper.run()
+        defer {
+            sleeper.terminate()
+            sleeper.waitUntilExit()
+        }
+        let holderC = String(getpid())
+        let holderA = String(sleeper.processIdentifier)
+        let lock = world.lock(version: Self.version, commit: head).path
+        let control = world.control.path
+        try world.installTool(
+            "readlink",
+            text: """
+                #!/bin/sh
+                if [ "$*" = '\(lock)' ] && [ -f '\(control)/readlink-once' ]; then
+                    rm -f '\(control)/readlink-once'
+                    /usr/bin/readlink "$@"
+                    status=$?
+                    /bin/rm -f '\(lock)'
+                    /bin/ln -s '\(holderC)' '\(lock)'
+                    echo C >> '\(control)/holders'
+                    : > '\(control)/window'
+                    exit "$status"
+                fi
+                exec /usr/bin/readlink "$@"
+                """)
+        for (tool, real) in [("mv", "/bin/mv"), ("rm", "/bin/rm")] {
+            try world.installTool(
+                tool,
+                text: """
+                    #!/bin/sh
+                    \(real) "$@"
+                    status=$?
+                    if [ -f '\(control)/window' ] && [ ! -e '\(lock)' ] && [ ! -L '\(lock)' ]; then
+                        /bin/rm -f '\(control)/window'
+                        /bin/ln -s '\(holderA)' '\(lock)'
+                        echo A >> '\(control)/holders'
+                    fi
+                    exit "$status"
+                    """)
+        }
+        try world.flag("readlink-once")
+        try world.plantLock(
+            version: Self.version, commit: head,
+            owner: String(try world.deadProcessIdentifier()))
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        let holders =
+            ((try? String(contentsOfFile: control + "/holders", encoding: .utf8)) ?? "")
+            .split(separator: "\n").map(String.init)
+        try #require(holders.first == "C", "the readlink shim never played script C")
+        #expect(run.status == 1)
+        #expect(run.stderr.contains("waited for another build"), "\(run.stderr)")
+        #expect(world.calls().isEmpty)
+        #expect(
+            holders == ["C"],
+            "the lock was missing while script C held it, so script A took it: \(holders)")
+        let owners = ["C": holderC, "A": holderA]
+        #expect(
+            world.lockOwner(version: Self.version, commit: head) == owners[holders.last ?? ""],
+            "holders \(holders), C is \(holderC), A is \(holderA)")
+        #expect(world.cacheEntries() == ["\(Self.version)-\(head).build-lock"])
+    }
+
+    /// A world with a pin, an origin and a lock whose owner process is gone. Returns the world,
+    /// the commit and the dead owner.
+    private func worldWithDeadLock() throws -> (world: WrapperWorld, head: String, dead: String) {
+        let world = try world()
+        let head = try world.makeOrigin()
+        try world.writeConfig(["version": Self.version, "commit": head])
+        let dead = String(try world.deadProcessIdentifier())
+        try world.plantLock(version: Self.version, commit: head, owner: dead)
+        return (world, head, dead)
+    }
+
+    @Test("a stale lock is left alone while a running script holds a fresh claim")
+    func freshLiveClaimIsRespected() throws {
+        let (world, head, dead) = try worldWithDeadLock()
+        let holder = String(getpid())
+        try world.plantClaim(version: Self.version, commit: head, target: holder)
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(run.status == 1)
+        #expect(run.stderr.contains("waited for another build"), "\(run.stderr)")
+        #expect(world.calls().isEmpty)
+        #expect(world.lockOwner(version: Self.version, commit: head) == dead)
+        #expect(world.claimTarget(version: Self.version, commit: head) == holder)
+    }
+
+    @Test("a claim whose target is not a running process does not block the reclaim")
+    func deadOrMalformedClaimIsCleared() throws {
+        for target in [nil, "abc", "12x", "-1", "../etc", "1 2"] {
+            let (world, head, _) = try worldWithDeadLock()
+            let claim = try target ?? String(world.deadProcessIdentifier())
+            try world.plantClaim(version: Self.version, commit: head, target: claim)
+            let run = try world.run(
+                environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+            #expect(run.status == 0, "claim \(claim.debugDescription): \(run.stderr)")
+            #expect(world.calls(of: "xcrun").count == 1, "claim \(claim.debugDescription)")
+            #expect(
+                world.cacheEntries() == ["\(Self.version)-\(head)"],
+                "claim \(claim.debugDescription)")
+        }
+    }
+
+    @Test("a claim that names the script's own process id is cleared and the script builds")
+    func claimWithOwnProcessIdIsCleared() throws {
+        let (world, head, _) = try worldWithDeadLock()
+        try installLnShim(world, head: head)
+        try world.flag("plant-claim")
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(
+            FileManager.default.fileExists(atPath: world.control.path + "/claim-planted"),
+            "the shim never planted the claim")
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(world.calls(of: "xcrun").count == 1)
+        #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
+    }
+
+    @Test("a claim older than a minute is cleared even when its process is running")
+    func oldClaimWithRunningProcessIsCleared() throws {
+        let (world, head, _) = try worldWithDeadLock()
+        try world.plantClaim(version: Self.version, commit: head, target: String(getpid()))
+        try world.ageClaim(version: Self.version, commit: head, seconds: 120)
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(world.calls(of: "xcrun").count == 1)
+        #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
+    }
+
+    @Test("a script stopped while it holds the claim leaves no claim")
+    func stoppedScriptRemovesItsClaim() throws {
+        let (world, head, dead) = try worldWithDeadLock()
+        try installLnShim(world, head: head)
+        try world.flag("stop-at-claim")
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(
+            FileManager.default.fileExists(atPath: world.control.path + "/stopped"),
+            "the shim never saw the claim")
+        #expect(run.status != 0)
+        #expect(world.calls().isEmpty)
+        #expect(world.claimTarget(version: Self.version, commit: head) == nil)
+        #expect(world.lockOwner(version: Self.version, commit: head) == dead)
+    }
+
+    @Test("a script stopped with the claim keeps a claim that another script holds")
+    func stoppedScriptKeepsAnotherScriptsClaim() throws {
+        let (world, head, _) = try worldWithDeadLock()
+        try installLnShim(world, head: head)
+        try world.flag("stop-at-claim")
+        try world.flag("swap-claim")
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        #expect(
+            FileManager.default.fileExists(atPath: world.control.path + "/stopped"),
+            "the shim never saw the claim")
+        #expect(run.status != 0)
+        #expect(
+            world.claimTarget(version: Self.version, commit: head) == String(getpid()),
+            "the script removed a claim that was not its own")
+    }
+
+    /// The script under test is script B. B reads a stale lock, then the lock vanishes, as if
+    /// another script had reclaimed it and not yet taken it. B holds the claim and finds no lock.
+    /// A running script C then takes the lock at the moment B reads it, and script A would take
+    /// the lock if B removed it.
+    ///
+    /// - The `readlink` shim plays the lock reads. Call 1 prints the dead owner, then removes the
+    ///   lock. Call 2 acts only while the lock is absent. It prints nothing, then takes the lock
+    ///   as C, whose owner is this test process, writes `C` to `holders` and makes `window`.
+    /// - The `rm` shim plays script A as in the regression test above.
+    ///
+    /// A claimant that tests the lock with `[ -L ]` finds none, removes nothing and takes the free
+    /// lock. A claimant that removes an absent lock would delete the lock of C, so `holders` would
+    /// be `C` then `A`.
+    @Test("a claimant never removes a lock that is absent when it holds the claim")
+    func absentLockIsNeverRemovedByAClaimant() throws {
+        let (world, head, _) = try worldWithDeadLock()
+        try installScriptWithToolsFirst(world)
+        let sleeper = Process()
+        sleeper.executableURL = URL(fileURLWithPath: "/bin/sleep")
+        sleeper.arguments = ["120"]
+        try sleeper.run()
+        defer {
+            sleeper.terminate()
+            sleeper.waitUntilExit()
+        }
+        let lock = world.lock(version: Self.version, commit: head).path
+        let control = world.control.path
+        try world.installTool(
+            "readlink",
+            text: """
+                #!/bin/sh
+                if [ "$*" = '\(lock)' ]; then
+                    if [ -f '\(control)/readlink-once' ]; then
+                        /bin/rm -f '\(control)/readlink-once'
+                        /usr/bin/readlink "$@"
+                        status=$?
+                        /bin/rm -f '\(lock)'
+                        : > '\(control)/first-read'
+                        exit "$status"
+                    fi
+                    if [ -f '\(control)/first-read' ] && [ ! -L '\(lock)' ] && [ ! -e '\(lock)' ]; then
+                        /bin/rm -f '\(control)/first-read'
+                        /usr/bin/readlink "$@"
+                        status=$?
+                        /bin/ln -s '\(getpid())' '\(lock)'
+                        echo C >> '\(control)/holders'
+                        : > '\(control)/window'
+                        exit "$status"
+                    fi
+                fi
+                exec /usr/bin/readlink "$@"
+                """)
+        try world.installTool(
+            "rm",
+            text: """
+                #!/bin/sh
+                /bin/rm "$@"
+                status=$?
+                if [ -f '\(control)/window' ] && [ ! -e '\(lock)' ] && [ ! -L '\(lock)' ]; then
+                    /bin/rm -f '\(control)/window'
+                    /bin/ln -s '\(sleeper.processIdentifier)' '\(lock)'
+                    echo A >> '\(control)/holders'
+                fi
+                exit "$status"
+                """)
+        try world.flag("readlink-once")
+        let run = try world.run(
+            environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+        let holders =
+            ((try? String(contentsOfFile: control + "/holders", encoding: .utf8)) ?? "")
+            .split(separator: "\n").map(String.init)
+        #expect(run.status == 0, "\(run.stderr)")
+        #expect(world.calls(of: "xcrun").count == 1)
+        #expect(holders == [], "holders \(holders): a live lock was removed")
+        #expect(world.cacheEntries() == ["\(Self.version)-\(head)"])
     }
 
     @Test(

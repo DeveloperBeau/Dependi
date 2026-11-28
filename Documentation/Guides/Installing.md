@@ -54,7 +54,7 @@ Use the same `version` and `commit` values that `.dependi.json` holds. The scrip
 ## Upgrading
 
 1. Check out the new Dependi tag in your clone.
-2. Run `init` again. It keeps your `.dependi.json`.
+2. Run `init` again. It keeps your `.dependi.json` and replaces `.dependi/run.sh` with the script of the new tag.
 3. Edit `version` and `commit` in `.dependi.json` to the new version and the commit of the tag (`git rev-parse HEAD` in the clone).
 4. Commit the changed files.
 

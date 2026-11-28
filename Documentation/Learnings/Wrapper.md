@@ -33,8 +33,14 @@
 ## A bare directory lock cannot name its owner
 
 - **Trap:** A lock folder removed after ten minutes lets two waiters both reclaim it, and a slow build then removes a lock that another run took.
-- **Finding:** The lock is a symlink whose target is the owner's process id. It is made in one step. Release checks the target. A stale lock is renamed away before it is removed. A dead owner is reclaimed at once.
-- **Rule:** Record the owner in the lock itself, remove only your own lock, and reclaim by rename and check.
+- **Finding:** The lock is a symlink whose target is the owner's process id. It is made in one step. Release checks the target. A stale lock is removed by the one script that holds a reclaim claim. A dead owner is reclaimed at once.
+- **Rule:** Record the owner in the lock itself, remove only your own lock, and reclaim under a claim (see the next entry).
+
+## A stale reading goes out of date before the script acts on it
+
+- **Trap:** The first reclaim moved the stale lock aside, checked what it had moved, and put it back if it was not the stale one. Script B read a stale lock. Script C reclaimed it and took the lock. B moved C's live lock aside. Script A then took the free lock. B put C's lock back over the lock of A, and two scripts built at once.
+- **Finding:** A shim on `readlink` plays C at the exact read, and a shim on `rm` plays A at the exact removal. That forces the order every time. The put-back is the fault, because any move opens a gap in which a third script can act. The reclaim now takes a claim, a symlink next to the lock, reads the lock again under the claim and removes it only if it is a stale symlink. Nothing is moved and nothing is put back. A test that makes a lock vanish under the claim showed a second fault. A check that treats an absent lock as stale removes a live lock that was taken a moment before. The claimant now tests the lock with `[ -L ]` first. A stop signal between `ln` and the line that records the claim left the claim in place. The script now records the claim before `ln`, and the trap removes it only if it still names the script. A claim left by a killed script is cleared when its process is gone, when its target is not a number, when it names this script, or when it is older than a minute.
+- **Rule:** One claimant decides under the claim, and nothing is moved back. A reading taken before the claim is a hint and is checked again under it. A step that must not run on a missing file tests that the file exists.
 
 ## A failed take with no lock in place is not a broken folder
 
@@ -78,3 +84,17 @@
 | The exit trap keeps the lock probe | `stoppedScriptRemovesLockProbe` |
 | A probe left from an earlier run with the same process id is kept, so the probe fails | `leftoverProbeWithSameProcessIdIsReplaced` |
 | The probe stays in the cache folder while the script waits and builds | `lockProbeIsGoneDuringBuild` |
+| A claim is ignored, so a stale lock is removed while a running script holds the claim | `freshLiveClaimIsRespected` |
+| The lock is not read again under the claim | `staleReadingThatGoesOutOfDateNeverMovesANewerLock` |
+| A lock that is absent under the claim is removed | `absentLockIsNeverRemovedByAClaimant` |
+| The claim stays after a reclaim | `concurrentRunsOnDeadLockBuildOnce` |
+| The exit trap keeps the claim | `stoppedScriptRemovesItsClaim` |
+| The script does not record that it holds the claim | `stoppedScriptRemovesItsClaim` |
+| The exit trap removes a claim that another script holds | `stoppedScriptKeepsAnotherScriptsClaim` |
+| A claim of a running process is always cleared | `freshLiveClaimIsRespected` |
+| A claim of a process that is gone is kept | `deadOrMalformedClaimIsCleared` |
+| The age of a claim is ignored | `oldClaimWithRunningProcessIsCleared` |
+| A claim whose target is not a number goes to the process check | `deadOrMalformedClaimIsCleared` |
+| A claim that names the script itself is kept | `claimWithOwnProcessIdIsCleared` |
+
+Two branches of the claim check have no mutation. The empty target only skips a claim that was just released, so removing the branch changes only one retry. The sleep after a refused claim, against a retry at once, changes timing and no result that a test can see.
