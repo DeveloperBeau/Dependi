@@ -17,10 +17,12 @@ struct ProjectObjectIDMakerTests {
     func repeatable() {
         var first = ProjectObjectIDMaker(existingText: "")
         var second = ProjectObjectIDMaker(existingText: "")
+        var otherRole = ProjectObjectIDMaker(existingText: "")
+        var otherTarget = ProjectObjectIDMaker(existingText: "")
         let id = first.make(targetID: "T", role: "buildFile")
         #expect(second.make(targetID: "T", role: "buildFile") == id)
-        #expect(second.make(targetID: "T", role: "fileReference") != id)
-        #expect(second.make(targetID: "U", role: "buildFile") != id)
+        #expect(otherRole.make(targetID: "T", role: "fileReference") != id)
+        #expect(otherTarget.make(targetID: "U", role: "buildFile") != id)
     }
 
     @Test("an id that is in the project text is skipped, even inside a comment")

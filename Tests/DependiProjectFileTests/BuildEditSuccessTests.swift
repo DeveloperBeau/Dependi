@@ -59,8 +59,15 @@ struct BuildEditSuccessTests {
             ]
         #expect(Set(added) == Set(expected))
         #expect(added.count == expected.count)
-        // The new section goes between the sections that sort around its name.
         let text = try world.currentText()
+        let resources = try #require(text.range(of: "D2568DEA214BCA3B00FCA44A /* Resources */ = {"))
+        #expect(text[resources.upperBound...].prefix(400).contains("Settings.bundle in Resources"))
+        #expect(
+            text.contains(
+                "D2568DEA214BCA3B00FCA44A /* Resources */,\n\t\t\t\t2753DE8B26A7EEA90771BF6B /* Dependi */,\n"
+            ))
+        // The new section goes between the sections that sort around its name.
+
         #expect(
             text.contains(
                 "/* End PBXResourcesBuildPhase section */\n\n/* Begin PBXShellScriptBuildPhase section */\n"

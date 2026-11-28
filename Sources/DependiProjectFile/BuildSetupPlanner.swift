@@ -174,7 +174,7 @@ struct BuildSetupPlanner {
                     || ($0 >= 0x61 && $0 <= 0x7A)
                     || $0 == 0x5F || $0 == 0x2E || $0 == 0x2F
             }
-        guard !plain || value.contains("//") || value.contains("/*") else { return value }
+        guard !plain else { return value }
         let escaped = value.replacingOccurrences(of: "\\", with: "\\\\")
             .replacingOccurrences(of: "\"", with: "\\\"")
         return "\"\(escaped)\""

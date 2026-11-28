@@ -109,10 +109,13 @@ struct BuildEditRefusalTests {
             "/elsewhere/Settings.bundle", "/work/App/Other.bundle", "/work/App/../Settings.bundle",
         ] {
             let world = try EditWorld("x", bytes: bytes)
-            #expect(throws: DomainError.self) {
+            do {
                 try world.editor.configureBuild(
                     projectFilePath: EditWorld.projectFolder, targetName: "MewTestsApp",
                     settingsBundlePath: path, backupPath: EditWorld.backup, isDryRun: false)
+                Issue.record("expected a refusal for \(path)")
+            } catch {
+                #expect("\(error)".contains("not inside the project folder"), "\(path): \(error)")
             }
             #expect(world.writer.records.isEmpty)
         }
@@ -270,7 +273,12 @@ struct BuildEditRefusalTests {
                 PBXTextEdit(offset: offset, removeCount: 0, insertText: "\t\t\tcomments = x;\n"))
             return plan
         }
-        #expect(throws: DomainError.self) { try run(editor) }
+        do {
+            _ = try run(editor)
+            Issue.record("expected a refusal")
+        } catch {
+            #expect("\(error)".contains("the key comments changed"), "\(error)")
+        }
         #expect(world.writer.records.isEmpty)
     }
 

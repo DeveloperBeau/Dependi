@@ -48,8 +48,11 @@ struct BuildEditLayoutTests {
     @Test("build settings on one line are refused and nothing is written")
     func oneLineSettings() throws {
         let world = try world(settings: "{}")
-        #expect(throws: DomainError.self) {
+        do {
             try world.configure(target: "App", bundle: "Settings.bundle")
+            Issue.record("expected a refusal")
+        } catch {
+            #expect("\(error)".contains("laid out in lines"), "\(error)")
         }
         #expect(world.writer.records.isEmpty)
     }
@@ -62,5 +65,15 @@ struct BuildEditLayoutTests {
         }
         #expect(world.writer.records == ["write \(EditWorld.backup)"])
         #expect(try world.currentBytes() == world.original)
+    }
+
+    @Test("the path of the project file itself works as well as the path of its folder")
+    func projectFilePathIsAccepted() throws {
+        let world = try EditWorld("old-format-mew")
+        let lines = try world.editor.configureBuild(
+            projectFilePath: EditWorld.projectFile, targetName: "MewTestsApp",
+            settingsBundlePath: "/work/App/Settings.bundle", backupPath: EditWorld.backup,
+            isDryRun: false)
+        #expect(lines.count == 6)
     }
 }
