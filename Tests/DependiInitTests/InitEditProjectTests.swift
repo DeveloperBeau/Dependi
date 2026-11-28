@@ -103,6 +103,7 @@ struct InitEditProjectTests {
         let world = try InitWorld()
         _ = try world.run(dry: true)
         #expect(world.projectBuild.calls.isEmpty)
+        #expect(!world.console.lines.contains { $0.contains("Edit the Xcode project") })
     }
 
     @Test("when the editor changes nothing, init says the project is already set up")

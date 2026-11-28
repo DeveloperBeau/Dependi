@@ -3929,5 +3929,117 @@
     "replace": ".min { $0.index > $1.index }?.id",
     "test": "firstOfTwoReferencesIsReused",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "init-edit-flag-ignored",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "isDryRun: isDryRun, editsProject: editsProject)",
+    "replace": "isDryRun: isDryRun, editsProject: false)",
+    "test": "tableRowsAreAccepted"
+  },
+  {
+    "id": "init-edit-flag-duplicate",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiCommandLine/CommandLineParser.swift",
+    "search": "if editsProject {",
+    "replace": "if false {",
+    "test": "duplicates"
+  },
+  {
+    "id": "init-edit-dry-run-first",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "backupPath: backupPath, isDryRun: true)",
+    "replace": "backupPath: backupPath, isDryRun: false)",
+    "test": "editsInTwoSteps"
+  },
+  {
+    "id": "init-edit-refusal-ignored",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "let plannedEdits =",
+    "replace": "let plannedEdits: [String] = []; let _ = try?",
+    "test": "refusalStopsInit"
+  },
+  {
+    "id": "init-edit-real-call-is-dry",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "backupPath: backupPath, isDryRun: false)",
+    "replace": "backupPath: backupPath, isDryRun: true)",
+    "test": "editsInTwoSteps"
+  },
+  {
+    "id": "init-edit-always-calls-editor",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if editsProject {",
+    "replace": "if true {",
+    "test": "plainInitSkipsTheEditor"
+  },
+  {
+    "id": "init-edit-dry-report-always",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "edits: editsProject ? plannedEdits : nil)",
+    "replace": "edits: plannedEdits)",
+    "test": "dryRunWithoutFlag"
+  },
+  {
+    "id": "init-edit-backup-path",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "location.root + \"/.dependi/project.pbxproj.bak\"",
+    "replace": "location.root + \"/.dependi/project.bak\"",
+    "test": "editsInTwoSteps"
+  },
+  {
+    "id": "init-edit-already-set-up-line",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if lines.isEmpty {",
+    "replace": "if false {",
+    "test": "alreadySetUp"
+  },
+  {
+    "id": "init-edit-reopen-note",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "Dependi: close and reopen the project if Xcode has it open, so that it reads the changes.",
+    "replace": "Dependi: done.",
+    "test": "editsInTwoSteps"
+  },
+  {
+    "id": "init-edit-resource-hint-kept",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "if original == nil && !editsProject {",
+    "replace": "if original == nil {",
+    "test": "editsInTwoSteps"
+  },
+  {
+    "id": "init-edit-manual-hint-removed",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "\"Or run init again with --edit-project to make these changes for you.\"",
+    "replace": "\"\"",
+    "test": "plainInitSkipsTheEditor"
+  },
+  {
+    "id": "init-edit-app-flag-dropped",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "absolute, isDryRun: isDryRun, editsProject: editsProject)",
+    "replace": "absolute, isDryRun: isDryRun, editsProject: false)",
+    "test": "editProjectSetsUpTheTargetAndBacksUpTheOriginal"
+  },
+  {
+    "id": "init-edit-app-flag-dropped-early",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiComposition/DependiApplication.swift",
+    "search": "return initialize(path: path, isDryRun: isDryRun, editsProject: editsProject)",
+    "replace": "return initialize(path: path, isDryRun: isDryRun, editsProject: false)",
+    "test": "editProjectSetsUpTheTargetAndBacksUpTheOriginal"
   }
 ]
