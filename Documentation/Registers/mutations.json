@@ -4184,7 +4184,7 @@
     "id": "init-edit-backup-link-check-skipped",
     "slice": "init-xcode-b",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "real == (parent == \"/\" ? \"\" : parent) + \"/\" + name,",
+    "search": "real == ProjectPathMath.standardize(parent + \"/\" + name),",
     "replace": "true,",
     "test": "linkAtBackupPath"
   },

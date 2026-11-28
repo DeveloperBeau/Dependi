@@ -97,11 +97,11 @@ public struct ProjectFileEditor: Sendable {
     private func keepsExistingBackup(at path: String) throws(DomainError) -> Bool {
         guard files.exists(at: path) else { return false }
         // A link resolves to another path, so the resolved path of a regular file equals this one.
-        let name = path.split(separator: "/").last.map(String.init) ?? path
+        let name = URL(fileURLWithPath: path).lastPathComponent
         let isRegular: Bool
         if let real = try? files.realPath(of: path),
             let parent = try? files.realPath(of: ProjectPathMath.parent(of: path)),
-            real == (parent == "/" ? "" : parent) + "/" + name,
+            real == ProjectPathMath.standardize(parent + "/" + name),
             (try? files.readRegularFile(at: real, upToBytes: 0)) != nil
         {
             isRegular = true
