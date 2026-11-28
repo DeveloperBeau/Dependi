@@ -3331,8 +3331,8 @@
     "id": "edit-real-path",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "realPath: model.path, backupPath: backupPath)",
-    "replace": "realPath: ProjectFileLoader.fileLocation(projectFilePath), backupPath: backupPath)",
+    "search": "realPath: model.path, backupPath: backup.path)",
+    "replace": "realPath: ProjectFileLoader.fileLocation(projectFilePath), backupPath: backup.path)",
     "test": "linkedProjectFile",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
@@ -3628,8 +3628,8 @@
     "id": "id-text-collision",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
-    "search": "while existingText.contains(id) || made.contains(id) {",
-    "replace": "while made.contains(id) {",
+    "search": "if !existingText.contains(id), !made.contains(id) {",
+    "replace": "if !made.contains(id) {",
     "test": "collisionWithText",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
@@ -3637,8 +3637,8 @@
     "id": "id-run-collision",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
-    "search": "while existingText.contains(id) || made.contains(id) {",
-    "replace": "while existingText.contains(id) {",
+    "search": "if !existingText.contains(id), !made.contains(id) {",
+    "replace": "if !existingText.contains(id) {",
     "test": "collisionWithEarlierID",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
@@ -3929,5 +3929,109 @@
     "replace": ".min { $0.index > $1.index }?.id",
     "test": "firstOfTwoReferencesIsReused",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "sandbox-conditional-key-ignored",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "{ $0.key.hasPrefix(Self.settingKey + \"[\") }",
+    "replace": "{ $0.key == \"never\" }",
+    "test": "conditionalKeyInRealProject"
+  },
+  {
+    "id": "sandbox-conditional-key-only-without-plain",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "{ $0.key.hasPrefix(Self.settingKey + \"[\") }",
+    "replace": "{ $0.key.hasPrefix(Self.settingKey + \"[\") && !entries.contains { $0.key == Self.settingKey } }",
+    "test": "conditionalKeyBesidePlainNo"
+  },
+  {
+    "id": "sandbox-conditional-key-prefix-too-wide",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "{ $0.key.hasPrefix(Self.settingKey + \"[\") }",
+    "replace": "{ $0.key.hasPrefix(Self.settingKey) }",
+    "test": "mewGetsAllThreeSteps"
+  },
+  {
+    "id": "backup-first-overwritten",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "if !files.exists(at: backupPath) {",
+    "replace": "if true {",
+    "test": "secondEditKeepsFirstBackup"
+  },
+  {
+    "id": "backup-number-starts-late",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "stride(from: 2, through: lastBackupNumber, by: 1)",
+    "replace": "stride(from: 3, through: lastBackupNumber, by: 1)",
+    "test": "secondEditKeepsFirstBackup"
+  },
+  {
+    "id": "backup-number-not-advancing",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "if !files.exists(at: path) {",
+    "replace": "if true {",
+    "test": "thirdEditGoesToNumberThree"
+  },
+  {
+    "id": "backup-later-line-says-original",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "\"Dependi: backup of the project file before this edit is at \\(path).\"",
+    "replace": "\"Dependi: backup of the original project file is at \\(path).\"",
+    "test": "secondEditKeepsFirstBackup"
+  },
+  {
+    "id": "backup-bound-off-by-one",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "stride(from: 2, through: lastBackupNumber, by: 1)",
+    "replace": "stride(from: 2, through: lastBackupNumber + 1, by: 1)",
+    "test": "everyNumberTaken"
+  },
+  {
+    "id": "resources-two-phases-allowed",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "guard resourcePhases.count == 1 else {",
+    "replace": "guard true else {",
+    "test": "twoResourcesPhases"
+  },
+  {
+    "id": "id-attempt-limit-ignored",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "for counter in 0..<attemptLimit {",
+    "replace": "for counter in 0..<Int.max {",
+    "test": "attemptLimit"
+  },
+  {
+    "id": "id-attempt-limit-off-by-one",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "for counter in 0..<attemptLimit {",
+    "replace": "for counter in 0...attemptLimit {",
+    "test": "attemptLimit"
+  },
+  {
+    "id": "id-planner-no-refusal",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "guard let id = ids.make(targetID: target.id, role: role) else {",
+    "replace": "guard let id = ids.make(targetID: target.id, role: role) ?? Optional(\"0\") else {",
+    "test": "plannerRefusesWithoutFreeID"
+  },
+  {
+    "id": "scanner-list-item-closer-ignored",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "let last = closers[index] ?? index",
+    "replace": "let last = index",
+    "test": "listItemsThatAreBrackets"
   }
 ]
