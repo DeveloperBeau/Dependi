@@ -23,7 +23,7 @@ struct GenerateFeatureTests {
         #expect(outcome == .wrote(count: 1))
         let call = try #require(world.writer.calls.first)
         #expect(call.bundlePath == "/products/App.app/Settings.bundle")
-        #expect(call.acknowledgements.map(\.displayName) == ["kit"])
+        #expect(call.acknowledgements.map(\.displayName) == ["kit (1.0.0)"])
         #expect(call.acknowledgements.first?.documents.map(\.text) == ["MIT License"])
         #expect(world.console.lines.contains("Dependi: running. archive build"))
         #expect(
@@ -77,7 +77,7 @@ struct GenerateFeatureTests {
         world.link("zeta", package: "zeta")
         _ = try world.run()
         let names = world.writer.calls.first?.acknowledgements.map(\.displayName)
-        #expect(names == ["alpha", "Vendored", "zeta"])
+        #expect(names == ["alpha (1.0.0)", "Vendored", "zeta (1.0.0)"])
         #expect(
             world.writer.calls.first?.acknowledgements[1].documents.map(\.text) == ["Vendored text"]
         )
@@ -110,7 +110,7 @@ struct GenerateFeatureTests {
         world.link("kit", package: "kit")
         world.allowUnreached()
         _ = try world.run()
-        #expect(world.writer.calls.first?.acknowledgements.map(\.displayName) == ["kit"])
+        #expect(world.writer.calls.first?.acknowledgements.map(\.displayName) == ["kit (1.0.0)"])
     }
 
     // MARK: Layout
@@ -348,7 +348,7 @@ struct GenerateFeatureTests {
         good.linkOther("snapshot-testing", package: "snapshot-testing")
         #expect(try good.run() == .wrote(count: 1))
         let call = try #require(good.writer.calls.first)
-        #expect(call.acknowledgements.map(\.displayName) == ["kit"])
+        #expect(call.acknowledgements.map(\.displayName) == ["kit (1.0.0)"])
 
         let broken = try world()
         try broken.addRemote("view-inspector")
@@ -411,7 +411,7 @@ struct GenerateFeatureTests {
         world.link("odd", package: "odd")
         _ = try world.run()
         let acknowledgements = try #require(world.writer.calls.first).acknowledgements
-        #expect(acknowledgements.map(\.displayName) == ["odd", "reuse"])
+        #expect(acknowledgements.map(\.displayName) == ["odd (1.0.0)", "reuse (1.0.0)"])
         #expect(acknowledgements[0].documents.map(\.fileName) == ["LICENSE.MIT"])
         #expect(acknowledgements[0].documents.map(\.text) == ["variant"])
         #expect(acknowledgements[1].documents.map(\.fileName) == ["Apache-2.0.txt", "MIT.txt"])

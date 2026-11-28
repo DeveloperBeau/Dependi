@@ -49,7 +49,7 @@ struct GenerateNestedLocalTests {
         let world = try world()
         #expect(try world.run() == .wrote(count: 2))
         let names = world.writer.calls.first?.acknowledgements.map(\.displayName)
-        #expect(names == ["kit", "spare"])
+        #expect(names == ["kit (1.0.0)", "spare (1.0.0)"])
         #expect(world.console.errorLines.isEmpty)
     }
 
@@ -65,7 +65,7 @@ struct GenerateNestedLocalTests {
     func nestedRemoteExcluded() throws {
         let world = try world(configuration: #"{"excludes":["spare"]}"#)
         #expect(try world.run() == .wrote(count: 1))
-        #expect(world.writer.calls.first?.acknowledgements.map(\.displayName) == ["kit"])
+        #expect(world.writer.calls.first?.acknowledgements.map(\.displayName) == ["kit (1.0.0)"])
         #expect(world.console.errorLines.isEmpty)
     }
 

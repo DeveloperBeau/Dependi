@@ -29,7 +29,7 @@ struct EndToEndTests {
         let world = try standardWorld()
         let result = try world.run()
         #expect(result.code == 0, "errors: \(result.errors)")
-        #expect(try world.indexTitles() == ["alamofire", "swift-log"])
+        #expect(try world.indexTitles() == ["alamofire (1.0.0)", "swift-log (1.0.0)"])
         let index = try world.plist("Acknowledgements.plist")
         #expect(index["Title"] as? String == "Acknowledgements")
         let entries = try requireValue(index["PreferenceSpecifiers"] as? [[String: String]])
@@ -185,7 +185,7 @@ struct EndToEndTests {
             world.files(in: "Acknowledgements") == [
                 ".dependi-manifest", "alamofire-5f720a3f84a5.plist",
             ])
-        #expect(try world.indexTitles() == ["alamofire"])
+        #expect(try world.indexTitles() == ["alamofire (1.0.0)"])
     }
 
     @Test("a Mac Catalyst product writes into its resources folder")
@@ -211,7 +211,7 @@ struct EndToEndTests {
         world.environment["CONFIGURATION"] = "AppStore"
         let result = try world.run()
         #expect(result.code == 0, "errors: \(result.errors)")
-        #expect(try world.indexTitles() == ["alamofire"])
+        #expect(try world.indexTitles() == ["alamofire (1.0.0)"])
     }
 
     // MARK: Skips
@@ -243,11 +243,11 @@ struct EndToEndTests {
         #expect(
             groups == [
                 [
-                    "Type": "PSGroupSpecifier", "Title": "alamofire",
+                    "Type": "PSGroupSpecifier", "Title": "alamofire (1.0.0)",
                     "FooterText": "license of alamofire",
                 ],
                 [
-                    "Type": "PSGroupSpecifier", "Title": "swift-log",
+                    "Type": "PSGroupSpecifier", "Title": "swift-log (1.0.0)",
                     "FooterText": "license of swift-log",
                 ],
             ])
@@ -265,11 +265,11 @@ struct EndToEndTests {
         #expect(
             groups == [
                 [
-                    "Type": "PSGroupSpecifier", "Title": "alamofire",
+                    "Type": "PSGroupSpecifier", "Title": "alamofire (1.0.0)",
                     "FooterText": "license of alamofire",
                 ],
                 [
-                    "Type": "PSGroupSpecifier", "Title": "swift-log",
+                    "Type": "PSGroupSpecifier", "Title": "swift-log (1.0.0)",
                     "FooterText": "license of swift-log",
                 ],
             ])
@@ -311,7 +311,7 @@ struct EndToEndTests {
         let index = try world.plist("Acknowledgements.plist")
         let groups = try requireValue(index["PreferenceSpecifiers"] as? [[String: String]])
         #expect(groups.map { $0["Type"] } == ["PSGroupSpecifier", "PSGroupSpecifier"])
-        #expect(groups.map { $0["Title"] } == ["alamofire", "swift-log"])
+        #expect(groups.map { $0["Title"] } == ["alamofire (1.0.0)", "swift-log (1.0.0)"])
         #expect(
             groups.map { $0["FooterText"] } == ["license of alamofire", "license of swift-log"])
         #expect(groups.allSatisfy { $0["File"] == nil })
@@ -396,7 +396,7 @@ struct EndToEndTests {
             "swift-syntax", owner: "swiftlang",
             manifest: EndToEndWorld.manifest(product: "SwiftSyntax"))
         #expect(try world.run().code == 0)
-        #expect(try world.indexTitles() == ["alamofire"])
+        #expect(try world.indexTitles() == ["alamofire (1.0.0)"])
 
         let withTools = try EndToEndWorld(configuration: #"{"includeBuildTools":true}"#)
         try withTools.addRemote("alamofire", owner: "Alamofire", manifest: macroManifest())
@@ -404,7 +404,7 @@ struct EndToEndTests {
             "swift-syntax", owner: "swiftlang",
             manifest: EndToEndWorld.manifest(product: "SwiftSyntax"))
         #expect(try withTools.run().code == 0)
-        #expect(try withTools.indexTitles() == ["alamofire", "swift-syntax"])
+        #expect(try withTools.indexTitles() == ["alamofire (1.0.0)", "swift-syntax (1.0.0)"])
     }
 
     @Test("a local package of the project file is written")
@@ -479,10 +479,10 @@ struct EndToEndTests {
         try world.addRemote(
             "swift-log", owner: "apple", manifest: EndToEndWorld.manifest(product: "Logging"))
         #expect(try world.run().code == 0)
-        #expect(try world.indexTitles() == ["alamofire"])
+        #expect(try world.indexTitles() == ["alamofire (1.0.0)"])
         world.environment["TARGET_NAME"] = "Other"
         #expect(try world.run().code == 0)
-        #expect(try world.indexTitles() == ["swift-log"])
+        #expect(try world.indexTitles() == ["swift-log (1.0.0)"])
     }
 
     // MARK: Command line
@@ -550,7 +550,7 @@ struct EndToEndTests {
 
         let generated = try world.run(["generate"])
         #expect(generated.code == 0, "errors: \(generated.errors)")
-        #expect(try world.indexTitles() == ["alamofire", "swift-log"])
+        #expect(try world.indexTitles() == ["alamofire (1.0.0)", "swift-log (1.0.0)"])
     }
 
     @Test("a relative project path is resolved against the current folder")

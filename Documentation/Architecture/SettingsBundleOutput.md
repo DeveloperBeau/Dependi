@@ -26,7 +26,7 @@ Both layouts put each license text in the `FooterText` of a `PSGroupSpecifier`. 
 
 ### Single page
 
-The single page layout writes `<bundle>/Acknowledgements.plist` with `Title` and `StringsTable`. Its `PreferenceSpecifiers` hold one `PSGroupSpecifier` for each license document, in the given package order and then in document order. The group `Title` is the display name when the package has one document. With two or more documents it is `<display name> (<file name>)`. `FooterText` is the license text. A package with no documents gives one group with only a `Title`, so no package is dropped. Two packages with the same display name both appear. No slugs are used.
+The single page layout writes `<bundle>/Acknowledgements.plist` with `Title` and `StringsTable`. Its `PreferenceSpecifiers` hold one `PSGroupSpecifier` for each license document, in the given package order and then in document order. The display name is the package title that `PackageTitle` builds, as the [plist keys](../Registers/plist-keys.md) page says. The group `Title` is the display name when the package has one document. With two or more documents it is `<display name> (<file name>)`. `FooterText` is the license text. A package with no documents gives one group with only a `Title`, so no package is dropped. Two packages with the same display name both appear. No slugs are used.
 
 The single page layout creates the bundle folder if it does not exist, as the other layout does. It never creates `Acknowledgements/`. If that folder does not exist, the index is the only file written.
 

@@ -90,7 +90,7 @@ struct EndToEndTraitsTests {
         let world = try world(defaultTrait: "SystemSQLite", csqlite: false)
         let result = try world.run()
         #expect(result.code == 0, "errors: \(result.errors)")
-        #expect(try world.indexTitles() == ["sqlite.swift"])
+        #expect(try world.indexTitles() == ["SQLite.swift (1.0.0)"])
         #expect(result.output.contains("Dependi: wrote 1 acknowledgement"))
     }
 
@@ -99,7 +99,7 @@ struct EndToEndTraitsTests {
         let world = try world(defaultTrait: "SQLiteSwiftCSQLite", csqlite: true)
         let result = try world.run()
         #expect(result.code == 0, "errors: \(result.errors)")
-        #expect(try world.indexTitles() == ["csqlite", "sqlite.swift"])
+        #expect(try world.indexTitles() == ["csqlite (1.0.0)", "SQLite.swift (1.0.0)"])
     }
 
     @Test("an archive follows the package that a trait picked in the project file gates")
@@ -109,7 +109,7 @@ struct EndToEndTraitsTests {
             projectTraits: "traits = (SQLiteSwiftCSQLite, );")
         let result = try world.run()
         #expect(result.code == 0, "errors: \(result.errors)")
-        #expect(try world.indexTitles() == ["csqlite", "sqlite.swift"])
+        #expect(try world.indexTitles() == ["csqlite (1.0.0)", "SQLite.swift (1.0.0)"])
         #expect(result.output.contains("Dependi: wrote 2 acknowledgements"))
     }
 
@@ -120,7 +120,10 @@ struct EndToEndTraitsTests {
             secondReference: "traits = (SQLiteSwiftCSQLite, );")
         let result = try world.run()
         #expect(result.code == 0, "errors: \(result.errors)")
-        #expect(try world.indexTitles() == ["csqlite", "sqlcipher.swift", "sqlite.swift"])
+        #expect(
+            try world.indexTitles() == [
+                "csqlite (1.0.0)", "sqlcipher.swift (1.0.0)", "SQLite.swift (1.0.0)",
+            ])
     }
 
     @Test("an empty trait list in the project file turns the default trait and its package off")
@@ -129,7 +132,7 @@ struct EndToEndTraitsTests {
             defaultTrait: "SQLiteSwiftCSQLite", csqlite: false, projectTraits: "traits = ( );")
         let result = try world.run()
         #expect(result.code == 0, "errors: \(result.errors)")
-        #expect(try world.indexTitles() == ["sqlite.swift"])
+        #expect(try world.indexTitles() == ["SQLite.swift (1.0.0)"])
     }
 
     @Test("a product that a trait that is on needs, and that no package has, fails and names it")

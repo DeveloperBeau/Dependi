@@ -20,12 +20,13 @@ Debug builds skip. An archive always runs.
 
 ## What it checks
 
-- A remote package that the app links and that has no license file is skipped, and the build log names it. Set `requireLicenses` in `.dependi.json` to make this a failure.
+- A remote package that the app links and that has no license file in its checkout is skipped. Xcode shows a build warning that names the package, and the run summary counts the skips. Add a `manualEntries` item with its license, or set `requireLicenses` in `.dependi.json` to make this a failure.
+- Each package title is `<name> (<version>)`. The name is the name in the package manifest. The version is the resolved version of a remote package. A package pinned by revision or branch shows the name only. A local package never shows a version. If the manifest name is missing, empty or has a control character, the title uses the package identity as the name. Before 0.3.0 the title was the lower-case identity. From 0.3.0 the title has the manifest name and the version.
 - A dependency that a package ties to a SwiftPM trait is followed only when that trait is on. A package that the app links, or that is local, has the traits that the project picks for it in the Package Dependencies tab of Xcode. With no pick it has its default traits. An empty pick turns the defaults off, and a list of names turns on only those names. A package also has the traits that the packages which use it ask for. A trait that another trait enables is on too.
 - Local packages, also the local packages that other local packages name with `.package(path:)`, are followed to find the remote packages that they use. A local package with no license file is left out of the output.
 - By default the Acknowledgements pane has one child pane for each package. Set `singlePage` in `.dependi.json` to put every license on one page instead. See the [settings table](Documentation/Guides/Installing.md#settings-in-dependijson).
 - Manual entries add a name and a license text file from the project for code that has no package.
-- The Acknowledgements pane lists packages and manual entries in one list, sorted by name without case, then by identity. The order does not depend on the locale or on the order of the input.
+- The Acknowledgements pane lists packages and manual entries in one list, sorted by title without case, then by identity. The order does not depend on the locale or on the order of the input.
 - License files are regular files inside their package, within 1 MB, valid text and free of control characters.
 - A checkout is at the revision that `Package.resolved` pins.
 - Resolved packages that the app does not link fail the build unless you allow them.

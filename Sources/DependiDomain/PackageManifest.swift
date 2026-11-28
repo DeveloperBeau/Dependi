@@ -13,12 +13,16 @@ public struct PackageManifest: Equatable, Sendable {
     /// The traits that the package requests from each declared dependency, by identity. A dependency with no entry gets its default traits.
     public let traitRequests: [String: [ManifestTraitRequest]]
 
+    /// The name that the package gives itself in its manifest, or nil if the manifest has none.
+    public let name: String?
+
     /// Creates a package manifest.
     public init(
         products: [ManifestProduct], targets: [ManifestTarget], declaredDependencies: [String],
         localDependencyPaths: [String] = [], traitDefinitions: [String: [String]] = [:],
-        traitRequests: [String: [ManifestTraitRequest]] = [:]
+        traitRequests: [String: [ManifestTraitRequest]] = [:], name: String? = nil
     ) {
+        self.name = name
         self.products = products
         self.targets = targets
         self.declaredDependencies = declaredDependencies

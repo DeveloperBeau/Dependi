@@ -860,7 +860,7 @@
     "search": "values.count > 3 ? values[3] : nil",
     "replace": "values.count > 2 ? values[2] : nil",
     "test": "syntheticPackage",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "graph-declared-lowercase",
@@ -869,7 +869,7 @@
     "search": "identities.append(identity.lowercased())",
     "replace": "identities.append(identity)",
     "test": "unknownDependencyShapeIgnored",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "settings-cleanup-escapes-folder",
@@ -995,7 +995,7 @@
     "search": "if context.isScriptSandboxEnabled == true { throw .scriptSandboxEnabled }",
     "replace": "",
     "test": "sandboxOnFails",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "gen-revision-check",
@@ -1004,7 +1004,7 @@
     "search": "wanted != actual",
     "replace": "false",
     "test": "revisionMismatch",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "gen-unreached",
@@ -1013,7 +1013,7 @@
     "search": "if !result.unreached.isEmpty && !settings.allowUnreached {",
     "replace": "if false {",
     "test": "unreachedPackages",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "gen-permission-mapping",
@@ -1022,7 +1022,7 @@
     "search": "reason.lowercased().contains(\"not permitted\")",
     "replace": "false",
     "test": "permissionErrorMeansSandbox",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-outside",
@@ -1031,7 +1031,7 @@
     "search": "catch .licenseOutsideCheckout {",
     "replace": "catch .licenseMissing {",
     "test": "manualEntryRefused",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "gen-manual-absolute",
@@ -1040,7 +1040,7 @@
     "search": "!path.hasPrefix(\"/\"), ",
     "replace": "",
     "test": "manualEntryRefused",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "gen-local-packages",
@@ -1049,7 +1049,7 @@
     "search": "for path in linked.localPackagePaths {",
     "replace": "for path in linked.localPackagePaths where false {",
     "test": "localPackageFromProject",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "gen-debug-skip",
@@ -1058,7 +1058,7 @@
     "search": "if case .skip(let reason) = decision {",
     "replace": "if case .skip(let reason) = decision, reason.isEmpty {",
     "test": "GenerateFeatureTests/debugSkips()",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "gen-platform-ios",
@@ -2246,7 +2246,7 @@
     "replace": "guard true else { continue }",
     "test": "licenseFolderOnlyIsMissing",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "generate-nested-folder-skipped",
@@ -2255,7 +2255,7 @@
     "replace": "where true {",
     "test": "licenseLayouts",
     "slice": "review-fix",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "workspace-registry-skipped",
@@ -2467,7 +2467,7 @@
     "search": "let absolute = path.hasPrefix(\"/\") ? path : packagePath + \"/\" + path",
     "replace": "let absolute = path",
     "test": "localDependencyPaths",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "generate-follow-locals",
@@ -2476,7 +2476,7 @@
     "search": ".collect(from: locals)",
     "replace": ".collect(from: [])",
     "test": "nestedProductResolves",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-local-quietly",
@@ -2485,7 +2485,7 @@
     "search": "if package.kind == .local { continue }",
     "replace": "if false { continue }",
     "test": "localSkippedQuietly",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "generate-require-licenses",
@@ -2494,16 +2494,16 @@
     "search": "if settings.requireLicenses {",
     "replace": "if false {",
     "test": "strictFails",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "generate-skip-line",
     "slice": "local-follow",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "\"Dependi: skipped \\(package.identity.value): no license file\")",
-    "replace": "\"\")",
+    "search": "skipped \\(package.identity.value): no license file in its checkout. ",
+    "replace": "x ",
     "test": "remoteSkipped",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "config-require-licenses",
@@ -2632,7 +2632,7 @@
     "search": "return condition[\"traits\"] as? [String] ?? []",
     "replace": "return []",
     "test": "traitsManifest",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "trait-table-unread",
@@ -2641,7 +2641,7 @@
     "search": "definitions[name] = entry[\"enabledTraits\"] as? [String] ?? []",
     "replace": "definitions[name] = []",
     "test": "traitsManifest",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "trait-empty-list-dropped",
@@ -2650,7 +2650,7 @@
     "search": "let raw = first[\"traits\"] as? [[String: Any]]",
     "replace": "let raw = first[\"traits\"] as? [[String: Any]], !raw.isEmpty",
     "test": "traitsManifest",
-    "lastRun": {"date": "2026-11-24", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "trait-project-pick-ignored",
@@ -3055,7 +3055,7 @@
     "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": "settings.singlePage ? .panePerPackage : .singlePage",
     "test": "singlePageAsksForSinglePage",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "single-page-generate-layout-forced-panes",
@@ -3064,7 +3064,7 @@
     "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": ".panePerPackage",
     "test": "singlePageAsksForSinglePage",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "single-page-generate-layout-forced-single",
@@ -3073,7 +3073,7 @@
     "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": ".singlePage",
     "test": "defaultAsksForPanes",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "runner-temp-ignores-tmpdir",
@@ -3136,7 +3136,7 @@
     "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": "forcesSinglePage && settings.singlePage ? .singlePage : .panePerPackage",
     "test": "flagWithEmptyConfigurationAsksForSinglePage",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "single-page-flag-layout-ignored",
@@ -3145,7 +3145,97 @@
     "search": "forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage",
     "replace": "settings.singlePage ? .singlePage : .panePerPackage",
     "test": "flagBeatsSinglePageFalse",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-warning-prefix-dropped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "\"warning: Dependi: skipped \\(package.identity.value)",
+    "replace": "\"Dependi: skipped \\(package.identity.value)",
+    "test": "remoteSkipped",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-skip-count-suffix-dropped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "let skippedNote = skippedCount > 0 ? \", skipped \\(skippedCount) with no license file\" : \"\"",
+    "replace": "let skippedNote = \"\"",
+    "test": "summaryNamesSkips",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-local-skip-counted",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "if package.kind == .local { continue }",
+    "replace": "if package.kind == .local { skippedCount += 1; continue }",
+    "test": "localSkippedQuietly",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-version-suffix-dropped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "return name + \" (\" + version + \")\"",
+    "replace": "return name",
+    "test": "nameAndVersion",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-local-version-added",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "guard isRemote, let version = Self.clean(version) else { return name }",
+    "replace": "guard let version = Self.clean(version) else { return name }",
+    "test": "localIgnoresVersion",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-control-check-skipped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "if hasControl { return nil }",
+    "replace": "_ = hasControl",
+    "test": "controlCharacterInName",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-trim-skipped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "let trimmed = text.trimmingCharacters(in: .whitespaces)",
+    "replace": "let trimmed = text",
+    "test": "trims",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-empty-check-skipped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "return trimmed.isEmpty ? nil : trimmed",
+    "replace": "return trimmed",
+    "test": "noVersion",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-identity-instead-of-manifest-name",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "manifestName: try manifests.manifest(atPackagePath: package.checkoutPath).name,",
+    "replace": "manifestName: nil,",
+    "test": "remoteTitleHasNameAndVersion",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-parser-ignores-name",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "name: root[\"name\"] as? String)",
+    "replace": "name: nil)",
+    "test": "nameIsRead",
+    "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
   {
     "id": "single-page-flag-not-passed",

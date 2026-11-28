@@ -44,7 +44,7 @@ struct PackageGraphParsingTests {
                         dependency(.byName, "InMemoryLogging"), dependency(.byName, "Logging"),
                     ]),
             ],
-            declaredDependencies: [])
+            declaredDependencies: [], name: "swift-log")
         #expect(try manifest("swift-log") == expected)
     }
 
@@ -76,7 +76,7 @@ struct PackageGraphParsingTests {
                 "csqlite": [ManifestTraitRequest(name: "FTS5", conditionTraits: ["FTS5"])],
                 "sqlcipher.swift": [ManifestTraitRequest(name: "default", conditionTraits: [])],
                 "off": [],
-            ])
+            ], name: "SQLite.swift")
         #expect(try manifest("traits") == expected)
     }
 
@@ -117,7 +117,7 @@ struct PackageGraphParsingTests {
                 ),
                 ManifestTarget(name: "absl", kind: .binary, dependencies: []),
             ],
-            declaredDependencies: [])
+            declaredDependencies: [], name: "abseil")
         #expect(try manifest("abseil-cpp-binary") == expected)
     }
 

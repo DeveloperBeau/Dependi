@@ -30,6 +30,7 @@
 - Output that is not a manifest fails and names the package.
 - A dependency of an unknown shape is skipped. The rest is kept.
 - Platform conditions are lowercase names such as `ios` and `macos`.
+- The reader keeps the top level `name` of the dump as the manifest name. A name that is missing or is not a string gives no name. The cache stores the whole dump, so an old entry gives the name too. An entry with no name reads as no name and the title falls back to the identity.
 - Trait conditions keep the names from the manifest. The reader also keeps the trait table of the package and the traits that the package asks of each dependency. A dependency with no `traits` key has no entry. An empty `traits` list is kept as an empty entry.
 
 ## Tests

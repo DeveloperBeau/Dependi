@@ -42,18 +42,20 @@ final class GenerateWorld {
     }
 
     /// Adds a remote package with a license file and a manifest that has one product of the same name.
+    /// The manifest has no name unless `manifestName` is given.
     @discardableResult
     func addRemote(
         _ name: String, license: String? = "MIT License", revision: String = "r1",
         product: String? = nil,
-        dependencies: [ManifestDependency] = [], declared: [String] = []
+        dependencies: [ManifestDependency] = [], declared: [String] = [],
+        version: String? = "1.0.0", manifestName: String? = nil
     ) throws -> ResolvedPackage {
         let path = "\(Self.sourcePackages)/checkouts/\(name)"
         try files.addDirectory(at: path)
         if let license { try files.addFile(at: path + "/LICENSE", contents: Data(license.utf8)) }
         let package = ResolvedPackage(
             identity: PackageIdentity(name), kind: .remote, normalizedLocation: "org/\(name)",
-            version: "1.0.0",
+            version: version,
             revision: revision, checkoutPath: path)
         packages.append(package)
         let productName = product ?? name
@@ -62,7 +64,7 @@ final class GenerateWorld {
             targets: [
                 ManifestTarget(name: productName, kind: .regular, dependencies: dependencies)
             ],
-            declaredDependencies: declared)
+            declaredDependencies: declared, name: manifestName)
         return package
     }
 
