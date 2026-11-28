@@ -53,10 +53,7 @@ public struct ProjectFileReader: LinkedProductReading {
         }
     }
 
-    func fileLocation(_ path: String) -> String {
-        let name = path.split(separator: "/", omittingEmptySubsequences: true).last
-        return name == "project.pbxproj" ? path : path + "/project.pbxproj"
-    }
+    func fileLocation(_ path: String) -> String { ProjectFileLoader.fileLocation(path) }
 
     /// Reads the package references of a project. It returns the local package paths and adds the
     /// traits that each reference picks, keyed by the repository URL as written or the local path.

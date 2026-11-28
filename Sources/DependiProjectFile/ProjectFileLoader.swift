@@ -6,6 +6,12 @@ enum ProjectFileLoader {
     /// The largest project file that is read.
     static let sizeLimit = 64 * 1024 * 1024
 
+    /// Gives the `project.pbxproj` path for the path of a `.xcodeproj` folder or of the file itself.
+    static func fileLocation(_ path: String) -> String {
+        let name = path.split(separator: "/", omittingEmptySubsequences: true).last
+        return name == "project.pbxproj" ? path : path + "/project.pbxproj"
+    }
+
     /// Loads the `project.pbxproj` at a path. The path may point to a link.
     static func load(projectFile: String, files: any FileReading) throws(DomainError)
         -> ProjectModel
