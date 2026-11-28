@@ -9,6 +9,7 @@ public struct InitFeature: Sendable {
     private let writer: any FileWriting
     private let executables: any ExecutableMarking
     private let targets: any ApplicationTargetListing
+    private let projectBuild: any ProjectBuildConfiguring
     private let linkedProducts: any LinkedProductReading
     private let process: any ProcessRunning
     private let prompts: any Prompting
@@ -29,7 +30,7 @@ public struct InitFeature: Sendable {
     public init(
         files: any FileReading, directories: any DirectoryListing, writer: any FileWriting,
         executables: any ExecutableMarking, targets: any ApplicationTargetListing,
-        linkedProducts: any LinkedProductReading, process: any ProcessRunning,
+        projectBuild: any ProjectBuildConfiguring, linkedProducts: any LinkedProductReading, process: any ProcessRunning,
         prompts: any Prompting,
         output: any OutputWriting, executablePath: String, sourceRoot: String?, wrapperText: String,
         version: String
@@ -39,6 +40,7 @@ public struct InitFeature: Sendable {
         self.writer = writer
         self.executables = executables
         self.targets = targets
+        self.projectBuild = projectBuild
         self.linkedProducts = linkedProducts
         self.process = process
         self.prompts = prompts
@@ -49,8 +51,15 @@ public struct InitFeature: Sendable {
         self.version = version
     }
 
-    /// Runs the wizard for the project at `projectPath`. A dry run reports and changes nothing.
+    /// Runs the wizard for the project at `projectPath` and leaves the project file as it is. A dry run reports and changes nothing.
     public func run(projectPath: String, isDryRun: Bool) throws(DomainError) -> InitOutcome {
+        try run(projectPath: projectPath, isDryRun: isDryRun, editsProject: false)
+    }
+
+    /// Runs the wizard for the project at `projectPath`. A dry run reports and changes nothing. If `editsProject` is true, it also sets up the build of the app target in the project file.
+    public func run(
+        projectPath: String, isDryRun: Bool, editsProject: Bool
+    ) throws(DomainError) -> InitOutcome {
         let location = try ProjectLocator(files: files, directories: directories, prompts: prompts)
             .locate(projectPath)
         let applications = try targets.applicationTargets(projectFilePath: location.projectFile)
@@ -75,23 +84,41 @@ public struct InitFeature: Sendable {
             "Dependi: project \(location.projectFile), target \(target), \(linked.products.count) package products."
         )
         let bundle = try findSettingsBundle(in: location.root)
+        let bundlePath = bundle ?? location.root + "/Settings.bundle"
+        let backupPath = location.root + "/.dependi/project.pbxproj.bak"
+        // A dry run of the editor first, so a refusal stops init before any file changes.
+        let plannedEdits =
+            editsProject
+            ? try projectBuild.configureBuild(
+                projectFilePath: location.projectFile, targetName: target,
+                settingsBundlePath: bundlePath, backupPath: backupPath, isDryRun: true)
+            : []
         if isDryRun {
-            report(location: location, bundle: bundle)
+            report(location: location, bundle: bundle, edits: editsProject ? plannedEdits : nil)
             return .reported
         }
         let commit = pinnedCommit()
         try writeConfiguration(location: location, commit: commit)
-        try prepareSettingsBundle(
-            at: bundle ?? location.root + "/Settings.bundle", root: location.root)
+        try prepareSettingsBundle(at: bundlePath, root: location.root, editsProject: editsProject)
         try installTool(in: location.root, commit: commit)
         try updateIgnoreFile(in: location.root)
-        printRunScript(root: location.root)
+        if editsProject {
+            let lines = try projectBuild.configureBuild(
+                projectFilePath: location.projectFile, targetName: target,
+                settingsBundlePath: bundlePath, backupPath: backupPath, isDryRun: false)
+            reportEdits(lines)
+        } else {
+            printRunScript()
+        }
+        output.writeLine(
+            "Commit .dependi.json and .dependi/run.sh. The program in .dependi/bin is ignored by git and rebuilt by the script."
+        )
         return .installed
     }
 
     // MARK: Dry run
 
-    private func report(location: ProjectLocation, bundle: String?) {
+    private func report(location: ProjectLocation, bundle: String?, edits: [String]?) {
         output.writeLine("Dry run. Nothing is changed. A real run would:")
         output.writeLine("1. Write \(location.root)/.dependi.json if it is missing.")
         output.writeLine(
@@ -101,6 +128,11 @@ public struct InitFeature: Sendable {
             "3. Copy this program to \(location.root)/.dependi/bin/dependi and write .dependi/run.sh."
         )
         output.writeLine("4. Add .dependi/bin/ to \(location.root)/.gitignore.")
+        if let edits {
+            output.writeLine("5. Edit the Xcode project:")
+            for line in edits { output.writeLine("   " + line) }
+            if edits.isEmpty { output.writeLine("   Dependi: the Xcode project is already set up.") }
+        }
     }
 
     // MARK: Configuration
@@ -174,7 +206,9 @@ public struct InitFeature: Sendable {
         }
     }
 
-    private func prepareSettingsBundle(at bundle: String, root: String) throws(DomainError) {
+    private func prepareSettingsBundle(
+        at bundle: String, root: String, editsProject: Bool
+    ) throws(DomainError) {
         let plistPath = bundle + "/Root.plist"
         let original: Data? =
             files.exists(at: plistPath)
@@ -198,7 +232,7 @@ public struct InitFeature: Sendable {
                 "Dependi: changed the old LicensePlist pane in \(plistPath) to Acknowledgements. The old file is saved as .dependi/Root.plist.bak, outside the bundle so it does not ship."
             )
         }
-        if original == nil {
+        if original == nil && !editsProject {
             output.writeLine("Dependi: add \(bundle) to your app target as a resource in Xcode.")
         }
         try removeClashes(in: bundle)
@@ -268,7 +302,15 @@ public struct InitFeature: Sendable {
         output.writeLine("Dependi: added \(rule) to .gitignore.")
     }
 
-    private func printRunScript(root: String) {
+    private func reportEdits(_ lines: [String]) {
+        for line in lines { output.writeLine(line) }
+        if lines.isEmpty { output.writeLine("Dependi: the Xcode project is already set up.") }
+        output.writeLine(
+            "Dependi: close and reopen the project if Xcode has it open, so that it reads the changes."
+        )
+    }
+
+    private func printRunScript() {
         output.writeLine("")
         output.writeLine(
             "Add a Run Script build phase to the app target, after Copy Bundle Resources:")
@@ -283,8 +325,6 @@ public struct InitFeature: Sendable {
         output.writeLine(
             "    3. Set ENABLE_USER_SCRIPT_SANDBOXING to NO for the target (a script-only target for Dependi is best)."
         )
-        output.writeLine(
-            "Commit .dependi.json and .dependi/run.sh. The program in .dependi/bin is ignored by git and rebuilt by the script."
-        )
+        output.writeLine("Or run init again with --edit-project to make these changes for you.")
     }
 }
