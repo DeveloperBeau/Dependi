@@ -15,6 +15,8 @@
 /// - `<version>-<commit>.build-lock`: the build lock, a symlink whose target is the owner's process id.
 /// - `<version>-<commit>.build-lock.probe.<pid>`: a short-lived link that tells a lock released
 ///   mid-check from a folder that cannot take a link. The script removes it on every exit.
+/// - `<version>-<commit>.build-lock.reclaim`: the reclaim claim, a symlink whose target is the
+///   process id of the one script that may remove a stale lock. It exists for a few milliseconds.
 /// - `build.XXXXXX`: a temporary build folder with `src`, `build`, `out` and `build.log`.
 ///   The product is read from `build/release/dependi`. `out` is renamed to `bin`.
 public enum WrapperScript {
@@ -132,6 +134,7 @@ public enum WrapperScript {
         cached="$cache_root/$key/bin"
         lock="$cache_root/$key.build-lock"
         probe="$lock.probe.$$"
+        claim="$lock.reclaim"
         token=$$
 
         cache_valid() {
@@ -148,6 +151,7 @@ public enum WrapperScript {
 
         # Step 5: build under a lock. The trap removes the lock and the temp folder on every exit.
         have_lock=0
+        have_claim=0
         tmp=
 
         release() {
@@ -162,6 +166,13 @@ public enum WrapperScript {
                     rm -f "$lock"
                 fi
                 have_lock=0
+            fi
+            if [ "$have_claim" = 1 ]; then
+                claimant=$(readlink "$claim" 2>/dev/null || true)
+                if [ "$claimant" = "$token" ]; then
+                    rm -f "$claim"
+                fi
+                have_claim=0
             fi
         }
 
@@ -202,18 +213,37 @@ public enum WrapperScript {
             [ -n "$(find "$lock" -maxdepth 0 -mmin +30 2>/dev/null)" ]
         }
 
-        # Move the stale lock aside under a name no one else uses, then check what was moved.
-        # A lock that another process took in the meantime goes back.
+        # Only the script that holds the claim may remove a lock. The stale reading that sent a
+        # script here can be out of date, so the claimant reads the lock again and removes it only
+        # if it is still there and still stale. A stale lock cannot change while the claim is held,
+        # because ln cannot replace it and its owner is gone. Nothing is moved aside or put back.
+        # Returns 1 when another script holds the claim, so the caller waits.
         reclaim_lock() {
-            grave="$lock.stale.$$"
-            rm -rf "$grave"
-            mv "$lock" "$grave" 2>/dev/null || return 0
-            moved=$(readlink "$grave" 2>/dev/null || true)
-            if [ "$moved" = "$holder" ]; then
-                rm -rf "$grave"
-            else
-                mv "$grave" "$lock" 2>/dev/null || rm -rf "$grave"
+            # have_claim is set before ln, so a signal that arrives just after ln still removes
+            # the claim. The trap removes a claim only if it names this process.
+            have_claim=1
+            if ! ln -s "$token" "$claim" 2>/dev/null; then
+                have_claim=0
+                claimant=$(readlink "$claim" 2>/dev/null || true)
+                case "$claimant" in
+                "") ;;
+                "$token" | *[!0-9]*) rm -f "$claim" ;;
+                *)
+                    # A claim whose claimant is gone, or older than a minute, was left by a hard kill.
+                    if ! kill -0 "$claimant" 2>/dev/null ||
+                        [ -n "$(find "$claim" -maxdepth 0 -mmin +1 2>/dev/null)" ]; then
+                        rm -f "$claim"
+                    fi
+                    ;;
+                esac
+                return 1
             fi
+            # An absent lock is free to take, so it is never removed here.
+            if [ -L "$lock" ] && lock_is_stale; then
+                rm -f "$lock"
+            fi
+            rm -f "$claim"
+            have_claim=0
         }
 
         # A failed ln with no lock in place means one of two things. The owner may have released
@@ -234,8 +264,7 @@ public enum WrapperScript {
             if [ "$steps" -ge "$max_steps" ]; then
                 fail 'waited for another build to finish'
             fi
-            if lock_is_stale; then
-                reclaim_lock
+            if lock_is_stale && reclaim_lock; then
                 continue
             fi
             sleep 0.2

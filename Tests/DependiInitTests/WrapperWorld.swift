@@ -206,18 +206,44 @@ final class WrapperWorld {
         try? fm.destinationOfSymbolicLink(atPath: lock(version: version, commit: commit).path)
     }
 
-    /// Sets the modification time of a symlink, in seconds before now.
+    /// The reclaim claim for a pin.
+    func claim(version: String, commit: String) -> URL {
+        URL(fileURLWithPath: lock(version: version, commit: commit).path + ".reclaim")
+    }
+
+    /// Replaces the reclaim claim for a pin with a symlink that holds `target` as its target.
+    func plantClaim(version: String, commit: String, target: String) throws {
+        try fm.createDirectory(at: cache, withIntermediateDirectories: true)
+        let url = claim(version: version, commit: commit)
+        try? fm.removeItem(at: url)
+        try fm.createSymbolicLink(atPath: url.path, withDestinationPath: target)
+    }
+
+    /// The target of the reclaim claim, or nil when there is no claim.
+    func claimTarget(version: String, commit: String) -> String? {
+        try? fm.destinationOfSymbolicLink(
+            atPath: claim(version: version, commit: commit).path)
+    }
+
+    /// Sets the modification time of the lock, in seconds before now.
     func ageLock(version: String, commit: String, seconds: Int) throws {
+        try ageLink(at: lock(version: version, commit: commit), seconds: seconds)
+    }
+
+    /// Sets the modification time of the claim, in seconds before now.
+    func ageClaim(version: String, commit: String, seconds: Int) throws {
+        try ageLink(at: claim(version: version, commit: commit), seconds: seconds)
+    }
+
+    /// Sets the modification time of a symlink, in seconds before now.
+    private func ageLink(at url: URL, seconds: Int) throws {
         let date = Date().addingTimeInterval(-Double(seconds))
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyyMMddHHmm"
         let touch = Process()
         touch.executableURL = URL(fileURLWithPath: "/usr/bin/touch")
-        touch.arguments = [
-            "-h", "-t", formatter.string(from: date),
-            lock(version: version, commit: commit).path,
-        ]
+        touch.arguments = ["-h", "-t", formatter.string(from: date), url.path]
         try touch.run()
         touch.waitUntilExit()
     }

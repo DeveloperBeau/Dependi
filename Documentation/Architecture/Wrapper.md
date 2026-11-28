@@ -11,13 +11,37 @@
 3. Validate. `version` must match `^[0-9]+\.[0-9]+\.[0-9]+$` and `commit` must match `^[0-9a-f]{40}$`. A value with a newline fails. A bad value prints `error: ...` to stderr and exits 1.
 4. Project copy. If `.dependi/bin/dependi` is executable and the first line of `.dependi/bin/VERSION` equals `<version>-<commit>` from the config, the script runs it with `exec`. `init` writes that line from the commit of the checkout it was run from. A file with only the version, or with another commit, does not match. This uses shell built-ins only.
 5. Cache. The cache root is `$HOME/Library/Caches/dependi`. `$DEPENDI_CACHE_ROOT` replaces it only with `DEPENDI_TESTING=1`. The script refuses a root that is a symlink, is not a folder, is not owned by the current user or can be written by the group or others. It makes a new root with mode 0700. The entry is `<version>-<commit>/bin`. It is used only when `dependi.sha256` equals the `shasum -a 256` of `dependi`.
-6. Build. The lock is a symlink `<version>-<commit>.build-lock` in the cache root. Its target is the process id of the owner, so taking the lock and recording the owner is one step (`ln -s`). The script polls every 0.2 s for at most 300 s. A lock is stale when its target is not a number, when the owner process is gone (`kill -0` fails), or when the owner runs but the lock is older than 30 minutes. A stale lock is renamed to a name that holds the script's own process id, checked, and then removed. A lock that another process took in the meantime is put back. When `ln -s` fails and no lock exists, the owner may have released the lock in between. The script then makes a probe link `<version>-<commit>.build-lock.probe.<pid>` and removes it. If the probe works, the script tries the lock again. If the probe fails too, the folder cannot take a link and the script fails at once. A dead owner is therefore reclaimed at once, before any waiter gives up. After it gets the lock the script checks the cache again. Then it:
+6. Build. The lock is a symlink `<version>-<commit>.build-lock` in the cache root. Its target is the process id of the owner, so taking the lock and recording the owner is one step (`ln -s`). The script polls every 0.2 s for at most 300 s. A lock is stale when its target is not a number, when the owner process is gone (`kill -0` fails), or when the owner runs but the lock is older than 30 minutes. A stale lock is removed only by the one script that holds the reclaim claim (see "Reclaiming a stale lock"). When `ln -s` fails and no lock exists, the owner may have released the lock in between. The script then makes a probe link `<version>-<commit>.build-lock.probe.<pid>` and removes it. If the probe works, the script tries the lock again. If the probe fails too, the folder cannot take a link and the script fails at once. A dead owner is therefore reclaimed at once, before any waiter gives up. After it gets the lock the script checks the cache again. Then it:
    - makes a temp folder `build.XXXXXX` under the cache root,
    - runs `git clone --quiet --template=`, `git checkout --quiet <commit>` and requires `git rev-parse HEAD` to equal the pin. Each git call goes through `env -i` with `HOME` set to an empty folder in the temp folder, `PATH=/usr/bin:/bin`, `GIT_CONFIG_NOSYSTEM=1`, `GIT_CONFIG_GLOBAL=/dev/null`, `GIT_TERMINAL_PROMPT=0`, `TMPDIR` and, when set, `DEVELOPER_DIR`. It also passes `-c core.hooksPath=/dev/null`. An inherited `GIT_DIR` or a user config never reaches git,
    - builds under `env -i` with `HOME`, `PATH=/usr/bin:/bin`, `TMPDIR` and, when set, `DEVELOPER_DIR`,
    - copies `build/release/dependi` to `out/dependi`, writes `out/dependi.sha256`,
    - renames `out` to `<version>-<commit>/bin`.
 7. Release the lock and the temp folder, then `exec` the cached binary with the script arguments.
+
+## Reclaiming a stale lock
+
+A script that reads a stale lock calls `reclaim_lock`. The stale reading can be out of date when the script acts on it. Another script can reclaim the lock and a third script can take it in the gap. The script therefore never removes a lock on the strength of that reading.
+
+1. The script takes the claim with `ln -s`. The claim is a symlink `<version>-<commit>.build-lock.reclaim` in the cache root. Its target is the process id of the script. If the claim exists, the script waits for the next step.
+2. Under the claim, the script reads the lock again. It removes the lock only if the lock is still there and still stale. An absent lock is free, so the script does not remove it. It goes back to take the lock with `ln -s`.
+3. The script removes the claim.
+
+A stale lock cannot change while the claim is held. `ln -s` cannot replace it and its owner is gone. Other waiters cannot remove it, because they need the claim. Nothing is moved aside, so nothing is moved back over a newer lock.
+
+A waiter that finds a claim reads its target. If the target is empty, the claim was just released and the waiter tries again at the next step. The waiter removes the claim in these cases:
+
+- The target is not a number.
+- The target names the waiter. An earlier run with the same process id left the claim.
+- The target names a process that is gone.
+- The claim is older than a minute. This covers a claimant that was killed and whose process id another program now uses. A real claim lasts a few milliseconds.
+
+If none applies, the claim is live and the waiter sleeps. The trap removes the claim of a script that is stopped, and only when the claim still names that script.
+
+Known limits. Each has a worst result of one extra build, which is no worse than the old script.
+
+- A lock older than 30 minutes with a live owner is stale. If that owner releases the lock after the second reading and another script takes it before the removal, the removal takes the new lock.
+- Two waiters can clear the same dead claim at the same time. The second can then remove a claim that a third script took in between. This needs a hard kill inside the few milliseconds that the claim is held.
 
 ## Fixed values
 
@@ -31,7 +55,7 @@ The cache is trusted when the folder is private to the user. `dependi.sha256` si
 
 ## Edge cases
 
-- A trap on `EXIT`, `HUP`, `INT` and `TERM` removes the temp folder, the lock probe and the lock. The lock is removed only when its target is still the script's own process id. The script releases both by hand before each `exec`, because `exec` skips the trap.
+- A trap on `EXIT`, `HUP`, `INT` and `TERM` removes the temp folder, the lock probe, the lock and the reclaim claim. The lock and the claim are each removed only when their target is still the script's own process id. The script releases both by hand before each `exec`, because `exec` skips the trap.
 - A cache entry without a sha file, or with a wrong sha, is deleted and rebuilt. It is never run.
 - A failed clone, checkout, commit check or build prints the last 20 lines of the log and exits 1. The temp folder is removed.
 - A gate name is matched as a quoted string inside the JSON list. A name with a quote or a backslash never matches.

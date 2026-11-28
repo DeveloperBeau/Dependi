@@ -75,4 +75,55 @@ struct WrapperScriptFuzzTests {
         #expect(accepted > 3)
         #expect(rejected > 3)
     }
+
+    private static let claimAlphabet = Array("0123456789abcXYZ-/. ;$`\n")
+
+    /// A claim target that is not a process id. Written by hand: it has at least one character that
+    /// is neither a digit nor a line break, so the script cannot read it as a number or as empty.
+    private static func malformedClaim(using generator: inout SeededGenerator) -> String {
+        var text = random(
+            from: claimAlphabet, length: 1 + Int(generator.next() % 8), using: &generator)
+        if !text.contains(where: { !$0.isNumber && $0 != "\n" }) { text += "x" }
+        return text
+    }
+
+    @Test("a claim is respected only when a running process holds it and it is fresh")
+    func randomClaimsAreRespectedOnlyWhenLiveAndFresh() throws {
+        var generator = SeededGenerator()
+        let seed = generator.seed
+        var respected = 0
+        var cleared = 0
+        for round in 0..<24 {
+            let world = try WrapperWorld()
+            let head = try world.makeOrigin()
+            try world.writeConfig(["version": "1.2.3", "commit": head])
+            let dead = String(try world.deadProcessIdentifier())
+            try world.plantLock(version: "1.2.3", commit: head, owner: dead)
+            let kind = round % 3
+            let target: String
+            switch kind {
+            case 0: target = String(getpid())
+            case 1: target = String(try world.deadProcessIdentifier())
+            default: target = Self.malformedClaim(using: &generator)
+            }
+            try world.plantClaim(version: "1.2.3", commit: head, target: target)
+            let run = try world.run(
+                environment: world.buildEnvironment(["DEPENDI_LOCK_WAIT_STEPS": "3"]))
+            let note = "seed \(seed) round \(round): claim \(target.debugDescription)"
+            if kind == 0 {
+                respected += 1
+                #expect(run.status == 1, "\(note)")
+                #expect(world.calls().isEmpty, "\(note)")
+                #expect(world.lockOwner(version: "1.2.3", commit: head) == dead, "\(note)")
+                #expect(world.claimTarget(version: "1.2.3", commit: head) == target, "\(note)")
+            } else {
+                cleared += 1
+                #expect(run.status == 0, "\(note): \(run.stderr)")
+                #expect(world.calls(of: "xcrun").count == 1, "\(note)")
+                #expect(world.cacheEntries() == ["1.2.3-\(head)"], "\(note)")
+            }
+        }
+        #expect(respected > 3)
+        #expect(cleared > 3)
+    }
 }
