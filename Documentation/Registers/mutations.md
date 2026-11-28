@@ -162,6 +162,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | init-edit-backup-link-check-skipped | init-xcode-b | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `linkAtBackupPath` | killed | 2026-11-29 KILLED |
 | init-edit-backup-path | init-xcode-b | `Sources/DependiInit/InitFeature.swift` | `editsInTwoSteps` | killed | 2026-11-29 KILLED |
 | init-edit-backup-regular-check-skipped | init-xcode-b | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `folderAtBackupPath` | killed | 2026-11-29 KILLED |
+| init-edit-backup-unreadable-accepted | init-xcode-b | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `backupReadbackFailsIsRemoved` | killed | not run |
 | init-edit-conditional-first-entry-skipped | init-xcode-b | `Sources/DependiProjectFile/BuildSetupPlanner.swift` | `conditionalKeyFirstInRealProject` | killed | not run |
 | init-edit-conditional-key-narrowed | init-xcode-b | `Sources/DependiProjectFile/BuildSetupPlanner.swift` | `conditionalKeyArch` | killed | not run |
 | init-edit-dry-report-always | init-xcode-b | `Sources/DependiInit/InitFeature.swift` | `dryRunWithoutFlag` | killed | 2026-11-29 KILLED |
@@ -169,6 +170,8 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | init-edit-dry-run-first | init-xcode-b | `Sources/DependiInit/InitFeature.swift` | `editsInTwoSteps` | killed | 2026-11-29 KILLED |
 | init-edit-flag-duplicate | init-xcode-b | `Sources/DependiCommandLine/CommandLineParser.swift` | `duplicates` | killed | 2026-11-29 KILLED |
 | init-edit-flag-ignored | init-xcode-b | `Sources/DependiCommandLine/CommandLineParser.swift` | `tableRowsAreAccepted` | killed | 2026-11-29 KILLED |
+| init-edit-id-default-limit-301 | init-xcode-b | `Sources/DependiProjectFile/ProjectObjectIDMaker.swift` | `defaultLimitAllowsManyClashes` | killed | not run |
+| init-edit-id-default-limit-999 | init-xcode-b | `Sources/DependiProjectFile/ProjectObjectIDMaker.swift` | `defaultLimitAllowsManyClashes` | killed | not run |
 | init-edit-id-default-limit-lowered | init-xcode-b | `Sources/DependiProjectFile/ProjectObjectIDMaker.swift` | `defaultLimitAllowsManyClashes` | killed | not run |
 | init-edit-manual-hint-removed | init-xcode-b | `Sources/DependiInit/InitFeature.swift` | `plainInitSkipsTheEditor` | killed | 2026-11-29 KILLED |
 | init-edit-real-call-is-dry | init-xcode-b | `Sources/DependiInit/InitFeature.swift` | `editsInTwoSteps` | killed | 2026-11-29 KILLED |

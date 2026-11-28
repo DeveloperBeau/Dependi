@@ -4214,5 +4214,29 @@
     "search": "attemptLimit: Int = 1000",
     "replace": "attemptLimit: Int = 100",
     "test": "defaultLimitAllowsManyClashes"
+  },
+  {
+    "id": "init-edit-id-default-limit-301",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "attemptLimit: Int = 1000",
+    "replace": "attemptLimit: Int = 301",
+    "test": "defaultLimitAllowsManyClashes"
+  },
+  {
+    "id": "init-edit-id-default-limit-999",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "attemptLimit: Int = 1000",
+    "replace": "attemptLimit: Int = 999",
+    "test": "defaultLimitAllowsManyClashes"
+  },
+  {
+    "id": "init-edit-backup-unreadable-accepted",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "guard let backup, Array(backup) == original else {",
+    "replace": "guard backup.map({ Array($0) == original }) ?? true else {",
+    "test": "backupReadbackFailsIsRemoved"
   }
 ]

@@ -92,6 +92,26 @@ struct BuildEditLayoutTests {
         #expect(try world.currentBytes() != world.original)
     }
 
+    @Test("a backup that cannot be read back is removed and the project is not replaced")
+    func backupReadbackFailsIsRemoved() throws {
+        let world = try EditWorld(
+            "old-format-mew", unreadablePrefix: "write \(EditWorld.backup)")
+        #expect(
+            throws: DomainError.fileUnwritable(
+                path: EditWorld.backup,
+                reason:
+                    "the backup did not match the original, so it was removed. The project file was not changed."
+            )
+        ) { try world.configure(target: "MewTestsApp", bundle: "Settings.bundle") }
+        #expect(
+            world.writer.records == [
+                "mkdir \(EditWorld.appFolder)/.dependi", "write \(EditWorld.backup)",
+                "remove \(EditWorld.backup)",
+            ])
+        #expect(!world.files.exists(at: EditWorld.backup))
+        #expect(try world.currentBytes() == world.original)
+    }
+
     @Test("a bad backup that cannot be removed is reported as left in place")
     func backupMismatchRemovalFails() throws {
         let world = try EditWorld(
