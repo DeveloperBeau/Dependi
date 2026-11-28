@@ -128,6 +128,7 @@ The editor refuses with `DomainError` and writes nothing when:
 - the target name is unknown. The message lists the targets.
 - the bundle path is not inside the project folder, or its last part is not `Settings.bundle`
 - the target has no Copy Bundle Resources phase. Dependi does not create one.
+- the target has more than one Copy Bundle Resources phase. The message tells the user to merge them in Xcode.
 - a build configuration of the target sets a conditional key such as `ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]`, whatever its value. The message names the configuration and the key. A plain `= NO` would not win over it.
 - the target copies another `Settings.bundle`, because two bundles with one name collide in the product
 - a synchronized folder leaves the bundle out of the target through a membership exception

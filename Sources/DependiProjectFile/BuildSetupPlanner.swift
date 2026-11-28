@@ -43,14 +43,19 @@ struct BuildSetupPlanner {
         }
         let relative = String(bundle.dropFirst(prefix.count))
         let phases = try model.strings(object, "buildPhases")
-        guard
-            let resources = phases.enumerated().compactMap({ index, id in
-                model.object(id, isa: "PBXResourcesBuildPhase").map { (index, id, $0) }
-            }).first
-        else {
+        let resourcePhases = phases.enumerated().compactMap { index, id in
+            model.object(id, isa: "PBXResourcesBuildPhase").map { (index, id, $0) }
+        }
+        guard let resources = resourcePhases.first else {
             throw .initRefused(
                 reason:
                     "\(targetName) has no Copy Bundle Resources phase. Add one in Xcode, then run again."
+            )
+        }
+        guard resourcePhases.count == 1 else {
+            throw .initRefused(
+                reason:
+                    "\(targetName) has more than one Copy Bundle Resources phase. Merge them in Xcode, then run again."
             )
         }
         try planBundle(

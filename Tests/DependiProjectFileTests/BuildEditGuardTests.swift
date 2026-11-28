@@ -89,6 +89,28 @@ struct BuildEditGuardTests {
             target: "App")
     }
 
+    @Test("a target with two Copy Bundle Resources phases is refused and nothing is written")
+    func twoResourcesPhases() throws {
+        var source = mini(settings: nil)
+        source = replacing(
+            source, "\t\t\t\tE0 /* Resources */,\n",
+            with: "\t\t\t\tE0 /* Resources */,\n\t\t\t\tE1 /* Resources */,\n")
+        source = replacing(
+            source, "/* End PBXResourcesBuildPhase section */",
+            with:
+                "\t\tE1 /* Resources */ = {\n\t\t\tisa = PBXResourcesBuildPhase;\n\t\t\tbuildActionMask = 2147483647;\n\t\t\tfiles = (\n\t\t\t);\n\t\t\trunOnlyForDeploymentPostprocessing = 0;\n\t\t};\n/* End PBXResourcesBuildPhase section */"
+        )
+        let world = try EditWorld("x", bytes: Data(source.utf8))
+        #expect(
+            throws: DomainError.initRefused(
+                reason:
+                    "App has more than one Copy Bundle Resources phase. Merge them in Xcode, then run again."
+            )
+        ) { try world.configure(target: "App", bundle: "Settings.bundle") }
+        #expect(world.writer.records.isEmpty)
+        #expect(try world.currentBytes() == Data(source.utf8))
+    }
+
     @Test("a build setting that shares its line is refused")
     func settingNotOnItsOwnLine() throws {
         try expectRefusal(
