@@ -60,6 +60,7 @@ public struct CommandLineParser: Sendable {
     {
         var projectPath: String?
         var isDryRun = false
+        var editsProject = false
         var index = 0
         while index < rest.count {
             let token = rest[index]
@@ -82,6 +83,12 @@ public struct CommandLineParser: Sendable {
                 }
                 isDryRun = true
                 index += 1
+            case "--edit-project":
+                if editsProject {
+                    throw CommandLineError.duplicateFlag(command: command, flag: token)
+                }
+                editsProject = true
+                index += 1
             default:
                 throw rejection(of: token, command: command)
             }
@@ -89,6 +96,6 @@ public struct CommandLineParser: Sendable {
         guard let projectPath else {
             throw CommandLineError.missingRequiredFlag(command: command, flag: "--project")
         }
-        return .initialize(projectPath: projectPath, isDryRun: isDryRun)
+        return .initialize(projectPath: projectPath, isDryRun: isDryRun, editsProject: editsProject)
     }
 }

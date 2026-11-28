@@ -19,14 +19,25 @@ struct CommandLineParserTests {
         let table: [([String], Command)] = [
             (["generate"], .generate(forcesSinglePage: false)),
             (["generate", "--single-page"], .generate(forcesSinglePage: true)),
-            (["init", "--project", "App"], .initialize(projectPath: "App", isDryRun: false)),
+            (
+                ["init", "--project", "App"],
+                .initialize(projectPath: "App", isDryRun: false, editsProject: false)
+            ),
+            (
+                ["init", "--project", "App", "--edit-project"],
+                .initialize(projectPath: "App", isDryRun: false, editsProject: true)
+            ),
+            (
+                ["init", "--edit-project", "--dry-run", "--project", "App"],
+                .initialize(projectPath: "App", isDryRun: true, editsProject: true)
+            ),
             (
                 ["init", "--project", "App", "--dry-run"],
-                .initialize(projectPath: "App", isDryRun: true)
+                .initialize(projectPath: "App", isDryRun: true, editsProject: false)
             ),
             (
                 ["init", "--dry-run", "--project", "App"],
-                .initialize(projectPath: "App", isDryRun: true)
+                .initialize(projectPath: "App", isDryRun: true, editsProject: false)
             ),
             (["--version"], .version),
             (["version"], .version),
@@ -44,7 +55,7 @@ struct CommandLineParserTests {
         for path in ["My App/App.xcodeproj", "../Prøjekt/日本語", "./a", "-single", "a=b"] {
             #expect(
                 try parser.parse(["init", "--project", path])
-                    == .initialize(projectPath: path, isDryRun: false))
+                    == .initialize(projectPath: path, isDryRun: false, editsProject: false))
         }
     }
 
@@ -125,6 +136,9 @@ struct CommandLineParserTests {
         #expect(
             error(["init", "--dry-run", "--project", "a", "--dry-run"])
                 == .duplicateFlag(command: "init", flag: "--dry-run"))
+        #expect(
+            error(["init", "--project", "a", "--edit-project", "--edit-project"])
+                == .duplicateFlag(command: "init", flag: "--edit-project"))
     }
 
     @Test("unknown flags and the equals form are refused")
@@ -140,6 +154,12 @@ struct CommandLineParserTests {
         #expect(
             error(["init", "--dry-run=true"])
                 == .unknownFlag(command: "init", flag: "--dry-run=true"))
+        #expect(
+            error(["init", "--project", "a", "--edit-project=yes"])
+                == .unknownFlag(command: "init", flag: "--edit-project=yes"))
+        #expect(
+            error(["generate", "--edit-project"])
+                == .unknownFlag(command: "generate", flag: "--edit-project"))
     }
 
     @Test("look-alike commands are refused")
@@ -183,7 +203,7 @@ struct CommandLineParserTests {
     func usageMentionsEverything() {
         for word in [
             "generate", "init", "version", "--version", "help", "--help", "-h", "--project",
-            "--dry-run", "<path>", "--single-page",
+            "--dry-run", "--edit-project", "<path>", "--single-page",
         ] {
             #expect(UsageText.text.contains(word), "missing: \(word)")
         }
