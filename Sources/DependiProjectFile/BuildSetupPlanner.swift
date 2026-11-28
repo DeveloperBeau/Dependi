@@ -151,8 +151,10 @@ struct BuildSetupPlanner {
     }
 
     private mutating func addFileReference(id: String, relative: String) throws(DomainError) {
+        // Xcode writes `name` only when the path has a folder.
+        let name = relative.contains("/") ? "name = Settings.bundle; " : ""
         try insertSectionLine(
-            "\t\t\(id) /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = \"wrapper.plug-in\"; name = Settings.bundle; path = \(Self.quoted(relative)); sourceTree = SOURCE_ROOT; };\n",
+            "\t\t\(id) /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = \"wrapper.plug-in\"; \(name)path = \(Self.quoted(relative)); sourceTree = SOURCE_ROOT; };\n",
             id: id, isa: "PBXFileReference")
         guard let mainGroup = model.project["mainGroup"] as? String,
             model.object(mainGroup, isa: "PBXGroup") != nil

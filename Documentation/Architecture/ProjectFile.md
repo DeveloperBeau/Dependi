@@ -102,7 +102,7 @@ The layout is the one that Xcode writes. Each object line is indented with tabs.
 - A missing `PBXShellScriptBuildPhase` section is created between the sections whose names sort before and after it. Xcode orders sections by name.
 - A new list item goes after the last item. The Dependi phase goes right after the Copy Bundle Resources phase.
 - A missing build setting goes before the first key that sorts after it in byte order. A setting with another value is replaced at its value only. The key, the spacing and the semicolon stay.
-- The file reference goes in the main group. It has `sourceTree = SOURCE_ROOT` and a path that is relative to the folder that holds the `.xcodeproj`. The path is quoted when it holds more than letters, digits, `_`, `.` and `/`.
+- The file reference goes in the main group. It has `sourceTree = SOURCE_ROOT` and a path that is relative to the folder that holds the `.xcodeproj`. The reference has `name = Settings.bundle` only when the path has a folder, as Xcode does. The path is quoted when it holds more than letters, digits, `_`, `.` and `/`.
 - The value `NO` and the value `"NO"` both count as done.
 - A build setting at project level or in a configuration file is not changed. The setting in the target wins over both. When the editor adds the setting to a configuration that has a configuration file, it adds a line that says so.
 

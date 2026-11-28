@@ -46,7 +46,7 @@ struct BuildEditSuccessTests {
         let expected =
             [
                 "\t\t76C979CC1790CDFA3037B5DC /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3F3B65923D016048D4FAF971 /* Settings.bundle */; };",
-                "\t\t3F3B65923D016048D4FAF971 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = \"wrapper.plug-in\"; name = Settings.bundle; path = Settings.bundle; sourceTree = SOURCE_ROOT; };",
+                "\t\t3F3B65923D016048D4FAF971 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = \"wrapper.plug-in\"; path = Settings.bundle; sourceTree = SOURCE_ROOT; };",
                 "\t\t\t\t3F3B65923D016048D4FAF971 /* Settings.bundle */,",
                 "\t\t\t\t2753DE8B26A7EEA90771BF6B /* Dependi */,",
                 "\t\t\t\t76C979CC1790CDFA3037B5DC /* Settings.bundle in Resources */,",
