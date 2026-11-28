@@ -107,8 +107,9 @@ final class EndToEndWorld {
     /// Manifest JSON in the shape of `dump-package`.
     static func manifest(
         product: String, dependencies: [String] = [], declared: [String] = [],
-        kinds: [(String, String, [String])] = []
+        kinds: [(String, String, [String])] = [], name: String? = nil
     ) -> String {
+        let nameJSON = name.map { "\"name\":\"\($0)\"," } ?? ""
         let products = ["{\"name\":\"\(product)\",\"targets\":[\"\(product)\"]}"]
         var targets = [
             "{\"name\":\"\(product)\",\"type\":\"regular\",\"dependencies\":[\(dependencies.map { "{\"product\":[\"\($0)\",\"\($0.lowercased() == "logging" ? "swift-log" : $0)\",null,null]}" }.joined(separator: ","))]}"
@@ -121,14 +122,14 @@ final class EndToEndWorld {
         let declaredJSON = declared.map { "{\"sourceControl\":[{\"identity\":\"\($0)\"}]}" }.joined(
             separator: ",")
         return
-            "{\"products\":[\(products.joined(separator: ","))],\"targets\":[\(targets.joined(separator: ","))],\"dependencies\":[\(declaredJSON)]}"
+            "{\(nameJSON)\"products\":[\(products.joined(separator: ","))],\"targets\":[\(targets.joined(separator: ","))],\"dependencies\":[\(declaredJSON)]}"
     }
 
     @discardableResult
     func addRemote(
         _ name: String, owner: String, license: String? = "license of NAME",
         manifest: String? = nil,
-        revision: String = "r1"
+        revision: String = "r1", version: String? = "1.0.0"
     ) throws -> String {
         let folder = sourcePackages + "/checkouts/" + name
         try FileManager.default.createDirectory(atPath: folder, withIntermediateDirectories: true)
@@ -147,7 +148,8 @@ final class EndToEndWorld {
                 "location": "https://github.com/\(owner)/\(name).git", "name": name,
             ],
             "state": [
-                "checkoutState": ["revision": revision, "version": "1.0.0"],
+                "checkoutState": version.map { ["revision": revision, "version": $0] }
+                    ?? ["revision": revision],
                 "name": "sourceControlCheckout",
             ],
             "subpath": name,

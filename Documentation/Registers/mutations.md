@@ -94,7 +94,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | generate-follow-locals | local-follow | `Sources/DependiGenerate/GenerateFeature.swift` | `nestedProductResolves` | killed | 2026-11-27 KILLED |
 | generate-nested-folder-skipped | review-fix | `Sources/DependiGenerate/GenerateFeature.swift` | `licenseLayouts` | killed | 2026-11-27 KILLED |
 | generate-require-licenses | local-follow | `Sources/DependiGenerate/GenerateFeature.swift` | `strictFails` | killed | 2026-11-27 KILLED |
-| generate-skip-line | local-follow | `Sources/DependiGenerate/GenerateFeature.swift` | `remoteSkipped` | killed | 2026-11-27 KILLED |
+| generate-skip-line | local-follow | `Sources/DependiGenerate/GenerateFeature.swift` | `remoteSkipped` | killed | not run |
 | generate-skip-local-quietly | local-follow | `Sources/DependiGenerate/GenerateFeature.swift` | `localSkippedQuietly` | killed | 2026-11-27 KILLED |
 | graph-declared-lowercase | 7 | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `unknownDependencyShapeIgnored` | killed | 2026-11-24 KILLED |
 | graph-exit-status | 7 | `Sources/DependiPackageGraph/PackageGraphReader.swift` | `nonZeroExit` | killed | 2026-11-04 KILLED |
@@ -155,6 +155,16 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | license-name-separator | 1 | `Sources/DependiEntities/LicenseDocument.swift` | `unsafeNamesAreRejected` | killed | 2026-11-04 KILLED |
 | license-notice-pattern | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `noticeNextToLicense` | killed | 2026-11-04 KILLED |
 | license-order | 2b | `Sources/DependiDomain/LicenseLocator.swift` | `foundInFixedOrder` | killed | 2026-11-04 KILLED |
+| licenseplist-gaps-control-check-skipped | licenseplist-gaps | `Sources/DependiDomain/PackageTitle.swift` | `controlCharacterInName` | killed | not run |
+| licenseplist-gaps-empty-check-skipped | licenseplist-gaps | `Sources/DependiDomain/PackageTitle.swift` | `noVersion` | killed | not run |
+| licenseplist-gaps-identity-instead-of-manifest-name | licenseplist-gaps | `Sources/DependiGenerate/GenerateFeature.swift` | `remoteTitleHasNameAndVersion` | killed | not run |
+| licenseplist-gaps-local-skip-counted | licenseplist-gaps | `Sources/DependiGenerate/GenerateFeature.swift` | `localSkippedQuietly` | killed | not run |
+| licenseplist-gaps-local-version-added | licenseplist-gaps | `Sources/DependiDomain/PackageTitle.swift` | `localIgnoresVersion` | killed | not run |
+| licenseplist-gaps-parser-ignores-name | licenseplist-gaps | `Sources/DependiPackageGraph/ManifestJSONParser.swift` | `nameIsRead` | killed | not run |
+| licenseplist-gaps-skip-count-suffix-dropped | licenseplist-gaps | `Sources/DependiGenerate/GenerateFeature.swift` | `summaryNamesSkips` | killed | not run |
+| licenseplist-gaps-trim-skipped | licenseplist-gaps | `Sources/DependiDomain/PackageTitle.swift` | `trims` | killed | not run |
+| licenseplist-gaps-version-suffix-dropped | licenseplist-gaps | `Sources/DependiDomain/PackageTitle.swift` | `nameAndVersion` | killed | not run |
+| licenseplist-gaps-warning-prefix-dropped | licenseplist-gaps | `Sources/DependiGenerate/GenerateFeature.swift` | `remoteSkipped` | killed | not run |
 | loader-size-cap | 2b | `Sources/DependiDomain/ConfigurationLoader.swift` | `oversizeAndFolder` | killed | 2026-11-04 KILLED |
 | local-cycle-guard | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `sharedDependencyIsListedOnce` | killed | 2026-11-10 KILLED |
 | local-follow-paths | local-follow | `Sources/DependiDomain/LocalPackageCollector.swift` | `nestedLocalPackage` | killed | not run |

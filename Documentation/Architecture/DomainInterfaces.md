@@ -17,7 +17,7 @@
 | `OutputWriting` | Write a line to the normal or the error output. |
 | `DependencySourceReading` | Resolved packages and pinned revisions. |
 | `LinkedProductReading` | The products a target links, with local package paths and platforms. |
-| `PackageManifestReading` | The products and targets of one package. |
+| `PackageManifestReading` | The name, products and targets of one package. |
 | `AcknowledgementWriting` | Write panes into a settings bundle. |
 
 All interfaces are `Sendable`. All operations that can fail use typed throws with `DomainError`, the one error enumeration of the module.

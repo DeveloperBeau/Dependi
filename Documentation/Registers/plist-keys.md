@@ -20,3 +20,7 @@ Every key that Dependi writes into a plist. A change that adds a key adds a row.
 | child entry | `Type` | `PSGroupSpecifier` |
 | child entry | `Title` | The file name of the license document. |
 | child entry | `FooterText` | The license text, unchanged. |
+
+## The display name
+
+The display name of a package is its title, `<name> (<version>)`. The name is the manifest name. The version is the resolved version of a remote package. The title is `<name>` with no brackets when the package has no version, such as a package pinned by revision, and for every local package. If the manifest name is missing, empty or has a control character, the name is the package identity. Spaces around the name and the version are removed. A manual entry keeps its own name. From 0.3.0 the title has this form. Before it was the lower-case identity.

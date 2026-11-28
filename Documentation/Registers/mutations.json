@@ -2500,10 +2500,9 @@
     "id": "generate-skip-line",
     "slice": "local-follow",
     "file": "Sources/DependiGenerate/GenerateFeature.swift",
-    "search": "\"Dependi: skipped \\(package.identity.value): no license file\")",
-    "replace": "\"\")",
-    "test": "remoteSkipped",
-    "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+    "search": "skipped \\(package.identity.value): no license file in its checkout. ",
+    "replace": "x ",
+    "test": "remoteSkipped"
   },
   {
     "id": "config-require-licenses",
@@ -3146,6 +3145,86 @@
     "replace": "settings.singlePage ? .singlePage : .panePerPackage",
     "test": "flagBeatsSinglePageFalse",
     "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+  },
+  {
+    "id": "licenseplist-gaps-warning-prefix-dropped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "\"warning: Dependi: skipped \\(package.identity.value)",
+    "replace": "\"Dependi: skipped \\(package.identity.value)",
+    "test": "remoteSkipped"
+  },
+  {
+    "id": "licenseplist-gaps-skip-count-suffix-dropped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "let skippedNote = skippedCount > 0 ? \", skipped \\(skippedCount) with no license file\" : \"\"",
+    "replace": "let skippedNote = \"\"",
+    "test": "summaryNamesSkips"
+  },
+  {
+    "id": "licenseplist-gaps-local-skip-counted",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "if package.kind == .local { continue }",
+    "replace": "if package.kind == .local { skippedCount += 1; continue }",
+    "test": "localSkippedQuietly"
+  },
+  {
+    "id": "licenseplist-gaps-version-suffix-dropped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "return name + \" (\" + version + \")\"",
+    "replace": "return name",
+    "test": "nameAndVersion"
+  },
+  {
+    "id": "licenseplist-gaps-local-version-added",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "guard isRemote, let version = Self.clean(version) else { return name }",
+    "replace": "guard let version = Self.clean(version) else { return name }",
+    "test": "localIgnoresVersion"
+  },
+  {
+    "id": "licenseplist-gaps-control-check-skipped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "if hasControl { return nil }",
+    "replace": "_ = hasControl",
+    "test": "controlCharacterInName"
+  },
+  {
+    "id": "licenseplist-gaps-trim-skipped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "let trimmed = text.trimmingCharacters(in: .whitespaces)",
+    "replace": "let trimmed = text",
+    "test": "trims"
+  },
+  {
+    "id": "licenseplist-gaps-empty-check-skipped",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiDomain/PackageTitle.swift",
+    "search": "return trimmed.isEmpty ? nil : trimmed",
+    "replace": "return trimmed",
+    "test": "noVersion"
+  },
+  {
+    "id": "licenseplist-gaps-identity-instead-of-manifest-name",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiGenerate/GenerateFeature.swift",
+    "search": "manifestName: try manifests.manifest(atPackagePath: package.checkoutPath).name,",
+    "replace": "manifestName: nil,",
+    "test": "remoteTitleHasNameAndVersion"
+  },
+  {
+    "id": "licenseplist-gaps-parser-ignores-name",
+    "slice": "licenseplist-gaps",
+    "file": "Sources/DependiPackageGraph/ManifestJSONParser.swift",
+    "search": "name: root[\"name\"] as? String)",
+    "replace": "name: nil)",
+    "test": "nameIsRead"
   },
   {
     "id": "single-page-flag-not-passed",
