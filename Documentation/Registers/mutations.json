@@ -2790,7 +2790,7 @@
   {
     "id": "legacy-local-group-order",
     "slice": "legacy-local",
-    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "file": "Sources/DependiProjectFile/ReferencePathResolver.swift",
     "search": "parts.insert(path, at: 0)",
     "replace": "parts.append(path)",
     "test": "legacyFolderReferencesAreLocalPackages",
@@ -2799,7 +2799,7 @@
   {
     "id": "legacy-local-sdk-source-tree",
     "slice": "legacy-local",
-    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "file": "Sources/DependiProjectFile/ReferencePathResolver.swift",
     "search": "            default:\n                return nil",
     "replace": "            default:\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
     "test": "sdkReferenceIsIgnored",
@@ -2808,7 +2808,7 @@
   {
     "id": "legacy-local-source-root",
     "slice": "legacy-local",
-    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "file": "Sources/DependiProjectFile/ReferencePathResolver.swift",
     "search": "case \"SOURCE_ROOT\":\n                return ProjectPathMath.resolve(parts.joined(separator: \"/\"), against: model.folder)",
     "replace": "case \"SOURCE_ROOT\":\n                return nil",
     "test": "sourceRootAndAbsoluteReferences",
@@ -2817,7 +2817,7 @@
   {
     "id": "legacy-local-absolute",
     "slice": "legacy-local",
-    "file": "Sources/DependiProjectFile/LegacyLocalPackages.swift",
+    "file": "Sources/DependiProjectFile/ReferencePathResolver.swift",
     "search": "ProjectPathMath.standardize(parts.joined(separator: \"/\"))",
     "replace": "nil",
     "test": "sourceRootAndAbsoluteReferences",
@@ -3245,5 +3245,477 @@
     "replace": "output: console, forcesSinglePage: false)",
     "test": "flagForcesSinglePage",
     "lastRun": {"date": "2026-11-27", "outcome": "KILLED"}
+  },
+  {
+    "id": "edit-no-change-no-write",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "if plan.edits.isEmpty { return plan.lines }",
+    "replace": "if false { return plan.lines }",
+    "test": "rerunIsIdentical"
+  },
+  {
+    "id": "edit-dry-run-writes",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "if isDryRun { return lines }",
+    "replace": "if false { return lines }",
+    "test": "dryRunWritesNothing"
+  },
+  {
+    "id": "edit-backup-first",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "try writer.write(Data(original), toPath: backupPath)",
+    "replace": "_ = backupPath",
+    "test": "BuildEditRefusalTests/backupFirst()"
+  },
+  {
+    "id": "edit-backup-verified",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "guard Array(backup) == original else {",
+    "replace": "guard true else {",
+    "test": "backupMismatch"
+  },
+  {
+    "id": "edit-verify-called",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "try plan.verify(before: model, after: after)",
+    "replace": "_ = after",
+    "test": "verifierUnplannedChange"
+  },
+  {
+    "id": "edit-settled-called",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "try checkSettled(edited, after: after, target: targetName, bundlePath: settingsBundlePath)",
+    "replace": "_ = edited",
+    "test": "verifierStepStillOpen"
+  },
+  {
+    "id": "edit-crlf-refused",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "if bytes.contains(0x0D) {",
+    "replace": "if false {",
+    "test": "crlf"
+  },
+  {
+    "id": "edit-spaces-refused",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "$0 == 0x0A && $1 == 0x20",
+    "replace": "$0 == 0x0A && $1 == 0x21",
+    "test": "spaceIndented"
+  },
+  {
+    "id": "edit-temp-removed",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "try? writer.removeItem(at: temporary)",
+    "replace": "_ = temporary",
+    "test": "projectWriteFails"
+  },
+  {
+    "id": "edit-real-path",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "realPath: model.path, backupPath: backupPath)",
+    "replace": "realPath: ProjectFileLoader.fileLocation(projectFilePath), backupPath: backupPath)",
+    "test": "linkedProjectFile"
+  },
+  {
+    "id": "edit-atomic-move",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "try writer.moveItem(at: temporary, to: realPath)",
+    "replace": "try writer.write(Data(edited), toPath: realPath)",
+    "test": "mewGetsAllThreeSteps"
+  },
+  {
+    "id": "edit-file-location",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileLoader.swift",
+    "search": "return name == \"project.pbxproj\" ? path : path + \"/project.pbxproj\"",
+    "replace": "return path + \"/project.pbxproj\"",
+    "test": "projectFilePathIsAccepted"
+  },
+  {
+    "id": "plan-unknown-target",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "targets.first(where: { $0.name == targetName })",
+    "replace": "targets.first",
+    "test": "BuildEditRefusalTests/unknownTarget()"
+  },
+  {
+    "id": "plan-bundle-inside-folder",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "bundle.hasPrefix(prefix), bundle.hasSuffix",
+    "replace": "bundle.hasSuffix",
+    "test": "bundleOutsideFolder"
+  },
+  {
+    "id": "plan-bundle-name",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "bundle.hasSuffix(\"/Settings.bundle\")",
+    "replace": "bundle.hasSuffix(\"\")",
+    "test": "bundleOutsideFolder"
+  },
+  {
+    "id": "plan-bundle-standardize",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "ProjectPathMath.standardize(bundlePath)",
+    "replace": "bundlePath",
+    "test": "bundleOutsideFolder"
+  },
+  {
+    "id": "plan-resources-isa",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "\"PBXResourcesBuildPhase\"",
+    "replace": "\"PBXSourcesBuildPhase\"",
+    "test": "mewGetsAllThreeSteps"
+  },
+  {
+    "id": "plan-same-bundle-return",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "if resolver.location(of: referenceID) == bundle { return }",
+    "replace": "if true { return }",
+    "test": "differentBundle"
+  },
+  {
+    "id": "plan-bundle-name-check",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "return name == \"Settings.bundle\"",
+    "replace": "return true",
+    "test": "mewGetsAllThreeSteps"
+  },
+  {
+    "id": "plan-folder-ref-ignored",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "guard reference[\"lastKnownFileType\"] as? String != \"folder\" else { return false }",
+    "replace": "guard true else { return false }",
+    "test": "folderReferenceDoesNotCount"
+  },
+  {
+    "id": "plan-sync-skip",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "if try isCoveredBySynchronizedGroup(target: target, object: object, bundle: bundle) {",
+    "replace": "if false {",
+    "test": "filaAddsNoReference"
+  },
+  {
+    "id": "plan-sync-exception",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "membershipExceptions\").contains(inside)",
+    "replace": "membershipExceptions\").contains(\"\")",
+    "test": "synchronizedExceptionRefuses"
+  },
+  {
+    "id": "plan-sync-exception-target",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "set[\"target\"] as? String == target.id",
+    "replace": "set[\"target\"] as? String != target.id",
+    "test": "exceptionOfAnotherTarget"
+  },
+  {
+    "id": "plan-reuse-reference",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "var referenceID = existingReference(at: bundle)",
+    "replace": "var referenceID: String? = nil",
+    "test": "existingReferenceOutsideTargetIsReused"
+  },
+  {
+    "id": "plan-quote-plain",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "guard !plain else",
+    "replace": "guard plain else",
+    "test": "spaceInPathIsQuoted"
+  },
+  {
+    "id": "plan-quote-escape-quote",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": ".replacingOccurrences(of: \"\\\"\", with: \"\\\\\\\"\")",
+    "replace": ".replacingOccurrences(of: \"\\\"\", with: \"\\\"\")",
+    "test": "awkwardPaths"
+  },
+  {
+    "id": "plan-quote-escape-backslash",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "replacingOccurrences(of: \"\\\\\", with: \"\\\\\\\\\")",
+    "replace": "replacingOccurrences(of: \"\\\\\", with: \"\\\\\")",
+    "test": "awkwardPaths"
+  },
+  {
+    "id": "plan-phase-detect",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": ".contains(\".dependi/run.sh\") == true",
+    "replace": ".contains(\"\") == true",
+    "test": "overlandKeepsExistingResource"
+  },
+  {
+    "id": "plan-phase-order-warning",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "if index < resourcesIndex {",
+    "replace": "if false {",
+    "test": "phaseBeforeResourcesIsKept"
+  },
+  {
+    "id": "plan-phase-position",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "key: \"buildPhases\", after: resourcesID)",
+    "replace": "key: \"buildPhases\", after: nil)",
+    "test": "phaseGoesRightAfterResources"
+  },
+  {
+    "id": "plan-section-order",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "$0.isa > Self.shellSection",
+    "replace": "$0.isa < Self.shellSection",
+    "test": "mewGetsAllThreeSteps"
+  },
+  {
+    "id": "plan-section-end",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "offset: scanner.lineEnd(of: last.end)",
+    "replace": "offset: last.end",
+    "test": "sectionAtTheEnd"
+  },
+  {
+    "id": "plan-sandbox-done",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "scanner.text(existing.valueFirst) == \"NO\"",
+    "replace": "scanner.text(existing.valueFirst) == \"YES\"",
+    "test": "rerunIsIdentical"
+  },
+  {
+    "id": "plan-sandbox-replace-length",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "removeCount: range.count, insertText: \"NO\"",
+    "replace": "removeCount: 0, insertText: \"NO\"",
+    "test": "quotedNoAndReplacedYes"
+  },
+  {
+    "id": "plan-xcconfig-note",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "configuration[\"baseConfigurationReference\"] != nil",
+    "replace": "configuration[\"baseConfigurationReference\"] == nil",
+    "test": "xcconfigGetsOverrideNote"
+  },
+  {
+    "id": "plan-xcconfig-anchor-note",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "|| configuration[\"baseConfigurationReferenceAnchor\"] != nil",
+    "replace": "|| false",
+    "test": "xcconfigAnchorGetsOverrideNote"
+  },
+  {
+    "id": "plan-setting-order",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "other.utf8.lexicographicallyPrecedes(key.utf8)",
+    "replace": "key.utf8.lexicographicallyPrecedes(other.utf8)",
+    "test": "onlyAddedLines"
+  },
+  {
+    "id": "plan-section-line-order",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "if Self.sortsAfter(String(decoding: entryID, as: UTF8.self), id) { break }",
+    "replace": "if false { break }",
+    "test": "onlyAddedLines"
+  },
+  {
+    "id": "plan-empty-list-indent",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "insertText: \"\\(indent)\\t\\(item),\\n\"",
+    "replace": "insertText: \"\\(indent)\\(item),\\n\"",
+    "test": "BuildEditLayoutTests/emptyList()"
+  },
+  {
+    "id": "plan-one-line-settings-refused",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "            let indent = scanner.tabsBefore(span: close)\n        else {",
+    "replace": "            let indent = Optional(\"\\t\\t\\t\")\n        else {",
+    "test": "oneLineSettings"
+  },
+  {
+    "id": "id-uppercase",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "\"%02X\"",
+    "replace": "\"%02x\"",
+    "test": "ProjectObjectIDMakerTests/shape()"
+  },
+  {
+    "id": "id-length",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "digest.prefix(12)",
+    "replace": "digest.prefix(11)",
+    "test": "ProjectObjectIDMakerTests/shape()"
+  },
+  {
+    "id": "id-text-collision",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "if !existingText.contains(id) && !made.contains(id) {",
+    "replace": "if !made.contains(id) {",
+    "test": "collisionWithText"
+  },
+  {
+    "id": "id-run-collision",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "if !existingText.contains(id) && !made.contains(id) {",
+    "replace": "if !existingText.contains(id) {",
+    "test": "collisionWithEarlierID"
+  },
+  {
+    "id": "id-role",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "\\u{0}\\(role)\\u{0}\\(counter)",
+    "replace": "\\u{0}\\(counter)",
+    "test": "repeatable"
+  },
+  {
+    "id": "id-target",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
+    "search": "\\(targetID)\\u{0}\\(role)",
+    "replace": "\\(role)",
+    "test": "repeatable"
+  },
+  {
+    "id": "scanner-escape",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "index += bytes[index] == UInt8(ascii: \"\\\\\") ? 2 : 1",
+    "replace": "index += 1",
+    "test": "escapedQuote"
+  },
+  {
+    "id": "scanner-block-comment",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "!(bytes[index] == UInt8(ascii: \"*\") && bytes[index + 1] == UInt8(ascii: \"/\"))",
+    "replace": "false",
+    "test": "braceInComment"
+  },
+  {
+    "id": "scanner-line-comment",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "where index + 1 < bytes.count && bytes[index + 1] == UInt8(ascii: \"/\"):",
+    "replace": "where index + 1 < bytes.count && bytes[index + 1] == UInt8(ascii: \"!\"):",
+    "test": "braceInComment"
+  },
+  {
+    "id": "scanner-brackets-match",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "Self.opener(of: bytes[span.range.lowerBound])",
+    "replace": "bytes[spans[start].range.lowerBound]",
+    "test": "malformed"
+  },
+  {
+    "id": "scanner-one-dictionary",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "closers[0] == spans.count - 1",
+    "replace": "true",
+    "test": "malformed"
+  },
+  {
+    "id": "scanner-object-depth",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "spans: spans, closers: closers, bytes: bytes, at: objects.valueFirst, path: path)",
+    "replace": "spans: spans, closers: closers, bytes: bytes, at: 0, path: path)",
+    "test": "objectDepth"
+  },
+  {
+    "id": "scanner-tabs",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "$0 == UInt8(ascii: \"\\t\")",
+    "replace": "$0 != 0",
+    "test": "listsAndTabs"
+  },
+  {
+    "id": "scanner-section-begin",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "line.hasPrefix(\"/* Begin \")",
+    "replace": "line.hasPrefix(\"/* Bagin \")",
+    "test": "sections"
+  },
+  {
+    "id": "verify-count",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
+    "search": "after.objects.count == before.objects.count + addedIDs.count",
+    "replace": "true",
+    "test": "verifierObjectCount"
+  },
+  {
+    "id": "verify-unplanned",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
+    "search": "guard editedIDs.contains(id) else {",
+    "replace": "guard true else {",
+    "test": "verifierUnplannedChange"
+  },
+  {
+    "id": "verify-keys",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
+    "search": "guard Self.editableKeys.contains(key) else",
+    "replace": "guard true else",
+    "test": "verifierOtherKey"
+  },
+  {
+    "id": "verify-list-order",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
+    "search": "else if !Self.isSubsequence(",
+    "replace": "else if false && !Self.isSubsequence(",
+    "test": "verifierListLosesEntry"
+  },
+  {
+    "id": "verify-setting-other",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
+    "search": "guard NSDictionary(dictionary: old).isEqual(to: new) else {",
+    "replace": "guard true else {",
+    "test": "verifierOtherSetting"
   }
 ]
