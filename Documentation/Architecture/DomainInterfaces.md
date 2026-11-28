@@ -17,6 +17,7 @@
 | `OutputWriting` | Write a line to the normal or the error output. |
 | `DependencySourceReading` | Resolved packages and pinned revisions. |
 | `LinkedProductReading` | The products a target links, with local package paths and platforms. |
+| `ProjectBuildConfiguring` | Set up the build of one app target in a project file: add the settings bundle, the Dependi phase and the sandbox setting. Return one line for each change. |
 | `PackageManifestReading` | The name, products and targets of one package. |
 | `AcknowledgementWriting` | Write panes into a settings bundle. |
 

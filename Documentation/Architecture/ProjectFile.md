@@ -4,7 +4,7 @@
 
 The project file reader answers one question. Which package products does an app target link, and which platforms does it support? It reads `project.pbxproj` through `FileReading` and implements `LinkedProductReading`. The module is `DependiProjectFile`. It knows only Foundation, CryptoKit, the entities and the domain.
 
-The module also holds an editor. `ProjectFileEditor` changes one app target so that it runs the Dependi build step. Nothing calls the editor yet. The wiring into `init` comes later.
+The module also holds an editor. `ProjectFileEditor` changes one app target so that it runs the Dependi build step. `InitFeature` calls it through the `ProjectBuildConfiguring` interface when the user gives `--edit-project`.
 
 ## Parts
 

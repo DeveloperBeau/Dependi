@@ -8,7 +8,7 @@
 
 | Type | Role |
 |---|---|
-| `Command` | The result: `generate(forcesSinglePage:)`, `initialize(projectPath:isDryRun:)`, `version`, `help`. |
+| `Command` | The result: `generate(forcesSinglePage:)`, `initialize(projectPath:isDryRun:editsProject:)`, `version`, `help`. |
 | `CommandLineParser` | `parse(_:)` with typed throws of `CommandLineError`. |
 | `CommandLineError` | The one error enum of the module. Each case has a message. |
 | `UsageText` | The help text with every command and flag. |
@@ -18,7 +18,7 @@
 | Command | Flags |
 |---|---|
 | `generate` | `--single-page` (switch) |
-| `init` | `--project <path>` (required), `--dry-run` (switch) |
+| `init` | `--project <path>` (required), `--dry-run` (switch), `--edit-project` (switch) |
 | `--version`, `version` | none |
 | `help`, `--help`, `-h` | none |
 
@@ -27,7 +27,7 @@
 1. The first argument names the command. No arguments gives `noCommand`. An unmatched name gives `unknownCommand`.
 2. A command without flags refuses any further argument with `unexpectedArgument`.
 3. `generate` reads the rest left to right. `--single-page` takes no value. Without it, `forcesSinglePage` is false.
-4. `init` reads the rest left to right. `--project` takes the next token as its value. `--dry-run` takes none.
+4. `init` reads the rest left to right. `--project` takes the next token as its value. `--dry-run` and `--edit-project` take none.
 5. After the loop, a missing `--project` gives `missingRequiredFlag`.
 
 ## Edge cases
