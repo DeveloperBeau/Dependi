@@ -6,32 +6,28 @@ public struct ProjectFileEditor: Sendable {
     private let files: any FileReading
     private let writer: any FileWriting
     private let adjustPlan: @Sendable (BuildSetupPlan) -> BuildSetupPlan
-    private let lastBackupNumber: Int
 
     /// Creates an editor that reads through `files` and writes through `writer`.
     public init(files: any FileReading, writer: any FileWriting) {
         self.init(files: files, writer: writer, adjustPlan: { $0 })
     }
 
-    /// Lets a test change the plan before it is checked, or lower the highest backup number.
+    /// Lets a test change the plan before it is checked.
     init(
         files: any FileReading, writer: any FileWriting,
-        adjustPlan: @escaping @Sendable (BuildSetupPlan) -> BuildSetupPlan,
-        lastBackupNumber: Int = 999
+        adjustPlan: @escaping @Sendable (BuildSetupPlan) -> BuildSetupPlan
     ) {
         self.files = files
         self.writer = writer
         self.adjustPlan = adjustPlan
-        self.lastBackupNumber = lastBackupNumber
     }
 
     /// Adds the settings bundle, the Dependi phase and the sandbox setting to one target, and returns one line for each change.
     ///
-    /// The settings bundle path is absolute. It writes a backup first and keeps the first backup for ever.
-    /// If nothing is at `backupPath`, the backup goes there. Otherwise it goes to `backupPath.2`,
-    /// then `.3`, and so on, and it refuses when every number up to `.999` is taken.
+    /// The settings bundle path is absolute. If nothing is at `backupPath`, it writes the backup there first.
+    /// If something is already there, it never changes it and writes no other backup, so the backup stays the original.
     /// An empty list means that nothing was written, and a dry run writes nothing at all.
-    /// A dry run reports the path that a real run would use.
+    /// A dry run reports the same backup line that a real run would print.
     public func configureBuild(
         projectFilePath: String, targetName: String, settingsBundlePath: String,
         backupPath: String, isDryRun: Bool
@@ -53,31 +49,18 @@ public struct ProjectFileEditor: Sendable {
             Data(edited), path: model.path, folder: model.folder)
         try plan.verify(before: model, after: after)
         try checkSettled(edited, after: after, target: targetName, bundlePath: settingsBundlePath)
-        let backup = try freeBackup(for: backupPath)
-        let lines = plan.lines + [backup.line]
+        let keepsBackup = files.exists(at: backupPath)
+        let lines =
+            plan.lines + [
+                keepsBackup
+                    ? "Dependi: kept the backup of the original project file at \(backupPath)."
+                    : "Dependi: backup of the original project file is at \(backupPath)."
+            ]
         if isDryRun { return lines }
-        try write(original: original, edited: edited, realPath: model.path, backupPath: backup.path)
+        try write(
+            original: original, edited: edited, realPath: model.path,
+            backupPath: keepsBackup ? nil : backupPath)
         return lines
-    }
-
-    /// The path for this backup and the line that reports it.
-    private func freeBackup(for backupPath: String) throws(DomainError) -> (
-        path: String, line: String
-    ) {
-        if !files.exists(at: backupPath) {
-            return (backupPath, "Dependi: backup of the original project file is at \(backupPath).")
-        }
-        for number in stride(from: 2, through: lastBackupNumber, by: 1) {
-            let path = "\(backupPath).\(number)"
-            if !files.exists(at: path) {
-                return (path, "Dependi: backup of the project file before this edit is at \(path).")
-            }
-        }
-        throw .fileUnwritable(
-            path: ProjectPathMath.parent(of: backupPath),
-            reason:
-                "every backup name from .2 to .\(lastBackupNumber) is taken in this folder. Remove old backups, then run again"
-        )
     }
 
     /// Plans again on the edited text. A correct edit leaves nothing more to do.
@@ -109,17 +92,20 @@ public struct ProjectFileEditor: Sendable {
         }
     }
 
-    /// Writes the backup first and reads it back, then replaces the project file in one move.
+    /// Writes the backup first, if there is one to write, and reads it back.
+    /// Then it replaces the project file in one move.
     private func write(
-        original: [UInt8], edited: [UInt8], realPath: String, backupPath: String
+        original: [UInt8], edited: [UInt8], realPath: String, backupPath: String?
     ) throws(DomainError) {
-        try writer.createDirectory(at: ProjectPathMath.parent(of: backupPath))
-        try writer.write(Data(original), toPath: backupPath)
-        let backup = try files.readRegularFile(
-            at: files.realPath(of: backupPath), upToBytes: ProjectFileLoader.sizeLimit)
-        guard Array(backup) == original else {
-            throw .fileUnwritable(
-                path: backupPath, reason: "the backup does not match the original")
+        if let backupPath {
+            try writer.createDirectory(at: ProjectPathMath.parent(of: backupPath))
+            try writer.write(Data(original), toPath: backupPath)
+            let backup = try files.readRegularFile(
+                at: files.realPath(of: backupPath), upToBytes: ProjectFileLoader.sizeLimit)
+            guard Array(backup) == original else {
+                throw .fileUnwritable(
+                    path: backupPath, reason: "the backup does not match the original")
+            }
         }
         let temporary = realPath + ".dependi-new"
         do {

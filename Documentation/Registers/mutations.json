@@ -3331,8 +3331,8 @@
     "id": "edit-real-path",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "realPath: model.path, backupPath: backup.path)",
-    "replace": "realPath: ProjectFileLoader.fileLocation(projectFilePath), backupPath: backup.path)",
+    "search": "original: original, edited: edited, realPath: model.path,",
+    "replace": "original: original, edited: edited, realPath: ProjectFileLoader.fileLocation(projectFilePath),",
     "test": "linkedProjectFile",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
@@ -3958,41 +3958,25 @@
     "id": "backup-first-overwritten",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "if !files.exists(at: backupPath) {",
-    "replace": "if true {",
-    "test": "secondEditKeepsFirstBackup"
+    "search": "let keepsBackup = files.exists(at: backupPath)",
+    "replace": "let keepsBackup = false",
+    "test": "secondEditKeepsOriginalBackup"
   },
   {
-    "id": "backup-number-starts-late",
+    "id": "backup-kept-line-says-written",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "stride(from: 2, through: lastBackupNumber, by: 1)",
-    "replace": "stride(from: 3, through: lastBackupNumber, by: 1)",
-    "test": "secondEditKeepsFirstBackup"
+    "search": "\"Dependi: kept the backup of the original project file at \\(backupPath).\"",
+    "replace": "\"Dependi: backup of the original project file is at \\(backupPath).\"",
+    "test": "existingBackupIsKept"
   },
   {
-    "id": "backup-number-not-advancing",
+    "id": "backup-kept-ignored",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "if !files.exists(at: path) {",
-    "replace": "if true {",
-    "test": "thirdEditGoesToNumberThree"
-  },
-  {
-    "id": "backup-later-line-says-original",
-    "slice": "init-xcode-a",
-    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "\"Dependi: backup of the project file before this edit is at \\(path).\"",
-    "replace": "\"Dependi: backup of the original project file is at \\(path).\"",
-    "test": "secondEditKeepsFirstBackup"
-  },
-  {
-    "id": "backup-bound-off-by-one",
-    "slice": "init-xcode-a",
-    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
-    "search": "stride(from: 2, through: lastBackupNumber, by: 1)",
-    "replace": "stride(from: 2, through: lastBackupNumber + 1, by: 1)",
-    "test": "everyNumberTaken"
+    "search": "backupPath: keepsBackup ? nil : backupPath)",
+    "replace": "backupPath: backupPath)",
+    "test": "existingBackupIsKept"
   },
   {
     "id": "resources-two-phases-allowed",

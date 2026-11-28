@@ -17,11 +17,9 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | assembler-missing-license | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `AcknowledgementAssemblerTests/missingLicense()` | killed | 2026-11-04 KILLED |
 | assembler-slug-collision | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `slugCollision` | killed | 2026-11-04 KILLED |
 | assembler-sort | 2b | `Sources/DependiDomain/AcknowledgementAssembler.swift` | `sortedWithoutCase` | killed | not run |
-| backup-bound-off-by-one | init-xcode-a | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `everyNumberTaken` | killed | not run |
-| backup-first-overwritten | init-xcode-a | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `secondEditKeepsFirstBackup` | killed | not run |
-| backup-later-line-says-original | init-xcode-a | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `secondEditKeepsFirstBackup` | killed | not run |
-| backup-number-not-advancing | init-xcode-a | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `thirdEditGoesToNumberThree` | killed | not run |
-| backup-number-starts-late | init-xcode-a | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `secondEditKeepsFirstBackup` | killed | not run |
+| backup-first-overwritten | init-xcode-a | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `secondEditKeepsOriginalBackup` | killed | not run |
+| backup-kept-ignored | init-xcode-a | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `existingBackupIsKept` | killed | not run |
+| backup-kept-line-says-written | init-xcode-a | `Sources/DependiProjectFile/ProjectFileEditor.swift` | `existingBackupIsKept` | killed | not run |
 | bundle-folder-slash | init-xcode-a | `Sources/DependiProjectFile/BuildSetupPlanner.swift` | `filaSiblingFolderIsNotCovered` | killed | 2026-11-28 KILLED |
 | cfg-limit-edge-included | review-fix | `Sources/DependiDomain/ConfigurationLoader.swift` | `goodLimits` | killed | 2026-11-04 KILLED |
 | cfg-limit-maximum | review-fix | `Sources/DependiDomain/ConfigurationLoader.swift` | `badRunLimit` | killed | 2026-11-04 KILLED |
