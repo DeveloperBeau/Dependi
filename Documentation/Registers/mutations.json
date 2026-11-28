@@ -3457,8 +3457,8 @@
     "id": "plan-reuse-reference",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
-    "search": "var referenceID = existingReference(at: bundle)",
-    "replace": "var referenceID: String? = nil",
+    "search": "if let existing = existingReference(at: bundle) {",
+    "replace": "if let existing = Optional<String>.none {",
     "test": "existingReferenceOutsideTargetIsReused",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
