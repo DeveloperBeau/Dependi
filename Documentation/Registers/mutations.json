@@ -4041,5 +4041,13 @@
     "search": "return initialize(path: path, isDryRun: isDryRun, editsProject: editsProject)",
     "replace": "return initialize(path: path, isDryRun: isDryRun, editsProject: false)",
     "test": "editProjectSetsUpTheTargetAndBacksUpTheOriginal"
+  },
+  {
+    "id": "init-edit-dry-run-already-set-up-removed",
+    "slice": "init-xcode-b",
+    "file": "Sources/DependiInit/InitFeature.swift",
+    "search": "\"   Dependi: the Xcode project is already set up.\"",
+    "replace": "\"\"",
+    "test": "dryRunAlreadySetUp"
   }
 ]

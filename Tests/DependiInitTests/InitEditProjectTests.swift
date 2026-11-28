@@ -106,6 +106,17 @@ struct InitEditProjectTests {
         #expect(!world.console.lines.contains { $0.contains("Edit the Xcode project") })
     }
 
+    @Test("a dry run with nothing to edit says the project is already set up")
+    func dryRunAlreadySetUp() throws {
+        let world = try InitWorld()
+        world.projectBuildResult = .success([])
+        #expect(try world.run(dry: true, editsProject: true) == .reported)
+        #expect(world.projectBuild.calls == [call(dry: true)])
+        #expect(world.console.lines.contains("5. Edit the Xcode project:"))
+        #expect(
+            world.console.lines.contains("   Dependi: the Xcode project is already set up."))
+    }
+
     @Test("when the editor changes nothing, init says the project is already set up")
     func alreadySetUp() throws {
         let world = try InitWorld()
