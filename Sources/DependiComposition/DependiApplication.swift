@@ -61,14 +61,16 @@ public struct DependiApplication {
         let projects = ProjectFileReader(files: disk)
         let feature = InitFeature(
             files: disk, directories: disk, writer: disk, executables: disk, targets: projects,
-            projectBuild: ProjectFileEditor(files: disk, writer: disk), linkedProducts: projects, process: process, prompts: console, output: console,
+            projectBuild: ProjectFileEditor(files: disk, writer: disk), linkedProducts: projects,
+            process: process, prompts: console, output: console,
             executablePath: executablePath,
             sourceRoot: SourceRootFinder.find(from: executablePath, files: disk),
             wrapperText: WrapperScript.text, version: DependiVersion.current)
         let absolute = path.hasPrefix("/") ? path : currentDirectory + "/" + path
         do {
             switch try feature.run(
-                projectPath: absolute, isDryRun: isDryRun, editsProject: editsProject) {
+                projectPath: absolute, isDryRun: isDryRun, editsProject: editsProject)
+            {
             case .installed, .reported: return 0
             case .stopped(let reason):
                 console.writeErrorLine("error: \(reason)")

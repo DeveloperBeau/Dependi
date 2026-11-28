@@ -118,7 +118,8 @@ struct CommandLineFuzzTests {
     func randomListsNeverCrash() {
         let alphabet = [
             "generate", "init", "version", "--version", "help", "-h", "--help", "--project",
-            "--dry-run", "--edit-project", "--single-page", "--project=x", "x", "a b", "", "--", "-", "Generate",
+            "--dry-run", "--edit-project", "--single-page", "--project=x", "x", "a b", "", "--",
+            "-", "Generate",
             "日本",
         ]
         var generator = SeededGenerator()

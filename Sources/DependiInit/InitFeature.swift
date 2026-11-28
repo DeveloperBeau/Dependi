@@ -30,7 +30,8 @@ public struct InitFeature: Sendable {
     public init(
         files: any FileReading, directories: any DirectoryListing, writer: any FileWriting,
         executables: any ExecutableMarking, targets: any ApplicationTargetListing,
-        projectBuild: any ProjectBuildConfiguring, linkedProducts: any LinkedProductReading, process: any ProcessRunning,
+        projectBuild: any ProjectBuildConfiguring, linkedProducts: any LinkedProductReading,
+        process: any ProcessRunning,
         prompts: any Prompting,
         output: any OutputWriting, executablePath: String, sourceRoot: String?, wrapperText: String,
         version: String
@@ -131,7 +132,9 @@ public struct InitFeature: Sendable {
         if let edits {
             output.writeLine("5. Edit the Xcode project:")
             for line in edits { output.writeLine("   " + line) }
-            if edits.isEmpty { output.writeLine("   Dependi: the Xcode project is already set up.") }
+            if edits.isEmpty {
+                output.writeLine("   Dependi: the Xcode project is already set up.")
+            }
         }
     }
 
