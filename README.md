@@ -14,7 +14,7 @@ See [the install guide](Documentation/Guides/Installing.md). In short:
 
 ## Set up Xcode by hand
 
-If you do not use `--edit-project`, make these three changes in Xcode:
+If you do not use `--edit-project`, make these three changes in Xcode. The flag makes all three for you, so you skip this section if you use it:
 
 1. Add `Settings.bundle` to the Copy Bundle Resources phase of the app target.
 2. Add a Run Script build phase to the app target, after Copy Bundle Resources, with this text: `"${SRCROOT}/.dependi/run.sh" generate`. Add the input file list `$(SRCROOT)/.dependi/inputs.xcfilelist` and the output file `$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Settings.bundle/Acknowledgements.plist`.

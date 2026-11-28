@@ -22,7 +22,7 @@ Dependi writes the licenses of your Swift packages into your app's `Settings.bun
    To put every license on one page for every run of this phase, use `generate --single-page` instead. The script passes its arguments on to the program. Without the flag, the `singlePage` key in `.dependi.json` decides.
 
 6. In that phase add the input file list `$(SRCROOT)/.dependi/inputs.xcfilelist` and the output file `$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Settings.bundle/Acknowledgements.plist`.
-7. Set `ENABLE_USER_SCRIPT_SANDBOXING` to `NO` for the target, as the next section says. Commit `.dependi.json` and `.dependi/run.sh` (and `.dependi/inputs.xcfilelist`).
+7. If you changed the project by hand, set `ENABLE_USER_SCRIPT_SANDBOXING` to `NO` for the target, as the next section says. If you used `--edit-project`, init already did steps 5 and 6 and this setting: it added the bundle to Copy Bundle Resources, added the Run Script phase with its input and output files, and set `ENABLE_USER_SCRIPT_SANDBOXING = NO`. Do only the rest of this step. Commit `.dependi.json` and `.dependi/run.sh` (and `.dependi/inputs.xcfilelist`).
 
 ## What `--edit-project` does
 
