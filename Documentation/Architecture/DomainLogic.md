@@ -9,6 +9,7 @@ The domain logic turns raw project data into the list of acknowledgements to wri
 | Type | Job |
 |---|---|
 | `PackageIdentityNormalizer` | Turns a URL or path into an identity and a normalized location. |
+| `PackageTitle` | Builds the title `<name> (<version>)` of a linked package. It is a pure function. The name is the manifest name, or the identity if the manifest name is missing, empty or has a control character. The version shows only for a remote package that has one. White space around both is removed. |
 | `SourcePackagesLocator` | Finds `SourcePackages` from the build directory. |
 | `ConfigurationLoader` | Reads `.dependi.json` and maps failures to errors. A time limit must be a finite number above 0. A process limit is at most 3600 seconds and a run limit at most 86400. |
 | `ReleaseGate` | Decides whether a build runs. |

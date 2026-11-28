@@ -65,7 +65,7 @@ Use the same `version` and `commit` values that `.dependi.json` holds. The scrip
 | `excludes` | Package identities to leave out. An exclude that matches no package is an error. Local packages with no license file are skipped without an exclude. |
 | `manualEntries` | Code that has no package, each with a `name` and a `licensePath` inside the project. |
 | `gateConfigurations` | Configurations that run besides an archive. The default is `Release`. |
-| `requireLicenses` | Fail when a remote package has no license file. The default is off: such a package is skipped and named on the error output. |
+| `requireLicenses` | Fail when a remote package has no license file in its checkout. The default is off. Then the package is skipped and Xcode shows a build warning that names it. |
 | `singlePage` | Put every license on one page instead of one child pane for each package. The default is off. `generate --single-page` turns it on for that run. |
 | `allowUnreached` | Allow resolved packages that no target of your project links. |
 | `includeBuildTools` | Include the dependencies of macro and plugin targets. |
@@ -74,5 +74,23 @@ Use the same `version` and `commit` values that `.dependi.json` holds. The scrip
 | `version`, `commit` | The version and full commit that the script builds. |
 
 An unknown key is an error, so a typo cannot silently use a default.
+
+## What the build log shows
+
+A run that writes files ends with this line:
+
+`Dependi: wrote <N> acknowledgements to <bundle>`
+
+If remote packages had no license file in their checkout, the line ends with `, skipped <M> with no license file`. Each skipped package also has a warning like this one:
+
+`warning: Dependi: skipped <identity>: no license file in its checkout. Add a manualEntries item with its license, or set requireLicenses to fail the build.`
+
+Xcode shows the warning in the issue navigator. To keep the package, add a `manualEntries` item with its license. To fail the build, set `requireLicenses`. A local package with no license file is left out with no warning and is not counted.
+
+## How titles are made
+
+The title of a package is `<name> (<version>)`. The name is the name that the package gives itself in its manifest. The version is the resolved version of a remote package. A package pinned by revision or branch has no version, so its title is the name only. A local package never shows a version. If the manifest name is missing, empty or has a control character, the title uses the package identity as the name. Spaces around the name and the version are removed. A manual entry keeps its own name. The list is sorted by title without case.
+
+Before 0.3.0 the title was the lower-case identity. From 0.3.0 the title has the manifest name and the version.
 
 tvOS is not a listed platform. If you use Dependi on tvOS anyway, Settings shows at most five lines of each license in both layouts, so show the full text in the app instead.

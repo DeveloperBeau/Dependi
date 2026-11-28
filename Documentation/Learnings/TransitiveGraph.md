@@ -6,6 +6,12 @@
 - **Finding:** A dedicated test with a valid dump and a wrong key was needed to connect the key check.
 - **Rule:** Build the damaged input so that exactly one property is wrong.
 
+## A new parsed field needs no cache change
+
+- **Trap:** A new field in the parsed manifest looks like a change of the cache format, which would need a new key or a migration.
+- **Finding:** The cache entry holds the raw `dump-package` text and the parser runs on each read. The dump always had the top level `name`. A test reads back an entry with no name and gets no name and no failure.
+- **Rule:** Before a cache key changes, check whether the cache holds raw input or parsed output.
+
 ## Package names in dependencies are not identities
 
 - **Trap:** A product dependency names its package as the manifest author wrote it, for example `OpenAPIKit` for the identity `openapikit`.

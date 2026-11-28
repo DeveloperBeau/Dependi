@@ -46,7 +46,7 @@ enum ManifestJSONParser {
             declaredDependencies: declared(root["dependencies"]),
             localDependencyPaths: localPaths(root["dependencies"], packagePath: packagePath),
             traitDefinitions: traitDefinitions(root["traits"]),
-            traitRequests: traitRequests(root["dependencies"]))
+            traitRequests: traitRequests(root["dependencies"]), name: root["name"] as? String)
     }
 
     private static func fail(_ reason: String, _ path: String) -> DomainError {

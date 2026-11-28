@@ -49,8 +49,9 @@ public struct GenerateFeature: Sendable {
         let settings = try configuration.get()
         if context.isScriptSandboxEnabled == true { throw .scriptSandboxEnabled }
         let acknowledgements: [Acknowledgement]
+        let skippedCount: Int
         do {
-            acknowledgements = try collect(context: context, settings: settings)
+            (acknowledgements, skippedCount) = try collect(context: context, settings: settings)
         } catch .fileUnreadable(let path, let reason)
             where reason.lowercased().contains("not permitted")
         {
@@ -62,7 +63,9 @@ public struct GenerateFeature: Sendable {
         let layout: AcknowledgementLayout =
             forcesSinglePage || settings.singlePage ? .singlePage : .panePerPackage
         try writers(layout).write(acknowledgements, intoBundleAt: bundle)
-        output.writeLine("Dependi: wrote \(acknowledgements.count) acknowledgements to \(bundle)")
+        let skippedNote = skippedCount > 0 ? ", skipped \(skippedCount) with no license file" : ""
+        output.writeLine(
+            "Dependi: wrote \(acknowledgements.count) acknowledgements to \(bundle)\(skippedNote)")
         return .wrote(count: acknowledgements.count)
     }
 
@@ -79,8 +82,9 @@ public struct GenerateFeature: Sendable {
         }
     }
 
+    /// Gives the acknowledgements and the number of remote packages that were skipped for having no license file.
     private func collect(context: BuildContext, settings: ToolConfiguration) throws(DomainError)
-        -> [Acknowledgement]
+        -> ([Acknowledgement], Int)
     {
         var missing: [String] = []
         if context.projectFilePath == nil { missing.append("PROJECT_FILE_PATH") }
@@ -136,6 +140,7 @@ public struct GenerateFeature: Sendable {
             files: files, maximumBytes: LicenseFileValidator.standardMaximumBytes)
         let locator = LicenseLocator()
         var items: [Acknowledgement] = []
+        var skippedCount = 0
         for package in result.linked {
             let names = locator.licenseFileNames(
                 among: try directories.topLevelNames(in: package.checkoutPath))
@@ -166,13 +171,21 @@ public struct GenerateFeature: Sendable {
                 if settings.requireLicenses {
                     throw .licenseMissing(package: package.identity.value)
                 }
+                // The `warning: ` prefix makes Xcode show the line in the issue navigator.
                 output.writeErrorLine(
-                    "Dependi: skipped \(package.identity.value): no license file")
+                    "warning: Dependi: skipped \(package.identity.value): no license file in its checkout. "
+                        + "Add a manualEntries item with its license, or set requireLicenses to fail the build."
+                )
+                skippedCount += 1
                 continue
             }
+            let title = PackageTitle().title(
+                manifestName: try manifests.manifest(atPackagePath: package.checkoutPath).name,
+                identity: package.identity, version: package.version,
+                isRemote: package.kind == .remote)
             items.append(
                 Acknowledgement(
-                    displayName: package.identity.value, identity: package.identity,
+                    displayName: title, identity: package.identity,
                     normalizedLocation: package.normalizedLocation, documents: documents))
         }
         for entry in settings.manualEntries {
@@ -180,7 +193,8 @@ public struct GenerateFeature: Sendable {
                 try manualAcknowledgement(
                     entry, projectDirectory: projectDirectory, validator: validator))
         }
-        return try AcknowledgementAssembler(slugger: OutputNameSlugger()).assemble(items)
+        let assembled = try AcknowledgementAssembler(slugger: OutputNameSlugger()).assemble(items)
+        return (assembled, skippedCount)
     }
 
     private func manualAcknowledgement(
