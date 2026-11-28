@@ -54,6 +54,63 @@
 - **Finding:** A real project of this shape (13 local packages, 32 product dependencies) failed on the first product. `dependi init --dry-run` listed the products and gave no warning.
 - **Rule:** A folder file reference of type `wrapper` or `folder` that holds a `Package.swift` is a local package. Resolve its path through the group chain and the source tree. A product that still has no package fails and names the product.
 
+## A project file has no one layout
+
+- **Trap:** Parsing the file and printing it again changes the order, the spacing and the comments that Xcode wrote. A search with a regular expression finds a key inside a comment or a string.
+- **Finding:** Five real files differ in object version, quoting, synchronized folders and where the sandbox setting lives. A comment such as `/* "${SRCROOT}/.dependi/run.sh" */` looks like a finished phase to a text search.
+- **Rule:** Ask the parsed model what the project means. Ask a scanner that skips comments and keeps strings whole where the text is. Edit bytes at those positions and leave the rest alone.
+
+## A folder can leave a bundle out
+
+- **Trap:** A synchronized folder copies the files inside it. A reference added on top would copy the bundle twice. A membership exception can also leave the bundle out of one target.
+- **Finding:** One real project has a synchronized folder per target and a one-line `path = Fila;` group. The group has no list of files to read.
+- **Rule:** Resolve the group path and test whether the bundle is inside it. Add no reference when it is. Refuse when an exception for this target names the bundle.
+
+## Hand-made ids are valid ids
+
+- **Trap:** An id maker that checks only the 24 digit ids of Xcode can make an id that already exists in a project with ids such as `FA3000000000000000000001`.
+- **Finding:** One real project uses short, patterned ids. An id inside a comment is harmless, but a text search is cheaper than telling the two apart.
+- **Rule:** Skip every id that appears anywhere in the text or was made earlier in the run.
+
+## A key can be quoted
+
+- **Trap:** Xcode quotes a key when it holds a character that is not plain. A file that was changed by hand or by another tool can quote `"ENABLE_USER_SCRIPT_SANDBOXING"` or the value `"NO"`.
+- **Finding:** The same project, spelled five ways, must give the same answer. The scanner gives the text without quotes, so all spellings match.
+- **Rule:** Compare the text of a key or a value without its quotes. Count `NO` and `"NO"` as done.
+
+## A conditional key can win over the plain key
+
+- **Trap:** A build configuration can hold `"ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]" = YES;`. The planner that looks for the exact key does not see it, adds a plain `= NO` and reports success. The conditional `YES` still wins.
+- **Finding:** The scanner gives the key without quotes, so the conditional key starts with the plain key and a `[`.
+- **Rule:** Refuse a target that has a conditional form of the key in any configuration, whatever the value, and also when the plain key is already `NO`. Name the configuration and the key. The planner runs before any write, so nothing is written.
+
+## A section can be missing
+
+- **Trap:** An older project has no `PBXShellScriptBuildPhase` section at all. An insert into a section that is not there fails or lands in the wrong place.
+- **Finding:** The oldest real file has no such section. Xcode orders sections by name and puts a blank line between them.
+- **Rule:** Make the section between the two sections whose names sort around it. If none sorts after it, make it after the last one.
+
+## A write can fail half way
+
+- **Trap:** A backup that is written after the project file, or a project file that is written in place, can leave the user with a broken file and no copy.
+- **Finding:** A recording writer shows the order of the writes. The backup comes first. The new text goes to a temporary file and a move replaces the project file.
+- **Rule:** Write the backup, read it back, then replace the project file in one move. Write nothing when the project needs no change. Write the backup only when none exists. Never replace it, so it is always the original. A later edit prints the kept line.
+
+## A check that reads the same text proves little
+
+- **Trap:** A check that the edit "looks right" can pass when the scanner and the parser read the file in different ways.
+- **Finding:** Planning again on the edited text must find nothing to do. A plan that drops one step fails that check, and a plan that changes another key fails the model comparison.
+- **Rule:** Check the edited bytes with the parser, and plan again on them. Keep one test for each check, so each check has a test that fails when the check is gone.
+
 ## Mutation results
 
+
 The 19 entries owned by this slice, and the 8 entries of the legacy local package change, are all killed. Each one names the test that fails. See `Documentation/Registers/mutations.md`.
+
+The 59 entries of the editor slice each name the test that fails when the code is broken. A first run of the register by hand showed that seven entries survived. Their tests only checked that an error was thrown, so they now check the text of the error or the place of the edit. See `Documentation/Registers/mutations.md`.
+
+## A guard with no test survives mutation
+
+- **Trap:** The first editor tests covered the success paths and a few refusals. Coverage showed 25 refusal lines that no test reached, and mutants of three guards survived.
+- **Finding:** The editor passed no original text to the id maker in one mutant, a sibling folder was taken as the synchronised folder in another, and a first byte that is a space was not refused in a third. The success tests for four fixtures also checked only counts, so a wrong id format would pass.
+- **Rule:** Write one test for each refusal, with a hand-written broken input and the exact error. A data literal, a second `objects` table and a plan that changes a key all reach refusals that the parser does not stop first. Write the full list of added lines for each fixture.
