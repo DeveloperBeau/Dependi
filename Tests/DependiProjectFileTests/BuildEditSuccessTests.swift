@@ -5,28 +5,33 @@ import Testing
 
 @Suite("Project file editor success", .timeLimit(.minutes(1)))
 struct BuildEditSuccessTests {
-    private static let phaseLines = [
-        "\t\t2753DE8B26A7EEA90771BF6B /* Dependi */ = {",
-        "\t\t\tisa = PBXShellScriptBuildPhase;",
-        "\t\t\tbuildActionMask = 2147483647;",
-        "\t\t\tfiles = (",
-        "\t\t\t);",
-        "\t\t\tinputFileListPaths = (",
-        "\t\t\t\t\"$(SRCROOT)/.dependi/inputs.xcfilelist\",",
-        "\t\t\t);",
-        "\t\t\tinputPaths = (",
-        "\t\t\t);",
-        "\t\t\tname = Dependi;",
-        "\t\t\toutputFileListPaths = (",
-        "\t\t\t);",
-        "\t\t\toutputPaths = (",
-        "\t\t\t\t\"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Settings.bundle/Acknowledgements.plist\",",
-        "\t\t\t);",
-        "\t\t\trunOnlyForDeploymentPostprocessing = 0;",
-        "\t\t\tshellPath = /bin/sh;",
-        "\t\t\tshellScript = \"\\\"${SRCROOT}/.dependi/run.sh\\\" generate\\n\";",
-        "\t\t};",
-    ]
+    /// The lines of the new Dependi phase, written by hand for one id.
+    private static func phaseLines(id: String) -> [String] {
+        [
+            "\t\t\(id) /* Dependi */ = {",
+            "\t\t\tisa = PBXShellScriptBuildPhase;",
+            "\t\t\tbuildActionMask = 2147483647;",
+            "\t\t\tfiles = (",
+            "\t\t\t);",
+            "\t\t\tinputFileListPaths = (",
+            "\t\t\t\t\"$(SRCROOT)/.dependi/inputs.xcfilelist\",",
+            "\t\t\t);",
+            "\t\t\tinputPaths = (",
+            "\t\t\t);",
+            "\t\t\tname = Dependi;",
+            "\t\t\toutputFileListPaths = (",
+            "\t\t\t);",
+            "\t\t\toutputPaths = (",
+            "\t\t\t\t\"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Settings.bundle/Acknowledgements.plist\",",
+            "\t\t\t);",
+            "\t\t\trunOnlyForDeploymentPostprocessing = 0;",
+            "\t\t\tshellPath = /bin/sh;",
+            "\t\t\tshellScript = \"\\\"${SRCROOT}/.dependi/run.sh\\\" generate\\n\";",
+            "\t\t};",
+        ]
+    }
+
+    private static let sandboxLine = "\t\t\t\tENABLE_USER_SCRIPT_SANDBOXING = NO;"
 
     @Test("Mew gets all three steps and the new lines match the hand-written ones")
     func mewGetsAllThreeSteps() throws {
@@ -52,7 +57,7 @@ struct BuildEditSuccessTests {
                 "\t\t\t\t76C979CC1790CDFA3037B5DC /* Settings.bundle in Resources */,",
                 "",
                 "/* Begin PBXShellScriptBuildPhase section */",
-            ] + Self.phaseLines + [
+            ] + Self.phaseLines(id: "2753DE8B26A7EEA90771BF6B") + [
                 "/* End PBXShellScriptBuildPhase section */",
                 "\t\t\t\tENABLE_USER_SCRIPT_SANDBOXING = NO;",
                 "\t\t\t\tENABLE_USER_SCRIPT_SANDBOXING = NO;",
@@ -111,6 +116,71 @@ struct BuildEditSuccessTests {
         let added = assertOnlyAdded(
             before: String(decoding: world.original, as: UTF8.self), after: try world.currentText())
         #expect(!added.contains { $0.contains("PBXBuildFile") || $0.contains("PBXFileReference") })
+        let expected =
+            ["\t\t\t\tD4B70E90F7363348AA99C94E /* Dependi */,"]
+            + Self.phaseLines(id: "D4B70E90F7363348AA99C94E") + [
+                Self.sandboxLine, Self.sandboxLine,
+            ]
+        #expect(Set(added) == Set(expected))
+        #expect(added.count == expected.count)
+    }
+
+    @Test(
+        "a bundle in a folder next to the synchronized folder still gets a reference and a copy entry"
+    )
+    func filaSiblingFolderIsNotCovered() throws {
+        let world = try EditWorld("synchronized-fila")
+        let lines = try world.configure(target: "Fila", bundle: "FilaExtras/Settings.bundle")
+        #expect(
+            lines == [
+                "Dependi: added the file reference Settings.bundle (FilaExtras/Settings.bundle) to the main group.",
+                "Dependi: added Settings.bundle to Copy Bundle Resources of Fila.",
+                "Dependi: added the Dependi Run Script phase after Copy Bundle Resources of Fila.",
+                "Dependi: set ENABLE_USER_SCRIPT_SANDBOXING = NO in Debug of Fila.",
+                "Dependi: set ENABLE_USER_SCRIPT_SANDBOXING = NO in Release of Fila.",
+                "Dependi: backup of the original project file is at /work/App/.dependi/project.pbxproj.bak.",
+            ])
+        let added = assertOnlyAdded(
+            before: String(decoding: world.original, as: UTF8.self), after: try world.currentText())
+        let expected =
+            [
+                "\t\tD8D171BBB09BB43C74768155 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 588A91F81B5940BC0126D64A /* Settings.bundle */; };",
+                "\t\t588A91F81B5940BC0126D64A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = \"wrapper.plug-in\"; name = Settings.bundle; path = FilaExtras/Settings.bundle; sourceTree = SOURCE_ROOT; };",
+                "\t\t\t\t588A91F81B5940BC0126D64A /* Settings.bundle */,",
+                "\t\t\t\tD4B70E90F7363348AA99C94E /* Dependi */,",
+                "\t\t\t\tD8D171BBB09BB43C74768155 /* Settings.bundle in Resources */,",
+            ] + Self.phaseLines(id: "D4B70E90F7363348AA99C94E") + [
+                Self.sandboxLine, Self.sandboxLine,
+            ]
+        #expect(Set(added) == Set(expected))
+        #expect(added.count == expected.count)
+    }
+
+    @Test("ids that the project text already holds in a comment are not used again")
+    func idsInACommentAreSkipped() throws {
+        let taken = [
+            "76C979CC1790CDFA3037B5DC", "3F3B65923D016048D4FAF971", "2753DE8B26A7EEA90771BF6B",
+        ]
+        let source = replacing(
+            String(decoding: FixtureWorld.fixture("old-format-mew"), as: UTF8.self),
+            "\tarchiveVersion = 1;\n",
+            with: "\t/* \(taken.joined(separator: " ")) */\n\tarchiveVersion = 1;\n")
+        let world = try EditWorld("x", bytes: Data(source.utf8))
+        let lines = try world.configure(target: "MewTestsApp", bundle: "Settings.bundle")
+        #expect(lines.count == 6)
+        let text = try world.currentText()
+        func count(_ id: String) -> Int { text.components(separatedBy: id).count - 1 }
+        for id in taken { #expect(count(id) == 1, "\(id)") }
+        // The next id for each role: the file reference, the build file and the phase.
+        let made = [
+            "DE1BF51D55BE617187F3A756": 3, "4EE5B9DD737E9DCC7D176091": 2,
+            "B3E12B5716B67B90F2B9B159": 2,
+        ]
+        for (id, times) in made {
+            #expect(count(id) == times, "\(id)")
+            #expect(id.count == 24 && id.allSatisfy { "0123456789ABCDEF".contains($0) })
+            #expect(!taken.contains(id))
+        }
     }
 
     @Test("a second app target is edited and the first stays as it was")
@@ -130,6 +200,13 @@ struct BuildEditSuccessTests {
         let lines = try world.configure(target: "Overland", bundle: "GPSLogger/Settings.bundle")
         #expect(lines.filter { $0.contains("Settings.bundle") }.isEmpty)
         #expect(lines.contains { $0.contains("Run Script phase") })
+        let added = assertOnlyAdded(
+            before: String(decoding: world.original, as: UTF8.self), after: try world.currentText())
+        let expected =
+            ["\t\t\t\t634792559B7D869A61B96187 /* Dependi */,"]
+            + Self.phaseLines(id: "634792559B7D869A61B96187")
+        #expect(Set(added) == Set(expected))
+        #expect(added.count == expected.count)
     }
 
     @Test("a setting that comes from a configuration file is overridden and the note says so")
@@ -154,6 +231,13 @@ struct BuildEditSuccessTests {
         let added = assertOnlyAdded(
             before: String(decoding: world.original, as: UTF8.self), after: try world.currentText())
         #expect(added.filter { $0 == "\t\t\t\tENABLE_USER_SCRIPT_SANDBOXING = NO;" }.count == 2)
+        let expected =
+            ["\t\t\t\tAB89770312B31623E747CA7D /* Dependi */,"]
+            + Self.phaseLines(id: "AB89770312B31623E747CA7D") + [
+                Self.sandboxLine, Self.sandboxLine,
+            ]
+        #expect(Set(added) == Set(expected))
+        #expect(added.count == expected.count)
     }
 
     @Test("each app target of one project can be chosen and the others stay unchanged")
@@ -179,6 +263,16 @@ struct BuildEditSuccessTests {
         let added = assertOnlyAdded(
             before: String(decoding: world.original, as: UTF8.self), after: try world.currentText())
         #expect(added.filter { $0.contains("Settings.bundle") }.count == 1)
+        let expected =
+            [
+                "\t\t\t\t387834CB168FA33CA67DCEFE /* Dependi */,",
+                "",
+                "/* Begin PBXShellScriptBuildPhase section */",
+            ] + Self.phaseLines(id: "387834CB168FA33CA67DCEFE") + [
+                "/* End PBXShellScriptBuildPhase section */", Self.sandboxLine, Self.sandboxLine,
+            ]
+        #expect(Set(added) == Set(expected))
+        #expect(added.count == expected.count)
     }
 
     @Test("a reference that is not in the target is reused")
