@@ -3628,8 +3628,8 @@
     "id": "id-text-collision",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
-    "search": "if !existingText.contains(id) && !made.contains(id) {",
-    "replace": "if !made.contains(id) {",
+    "search": "while existingText.contains(id) || made.contains(id) {",
+    "replace": "while made.contains(id) {",
     "test": "collisionWithText",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
@@ -3637,8 +3637,8 @@
     "id": "id-run-collision",
     "slice": "init-xcode-a",
     "file": "Sources/DependiProjectFile/ProjectObjectIDMaker.swift",
-    "search": "if !existingText.contains(id) && !made.contains(id) {",
-    "replace": "if !existingText.contains(id) {",
+    "search": "while existingText.contains(id) || made.contains(id) {",
+    "replace": "while existingText.contains(id) {",
     "test": "collisionWithEarlierID",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
   },
@@ -3785,5 +3785,125 @@
     "replace": "_ = ProjectPathMath.parent(of: backupPath)",
     "test": "missingBackupFolderIsCreated",
     "lastRun": {"date": "2026-11-28", "outcome": "KILLED"}
+  },
+  {
+    "id": "id-editor-original-text",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "ids: ProjectObjectIDMaker(existingText: String(decoding: original, as: UTF8.self)))",
+    "replace": "ids: ProjectObjectIDMaker(existingText: \"\"))",
+    "test": "idsInACommentAreSkipped"
+  },
+  {
+    "id": "bundle-folder-slash",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "bundle.hasPrefix(folder + \"/\")",
+    "replace": "bundle.hasPrefix(folder)",
+    "test": "filaSiblingFolderIsNotCovered"
+  },
+  {
+    "id": "layout-first-byte-space",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/ProjectFileEditor.swift",
+    "search": "bytes.first == 0x20",
+    "replace": "bytes.first == 0x21",
+    "test": "leadingSpace"
+  },
+  {
+    "id": "refuse-section-markers",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "throw .unsafeProject(path: model.path, why: \"the section markers are missing\")",
+    "replace": "return",
+    "test": "noSectionMarkers"
+  },
+  {
+    "id": "refuse-setting-own-line",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "guard let indent = scanner.tabsBefore(span: next.keyIndex) else {",
+    "replace": "guard let indent = Optional(scanner.tabsBefore(span: next.keyIndex) ?? \"\\t\\t\\t\\t\") else {",
+    "test": "settingNotOnItsOwnLine"
+  },
+  {
+    "id": "refuse-list-item-own-line",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "guard let indent = scanner.tabsBefore(span: anchor),",
+    "replace": "guard let indent = Optional(scanner.tabsBefore(span: anchor) ?? \"\\t\\t\\t\\t\"),",
+    "test": "listItemNotOnItsOwnLine"
+  },
+  {
+    "id": "refuse-list-comma-line",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "== scanner.lineStart(of: scanner.spans[anchor].range.lowerBound)",
+    "replace": "== scanner.lineStart(of: scanner.spans[anchor + 1].range.lowerBound)",
+    "test": "listItemNotOnItsOwnLine"
+  },
+  {
+    "id": "refuse-list-close-line",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlanner.swift",
+    "search": "guard let indent = scanner.tabsBefore(span: close) else {",
+    "replace": "guard let indent = Optional(scanner.tabsBefore(span: close) ?? \"\\t\\t\\t\") else {",
+    "test": "emptyListOnOneLine"
+  },
+  {
+    "id": "refuse-byte-not-allowed",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "guard isWordByte(byte) else {",
+    "replace": "guard isWordByte(byte) else { index += 1; continue }\n                guard true else {",
+    "test": "byteNotAllowed"
+  },
+  {
+    "id": "refuse-dictionary-not-closed",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "throw .unsafeProject(path: path, why: \"a dictionary is not closed\")",
+    "replace": "return []",
+    "test": "dictionaryNotClosed"
+  },
+  {
+    "id": "refuse-list-not-closed",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "guard let close = closers[open], Self.isOpen(spans, bytes, open, \"(\") else {",
+    "replace": "guard let close = closers[open] else {",
+    "test": "listNotClosed"
+  },
+  {
+    "id": "refuse-list-item-comma",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/PBXTextScanner.swift",
+    "search": "guard last + 1 <= close, Self.isOpen(spans, bytes, last + 1, \",\") else {",
+    "replace": "guard last + 1 <= close, true else {",
+    "test": "listItemWithoutComma"
+  },
+  {
+    "id": "verify-settings-dictionary",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
+    "search": "throw fail(\"the build settings are not a dictionary\")",
+    "replace": "return",
+    "test": "settingsNotADictionary"
+  },
+  {
+    "id": "verify-name-key",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
+    "search": "\"files\", \"children\", \"buildPhases\", \"buildSettings\",",
+    "replace": "\"files\", \"children\", \"buildPhases\", \"buildSettings\", \"name\",",
+    "test": "renameIsRefused"
+  },
+  {
+    "id": "verify-path-keys",
+    "slice": "init-xcode-a",
+    "file": "Sources/DependiProjectFile/BuildSetupPlan.swift",
+    "search": "\"files\", \"children\", \"buildPhases\", \"buildSettings\",",
+    "replace": "\"files\", \"children\", \"buildPhases\", \"buildSettings\", \"path\", \"sourceTree\",",
+    "test": "pathAndSourceTreeAreRefused"
   }
 ]

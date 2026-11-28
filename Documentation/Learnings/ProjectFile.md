@@ -102,3 +102,9 @@
 The 19 entries owned by this slice, and the 8 entries of the legacy local package change, are all killed. Each one names the test that fails. See `Documentation/Registers/mutations.md`.
 
 The 59 entries of the editor slice each name the test that fails when the code is broken. A first run of the register by hand showed that seven entries survived. Their tests only checked that an error was thrown, so they now check the text of the error or the place of the edit. See `Documentation/Registers/mutations.md`.
+
+## A guard with no test survives mutation
+
+- **Trap:** The first editor tests covered the success paths and a few refusals. Coverage showed 25 refusal lines that no test reached, and mutants of three guards survived.
+- **Finding:** The editor passed no original text to the id maker in one mutant, a sibling folder was taken as the synchronised folder in another, and a first byte that is a space was not refused in a third. The success tests for four fixtures also checked only counts, so a wrong id format would pass.
+- **Rule:** Write one test for each refusal, with a hand-written broken input and the exact error. A data literal, a second `objects` table and a plan that changes a key all reach refusals that the parser does not stop first. Write the full list of added lines for each fixture.
