@@ -154,7 +154,7 @@ struct PBXTextScanner {
                 spans[first].kind != .punctuation || isOpen(spans, bytes, first, "{")
                     || isOpen(spans, bytes, first, "(")
             else { throw .unsafeProject(path: path, why: "a dictionary entry has no value") }
-            let last = spans[first].kind == .punctuation ? (closers[first] ?? first) : first
+            let last = closers[first] ?? first
             guard last + 1 <= close, isOpen(spans, bytes, last + 1, ";") else {
                 throw .unsafeProject(
                     path: path, why: "a dictionary entry does not end with a semicolon")
@@ -210,7 +210,7 @@ struct PBXTextScanner {
         var index = open + 1
         while index < close {
             result.append(index)
-            let last = spans[index].kind == .punctuation ? (closers[index] ?? index) : index
+            let last = closers[index] ?? index
             guard last + 1 <= close, Self.isOpen(spans, bytes, last + 1, ",") else {
                 throw .unsafeProject(path: path, why: "a list item does not end with a comma")
             }

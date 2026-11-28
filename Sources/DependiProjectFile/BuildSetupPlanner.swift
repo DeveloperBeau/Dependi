@@ -44,9 +44,9 @@ struct BuildSetupPlanner {
         let relative = String(bundle.dropFirst(prefix.count))
         let phases = try model.strings(object, "buildPhases")
         guard
-            let resourcesID = phases.first(where: {
-                model.objects[$0]?["isa"] as? String == "PBXResourcesBuildPhase"
-            })
+            let resources = phases.enumerated().compactMap({ index, id in
+                model.object(id, isa: "PBXResourcesBuildPhase").map { (index, id, $0) }
+            }).first
         else {
             throw .initRefused(
                 reason:
@@ -54,9 +54,10 @@ struct BuildSetupPlanner {
             )
         }
         try planBundle(
-            target: target, object: object, resourcesID: resourcesID, bundle: bundle,
-            relative: relative)
-        try planPhase(target: target, phases: phases, resourcesID: resourcesID)
+            target: target, object: object, resources: (resources.1, resources.2),
+            bundle: bundle, relative: relative)
+        try planPhase(
+            target: target, phases: phases, resourcesID: resources.1, resourcesIndex: resources.0)
         try planSandboxSetting(target: target, object: object)
         return plan
     }
@@ -64,11 +65,11 @@ struct BuildSetupPlanner {
     // MARK: Settings.bundle
 
     private mutating func planBundle(
-        target: (id: String, name: String), object: ProjectModel.Object, resourcesID: String,
-        bundle: String, relative: String
+        target: (id: String, name: String), object: ProjectModel.Object,
+        resources: (id: String, object: ProjectModel.Object), bundle: String, relative: String
     ) throws(DomainError) {
-        let resources = model.objects[resourcesID] ?? [:]
-        for fileID in try model.strings(resources, "files") {
+        let resourcesID = resources.id
+        for fileID in try model.strings(resources.object, "files") {
             // A build file with no file reference, such as `(null) in Resources`, is not a bundle.
             guard let file = model.object(fileID, isa: "PBXBuildFile"),
                 let referenceID = file["fileRef"] as? String,
@@ -84,15 +85,16 @@ struct BuildSetupPlanner {
         if try isCoveredBySynchronizedGroup(target: target, object: object, bundle: bundle) {
             return
         }
-        var referenceID = existingReference(at: bundle)
-        if referenceID == nil {
-            let id = ids.make(targetID: target.id, role: "fileReference")
-            referenceID = id
-            try addFileReference(id: id, relative: relative)
+        let referenceID: String
+        if let existing = existingReference(at: bundle) {
+            referenceID = existing
+        } else {
+            referenceID = ids.make(targetID: target.id, role: "fileReference")
+            try addFileReference(id: referenceID, relative: relative)
         }
         let buildFileID = ids.make(targetID: target.id, role: "buildFile")
         try insertSectionLine(
-            "\t\t\(buildFileID) /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = \(referenceID ?? "") /* Settings.bundle */; };\n",
+            "\t\t\(buildFileID) /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = \(referenceID) /* Settings.bundle */; };\n",
             id: buildFileID, isa: "PBXBuildFile")
         try insertListLine(
             "\(buildFileID) /* Settings.bundle in Resources */", objectID: resourcesID,
@@ -116,11 +118,11 @@ struct BuildSetupPlanner {
     private func existingReference(at bundle: String) -> String? {
         model.objects.keys
             .filter {
-                model.objects[$0]?["isa"] as? String == "PBXFileReference"
-                    && isSettingsBundle(model.objects[$0] ?? [:])
+                model.object($0, isa: "PBXFileReference").map(isSettingsBundle) == true
                     && resolver.location(of: $0) == bundle
             }
-            .min { (scanner.object($0)?.keyIndex ?? 0) < (scanner.object($1)?.keyIndex ?? 0) }
+            .compactMap { id in scanner.object(id).map { (id: id, index: $0.keyIndex) } }
+            .min { $0.index < $1.index }?.id
     }
 
     /// Whether a synchronized folder of the target already copies the bundle.
@@ -185,9 +187,9 @@ struct BuildSetupPlanner {
     // MARK: Run Script phase
 
     private mutating func planPhase(
-        target: (id: String, name: String), phases: [String], resourcesID: String
+        target: (id: String, name: String), phases: [String], resourcesID: String,
+        resourcesIndex: Int
     ) throws(DomainError) {
-        let resourcesIndex = phases.firstIndex(of: resourcesID) ?? 0
         for (index, id) in phases.enumerated() {
             guard let phase = model.object(id, isa: Self.shellSection),
                 (phase["shellScript"] as? String)?.contains(".dependi/run.sh") == true

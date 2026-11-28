@@ -296,6 +296,34 @@ struct BuildEditSuccessTests {
             })
     }
 
+    @Test("of two references to the bundle, the one first in the file is reused")
+    func firstOfTwoReferencesIsReused() throws {
+        let text = String(
+            decoding: FixtureWorld.fixture("folder-reference-twittertexteditor"), as: UTF8.self)
+        var changed = replacing(
+            text, "\t\t\t\t54884C7024ABCC6B00D56C95 /* Settings.bundle in Resources */,\n", with: ""
+        )
+        // The copy has a smaller id and comes later in the file, so only the order decides.
+        let reference =
+            "\t\t54884C6F24ABCC6B00D56C95 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = \"wrapper.plug-in\"; path = Settings.bundle; sourceTree = \"<group>\"; };\n"
+        changed = replacing(
+            changed, reference,
+            with: reference
+                + reference.replacingOccurrences(of: "54884C6F", with: "00000000"))
+        changed = replacing(
+            changed, "\t\t\t\t54884C6F24ABCC6B00D56C95 /* Settings.bundle */,\n",
+            with: "\t\t\t\t54884C6F24ABCC6B00D56C95 /* Settings.bundle */,\n"
+                + "\t\t\t\t0000000024ABCC6B00D56C95 /* Settings.bundle */,\n")
+        let world = try EditWorld("x", bytes: Data(changed.utf8))
+        try world.configure(target: "Example", bundle: "Example/Resources/Settings.bundle")
+        let added = assertOnlyAdded(before: changed, after: try world.currentText())
+        #expect(
+            added.contains {
+                $0.contains("fileRef = 54884C6F24ABCC6B00D56C95 /* Settings.bundle */")
+            })
+        #expect(!added.contains { $0.contains("fileRef = 0000000024ABCC6B00D56C95") })
+    }
+
     @Test("a folder reference that is not the bundle does not count as a resource")
     func folderReferenceDoesNotCount() throws {
         let text = String(

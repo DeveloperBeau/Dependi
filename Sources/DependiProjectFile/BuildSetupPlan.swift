@@ -78,7 +78,7 @@ struct BuildSetupPlan {
     /// Whether every item of `small` is in `large`, in the same order.
     private static func isSubsequence(_ small: [String]?, of large: [String]?) -> Bool {
         guard let small, let large else { return false }
-        var rest = large[...]
+        var rest = ArraySlice(large)
         for item in small {
             guard let index = rest.firstIndex(of: item) else { return false }
             rest = rest[(index + 1)...]
