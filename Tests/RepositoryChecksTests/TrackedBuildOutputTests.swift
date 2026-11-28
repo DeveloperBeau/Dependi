@@ -108,48 +108,55 @@ struct TrackedBuildOutputTests {
 
     @Test("a global clean filter does not hide scratch paths")
     func globalCleanFilterDoesNotHideScratchPaths() throws {
-        let configDirectory = FileManager.default.temporaryDirectory
-            .appendingPathComponent("filter-config-\(UUID().uuidString)", isDirectory: true)
-        defer { try? FileManager.default.removeItem(at: configDirectory) }
-        try FileManager.default.createDirectory(
-            at: configDirectory, withIntermediateDirectories: true)
-        let attributes = configDirectory.appendingPathComponent("attributes")
-        let gitconfig = configDirectory.appendingPathComponent("gitconfig")
-        try "* filter=broken\n".write(to: attributes, atomically: true, encoding: .utf8)
-        let configText = """
-            [core]
-            \tattributesFile = \(attributes.path)
-            [filter "broken"]
-            \tclean = false
-            \trequired = true
-            """
-        try configText.write(to: gitconfig, atomically: true, encoding: .utf8)
-
-        let root = FileManager.default.temporaryDirectory
-            .appendingPathComponent("filter-index-\(UUID().uuidString)", isDirectory: true)
+        let config = try makeBrokenFilterConfig()
+        defer { try? FileManager.default.removeItem(at: config.directory) }
+        let root = try makeScratchFolders()
         defer { try? FileManager.default.removeItem(at: root) }
-        let build = root.appendingPathComponent(".build", isDirectory: true)
-        let modules = root.appendingPathComponent(".build-modules", isDirectory: true)
-        try FileManager.default.createDirectory(at: build, withIntermediateDirectories: true)
-        try FileManager.default.createDirectory(at: modules, withIntermediateDirectories: true)
-        try Data("b".utf8).write(to: build.appendingPathComponent("file.o"))
-        try Data("m".utf8).write(to: modules.appendingPathComponent("cache.o"))
-        let ready = try runCleanGit(["init", "-q"], at: root, globalConfig: gitconfig)
-        try #require(ready.status == 0, "git init failed: \(ready.output)")
-        let added = try runCleanGit(
-            ["add", "-f", "--", ".build/file.o", ".build-modules/cache.o"],
-            at: root,
-            globalConfig: gitconfig
-        )
-        try #require(added.status == 0, "git add failed: \(added.output)")
-        let listed = try TrackedBuildOutput.listTrackedPaths(root: root)
-        #expect(listed.contains(".build/file.o"))
-        #expect(listed.contains(".build-modules/cache.o"))
-        let found = TrackedBuildOutput.violations(in: listed)
-        #expect(found.contains(.init(relativePath: ".build/file.o", directoryName: ".build")))
-        #expect(
-            found.contains(
-                .init(relativePath: ".build-modules/cache.o", directoryName: ".build-modules")))
+        try addScratchFiles(at: root, globalConfig: config.gitconfig)
+        try expectScratchPathsFlagged(at: root)
+    }
+
+    @Test("a system git config with a clean filter does not hide scratch paths")
+    func systemCleanFilterDoesNotHideScratchPaths() throws {
+        let config = try makeBrokenFilterConfig()
+        defer { try? FileManager.default.removeItem(at: config.directory) }
+        let root = try makeScratchFolders()
+        defer { try? FileManager.default.removeItem(at: root) }
+        try addScratchFiles(at: root, ambient: systemConfig(config))
+        try expectScratchPathsFlagged(at: root)
+    }
+
+    @Test("environment git config does not hide scratch paths")
+    func environmentCleanFilterDoesNotHideScratchPaths() throws {
+        let config = try makeBrokenFilterConfig()
+        defer { try? FileManager.default.removeItem(at: config.directory) }
+        let root = try makeScratchFolders()
+        defer { try? FileManager.default.removeItem(at: root) }
+        try addScratchFiles(at: root, ambient: environmentConfig(config))
+        try expectScratchPathsFlagged(at: root)
+    }
+
+    @Test("the system config fixture really breaks git add without isolation")
+    func systemConfigFixtureBreaksUnisolatedAdd() throws {
+        let config = try makeBrokenFilterConfig()
+        defer { try? FileManager.default.removeItem(at: config.directory) }
+        let root = try makeScratchFolders()
+        defer { try? FileManager.default.removeItem(at: root) }
+        // Only the system config is left on: the other two sources are cleared by hand.
+        let isolation = ["GIT_CONFIG_GLOBAL=/dev/null", "GIT_CONFIG_COUNT=0"]
+        try expectUnisolatedAddFails(at: root, assignments: isolation + systemConfig(config))
+    }
+
+    @Test("the environment config fixture really breaks git add without isolation")
+    func environmentConfigFixtureBreaksUnisolatedAdd() throws {
+        let config = try makeBrokenFilterConfig()
+        defer { try? FileManager.default.removeItem(at: config.directory) }
+        let root = try makeScratchFolders()
+        defer { try? FileManager.default.removeItem(at: root) }
+        // The fixture's own count replaces any count in the process environment.
+        let isolation = ["GIT_CONFIG_GLOBAL=/dev/null", "GIT_CONFIG_NOSYSTEM=1"]
+        try expectUnisolatedAddFails(
+            at: root, assignments: isolation + environmentConfig(config))
     }
 
     @Test("a scratch file with a quote or a non-ascii name is build output")
@@ -242,13 +249,17 @@ struct TrackedBuildOutputTests {
         return root
     }
 
-    /// Runs git with no global or system config.
-    /// `globalConfig` is applied first. The clearing assignments come last, so they win.
-    /// A required clean filter in that file makes `git add -f` fail when the clearing assignments are removed.
+    /// Runs git with no system config, no global config and no environment config.
+    /// `ambient` stands for config the caller's environment happens to carry, such as
+    /// `GIT_CONFIG_SYSTEM` or `GIT_CONFIG_COUNT` with its keys and values. It goes first,
+    /// then `globalConfig`. The clearing assignments come last, so they win.
+    /// A required clean filter in any of these makes `git add -f` fail when its clearing
+    /// assignment is removed.
     private func runCleanGit(
         _ arguments: [String],
         at root: URL,
-        globalConfig: URL? = nil
+        globalConfig: URL? = nil,
+        ambient: [String] = []
     ) throws -> ChildProcessResult {
         var prefix = [
             "GIT_CONFIG_NOSYSTEM=1",
@@ -258,7 +269,109 @@ struct TrackedBuildOutputTests {
         if let globalConfig {
             prefix.insert("GIT_CONFIG_GLOBAL=\(globalConfig.path)", at: 0)
         }
-        return try ChildProcess.run(prefix + ["git"] + arguments, workingDirectory: root)
+        return try ChildProcess.run(
+            ambient + prefix + ["git"] + arguments, workingDirectory: root)
+    }
+
+    /// The files of a config that marks every path with a required clean filter that fails.
+    private struct BrokenFilterConfig {
+        let directory: URL
+        let attributes: URL
+        let gitconfig: URL
+    }
+
+    /// A config folder whose gitconfig marks every path with a required clean filter that fails.
+    private func makeBrokenFilterConfig() throws -> BrokenFilterConfig {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("filter-config-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let attributes = directory.appendingPathComponent("attributes")
+        let gitconfig = directory.appendingPathComponent("gitconfig")
+        try "* filter=broken\n".write(to: attributes, atomically: true, encoding: .utf8)
+        let configText = """
+            [core]
+            \tattributesFile = \(attributes.path)
+            [filter "broken"]
+            \tclean = false
+            \trequired = true
+            """
+        try configText.write(to: gitconfig, atomically: true, encoding: .utf8)
+        return BrokenFilterConfig(
+            directory: directory, attributes: attributes, gitconfig: gitconfig)
+    }
+
+    /// The broken filter config, read as the machine's system config.
+    private func systemConfig(_ config: BrokenFilterConfig) -> [String] {
+        ["GIT_CONFIG_SYSTEM=\(config.gitconfig.path)"]
+    }
+
+    /// The broken filter config, given as `GIT_CONFIG_COUNT` environment config.
+    private func environmentConfig(_ config: BrokenFilterConfig) -> [String] {
+        [
+            "GIT_CONFIG_COUNT=3",
+            "GIT_CONFIG_KEY_0=core.attributesFile",
+            "GIT_CONFIG_VALUE_0=\(config.attributes.path)",
+            "GIT_CONFIG_KEY_1=filter.broken.clean",
+            "GIT_CONFIG_VALUE_1=false",
+            "GIT_CONFIG_KEY_2=filter.broken.required",
+            "GIT_CONFIG_VALUE_2=true",
+        ]
+    }
+
+    /// A folder, not yet a repository, with one file in each scratch folder.
+    private func makeScratchFolders() throws -> URL {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent("filter-index-\(UUID().uuidString)", isDirectory: true)
+        let build = root.appendingPathComponent(".build", isDirectory: true)
+        let modules = root.appendingPathComponent(".build-modules", isDirectory: true)
+        try FileManager.default.createDirectory(at: build, withIntermediateDirectories: true)
+        try FileManager.default.createDirectory(at: modules, withIntermediateDirectories: true)
+        try Data("b".utf8).write(to: build.appendingPathComponent("file.o"))
+        try Data("m".utf8).write(to: modules.appendingPathComponent("cache.o"))
+        return root
+    }
+
+    /// Makes `root` a repository and adds both scratch files through `runCleanGit`.
+    private func addScratchFiles(
+        at root: URL, globalConfig: URL? = nil, ambient: [String] = []
+    ) throws {
+        let ready = try runCleanGit(
+            ["init", "-q"], at: root, globalConfig: globalConfig, ambient: ambient)
+        try #require(ready.status == 0, "git init failed: \(ready.output)")
+        let added = try runCleanGit(
+            ["add", "-f", "--", ".build/file.o", ".build-modules/cache.o"],
+            at: root,
+            globalConfig: globalConfig,
+            ambient: ambient
+        )
+        try #require(added.status == 0, "git add failed: \(added.output)")
+    }
+
+    /// Both scratch files are listed as tracked and flagged as build output.
+    private func expectScratchPathsFlagged(at root: URL) throws {
+        let listed = try TrackedBuildOutput.listTrackedPaths(root: root)
+        #expect(listed.contains(".build/file.o"))
+        #expect(listed.contains(".build-modules/cache.o"))
+        let found = TrackedBuildOutput.violations(in: listed)
+        #expect(found.contains(.init(relativePath: ".build/file.o", directoryName: ".build")))
+        #expect(
+            found.contains(
+                .init(relativePath: ".build-modules/cache.o", directoryName: ".build-modules")))
+    }
+
+    /// Runs `git add -f` of both scratch files with only `assignments` in front of git,
+    /// and expects the broken filter to stop it.
+    private func expectUnisolatedAddFails(at root: URL, assignments: [String]) throws {
+        let ready = try runCleanGit(["init", "-q"], at: root)
+        try #require(ready.status == 0, "git init failed: \(ready.output)")
+        let added = try ChildProcess.run(
+            assignments + ["git", "add", "-f", "--", ".build/file.o", ".build-modules/cache.o"],
+            workingDirectory: root
+        )
+        #expect(added.status != 0, "git add ignored the broken filter: \(added.output)")
+        #expect(
+            added.output.contains("clean filter 'broken' failed"),
+            "git add did not name the broken filter: \(added.output)")
     }
 
     /// The scratch folder the test expects, computed without the code under test.
