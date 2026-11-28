@@ -277,7 +277,7 @@ This page is generated from `mutations.json` by `Scripts/mutate.swift --markdown
 | process-timeout-check | 4 | `Sources/DependiProcess/SystemProcessRunner.swift` | `aSlowChildIsTimedOutQuickly` | killed | 2026-11-04 KILLED |
 | projectfile-other-products-subtract-app | review-fix | `Sources/DependiProjectFile/ProjectFileReader.swift` | `appProductsAreNotOtherProducts` | killed | 2026-11-28 KILLED |
 | projectfile-tests-in-other-products | review-fix | `Sources/DependiProjectFile/ProductCollector.swift` | `testTargetProductsAreOtherProducts` | killed | 2026-11-24 KILLED |
-| reference-first-in-file | init-xcode-a | `Sources/DependiProjectFile/BuildSetupPlanner.swift` | `firstOfTwoReferencesIsReused` | killed | not run |
+| reference-first-in-file | init-xcode-a | `Sources/DependiProjectFile/BuildSetupPlanner.swift` | `firstOfTwoReferencesIsReused` | killed | 2026-11-28 KILLED |
 | refuse-byte-not-allowed | init-xcode-a | `Sources/DependiProjectFile/PBXTextScanner.swift` | `byteNotAllowed` | killed | 2026-11-28 KILLED |
 | refuse-dictionary-not-closed | init-xcode-a | `Sources/DependiProjectFile/PBXTextScanner.swift` | `dictionaryNotClosed` | killed | 2026-11-28 KILLED |
 | refuse-list-close-line | init-xcode-a | `Sources/DependiProjectFile/BuildSetupPlanner.swift` | `emptyListOnOneLine` | killed | 2026-11-28 KILLED |
