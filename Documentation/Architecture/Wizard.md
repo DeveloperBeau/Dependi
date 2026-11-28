@@ -29,7 +29,7 @@
 8. If the source bundle holds `Acknowledgements`, or old LicensePlist files, name them and ask before removing each one. Without a yes nothing is removed.
 9. Copy the running program to `.dependi/bin/dependi`, write `VERSION`, `run.sh` and `inputs.xcfilelist`, and mark the program and the script executable.
 10. Add `.dependi/bin/` to `.gitignore` once.
-11. With `--edit-project`, call the editor with `isDryRun: false`. The backup path is `.dependi/project.pbxproj.bak` in the project folder. Print every line that the editor returns. If it returns none, print that the project is already set up. Then print a note to close and reopen the project in Xcode. Init does not print the Run Script steps, and it does not ask you to add the bundle in Xcode.
+11. With `--edit-project`, call the editor with `isDryRun: false`. The backup path is `.dependi/project.pbxproj.bak` in the project folder. The editor writes it only when nothing is there. Print every line that the editor returns. If it returns none, print that the project is already set up. Then print a note to close and reopen the project in Xcode. Init does not print the Run Script steps, and it does not ask you to add the bundle in Xcode.
 12. Without `--edit-project`, print the Run Script text and the settings to change, and one line that says `--edit-project` makes these changes. Init does not read `project.pbxproj` for writing and does not call the editor.
 
 ## The pinned commit
@@ -42,6 +42,6 @@ Without `--edit-project`, it does not edit `project.pbxproj`. It prints the Run 
 
 ## Tests
 
-The tests use the in-memory file system and the scripted console. `InitEditProjectTests` uses a recording double for the editor. It checks that plain init never calls the editor, that the flag makes a dry run call and then a real call with the expected paths, and that a refusal stops init before any file is written. The end-to-end tests run init on a real project file in a temporary folder. They cover a plain run, an edit with a backup, a second run and a damaged file.
+The tests use the in-memory file system and the scripted console. `InitEditProjectTests` uses a recording double for the editor. It checks that plain init never calls the editor, that the flag makes a dry run call and then a real call with the expected paths, and that a refusal stops init before any file is written. The end-to-end tests run init on a real project file in a temporary folder. They cover a plain run, an edit with a backup, a second run, a later edit that keeps the first backup and a damaged file.
 
 The other tests cover a fresh install, a dry run, a second run, an existing configuration, each `Root.plist` case including binary format and a seeded fuzz, bundle search and clashes, the ignore file, every form of project path, targets and platforms.

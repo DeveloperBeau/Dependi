@@ -45,7 +45,7 @@ Debug builds skip. An archive always runs.
 | Command | Meaning |
 |---|---|
 | `dependi generate [--single-page]` | Write the acknowledgements. Xcode runs it. `--single-page` puts every license on one page for that run. Without it, the `singlePage` key decides. |
-| `dependi init --project <path> [--dry-run] [--edit-project]` | Set Dependi up in a project. `--edit-project` also edits the Xcode project: it adds the bundle, the Run Script phase and the sandbox setting, and saves a backup in `.dependi/project.pbxproj.bak`. Without it, init never changes the project file. |
+| `dependi init --project <path> [--dry-run] [--edit-project]` | Set Dependi up in a project. `--edit-project` also edits the Xcode project: it adds the bundle, the Run Script phase and the sandbox setting, and keeps the original file in `.dependi/project.pbxproj.bak`. The first edit writes the backup. Later edits never replace it. To get a fresh backup, delete it by hand. Without it, init never changes the project file. |
 | `dependi --version` | Print the version. |
 | `dependi help` | Print the usage. |
 

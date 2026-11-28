@@ -18,6 +18,6 @@ public enum UsageText {
           --project <path>              The project to change. Required.
           --dry-run                     Show what would change. Write nothing.
           --edit-project                Also add the bundle, the Run Script phase and the
-                                        sandbox setting to the Xcode project. Saves a backup.
+                                        sandbox setting to the Xcode project. Keeps the original as a backup.
         """
 }

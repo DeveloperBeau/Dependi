@@ -34,9 +34,9 @@ With `--edit-project`, init makes these changes to `project.pbxproj` for one app
 
 Init prints one line for each change. It edits only the text that it must change. Other text in the file is not changed.
 
-Init saves the original file in `.dependi/project.pbxproj.bak` before it writes the new file. A second run does not change the file and does not write the backup again. It prints that the project is already set up. A later run that makes a new change replaces the backup.
+The file `.dependi/project.pbxproj.bak` is the original project file. The first edit writes it before it writes the new file. Init never replaces it. A later edit, for example for a second target or after a change by hand, keeps the backup and prints that it kept it. A run that changes nothing writes no backup and prints that the project is already set up. To get a fresh backup, delete the file by hand before the next edit.
 
-Init checks the edit before it writes any file. If it cannot edit the project safely, it stops and changes nothing. It refuses a project file that it cannot parse, a layout that it does not support, a target with no Resources phase and a `Settings.bundle` outside the project folder. The error names the project file and the reason. If you use `--dry-run` with `--edit-project`, init prints the changes that it would make and writes nothing.
+Init checks the edit before it writes any file. If it cannot edit the project safely, it stops and changes nothing. It refuses a project file that it cannot parse, a layout that it does not support, a target with no Resources phase, a target with two Copy Bundle Resources phases, a build configuration with a conditional sandbox key such as `ENABLE_USER_SCRIPT_SANDBOXING[sdk=iphoneos*]` and a `Settings.bundle` outside the project folder. Init refuses the two phases because it cannot know which one to use. It refuses the conditional key because the key can win over the plain `NO` setting. The error names the project file and the reason. If you use `--dry-run` with `--edit-project`, init prints the changes that it would make and writes nothing.
 
 If Xcode has the project open, close it and open it again after the run, so that Xcode reads the new file.
 

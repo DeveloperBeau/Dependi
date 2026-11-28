@@ -34,7 +34,7 @@
 
 - **Trap:** A backup that init writes on every run holds the edited file after the second run, and the original is lost.
 - **Finding:** The editor returns no lines for a project that is set up, and it writes nothing then. An end-to-end test compares the backup with the original bytes after two runs.
-- **Rule:** Init writes no backup of its own for the project file. Only the editor writes it, and only when it changes the file.
+- **Rule:** Init writes no backup of its own for the project file. Only the editor writes it, only when it changes the file and only when no backup exists. A later edit keeps the backup and says so.
 
 ## Mutation results
 
